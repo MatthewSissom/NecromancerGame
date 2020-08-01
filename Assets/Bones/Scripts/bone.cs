@@ -10,6 +10,7 @@ public class bone : MonoBehaviour
 
     public Rigidbody Rb { get { return rb; }}
     public boneGroup Group { get { return group; } }
+    public GameObject particleEffect;
 
     // Start is called before the first frame update
     void Awake()
@@ -18,6 +19,11 @@ public class bone : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
         group = gameObject.GetComponent<boneGroup>();
         if(!group) group = (boneGroup)gameObject.AddComponent(typeof(boneGroup));
+    }
+
+    private void Start()
+    {
+        particleEffect = (GameObject)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/ParticleFX/Combine/CombineFX.prefab", typeof(GameObject));
     }
 
     // Update is called once per frame
@@ -71,6 +77,9 @@ public class bone : MonoBehaviour
             newJoint.minDistance = 0.0f;
             newJoint.maxDistance = .025f;
             newJoint.enableCollision = true;
+
+            //create particle effect
+            Instantiate(particleEffect, jointWorldPoint, Quaternion.identity);
         }
     }
 }

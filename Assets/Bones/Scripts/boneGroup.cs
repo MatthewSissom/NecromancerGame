@@ -47,7 +47,7 @@ public class boneGroup : MonoBehaviour
     {
 
         boneID[] idGen = Resources.FindObjectsOfTypeAll<boneID>();
-        if (idGen.Length == 0) { myID = ((boneID)boneID.CreateInstance("boneID")).GetID();}
+        if (idGen.Length == 0)  { myID = ((boneID)boneID.CreateInstance("boneID")).GetID();}
         else myID = idGen[0].GetID();
         //only set group id if not on the conveyer
         if(!parent)
@@ -58,8 +58,8 @@ public class boneGroup : MonoBehaviour
 
     public static void combineGroups(boneGroup one, boneGroup two)
     {
-        one.removeFromConvayer();
-        two.removeFromConvayer();
+        //one.removeFromConvayer();
+        //two.removeFromConvayer();
         if (!one.parent)
         {
             two.addChild(one);

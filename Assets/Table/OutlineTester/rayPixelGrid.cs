@@ -32,6 +32,7 @@ public class rayPixelGrid : MonoBehaviour
     public TextMeshProUGUI outside;
     private string outsideInital;
     public TextMeshProUGUI inital;
+    public TextMeshProUGUI inital2;
     private string initalInital;
     public boneManager bManager;
     private float uiTimer = 0;
@@ -103,6 +104,7 @@ public class rayPixelGrid : MonoBehaviour
             {
                 bManager.updateUI(counts[1] - counts[0]);
                 inital.text = initalInital + (counts[1] - counts[0]).ToString();
+                inital2.text = initalInital + (counts[1] - counts[0]).ToString();
                 inside.text = insideInital + counts[1].ToString();
                 outside.text = outsideInital + counts[0].ToString();
                 uiTimer = UIRefreshRate;

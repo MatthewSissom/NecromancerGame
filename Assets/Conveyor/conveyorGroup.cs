@@ -17,4 +17,9 @@ public class conveyorGroup : boneGroup
         base.Start();
         myID = 0;
     }
+
+    public int groupCount ()
+    {
+        return children.Count;
+    }
 }
