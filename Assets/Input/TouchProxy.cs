@@ -8,11 +8,14 @@ public class TouchProxy : MonoBehaviour
 
     private float height;
 
-    public virtual bool active { get { return activeBone; }}
+    private BoxCollider myVolume;
+
+    public float radius { get; set; }
 
     // Start is called before the first frame update
     void Start()
     {
+        myVolume = gameObject.GetComponent<BoxCollider>();
         height = transform.position.y;
     }
 
@@ -33,7 +36,7 @@ public class TouchProxy : MonoBehaviour
     // Update is called once per frame
     protected virtual void Update()
     {
-        if (active)
+        if (activeBone)
         {
             //move the active object to the proxy
             const float maxVelocity = 3.0f;
@@ -51,25 +54,24 @@ public class TouchProxy : MonoBehaviour
         }
         else
         {
-            RaycastHit hitInfo;
-            Ray ray = new Ray(transform.position,transform.position - Camera.main.transform.position);
-            if (Physics.Raycast(ray, out hitInfo, 10, 1, QueryTriggerInteraction.Collide))
-            {
-                activeBone = hitInfo.collider.gameObject.GetComponentInParent<bone>();
-                if (!activeBone)
-                { return; }
-                //check to see if the bone is on the conveyor
-                if (activeBone.Group.GroupID == 0)
-                {
-                    activeBone.Group.removeFromConvayer();
-                }
-            }
+            transform.up = Camera.main.transform.position - transform.position;
+            myVolume.size = new Vector3(radius * 2, myVolume.size.y, radius * 2);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        bone b = other.GetComponentInParent<bone>();
+        if (b)
+        {
+            myVolume.enabled = false;
+            activeBone = b;
         }
     }
 
     protected virtual void OnDestroy()
     {
-        if (active)
+        if (activeBone)
         {
             //limit the upwards velocity of bones
             void clampYVel(bone toApply, FunctionArgs e)

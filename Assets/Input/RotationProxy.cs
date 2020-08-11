@@ -16,8 +16,6 @@ public class RotationProxy : TouchProxy
     }
     public Vector3 previousNorm;
 
-    public override bool active { get { return true; } }
-
     protected override void Update()
     {
         Vector3 norm = (parent.transform.position - transform.position).normalized;

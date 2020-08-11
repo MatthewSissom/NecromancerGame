@@ -8,11 +8,6 @@ public class CountDown : State
     public
     TextMeshProUGUI text;
 
-    public void Awake()
-    {
-        Name = "CountDown";
-    }
-
     public override IEnumerator Routine()
     {
         Begin();

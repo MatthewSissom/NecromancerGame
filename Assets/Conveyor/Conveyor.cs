@@ -8,6 +8,7 @@ public class Conveyor : State
     public List<GameObject> orderedBones;
     public List<int> count;
     public boneManager boneManager;
+    public List<int> bursts;
 
     [Header("Belt Stats")]
     public Vector3 velocity;
@@ -19,47 +20,11 @@ public class Conveyor : State
     private Rigidbody mBody;
     private BoxCollider dropCollider;
 
-    private void Awake()
-    {
-        mGroup = gameObject.GetComponent<conveyorGroup>();
-        mBody = gameObject.GetComponent<Rigidbody>();
-        initalPos = transform.position;
-        foreach(var bc in gameObject.GetComponentsInChildren<BoxCollider>())
-        {
-            if (bc.isTrigger)
-                dropCollider = bc;
-        }
-        Name = "Conveyor";
-    }
-
-    // Start is called before the first frame update
-    private void Start()
-    {
-        //add repeat bones to list
-        for (int i = 0; i < count.Count; i++)
-        {
-            for (int c = 1; c < count[i]; c++)
-            {
-                orderedBones.Add(orderedBones[i]);
-            }
-        }
-        //randomize bone order
-        for (int i = 0; i < 50; i++)
-        {
-            int rand1 = Random.Range(0, orderedBones.Count);
-            int rand2 = Random.Range(0, orderedBones.Count);
-            GameObject temp = orderedBones[rand2];
-            orderedBones[rand2] = orderedBones[rand1];
-            orderedBones[rand1] = temp;
-        }
-        boneManager.NumGroups = orderedBones.Count;
-    }
-
     void CreateBones()
     {
         initalPos = mBody.position;
 
-        //start all bones off screen and behing the conveyor
+        //start all bones off screen and behind the conveyor
         Vector3 offset = transform.position + 
             -gameObject.GetComponentInChildren<Renderer>().bounds.extents.x * velocity.normalized
             + .5f * new Vector3(0,1,0);
@@ -110,15 +75,12 @@ public class Conveyor : State
         }
     }
 
-    public override IEnumerator Routine()
+    private IEnumerator BoneShipment(int count, float timeUntilNext)
     {
-        CreateBones();
-        Begin();
-        yield return null;
-
         float previousTime = Time.time;
         float elapsedTime = 0;
-        while(mGroup.groupCount() > 0)
+        int initalCount = mGroup.groupCount();
+        while (mGroup.groupCount() > initalCount - count)
         {
             elapsedTime = Time.time - previousTime;
             previousTime = Time.time;
@@ -127,6 +89,19 @@ public class Conveyor : State
                 toApply.transform.Translate(velocity * elapsedTime, Space.World);
             }, new FunctionArgs());
             yield return null;
+        }
+        yield return new WaitForSeconds(timeUntilNext);
+    }
+
+    public override IEnumerator Routine()
+    {
+        CreateBones();
+        Begin();
+        yield return null;
+
+        foreach(int burst in bursts)
+        {
+            yield return BoneShipment(burst, burst);
         }
 
         Debug.Log("Conveyor Ended");
@@ -139,5 +114,53 @@ public class Conveyor : State
     {
         mBody.position -= Time.fixedDeltaTime * velocity;
         mBody.MovePosition(initalPos);
+    }
+
+    override protected void Awake()
+    {
+        base.Awake();
+        mGroup = gameObject.GetComponent<conveyorGroup>();
+        mBody = gameObject.GetComponent<Rigidbody>();
+        initalPos = transform.position;
+        foreach (var bc in gameObject.GetComponentsInChildren<BoxCollider>())
+        {
+            if (bc.isTrigger)
+                dropCollider = bc;
+        }
+    }
+
+    // Start is called before the first frame update
+    private void Start()
+    {
+        //add repeat bones to list
+        for (int i = 0; i < count.Count; i++)
+        {
+            for (int c = 1; c < count[i]; c++)
+            {
+                orderedBones.Add(orderedBones[i]);
+            }
+        }
+#if UNITY_EDITOR
+        //check burst total against bone total
+        int burstCount = 0;
+        foreach (int i in bursts)
+        {
+            burstCount += i;
+        }
+        if (burstCount != orderedBones.Count)
+        {
+            Debug.LogError("Burst Total (" + burstCount + ") not equal to bone total (" + orderedBones.Count + ")");
+        }
+#endif
+        //randomize bone order
+        for (int i = 0; i < 50; i++)
+        {
+            int rand1 = Random.Range(0, orderedBones.Count);
+            int rand2 = Random.Range(0, orderedBones.Count);
+            GameObject temp = orderedBones[rand2];
+            orderedBones[rand2] = orderedBones[rand1];
+            orderedBones[rand1] = temp;
+        }
+        boneManager.NumGroups = orderedBones.Count;
     }
 }

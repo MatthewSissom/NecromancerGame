@@ -51,7 +51,9 @@ public class InputManager : MonoBehaviour
             //pos represents the point in world space at the specified height
             Vector3 pos = t.position;
             pos.z = Camera.main.transform.position.y - height;
+            Vector3 radVec = pos + new Vector3(t.radius, 0, 0);
             pos = Camera.main.ScreenToWorldPoint(pos);
+            float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
 
             int id = t.fingerId;
 
@@ -87,6 +89,7 @@ public class InputManager : MonoBehaviour
                 //update the proxy of existing touches
                 case TouchPhase.Moved:
                     proxies[id].transform.position = pos;
+                    proxies[id].radius = rad;
                     break;
                 //destroy any proxies for ended touches
                 case TouchPhase.Ended:
@@ -99,6 +102,13 @@ public class InputManager : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private void Start()
+    {
+        StateManager.Instance.AddStateBeginMethod("Conveyor", () => { this.enabled = true; });
+        StateManager.Instance.AddStateEndMethod("Conveyor", () => { this.enabled = false; });
+        this.enabled = false;
     }
 }
 

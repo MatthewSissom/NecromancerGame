@@ -11,21 +11,4 @@ public class boneManager : MonoBehaviour
         get { return numGroups;  }
         set { numGroups = value; }
     }
-    public TextMeshProUGUI groupCount;
-    public TextMeshProUGUI total;
-    private string startingString;
-    private string startingStringTotal;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        startingString = groupCount.text;
-        startingStringTotal = total.text;
-    }
-
-    public void updateUI(int initalScore)
-    {
-        groupCount.text = startingString + numGroups.ToString();
-        total.text = startingStringTotal + (initalScore / numGroups).ToString();
-    }
 }

@@ -2,30 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MainMenu : State
+public class MenuMain : State
 {
-    private bool buttonPressed = false;
+    private string buttonName = null;
 
     public override IEnumerator Routine()
     {
         base.Begin();
 
-        while (!buttonPressed)
+        while (buttonName == null)
         {
             yield return null;
         }
 
+        MenuManager.Instance.buttonName = buttonName;
+
         base.End();
+        buttonName = null;
         yield break;
     }
 
-    public void playPressed()
+    public void ButtonPressed(string name)
     {
-        buttonPressed = true;
-    }
-
-    public MainMenu()
-    {
-        Name = "MainMenu";
+        buttonName = name;
     }
 }

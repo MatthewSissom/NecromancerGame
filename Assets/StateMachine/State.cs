@@ -28,4 +28,9 @@ public abstract class State : MonoBehaviour
     {
         EndEvent?.Invoke();
     }
+
+    protected virtual void Awake()
+    {
+        Name = this.GetType().ToString();
+    }
 }

@@ -24,31 +24,9 @@ public class rayPixelGrid : MonoBehaviour
     private float timer;
     private int cycle;
 
-    [Header("UI")]
-    private List<int> counts;
-    public float UIRefreshRate;
-    public TextMeshProUGUI inside;
-    private string insideInital;
-    public TextMeshProUGUI outside;
-    private string outsideInital;
-    public TextMeshProUGUI inital;
-    public TextMeshProUGUI inital2;
-    private string initalInital;
-    public boneManager bManager;
-    private float uiTimer = 0;
-    private float uiCycles = 0;
-
-
     // Start is called before the first frame update
     void Start()
     {
-        counts = new List<int>();
-        counts.Add(0);
-        counts.Add(0);
-
-        outsideInital = outside.text;
-        insideInital = inside.text;
-        initalInital = inital.text;
 
         refrence = gameObject.GetComponent<SpriteRenderer>();
         Sprite image = refrence.sprite;
@@ -83,7 +61,7 @@ public class rayPixelGrid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timer > RefreshRate && uiTimer > UIRefreshRate)
+        if (timer > RefreshRate)
         {
             int activeCode = 0;
             foreach (var l in pixelGrid)
@@ -91,27 +69,10 @@ public class rayPixelGrid : MonoBehaviour
                 for(int i = cycle; i < l.Count; i += groups )
                 {
                     activeCode = l[i].Refresh();
-                    if(activeCode != -1)
-                    {
-                        counts[activeCode]++;
-                    }
                 }
             }
             timer = 0;
             cycle = (cycle + 1) % groups;
-            uiCycles++;
-            if(uiCycles == groups)
-            {
-                bManager.updateUI(counts[1] - counts[0]);
-                inital.text = initalInital + (counts[1] - counts[0]).ToString();
-                inital2.text = initalInital + (counts[1] - counts[0]).ToString();
-                inside.text = insideInital + counts[1].ToString();
-                outside.text = outsideInital + counts[0].ToString();
-                uiTimer = UIRefreshRate;
-                uiCycles = 0;
-                counts[0] = 0;
-                counts[1] = 0;
-            }
         }
         else if(timer > RefreshRate)
         {
@@ -126,6 +87,5 @@ public class rayPixelGrid : MonoBehaviour
             cycle = (cycle + 1) % groups;
         }
         timer += Time.deltaTime;
-        uiTimer += Time.deltaTime;
     }
 }
