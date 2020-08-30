@@ -104,7 +104,6 @@ public class Conveyor : State
             yield return BoneShipment(burst, burst);
         }
 
-        Debug.Log("Conveyor Ended");
         End();
         yield break;
     }

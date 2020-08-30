@@ -8,10 +8,13 @@ public class CalculateScore : State
     {
         Begin();
 
-        ScoreManager.Instance.Add(new PartialScore("Has a head!", 50));
-        ScoreManager.Instance.Add(new PartialScore("No legs!"));
-        ScoreManager.Instance.Add(new PartialScore("No hips"));
-        ScoreManager.Instance.Add(new PartialScore("Has ribs!", 50));
+        ScoreManager.Instance.Add(new PartialScore("head", 50));
+        ScoreManager.Instance.Add(new PartialScore("legs"));
+        ScoreManager.Instance.Add(new PartialScore("hips"));
+        ScoreManager.Instance.Add(new PartialScore("ribs", 50));
+        ScoreManager.Instance.Add(new PartialScore("ribs", 50));
+        ScoreManager.Instance.Add(new PartialScore("ribs", 50));
+        ScoreManager.Instance.Add(new PartialScore("ribs", 50));
 
         End();
         yield break;

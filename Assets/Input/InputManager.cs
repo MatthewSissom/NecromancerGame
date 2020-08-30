@@ -109,8 +109,8 @@ public class InputManager : MonoBehaviour
 
     private void Start()
     {
-        StateManager.Instance.AddStateBeginMethod("Conveyor", () => { this.enabled = true; });
-        StateManager.Instance.AddStateEndMethod("Conveyor", () => { this.enabled = false; clear(); });
+        StateManager.Instance.AddEventMethod("Conveyor", "begin", () => { this.enabled = true; });
+        StateManager.Instance.AddEventMethod("Conveyor", "end", () => { this.enabled = false; clear(); });
         this.enabled = false;
     }
 }

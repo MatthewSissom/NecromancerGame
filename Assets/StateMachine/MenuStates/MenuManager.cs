@@ -13,6 +13,7 @@ public class MenuManager : StateManagerBase
         while (true)
         {
             //camera + board transition
+            yield return SetState("NotAState");
             yield return SetState("TransMain");
             yield return SetState("BoardMain");
             yield return SetState("Main");

@@ -16,6 +16,8 @@ public class MenuDisplayScore : State
 
         string partialList = "";
         float totalScore = 0;
+        int lineCount = 0;
+        const int maxLines = 5;
         PartialScore ps = ScoreManager.Instance.Next();
         textBox.text = "";
         yield return new WaitForSeconds(0.5f);
@@ -24,6 +26,12 @@ public class MenuDisplayScore : State
         {
             partialList += ps.Text();
             totalScore = ps.Apply(totalScore);
+            if (lineCount != maxLines)
+                lineCount++;
+            else
+            {
+                partialList = partialList.Substring(partialList.IndexOf("\n") + 1);
+            }
             textBox.text = partialList;
 
             ps = ScoreManager.Instance.Next();
@@ -45,10 +53,10 @@ public class MenuDisplayScore : State
 
     private void Start()
     {
-        MenuManager.Instance.AddStateBeginMethod("MenuMain", () => {
+        MenuManager.Instance.AddEventMethod("MenuMain", "begin", () => {
             textBox.text = "";
             canvas.SetActive(false); 
         });
-        StateManager.Instance.AddStateEndMethod("CalculateScore", () => { canvas.SetActive(true); });
+        StateManager.Instance.AddEventMethod("CalculateScore", "end", () => { canvas.SetActive(true); });
     }
 }

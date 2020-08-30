@@ -12,7 +12,7 @@ public class StateManager : StateManagerBase
         {
             yield return SetState(MenuManager.Instance.Main());
             yield return SetState("GameTrans");
-            //yield return SetState("CountDown");
+            yield return SetState("CountDown");
             yield return SetState("Conveyor");
             yield return SetState("CalculateScore");
             yield return SetState(MenuManager.Instance.Score());

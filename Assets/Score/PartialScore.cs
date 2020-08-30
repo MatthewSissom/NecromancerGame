@@ -13,7 +13,7 @@ public class PartialScore
 
     public string Text()
     {
-        return "Has" + (value > 0 ? " a " : " no ") + name + " , +" + value.ToString() + "\n";
+        return "Has" + (value > 0 ? " a " : " no ") + name + " , +" + value.ToString() + "!\n";
     }
 
     public PartialScore(string name, float value = 0)

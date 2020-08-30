@@ -12,14 +12,27 @@ public abstract class State : MonoBehaviour
     public delegate void StateMethod();
     protected event StateMethod BeginEvent;
     protected event StateMethod EndEvent;
-    public void AddBeginMethod(StateMethod method)
+
+    //tries to add a method to an event, returns true if the state was found, false if it was not
+    //to add new states to a child of this class use if(!base.AddToEvent(eventName,method,true)) and 
+    //add a new switch statement with all new events
+    public virtual bool AddToEvent(string eventName, StateMethod method, bool overriden = false)
     {
-        BeginEvent += method;
+        eventName.ToLower();
+        switch(eventName)
+        {
+            case "begin":
+                BeginEvent += method;
+                return true;
+            case "end":
+                EndEvent += method;
+                return true;
+            default:
+                if(!overriden) Debug.LogError(GetType() + " does not contain event \"" + eventName + "\"");
+                return false;
+        }
     }
-    public void AddEndMethod(StateMethod method)
-    {
-        EndEvent += method;
-    }
+
     protected void Begin()
     {
         BeginEvent?.Invoke();
