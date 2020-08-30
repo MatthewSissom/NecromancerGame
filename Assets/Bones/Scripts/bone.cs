@@ -10,7 +10,7 @@ public class bone : MonoBehaviour
 
     public Rigidbody Rb { get { return rb; }}
     public boneGroup Group { get { return group; } }
-    public GameObject particleEffect;
+    //public GameObject particleEffect;
 
     // Start is called before the first frame update
     void Awake()
@@ -23,7 +23,7 @@ public class bone : MonoBehaviour
 
     private void Start()
     {
-        particleEffect = (GameObject)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/ParticleFX/Combine/CombineFX.prefab", typeof(GameObject));
+        //particleEffect = (GameObject)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/ParticleFX/Combine/CombineFX.prefab", typeof(GameObject));
     }
 
     // Update is called once per frame
@@ -79,7 +79,7 @@ public class bone : MonoBehaviour
             newJoint.enableCollision = true;
 
             //create particle effect
-            Instantiate(particleEffect, jointWorldPoint, Quaternion.identity);
+            //Instantiate(particleEffect, jointWorldPoint, Quaternion.identity);
         }
     }
 }

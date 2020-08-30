@@ -48,21 +48,33 @@ public class StateManagerBase : MonoBehaviour
 
     public void AddStateBeginMethod(string stateName, State.StateMethod method)
     {
-        if (!states.ContainsKey(stateName))
+        IEnumerator HookUpEvent()
         {
-            Debug.LogError("State Manager does not contain state \"" + stateName + "\"");
-            return;
+            yield return new WaitForSeconds(0.1f);
+            if (!states.ContainsKey(stateName))
+            {
+                Debug.LogError("State Manager does not contain state \"" + stateName + "\"");
+                yield break;
+            }
+            states[stateName].AddBeginMethod(method);
+            yield break;
         }
-        states[stateName].AddBeginMethod(method);
+        StartCoroutine(HookUpEvent());
     }
 
     public void AddStateEndMethod(string stateName, State.StateMethod method)
     {
-        if (!states.ContainsKey(stateName))
+        IEnumerator HookUpEvent()
         {
-            Debug.LogError("State Manager does not contain state \"" + stateName + "\"");
-            return;
+            yield return new WaitForSeconds(0.1f);
+            if (!states.ContainsKey(stateName))
+            {
+                Debug.LogError("State Manager does not contain state \"" + stateName + "\"");
+                yield break;
+            }
+            states[stateName].AddEndMethod(method);
+            yield break;
         }
-        states[stateName].AddEndMethod(method);
+        StartCoroutine(HookUpEvent());
     }
 }

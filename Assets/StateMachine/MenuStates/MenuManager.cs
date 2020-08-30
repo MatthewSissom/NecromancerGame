@@ -7,10 +7,12 @@ public class MenuManager : StateManagerBase
     public static MenuManager Instance;
     public string buttonName;
 
-    public IEnumerator Routine()
+    public IEnumerator Main()
     {
+        yield return new WaitForSeconds(0.5f);
         while (true)
         {
+            //camera + board transition
             yield return SetState("TransMain");
             yield return SetState("BoardMain");
             yield return SetState("Main");
@@ -26,6 +28,13 @@ public class MenuManager : StateManagerBase
                     break;
             }
         }
+    }
+
+    public IEnumerator Score()
+    {
+        yield return SetState("TransMain");
+        yield return SetState("BoardFlipped");
+        yield return SetState("DisplayScore");
     }
 
     protected override void Awake()

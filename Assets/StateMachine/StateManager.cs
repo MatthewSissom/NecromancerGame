@@ -8,13 +8,14 @@ public class StateManager : StateManagerBase
 
     private IEnumerator StateFlow()
     {
-        yield return new WaitForEndOfFrame();
         while(true)
         {
-            yield return SetState(MenuManager.Instance.Routine());
+            yield return SetState(MenuManager.Instance.Main());
             yield return SetState("GameTrans");
-            yield return SetState("CountDown");
+            //yield return SetState("CountDown");
             yield return SetState("Conveyor");
+            yield return SetState("CalculateScore");
+            yield return SetState(MenuManager.Instance.Score());
         }
     }
 
