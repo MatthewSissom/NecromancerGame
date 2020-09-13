@@ -12,31 +12,35 @@ public class InputManager : MonoBehaviour
     public float height;
     public float rotationRadSquared;
 
+    static public InputManager Instance;
 
     Dictionary<int, TouchProxy> proxies = new Dictionary<int, TouchProxy>();
-    List<TouchProxy> allProxies = new List<TouchProxy>();
+    List<int> allIDs = new List<int>();
 
+    //removes a single proxie from all data structures
     private void remove(int id)
     {
         Destroy(proxies[id].gameObject);
-        allProxies.Remove(proxies[id]);
+        allIDs.Remove(id);
         proxies.Remove(id);
     }
 
-    private TouchProxy isRotationTouch(TouchProxy tp)
+    //removes all proxies
+    public void clear()
     {
-        foreach(TouchProxy t in allProxies)
+        foreach (int id in allIDs)
         {
-            if (t != tp && (t.transform.position - tp.transform.position).sqrMagnitude < rotationRadSquared)
-                return t;
+            Destroy(proxies[id].gameObject);
         }
-        return null;
+        proxies = new Dictionary<int, TouchProxy>();
+        allIDs = new List<int>();
     }
 
     private TouchProxy isRotationTouch(Vector3 pos)
     {
-        foreach (TouchProxy t in allProxies)
+        foreach (int i  in allIDs)
         {
+            TouchProxy t = proxies[i];
             if ((t.transform.position - pos).sqrMagnitude < rotationRadSquared)
                 return t;
         }
@@ -71,7 +75,7 @@ public class InputManager : MonoBehaviour
                                Quaternion.identity
                             ).GetComponent<TouchProxy>();
                         proxies.Add(id, newScript);
-                        allProxies.Add(newScript);
+                        allIDs.Add(id);
                     }
                     //if rotating create a rotation proxy
                     else
@@ -82,7 +86,7 @@ public class InputManager : MonoBehaviour
                                Quaternion.identity
                             ).GetComponent<RotationProxy>();
                         proxies.Add(id, newScript);
-                        allProxies.Add(newScript);
+                        allIDs.Add(id);
                         newScript.Parent = rotationParent;
                     }
                     break;
@@ -106,8 +110,10 @@ public class InputManager : MonoBehaviour
 
     private void Start()
     {
-        StateManager.Instance.AddStateBeginMethod("Conveyor", () => { this.enabled = true; });
-        StateManager.Instance.AddStateEndMethod("Conveyor", () => { this.enabled = false; });
+        if (Instance)
+            Destroy(this);
+        else
+            Instance = this;
         this.enabled = false;
     }
 }

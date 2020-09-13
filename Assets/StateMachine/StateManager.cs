@@ -8,13 +8,11 @@ public class StateManager : StateManagerBase
 
     private IEnumerator StateFlow()
     {
-        yield return new WaitForEndOfFrame();
         while(true)
         {
-            yield return SetState(MenuManager.Instance.Routine());
-            yield return SetState("GameTrans");
-            yield return SetState("CountDown");
-            yield return SetState("Conveyor");
+            yield return SetState(MenuManager.Instance.Main());
+            yield return SetState(GameManager.Instance.Game());
+            yield return SetState(MenuManager.Instance.Score());
         }
     }
 
@@ -22,7 +20,7 @@ public class StateManager : StateManagerBase
     {
         base.Awake();
         if (Instance)
-            Destroy(gameObject);
+            Destroy(this);
         else
             Instance = this;
     }
@@ -33,7 +31,7 @@ public class StateManager : StateManagerBase
         foreach(State s in allStates)
         {
             string name = s.Name;
-            if (name.Substring(0, 4) != "Menu")
+            if (name.Substring(0, 4) == "StMn")
             {
                 states.Add(s.Name, s);
             }

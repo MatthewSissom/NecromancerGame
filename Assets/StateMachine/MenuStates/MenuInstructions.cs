@@ -5,6 +5,7 @@ using UnityEngine;
 public class MenuInstructions : State
 {
     private string buttonName = null;
+    public GameObject canvas;
 
     public override IEnumerator Routine()
     {
@@ -23,5 +24,11 @@ public class MenuInstructions : State
     public void ButtonPressed(string name)
     {
         buttonName = name;
+    }
+
+    private void Start()
+    {
+        MenuManager.Instance.AddEventMethod("MenuMain", "begin", () => { canvas.SetActive(true); });
+        GameManager.Instance.AddEventMethod("CalculateScore", "end", () => { canvas.SetActive(false); });
     }
 }

@@ -28,13 +28,14 @@ public class StateManagerBase : MonoBehaviour
         if (states.ContainsKey(stateName))
         #endif
         {
+            //Debug.Log(GetType() + "setting state to" + stateName);
             currentRoutine = StartCoroutine(states[stateName].Routine());
             return currentRoutine;
         }
         #if UNITY_EDITOR
         else
         {
-            Debug.LogError("State Manager does not contain state \"" + stateName + "\"");
+            Debug.LogError(GetType() + " does not contain state \"" + stateName + "\"");
             return null;
         }
         #endif
@@ -46,23 +47,19 @@ public class StateManagerBase : MonoBehaviour
         return currentRoutine;
     }
 
-    public void AddStateBeginMethod(string stateName, State.StateMethod method)
+    public void AddEventMethod(string stateName, string eventName, State.StateMethod method)
     {
-        if (!states.ContainsKey(stateName))
+        IEnumerator HookUpEvent()
         {
-            Debug.LogError("State Manager does not contain state \"" + stateName + "\"");
-            return;
+            yield return new WaitForSeconds(0.2f);
+            if (!states.ContainsKey(stateName))
+            {
+                Debug.LogError(GetType() + " does not contain state \"" + stateName + "\"");
+                yield break;
+            }
+            states[stateName].AddToEvent(eventName, method);
+            yield break;
         }
-        states[stateName].AddBeginMethod(method);
-    }
-
-    public void AddStateEndMethod(string stateName, State.StateMethod method)
-    {
-        if (!states.ContainsKey(stateName))
-        {
-            Debug.LogError("State Manager does not contain state \"" + stateName + "\"");
-            return;
-        }
-        states[stateName].AddEndMethod(method);
+        StartCoroutine(HookUpEvent());
     }
 }

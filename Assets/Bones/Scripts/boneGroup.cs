@@ -45,12 +45,10 @@ public class boneGroup : MonoBehaviour
     // Start is called before the first frame update
     virtual protected void Start()
     {
+        myID = boneManager.Instance.GetID();
 
-        boneID[] idGen = Resources.FindObjectsOfTypeAll<boneID>();
-        if (idGen.Length == 0)  { myID = ((boneID)boneID.CreateInstance("boneID")).GetID();}
-        else myID = idGen[0].GetID();
         //only set group id if not on the conveyer
-        if(!parent)
+        if (!parent)
             groupID = myID;
 
         mBone = gameObject.GetComponent<bone>();
@@ -58,23 +56,24 @@ public class boneGroup : MonoBehaviour
 
     public static void combineGroups(boneGroup one, boneGroup two)
     {
-        //one.removeFromConvayer();
-        //two.removeFromConvayer();
         if (!one.parent)
         {
             two.addChild(one);
             one.resetID();
+            boneManager.Instance.SetFate(one,BoneFates.Merged);
         }
         else if (!two.parent)
         {
             one.addChild(two);
             two.resetID();
+            boneManager.Instance.SetFate(two, BoneFates.Merged);
         }
         else
         {
             two.makeRoot();
             one.addChild(two);
             two.resetID();
+            boneManager.Instance.SetFate(two, BoneFates.Merged);
         }
     }
 
