@@ -24,7 +24,7 @@ public class MenuDisplayScore : State
 
         while (ps != null)
         {
-            partialList += ps.Text();
+            partialList += ps.text;
             totalScore = ps.Apply(totalScore);
             if (lineCount != maxLines)
                 lineCount++;
@@ -38,7 +38,7 @@ public class MenuDisplayScore : State
             yield return new WaitForSeconds(0.5f);
         }
 
-        textBox.text = partialList + "Total: " + totalScore.ToString();
+        textBox.text = partialList + "\nTotal: " + totalScore.ToString();
 
         yield return new WaitUntil(() => { return buttonName == "Main"; });
 
@@ -57,6 +57,6 @@ public class MenuDisplayScore : State
             textBox.text = "";
             canvas.SetActive(false); 
         });
-        StateManager.Instance.AddEventMethod("CalculateScore", "end", () => { canvas.SetActive(true); });
+        GameManager.Instance.AddEventMethod("CalculateScore", "end", () => { canvas.SetActive(true); });
     }
 }

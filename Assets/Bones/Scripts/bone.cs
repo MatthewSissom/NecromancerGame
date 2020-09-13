@@ -6,7 +6,6 @@ public class bone : MonoBehaviour
 {
     private boneGroup group;
     private Rigidbody rb;
-    public boneManager boneManager;
 
     public Rigidbody Rb { get { return rb; }}
     public boneGroup Group { get { return group; } }
@@ -26,19 +25,12 @@ public class bone : MonoBehaviour
         //particleEffect = (GameObject)UnityEditor.AssetDatabase.LoadAssetAtPath("Assets/ParticleFX/Combine/CombineFX.prefab", typeof(GameObject));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         bone colliding = collision.gameObject.GetComponent<bone>();
         //if colliding with a bone and not in the same group already
         if (colliding && group.GroupID < colliding.group.GroupID)
         {
-            boneManager.NumGroups--;
             //update group trees
             boneGroup.combineGroups(group, colliding.group);
 
@@ -81,5 +73,10 @@ public class bone : MonoBehaviour
             //create particle effect
             //Instantiate(particleEffect, jointWorldPoint, Quaternion.identity);
         }
+    }
+
+    private void OnDestroy()
+    {
+        boneManager.Instance.SetFate(group, BoneFates.Destroyed);
     }
 }

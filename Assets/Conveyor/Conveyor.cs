@@ -7,8 +7,8 @@ public class Conveyor : State
     [Header("Bones")]
     public List<GameObject> orderedBones;
     public List<int> count;
-    public boneManager boneManager;
     public List<int> bursts;
+    private int current = 0;
 
     [Header("Belt Stats")]
     public Vector3 velocity;
@@ -20,7 +20,9 @@ public class Conveyor : State
     private Rigidbody mBody;
     private BoxCollider dropCollider;
 
-    void CreateBones()
+    public bool running = true;
+
+    public void CreateBones()
     {
         initalPos = mBody.position;
 
@@ -34,11 +36,10 @@ public class Conveyor : State
         GameObject current;
         foreach(GameObject p in orderedBones)
         {
-            current = Instantiate(p, safeInstantiation, p.transform.rotation);
-            bone currentBone = current.GetComponent<bone>();
+            bone currentBone = boneManager.Instance.NewBone(p, safeInstantiation, p.transform.rotation);
+            current = currentBone.gameObject;
             if (currentBone)
             {
-                currentBone.boneManager = boneManager;
                 mGroup.addChild(currentBone.Group);
 
                 //set bone position
@@ -49,10 +50,6 @@ public class Conveyor : State
 
                 //don't use gravity until enabled
                 currentBone.Rb.useGravity = false;
-            }
-            else
-            {
-                Destroy(current);
             }
             mGroup.GroupID = 0;
         }
@@ -75,7 +72,7 @@ public class Conveyor : State
         }
     }
 
-    private IEnumerator BoneShipment(int count, float timeUntilNext)
+    private IEnumerator BoneShipment(int count)
     {
         float previousTime = Time.time;
         float elapsedTime = 0;
@@ -90,19 +87,16 @@ public class Conveyor : State
             }, new FunctionArgs());
             yield return null;
         }
-        yield return new WaitForSeconds(timeUntilNext);
     }
 
     public override IEnumerator Routine()
     {
-        CreateBones();
         Begin();
         yield return null;
+        yield return BoneShipment(bursts[current]);
 
-        foreach(int burst in bursts)
-        {
-            yield return BoneShipment(burst, burst);
-        }
+        current++;
+        running = bursts.Count > current;
 
         End();
         yield break;
@@ -160,6 +154,5 @@ public class Conveyor : State
             orderedBones[rand2] = orderedBones[rand1];
             orderedBones[rand1] = temp;
         }
-        boneManager.NumGroups = orderedBones.Count;
     }
 }

@@ -18,7 +18,12 @@ public class MainCameraCustomEditory : Editor
         DrawDefaultInspector();
         if(GUILayout.Button("New Transition"))
         {
-            myScript.gameObject.AddComponent(typeof(CameraTransition));
+            CameraTransition newTrans = (CameraTransition)myScript.gameObject.AddComponent(typeof(CameraTransition));
+            newTrans.pos = newTrans.transform.position;
+            newTrans.up = newTrans.transform.up;
+            newTrans.forward = newTrans.transform.forward;
+            newTrans.transitionName = myScript.NewStateName;
+            newTrans.time = 1;
         }
     }
 }

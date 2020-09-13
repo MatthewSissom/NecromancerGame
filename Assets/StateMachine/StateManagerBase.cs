@@ -28,6 +28,7 @@ public class StateManagerBase : MonoBehaviour
         if (states.ContainsKey(stateName))
         #endif
         {
+            //Debug.Log(GetType() + "setting state to" + stateName);
             currentRoutine = StartCoroutine(states[stateName].Routine());
             return currentRoutine;
         }
@@ -50,7 +51,7 @@ public class StateManagerBase : MonoBehaviour
     {
         IEnumerator HookUpEvent()
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.2f);
             if (!states.ContainsKey(stateName))
             {
                 Debug.LogError(GetType() + " does not contain state \"" + stateName + "\"");

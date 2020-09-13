@@ -29,6 +29,6 @@ public class MenuInstructions : State
     private void Start()
     {
         MenuManager.Instance.AddEventMethod("MenuMain", "begin", () => { canvas.SetActive(true); });
-        StateManager.Instance.AddEventMethod("CalculateScore", "end", () => { canvas.SetActive(false); });
+        GameManager.Instance.AddEventMethod("CalculateScore", "end", () => { canvas.SetActive(false); });
     }
 }

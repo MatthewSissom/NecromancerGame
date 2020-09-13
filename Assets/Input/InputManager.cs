@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour
     public float height;
     public float rotationRadSquared;
 
+    static public InputManager Instance;
 
     Dictionary<int, TouchProxy> proxies = new Dictionary<int, TouchProxy>();
     List<int> allIDs = new List<int>();
@@ -25,7 +26,7 @@ public class InputManager : MonoBehaviour
     }
 
     //removes all proxies
-    private void clear()
+    public void clear()
     {
         foreach (int id in allIDs)
         {
@@ -109,8 +110,10 @@ public class InputManager : MonoBehaviour
 
     private void Start()
     {
-        StateManager.Instance.AddEventMethod("Conveyor", "begin", () => { this.enabled = true; });
-        StateManager.Instance.AddEventMethod("Conveyor", "end", () => { this.enabled = false; clear(); });
+        if (Instance)
+            Destroy(this);
+        else
+            Instance = this;
         this.enabled = false;
     }
 }
