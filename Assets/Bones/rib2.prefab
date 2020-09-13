@@ -65,6 +65,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneManager: {fileID: 0}
+  particleEffect: {fileID: 0}
 --- !u!212 &2214110588290316341
 SpriteRenderer:
   m_ObjectHideFlags: 0
