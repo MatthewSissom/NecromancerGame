@@ -9,6 +9,9 @@ public class TouchProxy : MonoBehaviour
     private float height;
 
     private BoxCollider myVolume;
+    //rad starts smaller and grows larger over a fraction of a second to avoid picking up bones on
+    //the outside of the rad instead of bones closer to the center
+    private float radMult;
 
     public float radius { get; set; }
 
@@ -17,6 +20,7 @@ public class TouchProxy : MonoBehaviour
     {
         myVolume = gameObject.GetComponent<BoxCollider>();
         height = transform.position.y;
+        radMult = .1f;
     }
 
     public void RotateGroup(float angle)
@@ -54,8 +58,10 @@ public class TouchProxy : MonoBehaviour
         }
         else
         {
+            if (radMult < 1)
+                radMult += Time.deltaTime * 5;
             transform.up = Camera.main.transform.position - transform.position;
-            myVolume.size = new Vector3(radius * 2, myVolume.size.y, radius * 2);
+            myVolume.size = new Vector3(radius * 2 * radMult, myVolume.size.y, radius * 2 * radMult);
         }
     }
 
@@ -65,6 +71,7 @@ public class TouchProxy : MonoBehaviour
         if (b)
         {
             myVolume.enabled = false;
+            b.PickedUp();
             activeBone = b;
         }
     }

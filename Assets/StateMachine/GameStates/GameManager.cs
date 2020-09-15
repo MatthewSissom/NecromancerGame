@@ -20,14 +20,17 @@ public class GameManager : StateManagerBase
         InputManager.Instance.enabled = true;
         Conveyor conveyor = GameObject.FindObjectOfType<Conveyor>();
         conveyor.CreateBones();
-        yield return SetState("CountDown");
-        while(conveyor.running)
+
+        //yield return SetState("CountDown");
+
+        //bone delivery loop
+        while (conveyor.running)
         {
             yield return SetState("GhostTrans");
             yield return SetState("Conveyor");
-            yield return new WaitForSeconds(1.0f);
-            yield return SetState("TableTrans");
             yield return new WaitForSeconds(3.0f);
+            yield return SetState("TableTrans");
+            yield return new WaitForSeconds(5.0f);
         }
         yield return SetState("CalculateScore");
 
