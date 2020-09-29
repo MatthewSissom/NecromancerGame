@@ -15,6 +15,13 @@ public class TouchProxy : MonoBehaviour
 
     public float radius { get; set; }
 
+    public Vector3 offset;
+
+    public boneGroup.applyToAllType applyToAll;
+
+    public delegate void destroyCallback();
+    public event destroyCallback DestroyEvent;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,20 +29,6 @@ public class TouchProxy : MonoBehaviour
         height = transform.position.y;
         radMult = .1f;
     }
-
-    public void RotateGroup(float angle)
-    {
-        void rotateY(bone toApply, FunctionArgs e)
-        {
-            toApply.transform.RotateAround((e as VecPair).vec1, Vector3.up, (e as VecPair).f);
-        }
-        activeBone.Group.applyToAll(rotateY, new VecPair(transform.position, angle));
-    }
-
-    public class VecWraper : FunctionArgs 
-    { public Vector3 vec; public VecWraper(Vector3 vec) { this.vec = vec; } }
-    public class VecPair : FunctionArgs 
-    { public Vector3 vec1; public float f; public VecPair(Vector3 vec1, float f) { this.vec1 = vec1; this.f = f; } }
 
     // Update is called once per frame
     protected virtual void Update()
@@ -46,15 +39,15 @@ public class TouchProxy : MonoBehaviour
             const float maxVelocity = 3.0f;
             const float baseMult = 10;
 
-            Vector3 toProxy = (transform.position - activeBone.transform.position) * baseMult;
+            Vector3 toProxy = (transform.position + offset- activeBone.transform.position) * baseMult;
             Vector3.ClampMagnitude(toProxy, maxVelocity);
-            activeBone.Group.applyToAll(
-                (bone toApply, FunctionArgs e) =>
-                {
-                    toApply.Rb.velocity = ((VecWraper)e).vec;
-                    toApply.Rb.angularVelocity = new Vector3();
-                },
-                new VecWraper(toProxy));
+
+            void SetVelocity(bone toApply, FunctionArgs e)
+            {
+                toApply.Rb.velocity = toProxy;
+                toApply.Rb.angularVelocity = new Vector3();
+            }
+            applyToAll(SetVelocity);
         }
         else
         {
@@ -65,7 +58,7 @@ public class TouchProxy : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         bone b = other.GetComponentInParent<bone>();
         if (b)
@@ -73,11 +66,13 @@ public class TouchProxy : MonoBehaviour
             myVolume.enabled = false;
             b.PickedUp();
             activeBone = b;
+            applyToAll = b.Group.applyToAll;
         }
     }
 
     protected virtual void OnDestroy()
     {
+        DestroyEvent?.Invoke();
         if (activeBone)
         {
             //limit the upwards velocity of bones
@@ -90,7 +85,7 @@ public class TouchProxy : MonoBehaviour
                     toApply.Rb.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
                 }
             }
-            activeBone.Group.applyToAll(clampYVel, new FunctionArgs());
+            activeBone.Group.applyToAll(clampYVel);
         }
     }
 }

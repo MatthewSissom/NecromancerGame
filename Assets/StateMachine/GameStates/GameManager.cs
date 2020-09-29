@@ -18,17 +18,13 @@ public class GameManager : StateManagerBase
     public IEnumerator Game()
     {
         InputManager.Instance.enabled = true;
-        Conveyor conveyor = GameObject.FindObjectOfType<Conveyor>();
-        conveyor.CreateBones();
-
         //yield return SetState("CountDown");
 
         //bone delivery loop
-        while (conveyor.running)
+        while (!GhostManager.Instance.done)
         {
             yield return SetState("GhostTrans");
-            yield return SetState("Conveyor");
-            yield return new WaitForSeconds(3.0f);
+            yield return SetState("GhostManager");
             yield return SetState("TableTrans");
             yield return new WaitForSeconds(5.0f);
         }
@@ -36,6 +32,12 @@ public class GameManager : StateManagerBase
 
         InputManager.Instance.clear();
         InputManager.Instance.enabled = true;
+        yield break;
+    }
+
+    public IEnumerator Reset()
+    {
+        //TODO implement reset
         yield break;
     }
 

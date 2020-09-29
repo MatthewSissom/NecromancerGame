@@ -41,8 +41,11 @@ public class bone : MonoBehaviour
         {
             bone colliding = collision.gameObject.GetComponent<bone>();
             //if colliding with a bone and not in the same group already
+            //then connect the two bones together
             if (colliding && group.GroupID < colliding.group.GroupID)
             {
+                //---Bone Connection---//
+
                 //update group trees
                 boneGroup.combineGroups(group, colliding.group);
 

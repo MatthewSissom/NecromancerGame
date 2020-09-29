@@ -130,7 +130,8 @@ public class boneGroup : MonoBehaviour
         }
     }
 
-    public virtual void applyToAll(GroupFunction func, FunctionArgs e, bool rootReached = false)
+    public delegate void applyToAllType(GroupFunction func, FunctionArgs e = null, bool rootReached = false);
+    public virtual void applyToAll(GroupFunction func, FunctionArgs e = null, bool rootReached = false)
     {
         //traverse up the tree until the root is reached
         if (!rootReached && parent)

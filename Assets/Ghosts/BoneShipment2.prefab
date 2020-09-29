@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6224480179685692120
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2027253193710276888}
+  - component: {fileID: 3001092951094203540}
+  m_Layer: 0
+  m_Name: BoneShipment2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2027253193710276888
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6224480179685692120}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.45919, y: 0.19298838, z: 0.45919}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3001092951094203540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6224480179685692120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1295e17bee5ee904ba63f48e901f8d41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bones:
+  - {fileID: 2955226788502251737, guid: af7277cd7ce01894f9781902f3f5827d, type: 3}
+  - {fileID: 2955226788502251737, guid: fba3d1902015fd841b13c488c73638bf, type: 3}
+  - {fileID: 2955226788502251737, guid: a7d087c5c23d44d48ac63635582dc2ed, type: 3}
+  - {fileID: 2955226788502251737, guid: c76a8f2e5f312f14da1f16a327cfaf57, type: 3}
+  - {fileID: 2955226788502251737, guid: 5c1c61175cc24ab46bd146a1202ea297, type: 3}
+  - {fileID: 2955226788502251737, guid: 5c1c61175cc24ab46bd146a1202ea297, type: 3}
+  - {fileID: 2955226788502251737, guid: 5c1c61175cc24ab46bd146a1202ea297, type: 3}

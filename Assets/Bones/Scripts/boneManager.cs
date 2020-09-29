@@ -15,7 +15,7 @@ public class boneManager : MonoBehaviour
     static public boneManager Instance { get; private set; }
     public int numGroups { get; private set; }
 
-    private int currentID = 1;
+    private int currentID = 0;
 
     //holds an int for the end state of every bone group
     public List<BoneFates> boneFates;

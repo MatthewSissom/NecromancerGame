@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Highest level state manager, controls the game flow 
 public class StateManager : StateManagerBase
 {
     public static StateManager Instance;
@@ -11,6 +12,7 @@ public class StateManager : StateManagerBase
         while(true)
         {
             yield return SetState(MenuManager.Instance.Main());
+            yield return SetState(GameManager.Instance.Reset());
             yield return SetState(GameManager.Instance.Game());
             yield return SetState(MenuManager.Instance.Score());
         }

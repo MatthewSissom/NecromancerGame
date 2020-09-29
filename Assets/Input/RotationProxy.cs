@@ -12,6 +12,7 @@ public class RotationProxy : TouchProxy
         { 
             parent = value;
             previousNorm  = (parent.transform.position - transform.position).normalized;
+            parent.DestroyEvent += () => InputManager.Instance.replaceWithNull(this);
         }
     }
     public Vector3 previousNorm;
@@ -19,11 +20,13 @@ public class RotationProxy : TouchProxy
     protected override void Update()
     {
         Vector3 norm = (parent.transform.position - transform.position).normalized;
-        parent.RotateGroup(Vector3.SignedAngle(previousNorm, norm, Vector3.up));
+        parent.applyToAll((bone toApply, FunctionArgs e) =>
+        {
+            float angle = Vector3.SignedAngle(previousNorm, norm, Vector3.up);
+            toApply.transform.RotateAround(parent.transform.position + parent.offset, Vector3.up, angle);
+        });
         previousNorm = norm;
     }
 
-    protected override void OnDestroy()
-    {
-    }
+    protected override void OnTriggerEnter(Collider other) { }
 }

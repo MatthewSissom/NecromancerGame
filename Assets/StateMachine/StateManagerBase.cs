@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Base class which all state managers inherit from
+//All states trigger begin and end events which can be added to using AddEventMethod
+
 public class StateManagerBase : MonoBehaviour
 {
     protected Dictionary<string, State> states;
@@ -47,6 +51,8 @@ public class StateManagerBase : MonoBehaviour
         return currentRoutine;
     }
 
+    //Used to run code when a state event is triggered
+    //All states have a "begin" and "end" event and can implement custom events as well.
     public void AddEventMethod(string stateName, string eventName, State.StateMethod method)
     {
         IEnumerator HookUpEvent()

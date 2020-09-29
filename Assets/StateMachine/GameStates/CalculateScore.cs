@@ -39,26 +39,6 @@ public class CalculateScore : State
     {
         Begin();
 
-        //for (int x = 0; x < width; x++)
-        //{
-        //    pixelGrid.Add(new List<rayPixel>());
-        //    for (int y = 0; y < height; y++)
-        //    {
-        //        if (raw.GetPixel(x, y) != Color.white)
-        //        {
-        //            pixelGrid[x].Add(
-        //                Instantiate(interiorPixel, transform.position + new Vector3(distance * (x - width / 2), 0, distance * (y - height / 2)), transform.rotation, transform)
-        //                .GetComponent<rayPixel>());
-        //        }
-        //        else
-        //        {
-        //            pixelGrid[x].Add(
-        //                Instantiate(exteriorPixel, transform.position + new Vector3(distance * (x - width / 2), 0, distance * (y - height / 2)), transform.rotation, transform)
-        //                .GetComponent<rayPixel>());
-        //        }
-        //    }
-        //}
-
         //create circles of pixels for each location
         for (int i = 0; i < names.Count; i++)
         {
@@ -109,7 +89,7 @@ public class CalculateScore : State
 
         if (names.Count != value.Count || locationAndRad.Count != names.Count)
         {
-            Debug.LogError("Size mismatch between names, values or circles in pixelGrid!");
+            Debug.LogError("Size mismatch between names, values or circles in CalculateScore!");
             return;
         }
 
