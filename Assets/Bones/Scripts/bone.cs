@@ -90,9 +90,4 @@ public class bone : MonoBehaviour
             }
         }
     }
-
-    private void OnDestroy()
-    {
-        boneManager.Instance.SetFate(group, BoneFates.Destroyed);
-    }
 }

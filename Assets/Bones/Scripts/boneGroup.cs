@@ -60,20 +60,17 @@ public class boneGroup : MonoBehaviour
         {
             two.addChild(one);
             one.resetID();
-            boneManager.Instance.SetFate(one,BoneFates.Merged);
         }
         else if (!two.parent)
         {
             one.addChild(two);
             two.resetID();
-            boneManager.Instance.SetFate(two, BoneFates.Merged);
         }
         else
         {
             two.makeRoot();
             one.addChild(two);
             two.resetID();
-            boneManager.Instance.SetFate(two, BoneFates.Merged);
         }
     }
 

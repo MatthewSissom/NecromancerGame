@@ -14,6 +14,7 @@ public class GhostManager : State
 
     [Header("Ghosts")]
     public GameObject ghostPref;
+    private List<GhostBehavior> ghosts;
 
 
     //instantiates the bones given 
@@ -30,15 +31,36 @@ public class GhostManager : State
             bone currentBone = boneManager.Instance.NewBone(pref, new Vector3(0,100,0), pref.transform.rotation);
             if (currentBone)
             {
-                GhostBehavior ghost = Instantiate(ghostPref, pos, Quaternion.Euler(0,90,0)).GetComponent<GhostBehavior>();
+                GhostBehavior ghost = CreateGhost(pos);
                 ghost.mBone = currentBone;
                 currentBone.mGhost = ghost;
-                ghost.destination = target;
-                ghost.timeToDest = 1 + Random.value;
+                ghost.MoveToPosition(1 + Random.value, target);
             }
             pos += spacing;
         }
     }
+
+    public GhostBehavior CreateGhost(Vector3 position)
+    {
+        GhostBehavior newGhost = Instantiate(ghostPref, position, Quaternion.Euler(0, 90, 0)).GetComponent<GhostBehavior>();
+        ghosts.Add(newGhost);
+        return newGhost;
+    }
+
+    public void DestroyGhost(GhostBehavior toRemove)
+    {
+        ghosts.Remove(toRemove);
+        Destroy(toRemove.transform.root.gameObject);
+    }
+
+    public void RecallGhosts()
+    {
+        foreach(GhostBehavior b in ghosts)
+        {
+            b.Recall();
+        }
+    }
+
 
     private float getLength(GameObject bone)
     {
@@ -50,6 +72,7 @@ public class GhostManager : State
         CreateBones(boneShipments[currentShipment].GetComponent<BoneShipment>().bones);
         done = ++currentShipment == boneShipments.Count;
         yield return new WaitForSeconds(5.0f);
+        RecallGhosts();
         yield break;
     }
 
@@ -74,6 +97,7 @@ public class GhostManager : State
         {
             Instance = this;
         }
+        ghosts = new List<GhostBehavior>();
     }
 }
 
