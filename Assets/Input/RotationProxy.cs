@@ -4,20 +4,21 @@ using UnityEngine;
 
 public class RotationProxy : TouchProxy
 {
-    private TouchProxy parent;
-    public TouchProxy Parent
+    private FloatingTouch parent;
+    public FloatingTouch Parent
     { 
         get { return parent; }
         set 
         { 
             parent = value;
             previousNorm  = (parent.transform.position - transform.position).normalized;
-            parent.DestroyEvent += () => InputManager.Instance.replaceWithNull(this);
+            //replace this touch with a functionless one
+            parent.DestroyEvent += () => InputManager.Instance.ReplaceWith<TouchProxy>(this);
         }
     }
     public Vector3 previousNorm;
 
-    protected override void Update()
+    protected void Update()
     {
         Vector3 norm = (parent.transform.position - transform.position).normalized;
         parent.applyToAll((bone toApply, FunctionArgs e) =>
@@ -27,6 +28,4 @@ public class RotationProxy : TouchProxy
         });
         previousNorm = norm;
     }
-
-    protected override void OnTriggerEnter(Collider other) { }
 }

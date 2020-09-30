@@ -50,6 +50,10 @@ public class GhostManager : State
     public void DestroyGhost(GhostBehavior toRemove)
     {
         ghosts.Remove(toRemove);
+        if(toRemove.mBone)
+        {
+            boneManager.Instance.DestroyBone(toRemove.mBone);
+        }
         Destroy(toRemove.transform.root.gameObject);
     }
 

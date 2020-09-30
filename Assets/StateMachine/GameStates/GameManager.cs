@@ -31,7 +31,7 @@ public class GameManager : StateManagerBase
         yield return SetState("CalculateScore");
 
         InputManager.Instance.clear();
-        InputManager.Instance.enabled = true;
+        InputManager.Instance.enabled = false;
         yield break;
     }
 

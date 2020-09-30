@@ -6,7 +6,9 @@ using TMPro;
 public class boneManager : MonoBehaviour
 {
     static public boneManager Instance { get; private set; }
-    public int numGroups { get; private set; }
+
+    private LinkedList<bone> activeBones;
+    private LinkedList<bone> deactivatedBones;
 
     private int currentID = 0;
 
@@ -21,10 +23,9 @@ public class boneManager : MonoBehaviour
         {
             Instance = this;
         }
-    }
 
-    private void Start()
-    {
+        activeBones = new LinkedList<bone>();
+        deactivatedBones = new LinkedList<bone>();
     }
 
     public int GetID()
@@ -35,20 +36,53 @@ public class boneManager : MonoBehaviour
     public bone NewBone(GameObject pref, Vector3 location, Quaternion rotation)
     {
         var go = Instantiate(pref, location, rotation);
-        return go.GetComponent<bone>();
+        bone bone = go.GetComponent<bone>();
+        activeBones.AddLast(bone);
+        return bone;
     }
 
 
+    public void DeactivateBone(bone toDeactivate)
+    {
+        if (toDeactivate && !deactivatedBones.Contains(toDeactivate))
+        {
+            activeBones.Remove(toDeactivate);
+            deactivatedBones.AddLast(toDeactivate);
+            toDeactivate.enabled = false;
+        }
+    }
+
+    public void DestroyBone(bone toDestroy)
+    {
+        activeBones.Remove(toDestroy);
+        Destroy(toDestroy.transform.root.gameObject);
+    }
+
     public PartialScore ConnectionScore()
     {
-        return new PartialScore("connection", 0, "Skeleton is not connected, + 0\n");
+        //search for any ids that aren't the same 
+        int id = (activeBones.Count > 0) ? activeBones.First.Value.Group.GroupID : -1;
+        foreach(bone b in activeBones)
+        {
+            if(b.Group.GroupID != id)
+            {
+                id = -1;
+                break;
+            }
+        }
 
-        return new PartialScore("connection", 1000, "Skeleton is fully connected, + 1000!\n");
+        if (id == -1)
+        {
+            return new PartialScore("connection", 0, "Skeleton is not connected, + 0\n");
+        }
+        {
+            return new PartialScore("connection", 1000, "Skeleton is fully connected, + 1000!\n");
+        }
     }
 
     public PartialScore LostBones()
     {
-        int lostCount = 0;
+        int lostCount = deactivatedBones.Count;
         if (lostCount == 0)
         {
             return new PartialScore("lostBone", 1000, "No lost bones, + 1000!");

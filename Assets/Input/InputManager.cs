@@ -6,8 +6,9 @@ public class InputManager : MonoBehaviour
 {
     [Header ("GameObjects")]
     public GameObject touchProxy;
+    public GameObject searchingTouch;
+    public GameObject floatingTouch;
     public GameObject rotationProxy;
-    public GameObject nullTouch;
 
     [Header ("Game Feel Values")]
     public float height;
@@ -27,18 +28,32 @@ public class InputManager : MonoBehaviour
         proxies.Remove(id);
     }
 
-    public void replaceWithNull(TouchProxy toReplace)
+    //replaces the given touch with another touch and return the replacment
+    public T ReplaceWith<T>(TouchProxy toReplace) where T : TouchProxy
     {
-        Destroy(toReplace);
+        //prevent stale calls
+        if (!proxies.ContainsValue(toReplace))
+            return null;
+
         //find id
         foreach (int possibleId in allIDs)
         {
             if (proxies[possibleId] == toReplace)
             {
-                proxies[possibleId] = Instantiate(nullTouch).GetComponent<NullTouch>();
-                return;
+                T newProxy;
+                if (typeof(T) == typeof(TouchProxy))
+                    newProxy = Instantiate(touchProxy, toReplace.transform.position, Quaternion.identity).GetComponent<T>();
+                else if (typeof(T) == typeof(FloatingTouch))
+                    newProxy = Instantiate(floatingTouch, toReplace.transform.position, Quaternion.identity).GetComponent<T>();
+                else
+                    throw new System.Exception("ReplaceWith<T> does not support type \"" + typeof(T) + "\"");
+
+                Destroy(toReplace.gameObject);
+                proxies[possibleId] = newProxy;
+                return newProxy;
             }
         }
+        return null;
     }
 
     //removes all proxies
@@ -52,19 +67,18 @@ public class InputManager : MonoBehaviour
         allIDs = new List<int>();
     }
 
-    private TouchProxy isRotationTouch(Vector3 pos)
+    private FloatingTouch isRotationTouch(Vector3 pos)
     {
         foreach (int i  in allIDs)
         {
-            TouchProxy t = proxies[i];
-            if (t.GetType() == typeof(TouchProxy) &&
-                (t.transform.position - pos).sqrMagnitude < rotationRadSquared)
-                return t;
+            FloatingTouch ft = proxies[i] as FloatingTouch;
+            if (ft && (ft.transform.position - pos).sqrMagnitude < rotationRadSquared)
+                return ft;
         }
         return null;
     }
 
-    void CreateTouchProxy(int id, Vector3 pos, TouchProxy rotationParent = null)
+    void CreateTouchProxy(int id, Vector3 pos, FloatingTouch rotationParent = null)
     {
         //if the touch is a rotation touch create a specialized touch
         if (rotationParent)
@@ -78,15 +92,14 @@ public class InputManager : MonoBehaviour
             allIDs.Add(id);
             newScript.Parent = rotationParent;
         }
-        //otherwise create a standard touch proxy
+        //otherwise create a searching touch proxy
         else
         {
            var newScript = Instantiate(
-               touchProxy,
+               searchingTouch,
                pos,
                Quaternion.identity
-               ).GetComponent<TouchProxy>();
-            newScript.offset = offset;
+               ).GetComponent<SearchingTouch>();
             proxies.Add(id, newScript);
             allIDs.Add(id);
         }

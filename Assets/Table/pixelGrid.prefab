@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5695343819301046884}
-  - component: {fileID: -4291883207613875757}
   - component: {fileID: -1606995071302942416}
+  - component: {fileID: 4124683568221905956}
   m_Layer: 0
   m_Name: pixelGrid
   m_TagString: Untagged
@@ -32,25 +32,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
---- !u!114 &-4291883207613875757
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3104035216564944652}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd099aec2d27a824c870dda8e6406e53, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  exteriorPixel: {fileID: 3437619409915506882, guid: 25d318468ddf11840992f5a781906d0e,
-    type: 3}
-  interiorPixel: {fileID: 3437619409915506882, guid: 5b1eb2662a050584fb82755a5596379b,
-    type: 3}
-  padding: 0
-  RefreshRate: 0
-  groups: 0
 --- !u!212 &-1606995071302942416
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -98,6 +79,39 @@ SpriteRenderer:
   m_Size: {x: 0.64, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4124683568221905956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3104035216564944652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d26aaeb81962fa478e8d81667ed9505, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxOutsideOutlinePenalty: 10000
+  step: 10
+  locationAndRad:
+  - {x: 200, y: 100, z: 30}
+  - {x: 800, y: 300, z: 200}
+  - {x: 550, y: 550, z: 30}
+  - {x: 600, y: 820, z: 30}
+  - {x: 1330, y: 420, z: 20}
+  - {x: 1300, y: 750, z: 20}
+  - {x: 1240, y: 160, z: 35}
+  - {x: 1675, y: 480, z: 20}
+  names:
+  - head
+  - ribcage
+  - upper front leg
+  - lower front leg
+  - upper back leg
+  - lower back leg
+  - spine
+  - tail
+  value: 64000000c80000004b000000410000004b000000410000005000000064000000
