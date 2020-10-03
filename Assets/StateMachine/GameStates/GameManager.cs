@@ -5,12 +5,17 @@ using UnityEngine;
 public class GameManager : StateManagerBase
 {
     public static GameManager Instance;
+    private FMOD.Studio.EventInstance musicInstance;
 
     protected override void Awake()
     {
         base.Awake();
+
         if (Instance)
+        {
             Destroy(this);
+            musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
         else
             Instance = this;
     }
@@ -44,6 +49,10 @@ public class GameManager : StateManagerBase
     override protected void Start()
     {
         base.Start();
+
+        musicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Music/NecromancerAcademyDemo_Take4");
+        musicInstance.start();
+
         foreach (State s in allStates)
         {
             string name = s.Name;
