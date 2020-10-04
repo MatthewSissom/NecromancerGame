@@ -86,7 +86,7 @@ public class bone : MonoBehaviour
                 newJoint.enableCollision = true;
 
                 //create particle effect
-                //Instantiate(particleEffect, jointWorldPoint, Quaternion.identity);
+                Instantiate(particleEffect, jointWorldPoint, Quaternion.identity);
             }
         }
     }

@@ -10,6 +10,12 @@ public class TouchProxy : MonoBehaviour
     public delegate void destroyCallback();
     public event destroyCallback DestroyEvent;
 
+    public virtual void Move(Vector3 pos, float rad)
+    {
+        transform.position = pos;
+        radius = rad;
+    }
+
     protected virtual void OnDestroy()
     {
         DestroyEvent?.Invoke();

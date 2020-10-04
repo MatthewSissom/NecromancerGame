@@ -10,11 +10,23 @@ public class FloatingTouch : TouchProxy
     public boneGroup.applyToAllType applyToAll;
 
     public Vector3 offset;
+    public float heightThreshold;
+
+    //speed
+    public float speed;
+    public Vector3 previousLocation;
 
     // Start is called before the first frame update
     void Awake()
     {
         activeBone = null;
+    }
+
+    public override void Move(Vector3 pos, float rad)
+    {
+        speed = (pos - previousLocation).magnitude;
+        previousLocation = transform.position;
+        base.Move(pos, rad);
     }
 
     public void SetBone(bone bone)
@@ -34,6 +46,10 @@ public class FloatingTouch : TouchProxy
         const float baseMult = 10;
 
         Vector3 toProxy = (transform.position + offset - activeBone.transform.position) * baseMult;
+        if(toProxy.y > heightThreshold)
+        {
+            toProxy = new Vector3(0, toProxy.y, 0);
+        }
         Vector3.ClampMagnitude(toProxy, maxVelocity);
 
         void SetVelocity(bone toApply, FunctionArgs e)

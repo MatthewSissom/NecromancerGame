@@ -58,6 +58,20 @@ public class boneManager : MonoBehaviour
         Destroy(toDestroy.transform.root.gameObject);
     }
 
+    public void DestroyAll()
+    {
+        foreach (bone b in activeBones)
+        {
+            Destroy(b);
+        }
+        foreach (bone b in deactivatedBones)
+        {
+            Destroy(b);
+        }
+        activeBones = new LinkedList<bone>();
+        deactivatedBones = new LinkedList<bone>();
+    }
+
     public PartialScore ConnectionScore()
     {
         //search for any ids that aren't the same 

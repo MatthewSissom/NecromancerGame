@@ -11,21 +11,25 @@ public class RotationProxy : TouchProxy
         set 
         { 
             parent = value;
-            previousNorm  = (parent.transform.position - transform.position).normalized;
-            //replace this touch with a functionless one
-            parent.DestroyEvent += () => InputManager.Instance.ReplaceWith<TouchProxy>(this);
+            //replace this touch with a functionless one if the floating touch is removed
+            parent.DestroyEvent += () => { InputManager.Instance.ReplaceWith<TouchProxy>(this); };
         }
     }
-    public Vector3 previousNorm;
+    public float toRotate = 0;
+
+    public override void Move(Vector3 pos, float rad)
+    {
+        Vector3 previousNorm = (parent.transform.position - transform.position).normalized;
+        base.Move(pos, rad);
+        toRotate += Vector3.SignedAngle(previousNorm, (parent.transform.position - transform.position).normalized, Vector3.up);
+    }
 
     protected void Update()
     {
-        Vector3 norm = (parent.transform.position - transform.position).normalized;
         parent.applyToAll((bone toApply, FunctionArgs e) =>
         {
-            float angle = Vector3.SignedAngle(previousNorm, norm, Vector3.up);
-            toApply.transform.RotateAround(parent.transform.position + parent.offset, Vector3.up, angle);
+            toApply.transform.RotateAround(parent.transform.position + parent.offset, Vector3.up, toRotate);
         });
-        previousNorm = norm;
+        toRotate = 0;
     }
 }

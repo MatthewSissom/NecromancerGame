@@ -44,3 +44,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 0.2, y: 0, z: 0.2}
+  heightThreshold: 3

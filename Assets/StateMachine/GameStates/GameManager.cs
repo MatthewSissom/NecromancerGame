@@ -17,7 +17,8 @@ public class GameManager : StateManagerBase
 
     public IEnumerator Game()
     {
-        InputManager.Instance.enabled = true;
+        yield return SetState("GameInit");
+        
         //yield return SetState("CountDown");
 
         //bone delivery loop
@@ -30,8 +31,8 @@ public class GameManager : StateManagerBase
         }
         yield return SetState("CalculateScore");
 
-        InputManager.Instance.clear();
-        InputManager.Instance.enabled = false;
+        yield return SetState("GameCleanUp");
+
         yield break;
     }
 

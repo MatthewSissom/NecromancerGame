@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class InputManager : MonoBehaviour
 {
+    //TEMP stats for input
+    bool recordingVelocities = false;
+    List<float> touchVelocities = new List<float>();
+
     [Header ("GameObjects")]
     public GameObject touchProxy;
     public GameObject searchingTouch;
@@ -13,134 +17,160 @@ public class InputManager : MonoBehaviour
     [Header ("Game Feel Values")]
     public float height;
     public float rotationRadSquared;
-    public Vector3 offset;
+    public float rotationVelocityThreshold;
 
     static public InputManager Instance;
 
-    Dictionary<int, TouchProxy> proxies = new Dictionary<int, TouchProxy>();
-    List<int> allIDs = new List<int>();
+    TouchProxy[] proxies = new TouchProxy[5];
 
     //removes a single proxie from all data structures
     private void remove(int id)
     {
-        Destroy(proxies[id].gameObject);
-        allIDs.Remove(id);
-        proxies.Remove(id);
+        ReplaceWith<TouchProxy>(proxies[id]);
     }
 
     //replaces the given touch with another touch and return the replacment
-    public T ReplaceWith<T>(TouchProxy toReplace) where T : TouchProxy
+    public T ReplaceWith<T>(TouchProxy toReplace, Vector3? pos = null) where T : TouchProxy
     {
-        //prevent stale calls
-        if (!proxies.ContainsValue(toReplace))
-            return null;
-
         //find id
-        foreach (int possibleId in allIDs)
+        int id = -1;
+        for(int possibleId = 0; possibleId < 5; possibleId++)
         {
             if (proxies[possibleId] == toReplace)
             {
-                T newProxy;
-                if (typeof(T) == typeof(TouchProxy))
-                    newProxy = Instantiate(touchProxy, toReplace.transform.position, Quaternion.identity).GetComponent<T>();
-                else if (typeof(T) == typeof(FloatingTouch))
-                    newProxy = Instantiate(floatingTouch, toReplace.transform.position, Quaternion.identity).GetComponent<T>();
-                else
-                    throw new System.Exception("ReplaceWith<T> does not support type \"" + typeof(T) + "\"");
-
-                Destroy(toReplace.gameObject);
-                proxies[possibleId] = newProxy;
-                return newProxy;
+                id = possibleId;
+                break;
             }
         }
-        return null;
+        if (id == -1) return null;
+
+        return ReplaceWith<T>(id, pos);
+    }
+
+    public T ReplaceWith<T>(int id, Vector3? pos) where T : TouchProxy
+    {
+        var toReplace = proxies[id];
+        if (!toReplace)
+            return null;
+
+        if (pos == null)
+            pos = toReplace.transform.position;
+
+
+        //create new proxy
+        T newProxy;
+        if (typeof(T) == typeof(TouchProxy))
+            newProxy = Instantiate(touchProxy, (Vector3)pos, Quaternion.identity).GetComponent<T>();
+        else if (typeof(T) == typeof(FloatingTouch))
+            newProxy = Instantiate(floatingTouch, (Vector3)pos, Quaternion.identity).GetComponent<T>();
+        else if (typeof(T) == typeof(SearchingTouch))
+            newProxy = Instantiate(searchingTouch, (Vector3)pos, Quaternion.identity).GetComponent<T>();
+        else if (typeof(T) == typeof(RotationProxy))
+            newProxy = Instantiate(rotationProxy, (Vector3)pos, Quaternion.identity).GetComponent<T>();
+        else
+            throw new System.Exception("ReplaceWith<T> does not support type \"" + typeof(T) + "\"");
+
+        proxies[id] = newProxy;
+        Destroy(toReplace.gameObject);
+        return newProxy;
     }
 
     //removes all proxies
     public void clear()
     {
-        foreach (int id in allIDs)
+        for (int id = 0; id < 5; id++)
         {
             Destroy(proxies[id].gameObject);
         }
-        proxies = new Dictionary<int, TouchProxy>();
-        allIDs = new List<int>();
+        proxies = new TouchProxy[5];
+        for (int i = 0; i < 5; i++)
+        {
+            proxies[i] = Instantiate(touchProxy).GetComponent<TouchProxy>();
+        }
     }
 
     private FloatingTouch isRotationTouch(Vector3 pos)
     {
-        foreach (int i  in allIDs)
+        for (int id = 0; id < 5; id++)
         {
-            FloatingTouch ft = proxies[i] as FloatingTouch;
-            if (ft && (ft.transform.position - pos).sqrMagnitude < rotationRadSquared)
+            FloatingTouch ft = proxies[id] as FloatingTouch;
+            if (ft &&
+                //ft.velocity.magnitude < rotationVelocityThreshold &&
+                (ft.transform.position - pos).sqrMagnitude < rotationRadSquared)
+            {
                 return ft;
+            }
         }
         return null;
     }
 
     void CreateTouchProxy(int id, Vector3 pos, FloatingTouch rotationParent = null)
     {
-        //if the touch is a rotation touch create a specialized touch
-        if (rotationParent)
+        if(rotationParent)
         {
-            var newScript = Instantiate(
-               rotationProxy,
-               pos,
-               Quaternion.identity
-               ).GetComponent<RotationProxy>();
-            proxies.Add(id, newScript);
-            allIDs.Add(id);
-            newScript.Parent = rotationParent;
+            ReplaceWith<RotationProxy>(id,pos).Parent = rotationParent;
+            return;
         }
-        //otherwise create a searching touch proxy
-        else
-        {
-           var newScript = Instantiate(
-               searchingTouch,
-               pos,
-               Quaternion.identity
-               ).GetComponent<SearchingTouch>();
-            proxies.Add(id, newScript);
-            allIDs.Add(id);
-        }
+        ReplaceWith<SearchingTouch>(id, pos);
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         foreach(Touch t in Input.touches)
         {
-            //pos represents the point in world space at the specified height
-            Vector3 pos = t.position;
-            pos.z = Camera.main.transform.position.y - height;
-            Vector3 radVec = pos + new Vector3(t.radius, 0, 0);
-            
-            pos = Camera.main.ScreenToWorldPoint(pos);
-            float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
-
-            int id = t.fingerId;
-
-            switch (t.phase)
+            //try
             {
-                //new touch, create a proxy at the touch location and add it to dictionary
-                case TouchPhase.Began:
-                    CreateTouchProxy(id, pos, isRotationTouch(pos));
-                    break;
-                //update the proxy of existing touches
-                case TouchPhase.Moved:
-                    proxies[id].transform.position = pos;
-                    proxies[id].radius = rad;
-                    break;
-                //destroy any proxies for ended touches
-                case TouchPhase.Ended:
-                    remove(id);
-                    break;
-                case TouchPhase.Canceled:
-                    remove(id);
-                    break;
-                default:
-                    break;
+                //pos represents the point in world space at the specified height
+                Vector3 pos = t.position;
+                pos.z = Camera.main.transform.position.y - height;
+                Vector3 radVec = pos + new Vector3(t.radius, 0, 0);
+
+                pos = Camera.main.ScreenToWorldPoint(pos);
+                float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
+
+                int id = t.fingerId;
+
+                switch (t.phase)
+                {
+                    //new touch, create a proxy at the touch location and add it to dictionary
+                    case TouchPhase.Began:
+                        CreateTouchProxy(id, pos, isRotationTouch(pos));
+                        break;
+                    //update the proxy of existing touches
+                    case TouchPhase.Moved:
+                        proxies[id].Move(pos, rad);
+                        if (recordingVelocities)
+                        {
+                            FloatingTouch ft = proxies[id] as FloatingTouch;
+                            if (ft)
+                                touchVelocities.Add(ft.speed);
+                        }
+                        break;
+                    //destroy any proxies for ended touches
+                    case TouchPhase.Ended:
+                        remove(id);
+                        break;
+                    case TouchPhase.Canceled:
+                        remove(id);
+                        break;
+                    default:
+                        break;
+                }
             }
+            //catch (System.Exception e )
+            {
+               // proxies = null;
+            }
+        }
+    }
+
+    private void Awake()
+    {
+        proxies = new TouchProxy[5];
+        for (int i = 0; i < 5; i++)
+        {
+            proxies[i] = Instantiate(touchProxy).GetComponent<TouchProxy>();
         }
     }
 
@@ -151,6 +181,28 @@ public class InputManager : MonoBehaviour
         else
             Instance = this;
         this.enabled = false;
+
+
+        //TEMP stats for input
+        void RecordStats()
+        {
+            touchVelocities = new List<float>();
+            recordingVelocities = true;
+        }
+        void CalcStats()
+        {
+            touchVelocities.Sort();
+            Debug.Log(string.Format("Median: {0}\n" +
+                "80 per over {1}\n" +
+                "80 per under {3}\n",
+                touchVelocities[Mathf.FloorToInt(touchVelocities.Count/2)],
+                touchVelocities[Mathf.FloorToInt(touchVelocities.Count * .2f)],
+                touchVelocities[Mathf.FloorToInt(touchVelocities.Count * .8f)]
+                ));
+            recordingVelocities = false;
+        }
+        //GameManager.Instance.AddEventMethod("GhostManager", "begin", RecordStats);
+        //GameManager.Instance.AddEventMethod("TableTrans", "begin", CalcStats);
     }
 }
 
