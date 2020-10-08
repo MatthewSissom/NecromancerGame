@@ -12,6 +12,8 @@ public class FloatingTouch : TouchProxy
     public Vector3 offset;
     public float heightThreshold;
 
+    private GameObject lightParticle;
+
     //speed
     public float speed;
     public Vector3 previousLocation;
@@ -20,6 +22,7 @@ public class FloatingTouch : TouchProxy
     void Awake()
     {
         activeBone = null;
+        lightParticle = ParticleManager.CreateEffect("TouchLight",transform.position);
     }
 
     public override void Move(Vector3 pos, float rad)
@@ -27,6 +30,7 @@ public class FloatingTouch : TouchProxy
         speed = (pos - previousLocation).magnitude;
         previousLocation = transform.position;
         base.Move(pos, rad);
+        lightParticle.transform.position = transform.position + offset;
     }
 
     public void SetBone(bone bone)
@@ -63,6 +67,7 @@ public class FloatingTouch : TouchProxy
     protected override void OnDestroy()
     {
         base.OnDestroy();
+        Destroy(lightParticle);
         if (activeBone)
         {
             //limit the upwards velocity of bones

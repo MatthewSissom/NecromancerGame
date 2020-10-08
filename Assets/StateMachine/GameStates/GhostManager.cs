@@ -65,6 +65,14 @@ public class GhostManager : State
         }
     }
 
+    public void FocusGhostsOnTable()
+    {
+        foreach (GhostBehavior b in ghosts)
+        {
+            b.Recall();
+        }
+    }
+
 
     private float getLength(GameObject bone)
     {

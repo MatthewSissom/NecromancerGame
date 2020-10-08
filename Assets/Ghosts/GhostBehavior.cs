@@ -5,9 +5,12 @@ using UnityEngine;
 public class GhostBehavior : MonoBehaviour
 {
     private Vector3 destination;
-    private float timeToDest;
+    private float acceleration;
+    private float maxSpeed;
     public bone mBone;
     private Transform boneLocation;
+
+    bool recalculateForces;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +25,7 @@ public class GhostBehavior : MonoBehaviour
         {
             mBone.transform.position = boneLocation.position;
         }
+
     }
 
 

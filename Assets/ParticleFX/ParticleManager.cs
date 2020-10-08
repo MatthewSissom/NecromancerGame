@@ -25,7 +25,7 @@ public class ParticleManager : MonoBehaviour
         }
     }
 
-    static GameObject CreateEffect(string name, Vector3 pos)
+    public static GameObject CreateEffect(string name, Vector3 pos)
     {
         if (!Instance.directory.ContainsKey(name))
             Debug.LogError("ParticleManager does not contain effect \'" + name + "\'");
