@@ -28,7 +28,7 @@ public class GhostManager : State
         foreach(GameObject pref in bones)
         {
             Vector3 target = pos + new Vector3(0, 0, -2.2f);
-            bone currentBone = boneManager.Instance.NewBone(pref, new Vector3(0,100,0), pref.transform.rotation);
+            Bone currentBone = BoneManager.Instance.NewBone(pref, new Vector3(0,100,0), pref.transform.rotation);
             if (currentBone)
             {
                 GhostBehavior ghost = CreateGhost(pos);
@@ -52,7 +52,7 @@ public class GhostManager : State
         ghosts.Remove(toRemove);
         if(toRemove.mBone)
         {
-            boneManager.Instance.DestroyBone(toRemove.mBone);
+            BoneManager.Instance.DestroyBone(toRemove.mBone);
         }
         Destroy(toRemove.transform.root.gameObject);
     }

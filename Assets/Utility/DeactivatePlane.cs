@@ -8,10 +8,10 @@ public class DeactivatePlane : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        bone b;
-        if ((b = collision.gameObject.GetComponent<bone>()) != null)
+        Bone b;
+        if ((b = collision.gameObject.GetComponent<Bone>()) != null)
         {
-            boneManager.Instance.DeactivateBone(b);
+            BoneManager.Instance.DeactivateBone(b);
         }
     }
 }

@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FunctionArgs { }
-public delegate void GroupFunction(bone applyTo, FunctionArgs e);
+public delegate void GroupFunction(Bone applyTo, FunctionArgs e);
 
-public class boneGroup : MonoBehaviour
+public class BoneGroup : MonoBehaviour
 {
-    protected boneGroup parent;
-    protected List<boneGroup> children;
-    protected bone mBone;
+    protected BoneGroup parent;
+    protected List<BoneGroup> children;
+    protected Bone mBone;
     protected int groupID;
     protected int myID;
 
-    public boneGroup Parent
+    public BoneGroup Parent
     {
         set 
         {
@@ -30,7 +30,7 @@ public class boneGroup : MonoBehaviour
         set
         {
             groupID = value;
-            foreach(boneGroup b in children)
+            foreach(BoneGroup b in children)
             {
                 b.GroupID = value;
             }
@@ -39,22 +39,22 @@ public class boneGroup : MonoBehaviour
 
     private void Awake()
     {
-        children = new List<boneGroup>();
+        children = new List<BoneGroup>();
     }
 
     // Start is called before the first frame update
     virtual protected void Start()
     {
-        myID = boneManager.Instance.GetID();
+        myID = BoneManager.Instance.GetID();
 
         //only set group id if not on the conveyer
         if (!parent)
             groupID = myID;
 
-        mBone = gameObject.GetComponent<bone>();
+        mBone = gameObject.GetComponent<Bone>();
     }
 
-    public static void combineGroups(boneGroup one, boneGroup two)
+    public static void combineGroups(BoneGroup one, BoneGroup two)
     {
         if (!one.parent)
         {
@@ -74,13 +74,13 @@ public class boneGroup : MonoBehaviour
         }
     }
 
-    public void addChild(boneGroup child)
+    public void addChild(BoneGroup child)
     {
         children.Add(child);
         child.Parent = this;
     }
 
-    public void removeChild(boneGroup child)
+    public void removeChild(BoneGroup child)
     {
         children.Remove(child);
         child.parent = null;
@@ -109,15 +109,15 @@ public class boneGroup : MonoBehaviour
     //makes this bone the root of the tree
     public void makeRoot()
     {
-        boneGroup temp = this;
-        List<boneGroup> path = new List<boneGroup>();
+        BoneGroup temp = this;
+        List<BoneGroup> path = new List<BoneGroup>();
         while(temp)
         {
             path.Add(temp);
             temp = temp.parent;
         }
 
-        boneGroup child;
+        BoneGroup child;
         for(int i = path.Count-2; i != -1; --i)
         {
             child = path[i];
@@ -139,7 +139,7 @@ public class boneGroup : MonoBehaviour
         else
         {
             func(mBone, e);
-            foreach (boneGroup b in children)
+            foreach (BoneGroup b in children)
             {
                 b.applyToAll(func, e, true);
             }

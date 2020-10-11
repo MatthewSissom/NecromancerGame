@@ -32,7 +32,7 @@ public class SearchingTouch : TouchProxy
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        bone b = other.GetComponentInParent<bone>();
+        Bone b = other.GetComponentInParent<Bone>();
         if (b)
         {
             FloatingTouch newTouch = InputManager.Instance.ReplaceWith<FloatingTouch>(this);

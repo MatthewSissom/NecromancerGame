@@ -4,15 +4,12 @@ using UnityEngine;
 
 public class CalculateScore : State
 {
-    private List<List<int>> pixelGrid;
-    private SpriteRenderer refrence;
-    private Texture2D raw;
 
     [Header("Score Mods")]
     public int maxOutsideOutlinePenalty;
 
     [Header("Dimensions")]
-    private float distance;
+    private float scale;
     private Vector2 imageDimensions;
 
     [Header("Fidelity")]
@@ -24,12 +21,16 @@ public class CalculateScore : State
     public List<int> value;
     private Dictionary<string,List<Vector2>> specialCircles;
 
+    [Header("Refrences")]
+    public SpriteRenderer scoreAreaRenderer;
+    public GameObject small;
+    private Texture2D scoreAreaImage;
 
     bool RayAtPixelLocation(Vector2 location)
     {
         return Physics.Raycast(
             new Ray(
-                transform.position + new Vector3(distance * (location.x - imageDimensions.x / 2), 0, distance * (location.y - imageDimensions.y / 2)),
+                scoreAreaRenderer.transform.position + new Vector3(scale * (location.x - imageDimensions.x / 2), 0, scale * (imageDimensions.y / 2 - location.y)),
                 Vector3.up
                 )
             );
@@ -60,7 +61,7 @@ public class CalculateScore : State
         {
             for(int y = 0; y < imageDimensions.y; y += step)
             {
-                if (raw.GetPixel(x, y) == Color.white && RayAtPixelLocation(new Vector2(x, y)))
+                if (scoreAreaImage.GetPixel(x, y) == Color.white && RayAtPixelLocation(new Vector2(x, y)))
                     outCount++;
             }
         }
@@ -71,8 +72,8 @@ public class CalculateScore : State
         if (outCount > 0)
             ScoreManager.Instance.Add(new PartialScore("outPenalty", -outCount, "Bones outside the line " + (-outCount).ToString() + "\n"));
 
-        ScoreManager.Instance.Add(boneManager.Instance.ConnectionScore());
-        ScoreManager.Instance.Add(boneManager.Instance.LostBones());
+        ScoreManager.Instance.Add(BoneManager.Instance.ConnectionScore());
+        ScoreManager.Instance.Add(BoneManager.Instance.LostBones());
 
         End();
         yield break;
@@ -81,11 +82,10 @@ public class CalculateScore : State
     // Start is called before the first frame update
     void Start()
     {
-        refrence = gameObject.GetComponent<SpriteRenderer>();
-        Sprite image = refrence.sprite;
-        raw = image.texture;
-        imageDimensions = new Vector2(raw.width, raw.height);
-        distance = transform.localScale.x;
+        Sprite image = scoreAreaRenderer.sprite;
+        scoreAreaImage = image.texture;
+        imageDimensions = new Vector2(scoreAreaImage.width, scoreAreaImage.height);
+        scale = scoreAreaRenderer.transform.localScale.x / image.pixelsPerUnit;
 
         if (names.Count != value.Count || locationAndRad.Count != names.Count)
         {
@@ -101,6 +101,8 @@ public class CalculateScore : State
             int rad = (int)(locationAndRad[i].z);
             Vector2 location = new Vector2(locationAndRad[i].x, locationAndRad[i].y);
 
+            Instantiate(small, scoreAreaRenderer.transform.position + new Vector3(scale * (location.x - imageDimensions.x / 2), .1f, scale * (imageDimensions.y / 2 - location.y)), Quaternion.identity);
+
             for (int x = -rad; x <= rad; x++)
             {
                 for (int y = -rad; y <= rad; y++)
@@ -115,6 +117,6 @@ public class CalculateScore : State
             specialCircles.Add(names[i], circlePoints);
         }
 
-        refrence.enabled = false;
+        scoreAreaRenderer.enabled = false;
     }
 }

@@ -26,7 +26,7 @@ public class RotationProxy : TouchProxy
 
     protected void Update()
     {
-        parent.applyToAll((bone toApply, FunctionArgs e) =>
+        parent.applyToAll((Bone toApply, FunctionArgs e) =>
         {
             toApply.transform.RotateAround(parent.transform.position + parent.offset, Vector3.up, toRotate);
         });

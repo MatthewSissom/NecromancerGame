@@ -7,7 +7,7 @@ public class GhostBehavior : MonoBehaviour
     private Vector3 destination;
     private float acceleration;
     private float maxSpeed;
-    public bone mBone;
+    public Bone mBone;
     private Transform boneLocation;
 
     bool recalculateForces;

@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class conveyorGroup : boneGroup
+public class conveyorGroup : BoneGroup
 {
     public override void applyToAll(GroupFunction func, FunctionArgs e, bool rootReached = false)
     {
-        foreach (boneGroup b in children)
+        foreach (BoneGroup b in children)
         {
             b.applyToAll(func, e, true);
         }

@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bone : MonoBehaviour
+public class Bone : MonoBehaviour
 {
-    private boneGroup group;
+    private BoneGroup group;
     private Rigidbody rb;
     public GhostBehavior mGhost;
 
     public Rigidbody Rb { get { return rb; }}
-    public boneGroup Group { get { return group; } }
+    public BoneGroup Group { get { return group; } }
 
     // Start is called before the first frame update
     void Awake()
     {
         //get values
         rb = gameObject.GetComponent<Rigidbody>();
-        group = gameObject.GetComponent<boneGroup>();
-        if(!group) group = (boneGroup)gameObject.AddComponent(typeof(boneGroup));
+        group = gameObject.GetComponent<BoneGroup>();
+        if(!group) group = (BoneGroup)gameObject.AddComponent(typeof(BoneGroup));
     }
 
     public void PickedUp()
@@ -27,13 +27,14 @@ public class bone : MonoBehaviour
             mGhost.LostBone();
         }
         mGhost = null;
+        rb.useGravity = true;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (!mGhost)
         {
-            bone colliding = collision.gameObject.GetComponent<bone>();
+            Bone colliding = collision.gameObject.GetComponent<Bone>();
             //if colliding with a bone and not in the same group already
             //then connect the two bones together
             if (colliding && group.GroupID < colliding.group.GroupID)
@@ -41,7 +42,7 @@ public class bone : MonoBehaviour
                 //---Bone Connection---//
 
                 //update group trees
-                boneGroup.combineGroups(group, colliding.group);
+                BoneGroup.combineGroups(group, colliding.group);
                 FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
 
                 //get joint info from collision

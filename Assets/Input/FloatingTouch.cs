@@ -6,8 +6,8 @@ using UnityEngine;
 //players finger
 public class FloatingTouch : TouchProxy
 {
-    bone activeBone;
-    public boneGroup.applyToAllType applyToAll;
+    Bone activeBone;
+    public BoneGroup.applyToAllType applyToAll;
 
     public Vector3 offset;
     public float heightThreshold;
@@ -33,7 +33,7 @@ public class FloatingTouch : TouchProxy
         lightParticle.transform.position = transform.position + offset;
     }
 
-    public void SetBone(bone bone)
+    public void SetBone(Bone bone)
     {
         if(!activeBone)
         {
@@ -56,7 +56,7 @@ public class FloatingTouch : TouchProxy
         }
         Vector3.ClampMagnitude(toProxy, maxVelocity);
 
-        void SetVelocity(bone toApply, FunctionArgs e)
+        void SetVelocity(Bone toApply, FunctionArgs e)
         {
             toApply.Rb.velocity = toProxy;
             toApply.Rb.angularVelocity = new Vector3();
@@ -71,7 +71,7 @@ public class FloatingTouch : TouchProxy
         if (activeBone)
         {
             //limit the upwards velocity of bones
-            void clampYVel(bone toApply, FunctionArgs e)
+            void clampYVel(Bone toApply, FunctionArgs e)
             {
                 const float maxReleaseYVelocity = 1.0f;
                 Vector3 velocity = toApply.Rb.velocity;

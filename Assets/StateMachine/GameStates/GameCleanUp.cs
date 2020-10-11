@@ -10,7 +10,7 @@ public class GameCleanUp : State
 
         InputManager.Instance.clear();
         InputManager.Instance.enabled = false;
-        boneManager.Instance.DestroyAll();
+        BoneManager.Instance.DestroyAll();
 
         End();
 

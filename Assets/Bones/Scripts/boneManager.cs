@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class boneManager : MonoBehaviour
+public class BoneManager : MonoBehaviour
 {
-    static public boneManager Instance { get; private set; }
+    static public BoneManager Instance { get; private set; }
 
-    private LinkedList<bone> activeBones;
-    private LinkedList<bone> deactivatedBones;
+    private LinkedList<Bone> activeBones;
+    private LinkedList<Bone> deactivatedBones;
 
     private int currentID = 0;
 
@@ -24,8 +24,8 @@ public class boneManager : MonoBehaviour
             Instance = this;
         }
 
-        activeBones = new LinkedList<bone>();
-        deactivatedBones = new LinkedList<bone>();
+        activeBones = new LinkedList<Bone>();
+        deactivatedBones = new LinkedList<Bone>();
     }
 
     public int GetID()
@@ -33,16 +33,16 @@ public class boneManager : MonoBehaviour
         return currentID++;
     }
 
-    public bone NewBone(GameObject pref, Vector3 location, Quaternion rotation)
+    public Bone NewBone(GameObject pref, Vector3 location, Quaternion rotation)
     {
         var go = Instantiate(pref, location, rotation);
-        bone bone = go.GetComponent<bone>();
+        Bone bone = go.GetComponent<Bone>();
         activeBones.AddLast(bone);
         return bone;
     }
 
 
-    public void DeactivateBone(bone toDeactivate)
+    public void DeactivateBone(Bone toDeactivate)
     {
         if (toDeactivate && !deactivatedBones.Contains(toDeactivate))
         {
@@ -52,7 +52,7 @@ public class boneManager : MonoBehaviour
         }
     }
 
-    public void DestroyBone(bone toDestroy)
+    public void DestroyBone(Bone toDestroy)
     {
         activeBones.Remove(toDestroy);
         Destroy(toDestroy.transform.root.gameObject);
@@ -60,23 +60,23 @@ public class boneManager : MonoBehaviour
 
     public void DestroyAll()
     {
-        foreach (bone b in activeBones)
+        foreach (Bone b in activeBones)
         {
             Destroy(b);
         }
-        foreach (bone b in deactivatedBones)
+        foreach (Bone b in deactivatedBones)
         {
             Destroy(b);
         }
-        activeBones = new LinkedList<bone>();
-        deactivatedBones = new LinkedList<bone>();
+        activeBones = new LinkedList<Bone>();
+        deactivatedBones = new LinkedList<Bone>();
     }
 
     public PartialScore ConnectionScore()
     {
         //search for any ids that aren't the same 
         int id = (activeBones.Count > 0) ? activeBones.First.Value.Group.GroupID : -1;
-        foreach(bone b in activeBones)
+        foreach(Bone b in activeBones)
         {
             if(b.Group.GroupID != id)
             {

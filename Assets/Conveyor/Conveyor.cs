@@ -36,7 +36,7 @@ public class Conveyor : State
         GameObject current;
         foreach(GameObject p in orderedBones)
         {
-            bone currentBone = boneManager.Instance.NewBone(p, safeInstantiation, p.transform.rotation);
+            Bone currentBone = BoneManager.Instance.NewBone(p, safeInstantiation, p.transform.rotation);
             current = currentBone.gameObject;
             if (currentBone)
             {
@@ -62,7 +62,7 @@ public class Conveyor : State
 
     public void OnTriggerEnter(Collider collision)
     {
-        bone b = collision.gameObject.GetComponentInParent<bone>();
+        Bone b = collision.gameObject.GetComponentInParent<Bone>();
         if (b)
         {
             b.Rb.useGravity = true;
@@ -81,7 +81,7 @@ public class Conveyor : State
         {
             elapsedTime = Time.time - previousTime;
             previousTime = Time.time;
-            mGroup.applyToAll((bone toApply, FunctionArgs e) =>
+            mGroup.applyToAll((Bone toApply, FunctionArgs e) =>
             {
                 toApply.transform.Translate(velocity * elapsedTime, Space.World);
             }, new FunctionArgs());
