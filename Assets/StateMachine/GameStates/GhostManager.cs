@@ -20,14 +20,14 @@ public class GhostManager : State
     //instantiates the bones given 
     public void CreateBones(in List<GameObject> bones)
     {
-        Vector3 spacing = new Vector3(-1, 0, 0);
+        Vector3 spacing = new Vector3(-4, 0, 0);
         Vector3 pos = transform.position;
 
 
         //instantiate bones
         foreach(GameObject pref in bones)
         {
-            Vector3 target = pos + new Vector3(0, 0, -2.2f);
+            Vector3 target = pos + new Vector3(0, 0, -22f);
             Bone currentBone = BoneManager.Instance.NewBone(pref, new Vector3(0,100,0), pref.transform.rotation);
             if (currentBone)
             {
