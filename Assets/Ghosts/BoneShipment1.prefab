@@ -46,6 +46,8 @@ MonoBehaviour:
   bones:
   - {fileID: 7946559770330850285, guid: 563f18a60aff41043bccb1f6fcf3be6b, type: 3}
   - {fileID: 2955226788502251737, guid: fba3d1902015fd841b13c488c73638bf, type: 3}
-  - {fileID: 2955226788502251737, guid: a7d087c5c23d44d48ac63635582dc2ed, type: 3}
+  - {fileID: 3654807093091182846, guid: a4c743ca2335018459dd6a1f749553da, type: 3}
   - {fileID: 4981607565998472679, guid: 006d207bbf4d9844ea8e7f127cfae291, type: 3}
-  - {fileID: 2955226788502251737, guid: 5c1c61175cc24ab46bd146a1202ea297, type: 3}
+  - {fileID: 492156262034071375, guid: f1fcb2bc9e933054c975ebbc3fefdd10, type: 3}
+  - {fileID: 2431325389565282801, guid: 95a60e09cde338647ba50b0c04cf26a4, type: 3}
+  - {fileID: 2431325389565282801, guid: 95a60e09cde338647ba50b0c04cf26a4, type: 3}
