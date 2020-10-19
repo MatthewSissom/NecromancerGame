@@ -45,9 +45,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bones:
   - {fileID: 7946559770330850285, guid: 563f18a60aff41043bccb1f6fcf3be6b, type: 3}
-  - {fileID: 2955226788502251737, guid: fba3d1902015fd841b13c488c73638bf, type: 3}
+  - {fileID: 4288631697191107241, guid: 15b1e6d8908fa0f4480d09bb45fc73ea, type: 3}
   - {fileID: 3654807093091182846, guid: a4c743ca2335018459dd6a1f749553da, type: 3}
   - {fileID: 4981607565998472679, guid: 006d207bbf4d9844ea8e7f127cfae291, type: 3}
   - {fileID: 492156262034071375, guid: f1fcb2bc9e933054c975ebbc3fefdd10, type: 3}
   - {fileID: 2431325389565282801, guid: 95a60e09cde338647ba50b0c04cf26a4, type: 3}
   - {fileID: 2431325389565282801, guid: 95a60e09cde338647ba50b0c04cf26a4, type: 3}
+  - {fileID: 6433956109204502383, guid: 550b58a1e5556ac4ca341e6b5dc9e1cb, type: 3}
+  - {fileID: 3669585400351104432, guid: b6f637aaac7d4c044b927ae9c5837b2d, type: 3}
+  - {fileID: 9088458291851306552, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
+  - {fileID: 5924965627590264117, guid: e303b0ed769096e4d9a3675265a84341, type: 3}
