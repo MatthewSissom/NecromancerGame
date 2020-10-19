@@ -173,8 +173,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e31a79b44e46103468b4213509fbd4f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxAcceleration: 5
-  maxSpeed: 5
+  maxAcceleration: 10
+  maxSpeed: 10
   maxAngularVelocity: 360
   maxYSpeed: 1
   wobbleTollerance: 20
