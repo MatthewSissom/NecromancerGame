@@ -4,13 +4,20 @@ using UnityEngine;
 
 public class GhostBehavior : MonoBehaviour
 {
+    //movement values
     private Vector3 destination;
-    private float acceleration;
-    private float maxSpeed;
+
+    //bone values
     public Bone mBone;
     private Transform boneLocation;
 
-    bool recalculateForces;
+    public GhostPhysics body { get; private set; }
+
+    private void Awake()
+    {
+        body = gameObject.GetComponent<GhostPhysics>();        
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,7 +32,6 @@ public class GhostBehavior : MonoBehaviour
         {
             mBone.transform.position = boneLocation.position;
         }
-
     }
 
 
@@ -36,22 +42,14 @@ public class GhostBehavior : MonoBehaviour
         mBone = null;
     }
 
-    public void MoveToPosition(float timeToDest, Vector3 destination)
-    {
-        StartCoroutine(MoveTo(timeToDest, destination));
-    }
 
-    public void RotateToAngle(float timeToRotation, Quaternion rotation)
-    {
-        StartCoroutine(RotateTo(timeToRotation, rotation));
-    }
 
     public void Recall()
     {
         IEnumerator RecallRoutine()
         {
-            yield return RotateTo(.3f, Quaternion.Euler(0, -90, 0));
-            yield return MoveTo(.5f, transform.position + new Vector3(0, 0, 1));
+            body.MoveToPosition(transform.position + new Vector3(0, 0, 1));
+            yield return new WaitForSeconds(3);
             GhostManager.Instance.DestroyGhost(this);
             yield break;
         }
@@ -60,31 +58,7 @@ public class GhostBehavior : MonoBehaviour
 
     #region behaviors
 
-    private IEnumerator MoveTo(float timeToDest, Vector3 destination)
-    {
-        while (timeToDest > 0)
-        {
-            float inital = timeToDest;
-            timeToDest -= Time.deltaTime;
-            transform.position += (destination - transform.position) * (inital - timeToDest) / inital;
-            yield return null;
-        }
-        transform.position = destination;
-        yield break;
-    }
 
-    private IEnumerator RotateTo(float timeToRotation, Quaternion rotation)
-    {
-        while (timeToRotation > 0)
-        {
-            float inital = timeToRotation;
-            timeToRotation -= Time.deltaTime;
-            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, (inital - timeToRotation) / inital);
-            yield return null;
-        }
-        transform.rotation = rotation;
-        yield break;
-    }
 
     IEnumerator Surprised(Transform head, Transform arms)
     {

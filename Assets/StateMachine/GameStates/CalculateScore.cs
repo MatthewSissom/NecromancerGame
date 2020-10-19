@@ -101,7 +101,8 @@ public class CalculateScore : State
             int rad = (int)(locationAndRad[i].z);
             Vector2 location = new Vector2(locationAndRad[i].x, locationAndRad[i].y);
 
-            Instantiate(small, scoreAreaRenderer.transform.position + new Vector3(scale * (location.x - imageDimensions.x / 2), .1f, scale * (imageDimensions.y / 2 - location.y)), Quaternion.identity);
+            //Debug orbs
+            //Instantiate(small, scoreAreaRenderer.transform.position + new Vector3(scale * (location.x - imageDimensions.x / 2), .1f, scale * (imageDimensions.y / 2 - location.y)), Quaternion.identity);
 
             for (int x = -rad; x <= rad; x++)
             {
