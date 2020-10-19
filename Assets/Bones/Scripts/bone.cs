@@ -16,6 +16,11 @@ public class Bone : MonoBehaviour
     {
         //get values
         rb = gameObject.GetComponent<Rigidbody>();
+        gameObject.layer = 8;
+        for(int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.layer = 8;
+        }
         group = gameObject.GetComponent<BoneGroup>();
         if(!group) group = (BoneGroup)gameObject.AddComponent(typeof(BoneGroup));
     }
@@ -28,6 +33,11 @@ public class Bone : MonoBehaviour
         }
         mGhost = null;
         rb.useGravity = true;
+        gameObject.layer = 1;
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            transform.GetChild(i).gameObject.layer = 1;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)

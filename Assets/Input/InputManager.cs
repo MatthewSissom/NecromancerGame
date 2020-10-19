@@ -23,6 +23,9 @@ public class InputManager : MonoBehaviour
 
     TouchProxy[] proxies = new TouchProxy[5];
 
+    //temp mouse input var
+    bool holdingMouseDown = false;
+
     //removes a single proxie from all data structures
     private void remove(int id)
     {
@@ -117,7 +120,44 @@ public class InputManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        foreach(Touch t in Input.touches)
+        #region mouseInput
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 pos = Input.mousePosition;
+            pos.z = Camera.main.transform.position.y - height;
+            Vector3 radVec = pos + new Vector3(5, 0, 0);
+
+            pos = Camera.main.ScreenToWorldPoint(pos);
+            float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
+
+            int id = 0;
+
+
+            if (!holdingMouseDown)
+            {
+                holdingMouseDown = true;
+                CreateTouchProxy(id, pos, isRotationTouch(pos));
+            }
+            else
+            {
+                proxies[id].Move(pos, rad);
+                if (recordingVelocities)
+                {
+                    FloatingTouch ft = proxies[id] as FloatingTouch;
+                    if (ft)
+                        touchVelocities.Add(ft.speed);
+                }
+            }
+        }
+        else if(holdingMouseDown)
+        {
+            holdingMouseDown = false;
+            remove(0);
+        }
+        #endregion
+
+
+        foreach (Touch t in Input.touches)
         {
             //try
             {
