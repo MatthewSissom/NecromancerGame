@@ -34,7 +34,7 @@ public class GhostManager : State
                 GhostBehavior ghost = CreateGhost(pos);
                 ghost.mBone = currentBone;
                 currentBone.mGhost = ghost;
-                ghost.MoveToPosition(1 + Random.value, target);
+                ghost.body.MoveToPosition(target);
             }
             pos += spacing;
         }
