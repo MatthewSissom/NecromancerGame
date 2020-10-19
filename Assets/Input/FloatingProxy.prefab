@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   offset: {x: 2, y: 0, z: 2}
-  heightThreshold: 3
+  heightThreshold: 100
   speed: 0
   previousLocation: {x: 0, y: 0, z: 0}

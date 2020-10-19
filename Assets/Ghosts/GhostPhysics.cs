@@ -24,6 +24,8 @@ public class GhostPhysics : MonoBehaviour
     [Header("Angular Velocity")]
     [SerializeField]
     private float maxAngularVelocity;
+    [SerializeField]
+    private float torque;
 
     //Stabilization values
     [Header("Stabilization")]
@@ -39,6 +41,8 @@ public class GhostPhysics : MonoBehaviour
     [SerializeField]
     private float ballanceHeightThreshold;
     private Vector3 up = new Vector3(0, 1, 0);
+
+    bool rotating = false;
 
     //component refrences
     Rigidbody rb;
@@ -67,7 +71,16 @@ public class GhostPhysics : MonoBehaviour
         float angleFromTargetUp = Mathf.Abs(Mathf.Acos(Vector3.Dot(gameObject.transform.up, up))) * 180 / Mathf.PI;
         if (angleFromTargetUp > wobbleTollerance)
         {
+            float angvel = rb.angularVelocity.magnitude;
 
+            if(angvel > 1)
+            {
+                rb.angularVelocity *= angvel - torque * Time.deltaTime;
+            }
+            else if(!rotating)
+            {
+                RotateToAngle(new Vector3(0,90,0));
+            }
 
             if(angleFromTargetUp > ballanceRotationThreshold)
             {
@@ -77,7 +90,16 @@ public class GhostPhysics : MonoBehaviour
         float angleFromTargetForward = Mathf.Abs(Mathf.Acos(Vector3.Dot(gameObject.transform.up, up))) * 180 / Mathf.PI;
         if(angleFromTargetForward > wobbleTollerance)
         {
+            float angvel = rb.angularVelocity.magnitude;
 
+            if (angvel > 1)
+            {
+                rb.angularVelocity *= angvel - torque * Time.deltaTime;
+            }
+            else if (!rotating)
+            {
+                RotateToAngle(new Vector3(0, 90, 0));
+            }
 
             if (angleFromTargetForward > ballanceRotationThreshold)
             {
@@ -131,10 +153,21 @@ public class GhostPhysics : MonoBehaviour
     //rotation is equal to the number of degrees needed to rotate on each axis
     public void RotateToAngle(Vector3 rotation)
     {
+        Quaternion final = Quaternion.Euler(rotation);
+        Quaternion inital = transform.rotation;
         IEnumerator RotateTo()
         {
+            rotating = true;
+            float totalTime = Quaternion.Angle(final, transform.rotation) / torque;
+            float currentTime = 0;
 
-
+            while (currentTime <= totalTime)
+            {
+                transform.rotation = Quaternion.Slerp(inital, final, currentTime / totalTime);
+                currentTime += Time.deltaTime;
+                yield return null;
+            }
+            rotating = false;
             yield break;
         }
         StartCoroutine(RotateTo());

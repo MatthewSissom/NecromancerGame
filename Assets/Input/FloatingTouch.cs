@@ -46,8 +46,8 @@ public class FloatingTouch : TouchProxy
     void Update()
     {
         //move the active object to the proxy
-        const float maxVelocity = 3.0f;
-        const float baseMult = 10;
+        const float maxVelocity = 7.0f;
+        const float baseMult = 20;
 
         Vector3 toProxy = (transform.position + offset - activeBone.transform.position) * baseMult;
         if(toProxy.y > heightThreshold)
