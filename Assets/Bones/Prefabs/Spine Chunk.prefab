@@ -55,6 +55,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3506477618903646177}
   - component: {fileID: 6513317120620398763}
+  - component: {fileID: 3328317493677809674}
   m_Layer: 0
   m_Name: Spine Chunk
   m_TagString: Untagged
@@ -99,6 +100,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3328317493677809674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4288631697191107241}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
 --- !u!1 &6863200735467431798
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,7 +225,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1793738183603464776, guid: fcb192d446f422f4790ce0222da52fd3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fcb192d446f422f4790ce0222da52fd3, type: 3}
 --- !u!4 &6852786357349805498 stripped
 Transform:
@@ -301,7 +316,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.04
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1793738183603464776, guid: fcb192d446f422f4790ce0222da52fd3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fcb192d446f422f4790ce0222da52fd3, type: 3}
 --- !u!4 &5146307191295817707 stripped
 Transform:
@@ -391,7 +407,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.0083
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1793738183603464776, guid: fcb192d446f422f4790ce0222da52fd3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fcb192d446f422f4790ce0222da52fd3, type: 3}
 --- !u!4 &8774780986335257590 stripped
 Transform:
@@ -481,7 +498,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.0517
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1793738183603464776, guid: fcb192d446f422f4790ce0222da52fd3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fcb192d446f422f4790ce0222da52fd3, type: 3}
 --- !u!4 &1183422296919709690 stripped
 Transform:
@@ -571,7 +589,8 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.1216
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1793738183603464776, guid: fcb192d446f422f4790ce0222da52fd3, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fcb192d446f422f4790ce0222da52fd3, type: 3}
 --- !u!4 &1647114521567353263 stripped
 Transform:

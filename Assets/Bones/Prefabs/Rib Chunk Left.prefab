@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3547494464584617824}
+  - component: {fileID: -5553643440331171450}
+  - component: {fileID: -8824475881656117283}
   m_Layer: 0
   m_Name: Rib Chunk Left
   m_TagString: Untagged
@@ -34,6 +36,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-5553643440331171450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698433228929267840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
+--- !u!54 &-8824475881656117283
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1698433228929267840}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &3759856414914053129
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -116,7 +147,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rib (1)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4386896184723661460, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
 --- !u!4 &6924305680305369977 stripped
 Transform:
@@ -206,7 +238,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rib (2)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4386896184723661460, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
 --- !u!4 &1994393349682906397 stripped
 Transform:
@@ -296,7 +329,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rib (3)
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4386896184723661460, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
 --- !u!4 &303199537063505987 stripped
 Transform:
@@ -371,7 +405,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rib
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4386896184723661460, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
 --- !u!4 &2717448692080397570 stripped
 Transform:
