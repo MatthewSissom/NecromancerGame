@@ -2504,7 +2504,7 @@ MonoBehaviour:
   rotationProxy: {fileID: 7669088987514535589, guid: f613fcf2816568445a64caf996a4097e,
     type: 3}
   height: 12
-  rotationRadSquared: 20
+  rotationRadSquared: 400
   rotationVelocityThreshold: 500
 --- !u!114 &1416826185
 MonoBehaviour:
