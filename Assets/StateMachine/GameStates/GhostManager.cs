@@ -83,7 +83,7 @@ public class GhostManager : State
     {
         CreateBones(boneShipments[currentShipment].GetComponent<BoneShipment>().bones);
         done = ++currentShipment == boneShipments.Count;
-        yield return new WaitForSeconds(5.0f);
+        yield return new WaitForSeconds(10.0f);
         RecallGhosts();
         yield break;
     }
