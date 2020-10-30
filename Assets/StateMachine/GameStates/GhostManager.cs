@@ -20,15 +20,15 @@ public class GhostManager : State
     //instantiates the bones given 
     public void CreateBones(in List<GameObject> bones)
     {
-        Vector3 spacing = new Vector3(-4, 0, 0);
+        Vector3 spacing = new Vector3(-.15f, 0, 0);
         Vector3 pos = transform.position;
 
 
         //instantiate bones
         foreach(GameObject pref in bones)
         {
-            Vector3 target = pos + new Vector3(0, 0, -22f);
-            Bone currentBone = BoneManager.Instance.NewBone(pref, new Vector3(0,100,0), pref.transform.rotation);
+            Vector3 target = pos + new Vector3(0,0,-1.2f);
+            Bone currentBone = BoneManager.Instance.NewBone(pref, new Vector3(0,0,100), pref.transform.rotation);
             if (currentBone)
             {
                 GhostBehavior ghost = CreateGhost(pos);
@@ -83,7 +83,7 @@ public class GhostManager : State
     {
         CreateBones(boneShipments[currentShipment].GetComponent<BoneShipment>().bones);
         done = ++currentShipment == boneShipments.Count;
-        yield return new WaitForSeconds(10.0f);
+        yield return new WaitForSeconds(15.0f);
         RecallGhosts();
         yield break;
     }

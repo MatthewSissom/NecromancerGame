@@ -30,7 +30,7 @@ public class GameManager : StateManagerBase
             yield return SetState("GhostTrans");
             yield return SetState("GhostManager");
             yield return SetState("TableTrans");
-            yield return new WaitForSeconds(10.0f);
+            yield return new WaitForSeconds(15.0f);
         }
         yield return SetState("CalculateScore");
 

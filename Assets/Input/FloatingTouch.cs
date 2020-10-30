@@ -6,7 +6,7 @@ using UnityEngine;
 //players finger
 public class FloatingTouch : TouchProxy
 {
-    Bone activeBone;
+    public Bone activeBone { private set;  get; }
     public BoneGroup.applyToAllType applyToAll;
 
     public Vector3 offset;

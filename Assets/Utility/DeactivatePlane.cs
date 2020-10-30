@@ -8,7 +8,7 @@ public class DeactivatePlane : MonoBehaviour
 
     private void Start()
     {
-        gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(5, 5);
+        gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(15, 15);
     }
 
     private void OnCollisionEnter(Collision collision)

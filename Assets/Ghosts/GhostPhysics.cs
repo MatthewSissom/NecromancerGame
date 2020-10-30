@@ -57,10 +57,10 @@ public class GhostPhysics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(!Balance())
-        {
+            //if (!Balance())
+            {
 
-        }
+            }
     }
 
     //adjusts ghosts up and forward vectors and y valu
@@ -73,22 +73,22 @@ public class GhostPhysics : MonoBehaviour
         {
             float angvel = rb.angularVelocity.magnitude;
 
-            if(angvel > 1)
+            if (angvel > 1)
             {
                 rb.angularVelocity *= angvel - torque * Time.deltaTime;
             }
-            else if(!rotating)
+            else if (!rotating)
             {
-                RotateToAngle(new Vector3(0,90,0));
+                RotateToAngle(new Vector3(0, 90, 0));
             }
 
-            if(angleFromTargetUp > ballanceRotationThreshold)
+            if (angleFromTargetUp > ballanceRotationThreshold)
             {
                 balanced = false;
             }
         }
         float angleFromTargetForward = Mathf.Abs(Mathf.Acos(Vector3.Dot(gameObject.transform.up, up))) * 180 / Mathf.PI;
-        if(angleFromTargetForward > wobbleTollerance)
+        if (angleFromTargetForward > wobbleTollerance)
         {
             float angvel = rb.angularVelocity.magnitude;
 
@@ -115,6 +115,7 @@ public class GhostPhysics : MonoBehaviour
                 balanced = false;
             }
         }
+
         return balanced;
     }
 
@@ -144,6 +145,8 @@ public class GhostPhysics : MonoBehaviour
                 rb.AddForce(force);
                 yield return null;
             }
+
+            rb.velocity = new Vector3();
 
             yield break;
         }
