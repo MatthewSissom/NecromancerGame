@@ -36,7 +36,7 @@ public class StateManager : StateManagerBase
             string name = s.Name;
             if (name.Substring(0, 4) == "StMn")
             {
-                states.Add(s.Name, s);
+                states.Add(s.Name.ToLower().Trim(), s);
             }
         }
         StartCoroutine(StateFlow());

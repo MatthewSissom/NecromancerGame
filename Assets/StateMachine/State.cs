@@ -18,7 +18,7 @@ public abstract class State : MonoBehaviour
     //add a new switch statement with all new events
     public virtual bool AddToEvent(string eventName, StateMethod method, bool overriden = false)
     {
-        eventName.ToLower();
+        eventName = eventName.ToLower().Trim();
         switch(eventName)
         {
             case "begin":

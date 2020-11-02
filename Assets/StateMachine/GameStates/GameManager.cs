@@ -55,7 +55,7 @@ public class GameManager : StateManagerBase
             string managerKey = name.Substring(0, 4);
             if (managerKey != "StMn" && managerKey != "Menu")
             {
-                states.Add(s.Name, s);
+                states.Add(s.Name.ToLower().Trim(), s);
             }
         }
     }

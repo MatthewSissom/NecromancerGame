@@ -57,7 +57,7 @@ public class MenuManager : StateManagerBase
             string name = s.Name;
             if (name.Substring(0, 4) == "Menu")
             {
-                states.Add(s.Name, s);
+                states.Add(s.Name.ToLower().Trim(), s);
             }
         }
     }

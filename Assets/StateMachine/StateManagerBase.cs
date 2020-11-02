@@ -28,6 +28,7 @@ public class StateManagerBase : MonoBehaviour
 
     protected virtual Coroutine SetState(string stateName)
     {
+        stateName = stateName.ToLower().Trim();
         #if UNITY_EDITOR
         if (states.ContainsKey(stateName))
         #endif
