@@ -57,6 +57,7 @@ public class StateManagerBase : MonoBehaviour
     {
         IEnumerator HookUpEvent()
         {
+            stateName = stateName.ToLower().Trim();
             yield return new WaitForSeconds(0.2f);
             if (!states.ContainsKey(stateName))
             {

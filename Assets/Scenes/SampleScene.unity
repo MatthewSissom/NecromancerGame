@@ -868,7 +868,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &488638681
 GameObject:
@@ -1544,6 +1544,7 @@ GameObject:
   - component: {fileID: 963194229}
   - component: {fileID: 963194232}
   - component: {fileID: 963194230}
+  - component: {fileID: 963194233}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1609,12 +1610,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.122, z: 0.089}
+  m_LocalRotation: {x: 0.6148513, y: 0, z: 0, w: 0.78864306}
+  m_LocalPosition: {x: 0, y: 0.909, z: 0.561}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &963194229
 MonoBehaviour:
@@ -1662,7 +1663,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf696a9f44685f54c8e929e9dded9db2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NewStateName: MenuTrans
+  NewStateName: GhostTest
 --- !u!114 &963194232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1678,6 +1679,23 @@ MonoBehaviour:
   transitionName: GhostTrans
   time: 1
   pos: {x: 0, y: 0.762, z: -0.023}
+  forward: {x: 0, y: -0.9697964, z: 0.2439158}
+  up: {x: 0, y: 0.2439158, z: 0.9697964}
+--- !u!114 &963194233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c16fe5ecfcb4a84fa5814ffc9e47693, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  transitionName: GhostTest
+  time: 1
+  pos: {x: 0, y: 0.909, z: 0.561}
   forward: {x: 0, y: -0.9697964, z: 0.2439158}
   up: {x: 0, y: 0.2439158, z: 0.9697964}
 --- !u!1 &1067911223
@@ -1918,7 +1936,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1145780816
 GameObject:
@@ -2936,7 +2954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionName: MenuBoardFlipped
-  time: 1
+  time: 0.5
   pos: {x: 0, y: 0, z: 0}
   forward: {x: 0, y: 0, z: -1}
   up: {x: 0, y: -1, z: 0}
@@ -2953,7 +2971,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transitionName: MenuBoardMain
-  time: 1
+  time: 0.5
   pos: {x: 0, y: 0, z: 0}
   forward: {x: 0, y: 0, z: 1}
   up: {x: 0, y: 1, z: 0}
@@ -3814,7 +3832,7 @@ PrefabInstance:
     - target: {fileID: 559537520518874582, guid: c14691308bb5f384195e1782aa47782d,
         type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 559537520518874582, guid: c14691308bb5f384195e1782aa47782d,
         type: 3}

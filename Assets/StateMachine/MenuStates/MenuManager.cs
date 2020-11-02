@@ -26,6 +26,9 @@ public class MenuManager : StateManagerBase
                     yield return SetState("BoardFlipped");
                     yield return SetState("Instructions");
                     break;
+                default:
+                    buttonName = null;
+                    yield break;
             }
         }
     }

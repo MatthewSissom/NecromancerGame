@@ -220,8 +220,15 @@ public class InputManager : MonoBehaviour
             Destroy(this);
         else
             Instance = this;
-        this.enabled = false;
 
+        MenuManager.Instance.AddEventMethod("MenuMain", "Begin", () =>
+        {
+            enabled = false;
+        });
+        GameManager.Instance.AddEventMethod("GameInit", "End", () =>
+        {
+            enabled = true;
+        });
 
         //TEMP stats for input
         void RecordStats()

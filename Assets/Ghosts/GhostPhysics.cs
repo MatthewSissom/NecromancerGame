@@ -1,16 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GhostPhysics : MonoBehaviour
 {
     //direction values
-    Vector3 target;
+    Vector3 target = new Vector3(0,0-1);
 
     //speed values
     [Header("Speed")]
     [SerializeField]
-    private float maxAcceleration;
+    private float maxAcceleration = 0;
     private float acceleration;
     public  float Acceleration
     {
@@ -18,31 +19,32 @@ public class GhostPhysics : MonoBehaviour
         set { acceleration = Mathf.Max(value, maxAcceleration); }
     }
     [SerializeField]
-    private float maxSpeed;
+    private float maxSpeed = 0;
 
     //angular velocity values
     [Header("Angular Velocity")]
     [SerializeField]
     private float maxAngularVelocity;
     [SerializeField]
-    private float torque;
+    private float torque = 0;
 
     //Stabilization values
     [Header("Stabilization")]
-    private float targetHeight;
+    private float targetHeight = 0;
     [SerializeField]
     private float maxYSpeed;
     [SerializeField]
-    private float wobbleTollerance;
+    private float wobbleTollerance = 0;
     [SerializeField]
-    private float ballanceRotationThreshold;
+    private float ballanceRotationThreshold = 0;
     [SerializeField]
-    private float bobTollerance;
+    private float bobTollerance = 0;
     [SerializeField]
-    private float ballanceHeightThreshold;
+    private float ballanceHeightThreshold = 0;
     private Vector3 up = new Vector3(0, 1, 0);
 
-    bool rotating = false;
+    private bool stoppingRotation = false;
+    private bool rotating = false;
 
     //component refrences
     Rigidbody rb;
@@ -57,7 +59,7 @@ public class GhostPhysics : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            //if (!Balance())
+            if (!Balance())
             {
 
             }
@@ -69,43 +71,31 @@ public class GhostPhysics : MonoBehaviour
     {
         bool balanced = true;
         float angleFromTargetUp = Mathf.Abs(Mathf.Acos(Vector3.Dot(gameObject.transform.up, up))) * 180 / Mathf.PI;
-        if (angleFromTargetUp > wobbleTollerance)
+        if (!stoppingRotation && !rotating && angleFromTargetUp > wobbleTollerance)
         {
-            float angvel = rb.angularVelocity.magnitude;
-
-            if (angvel > 1)
+            IEnumerator Reorient()
             {
-                rb.angularVelocity *= angvel - torque * Time.deltaTime;
+                yield return StartCoroutine(StopRotation());
+                Vector3 toTarget = target - transform.position;
+                toTarget.y = 0;
+                toTarget.Normalize();
+                RotateToAngle(new Vector3(0, Mathf.Rad2Deg*Mathf.Atan2(toTarget.z, toTarget.x), 0));
             }
-            else if (!rotating)
-            {
-                RotateToAngle(new Vector3(0, 90, 0));
-            }
-
+            StartCoroutine(Reorient());
             if (angleFromTargetUp > ballanceRotationThreshold)
             {
                 balanced = false;
             }
         }
-        float angleFromTargetForward = Mathf.Abs(Mathf.Acos(Vector3.Dot(gameObject.transform.up, up))) * 180 / Mathf.PI;
-        if (angleFromTargetForward > wobbleTollerance)
-        {
-            float angvel = rb.angularVelocity.magnitude;
-
-            if (angvel > 1)
-            {
-                rb.angularVelocity *= angvel - torque * Time.deltaTime;
-            }
-            else if (!rotating)
-            {
-                RotateToAngle(new Vector3(0, 90, 0));
-            }
-
-            if (angleFromTargetForward > ballanceRotationThreshold)
-            {
-                balanced = false;
-            }
-        }
+        //float angleFromTargetForward = Mathf.Abs(Mathf.Acos(Vector3.Dot(gameObject.transform.up, up))) * 180 / Mathf.PI;
+        //if (!stoppingRotation && !rotating && angleFromTargetForward > wobbleTollerance)
+        //{
+        //    StartCoroutine(StopRotation());
+        //    if (angleFromTargetForward > ballanceRotationThreshold)
+        //    {
+        //        balanced = false;
+        //    }
+        //}
         if (Mathf.Abs(transform.position.y - targetHeight) > bobTollerance)
         {
 
@@ -161,7 +151,7 @@ public class GhostPhysics : MonoBehaviour
         IEnumerator RotateTo()
         {
             rotating = true;
-            float totalTime = Quaternion.Angle(final, transform.rotation) / torque;
+            float totalTime = Quaternion.Angle(final, transform.rotation) / torque /  30;
             float currentTime = 0;
 
             while (currentTime <= totalTime)
@@ -176,7 +166,35 @@ public class GhostPhysics : MonoBehaviour
         StartCoroutine(RotateTo());
     }
 
+    IEnumerator StopRotation()
+    {
+        stoppingRotation = true;
+        Vector3 angularVelocity = rb.angularVelocity;
+        float angspeed = angularVelocity.magnitude;
+        if (angspeed < torque * Time.deltaTime)
+        {
+            rb.angularVelocity = new Vector3();
+            stoppingRotation = false;
+            yield break;
+        }
 
+        int getSigniture()
+        { return Math.Sign(angularVelocity.x) + Math.Sign(angularVelocity.y) * 2 + Math.Sign(angularVelocity.z) * 4; }
+
+        int signiture = getSigniture();
+
+        while (signiture == getSigniture())
+        {
+            angularVelocity = rb.angularVelocity;
+            angspeed = angularVelocity.magnitude;
+            rb.angularVelocity *= (angspeed - torque * Time.deltaTime)/angspeed;
+            yield return null;
+        }
+
+        rb.angularVelocity = new Vector3();
+        stoppingRotation = false;
+        yield break;
+    }
 
     IEnumerator AngularAcceleration(float seconds, Vector3 unitTorque)
     {
@@ -186,7 +204,7 @@ public class GhostPhysics : MonoBehaviour
         {
             timer += Time.deltaTime;
             speed = rb.angularVelocity.magnitude;
-            rb.velocity = (speed + Time.deltaTime * acceleration) / speed * rb.velocity;
+            rb.angularVelocity = (speed + Time.deltaTime * torque) / speed * rb.angularVelocity;
             yield return null;
         }
         yield break;

@@ -8,8 +8,6 @@ public class GameInit : State
     {
         Begin();
 
-        InputManager.Instance.enabled = true;
-
         End();
         yield break;
     }
