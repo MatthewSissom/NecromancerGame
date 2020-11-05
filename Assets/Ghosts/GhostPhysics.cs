@@ -6,7 +6,8 @@ using System;
 public class GhostPhysics : MonoBehaviour
 {
     //direction values
-    Vector3 target = new Vector3(0,0-1);
+    [SerializeField]
+    Vector3 target = new Vector3(0,0,1);
 
     //speed values
     [Header("Speed")]
@@ -20,6 +21,7 @@ public class GhostPhysics : MonoBehaviour
     }
     [SerializeField]
     private float maxSpeed = 0;
+    private float targetSpeed = 0;
 
     //angular velocity values
     [Header("Angular Velocity")]
@@ -27,6 +29,7 @@ public class GhostPhysics : MonoBehaviour
     private float maxAngularVelocity;
     [SerializeField]
     private float torque = 0;
+    private Vector3 targetForward;
 
     //Stabilization values
     [Header("Stabilization")]
@@ -45,6 +48,7 @@ public class GhostPhysics : MonoBehaviour
 
     private bool stoppingRotation = false;
     private bool rotating = false;
+    private bool moving = false;
 
     //component refrences
     Rigidbody rb;
@@ -54,19 +58,31 @@ public class GhostPhysics : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody>();
         acceleration = maxAcceleration;
+        targetSpeed = maxSpeed;
+        targetForward = transform.forward;
     }
 
     // Update is called once per frame
     void Update()
     {
-            if (!Balance())
+        if (Balance())
+        {
+            targetHeight = Mathf.Sin(Time.time) * bobTollerance * .75f;
+        }
+        else
+        {
+            if(!stoppingRotation)
             {
-
+                transform.up = new Vector3(0, 1, 0);
+                transform.forward = new Vector3(target.x - transform.position.x, 0, target.z - transform.position.z).normalized;
             }
+            targetHeight = 0;
+        }
+        UpdateVelocity(target + new Vector3(0, targetHeight, 0) - transform.position);
     }
 
-    //adjusts ghosts up and forward vectors and y valu
-    //returns if this ghost is 'balanced'
+    //adjusts ghosts up and forward vectors
+    //returns if the ghost is close to the proper orientation
     private bool Balance()
     {
         bool balanced = true;
@@ -75,11 +91,9 @@ public class GhostPhysics : MonoBehaviour
         {
             IEnumerator Reorient()
             {
+                stoppingRotation = true;
                 yield return StartCoroutine(StopRotation());
-                Vector3 toTarget = target - transform.position;
-                toTarget.y = 0;
-                toTarget.Normalize();
-                RotateToAngle(new Vector3(0, Mathf.Rad2Deg*Mathf.Atan2(toTarget.z, toTarget.x), 0));
+                //RotateToOrientation();
             }
             StartCoroutine(Reorient());
             if (angleFromTargetUp > ballanceRotationThreshold)
@@ -96,11 +110,9 @@ public class GhostPhysics : MonoBehaviour
         //        balanced = false;
         //    }
         //}
-        if (Mathf.Abs(transform.position.y - targetHeight) > bobTollerance)
+        if (Mathf.Abs(transform.position.y - target.y) > bobTollerance)
         {
-
-
-            if (Mathf.Abs(transform.position.y - targetHeight) > ballanceHeightThreshold)
+            if (Mathf.Abs(transform.position.y - target.y) > ballanceHeightThreshold)
             {
                 balanced = false;
             }
@@ -109,57 +121,122 @@ public class GhostPhysics : MonoBehaviour
         return balanced;
     }
 
+    public void UpdateVelocity(Vector3 toTarget)
+    {
+        float length = toTarget.magnitude;
+        float speed = rb.velocity.magnitude;
+
+        if (length > .01f || speed > .5f)
+        {
+            Vector3 toTargetNormal = toTarget / length;
+            //transform.up = new Vector3(0, 1, 0);
+            //transform.forward = toTargetNormal;
+
+            ////make sure the ghost is moving in the twards the target
+            //if (Vector3.Angle(rb.velocity,toTarget) > 10)
+            //{
+            //    //TEMP target speed should not be max speed in direction of toTarget
+            //    float speedTwards = Vector3.Dot(toTargetNormal, rb.velocity);
+            //    if (speedTwards > 0 && speedTwards * speedTwards / (2 * acceleration) >= length)
+            //    {
+            //        toTargetNormal *= -1;
+            //    }
+            //    correction = (toTargetNormal * targetSpeed) - rb.velocity;
+            //    rb.velocity += (correction.normalized * acceleration * dt);
+            //    yield return null;
+            //    continue;
+            //}
+
+            Vector3 targetVel = Mathf.Min(Mathf.Sqrt(2 * length * acceleration), targetSpeed) * toTarget;
+            Vector3 correction = targetVel - rb.velocity;
+            Vector3 force = correction.normalized * acceleration * Time.deltaTime;
+            rb.velocity += (force);
+        }
+        else
+        {
+            moving = false;
+        }
+    }
+
     public void MoveToPosition(Vector3 destination)
     {
+        moving = true;
+        target = destination;
+        targetForward = new Vector3(target.x - transform.position.x, 0, target.z - transform.position.z).normalized;
+
+        transform.up = new Vector3(0, 1, 0);
+        transform.forward = new Vector3(target.x - transform.position.x, 0, target.z - transform.position.z).normalized;
+
         IEnumerator MoveTo()
         {
-            target = destination;
-
             Vector3 toTarget;
-            float length = 5;
-            float speed;
+            //length and speed set to any number > .01 for loop
+            float length = 1;
+            float speed =1;
 
-            while (length > .01f)
-            {
-                toTarget = destination - transform.position;
-                length = toTarget.magnitude;
-                speed = rb.velocity.magnitude;
+            //while (length > .01f || speed > .5f)
+            //{
+            //    toTarget = target + new Vector3(0, targetHeight,0) - transform.position;
+            //    length = toTarget.magnitude;
+            //    Vector3 toTargetNormal = toTarget / length;
+            //    speed = rb.velocity.magnitude;
 
-                if (speed * speed / (2 * acceleration) > length)
-                {
-                    toTarget *= -1;
-                }
+            //    ////make sure the ghost is moving in the twards the target
+            //    //if (Vector3.Angle(rb.velocity,toTarget) > 10)
+            //    //{
+            //    //    //TEMP target speed should not be max speed in direction of toTarget
+            //    //    float speedTwards = Vector3.Dot(toTargetNormal, rb.velocity);
+            //    //    if (speedTwards > 0 && speedTwards * speedTwards / (2 * acceleration) >= length)
+            //    //    {
+            //    //        toTargetNormal *= -1;
+            //    //    }
+            //    //    correction = (toTargetNormal * targetSpeed) - rb.velocity;
+            //    //    rb.velocity += (correction.normalized * acceleration * dt);
+            //    //    yield return null;
+            //    //    continue;
+            //    //}
 
-                Vector3 force = toTarget.normalized * maxSpeed - rb.velocity;
-                force = Vector3.ClampMagnitude(force, acceleration);
-                rb.AddForce(force);
-                yield return null;
-            }
-
-            rb.velocity = new Vector3();
-
+            //    Vector3 targetVel = Mathf.Min(Mathf.Sqrt(2 * length * acceleration), targetSpeed) * toTarget;
+            //    Vector3 correction = targetVel - rb.velocity;
+            //    Vector3 force = correction.normalized * acceleration * Time.deltaTime;
+            //    rb.velocity +=(force);
+            //    yield return null;
+            //}
             yield break;
         }
-        StartCoroutine(MoveTo());
+        //StartCoroutine(MoveTo());
     }
 
     //rotation is equal to the number of degrees needed to rotate on each axis
-    public void RotateToAngle(Vector3 rotation)
+    public void RotateToOrientation()
     {
-        Quaternion final = Quaternion.Euler(rotation);
-        Quaternion inital = transform.rotation;
         IEnumerator RotateTo()
         {
             rotating = true;
-            float totalTime = Quaternion.Angle(final, transform.rotation) / torque /  30;
-            float currentTime = 0;
 
-            while (currentTime <= totalTime)
+            float signedAngleToUp = 30;
+            float signedAngleToForward = 0;
+            Vector3 localVelocity = new Vector3();
+            Vector3 torqueToAdd = new Vector3();
+
+            while (signedAngleToForward > 5 || signedAngleToUp > 5 || localVelocity.x > .1 || localVelocity.y > .1 || localVelocity.z > .1)
             {
-                transform.rotation = Quaternion.Slerp(inital, final, currentTime / totalTime);
-                currentTime += Time.deltaTime;
+                signedAngleToUp = Mathf.Deg2Rad * Vector3.SignedAngle(new Vector3(0, 1, 0), transform.up, transform.right);
+                signedAngleToForward = Mathf.Deg2Rad * Vector3.SignedAngle(targetForward, new Vector3(transform.forward.x, 0, transform.forward.x), new Vector3(0, 1, 0));
+                localVelocity = transform.InverseTransformDirection(rb.angularVelocity);
+
+                float targetXAngVel = Mathf.Sqrt(2 * signedAngleToUp * torque); 
+                float targetYAngVel = Mathf.Sqrt(2 * signedAngleToForward * torque);
+
+
+                torqueToAdd = new Vector3(targetXAngVel - localVelocity.x, targetYAngVel - localVelocity.y, -localVelocity.z).normalized * Time.deltaTime * torque;
+
+                rb.AddRelativeTorque(torqueToAdd);
+
                 yield return null;
             }
+
+
             rotating = false;
             yield break;
         }
@@ -193,34 +270,6 @@ public class GhostPhysics : MonoBehaviour
 
         rb.angularVelocity = new Vector3();
         stoppingRotation = false;
-        yield break;
-    }
-
-    IEnumerator AngularAcceleration(float seconds, Vector3 unitTorque)
-    {
-        float timer = 0;
-        float speed;
-        while (timer <= seconds)
-        {
-            timer += Time.deltaTime;
-            speed = rb.angularVelocity.magnitude;
-            rb.angularVelocity = (speed + Time.deltaTime * torque) / speed * rb.angularVelocity;
-            yield return null;
-        }
-        yield break;
-    }
-
-    IEnumerator Accelerate(float seconds, Vector3 direction)
-    {
-        float timer = 0;
-        float speed;
-        while(timer <= seconds)
-        {
-            timer += Time.deltaTime;
-            speed = rb.velocity.magnitude;
-            rb.velocity = (speed + Time.deltaTime * acceleration) / speed * rb.velocity;
-            yield return null;
-        }
         yield break;
     }
 }

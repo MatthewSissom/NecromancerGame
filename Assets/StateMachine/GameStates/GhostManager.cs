@@ -10,6 +10,8 @@ public class GhostManager : State
 
     [Header("Bones")]
     public List<GameObject> boneShipments;
+    [SerializeField]
+    float timePerShipment;
     private int currentShipment = 0;
 
     [Header("Ghosts")]
@@ -83,7 +85,7 @@ public class GhostManager : State
     {
         CreateBones(boneShipments[currentShipment].GetComponent<BoneShipment>().bones);
         done = ++currentShipment == boneShipments.Count;
-        yield return new WaitForSeconds(15.0f);
+        yield return new WaitForSeconds(timePerShipment);
         RecallGhosts();
         yield break;
     }

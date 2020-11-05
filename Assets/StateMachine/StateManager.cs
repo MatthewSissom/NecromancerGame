@@ -13,7 +13,6 @@ public class StateManager : StateManagerBase
         {
             yield return SetState(MenuManager.Instance.Main());
             yield return SetState(GameManager.Instance.Reset());
-            //yield return new WaitForSeconds(100);
             yield return SetState(GameManager.Instance.Game());
             yield return SetState(MenuManager.Instance.Score());
         }
