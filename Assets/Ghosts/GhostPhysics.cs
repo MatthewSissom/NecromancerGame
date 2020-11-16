@@ -46,7 +46,6 @@ public class GhostPhysics : MonoBehaviour
     private float ballanceHeightThreshold = 0;
     private Vector3 up = new Vector3(0, 1, 0);
 
-    private bool stoppingRotation = false;
     private bool rotating = false;
     private bool moving = false;
 
@@ -71,11 +70,6 @@ public class GhostPhysics : MonoBehaviour
         }
         else
         {
-            if(!stoppingRotation)
-            {
-                transform.up = new Vector3(0, 1, 0);
-                transform.forward = new Vector3(target.x - transform.position.x, 0, target.z - transform.position.z).normalized;
-            }
             targetHeight = 0;
         }
         UpdateVelocity(target + new Vector3(0, targetHeight, 0) - transform.position);
@@ -87,13 +81,39 @@ public class GhostPhysics : MonoBehaviour
     {
         bool balanced = true;
         float angleFromTargetUp = Mathf.Abs(Mathf.Acos(Vector3.Dot(gameObject.transform.up, up))) * 180 / Mathf.PI;
-        if (!stoppingRotation && !rotating && angleFromTargetUp > wobbleTollerance)
+        if (!rotating && angleFromTargetUp > wobbleTollerance)
         {
             IEnumerator Reorient()
             {
-                stoppingRotation = true;
-                yield return StartCoroutine(StopRotation());
-                //RotateToOrientation();
+                rotating = true;
+
+                Vector3 signedAngleToTarget = new Vector3(1, 1, 1);
+                Vector3 localVelocity = new Vector3();
+                Vector3 torqueToAdd = new Vector3();
+
+                while (signedAngleToTarget.magnitude > 0.01f || localVelocity.magnitude > 0.01f)
+                {
+                    signedAngleToTarget.y = Mathf.Deg2Rad * Vector3.SignedAngle(transform.forward, targetForward, transform.up);
+                    signedAngleToTarget.x = Mathf.Deg2Rad * Vector3.SignedAngle(transform.up, new Vector3(0, 1, 0), transform.right);
+                    signedAngleToTarget.z = Mathf.Deg2Rad * Vector3.SignedAngle(transform.up, new Vector3(0, 1, 0), transform.forward);
+                    
+                    localVelocity = transform.InverseTransformDirection(rb.angularVelocity);
+
+                    float targetXAngVel = Mathf.Sign(signedAngleToTarget.x) * Mathf.Sqrt(2 * Mathf.Abs(signedAngleToTarget.x) * torque);
+                    float targetYAngVel = Mathf.Sign(signedAngleToTarget.y) * Mathf.Sqrt(2 * Mathf.Abs(signedAngleToTarget.y) * torque);
+                    float targetZAngVel = Mathf.Sign(signedAngleToTarget.z) * Mathf.Sqrt(2 * Mathf.Abs(signedAngleToTarget.z) * torque);
+
+
+                    torqueToAdd = new Vector3(targetXAngVel - localVelocity.x, targetYAngVel - localVelocity.y, targetZAngVel - localVelocity.z).normalized * Time.deltaTime * torque;
+
+                    rb.AddRelativeTorque(torqueToAdd);
+
+                    yield return null;
+                }
+
+                rb.angularVelocity = new Vector3();
+                rotating = false;
+                yield break;
             }
             StartCoroutine(Reorient());
             if (angleFromTargetUp > ballanceRotationThreshold)
@@ -205,71 +225,5 @@ public class GhostPhysics : MonoBehaviour
             yield break;
         }
         //StartCoroutine(MoveTo());
-    }
-
-    //rotation is equal to the number of degrees needed to rotate on each axis
-    public void RotateToOrientation()
-    {
-        IEnumerator RotateTo()
-        {
-            rotating = true;
-
-            float signedAngleToUp = 30;
-            float signedAngleToForward = 0;
-            Vector3 localVelocity = new Vector3();
-            Vector3 torqueToAdd = new Vector3();
-
-            while (signedAngleToForward > 5 || signedAngleToUp > 5 || localVelocity.x > .1 || localVelocity.y > .1 || localVelocity.z > .1)
-            {
-                signedAngleToUp = Mathf.Deg2Rad * Vector3.SignedAngle(new Vector3(0, 1, 0), transform.up, transform.right);
-                signedAngleToForward = Mathf.Deg2Rad * Vector3.SignedAngle(targetForward, new Vector3(transform.forward.x, 0, transform.forward.x), new Vector3(0, 1, 0));
-                localVelocity = transform.InverseTransformDirection(rb.angularVelocity);
-
-                float targetXAngVel = Mathf.Sqrt(2 * signedAngleToUp * torque); 
-                float targetYAngVel = Mathf.Sqrt(2 * signedAngleToForward * torque);
-
-
-                torqueToAdd = new Vector3(targetXAngVel - localVelocity.x, targetYAngVel - localVelocity.y, -localVelocity.z).normalized * Time.deltaTime * torque;
-
-                rb.AddRelativeTorque(torqueToAdd);
-
-                yield return null;
-            }
-
-
-            rotating = false;
-            yield break;
-        }
-        StartCoroutine(RotateTo());
-    }
-
-    IEnumerator StopRotation()
-    {
-        stoppingRotation = true;
-        Vector3 angularVelocity = rb.angularVelocity;
-        float angspeed = angularVelocity.magnitude;
-        if (angspeed < torque * Time.deltaTime)
-        {
-            rb.angularVelocity = new Vector3();
-            stoppingRotation = false;
-            yield break;
-        }
-
-        int getSigniture()
-        { return Math.Sign(angularVelocity.x) + Math.Sign(angularVelocity.y) * 2 + Math.Sign(angularVelocity.z) * 4; }
-
-        int signiture = getSigniture();
-
-        while (signiture == getSigniture())
-        {
-            angularVelocity = rb.angularVelocity;
-            angspeed = angularVelocity.magnitude;
-            rb.angularVelocity *= (angspeed - torque * Time.deltaTime)/angspeed;
-            yield return null;
-        }
-
-        rb.angularVelocity = new Vector3();
-        stoppingRotation = false;
-        yield break;
     }
 }

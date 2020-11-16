@@ -30,7 +30,8 @@ public class GameManager : StateManagerBase
             yield return SetState("GhostTrans");
             yield return SetState("GhostManager");
             yield return SetState("TableTrans");
-            yield return new WaitForSeconds(15.0f);
+            CountDown.SetParams("Bone Delivery", "Grab Bones", 15);
+            yield return SetState("CountDown");
         }
         yield return SetState("CalculateScore");
 
