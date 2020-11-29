@@ -1432,8 +1432,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   boneShipments:
-  - {fileID: 6224480179685692120, guid: 7403660fe374bc4498782d63980cdc5f, type: 3}
   - {fileID: 6224480179685692120, guid: 91a8b9c2143c97740a585d442c318b49, type: 3}
+  - {fileID: 6224480179685692120, guid: 7403660fe374bc4498782d63980cdc5f, type: 3}
   timePerShipment: 30
   ghostPref: {fileID: 6224480179685692120, guid: e78191e8a3482ac459c8b8c39c29257f,
     type: 3}

@@ -30,14 +30,9 @@ public class GhostManager : State
         foreach(GameObject pref in bones)
         {
             Vector3 target = pos + new Vector3(0,0,-1.2f);
-            Bone currentBone = BoneManager.Instance.NewBone(pref, new Vector3(0,0,100), pref.transform.rotation);
-            if (currentBone)
-            {
-                GhostBehavior ghost = CreateGhost(pos);
-                ghost.mBone = currentBone;
-                currentBone.mGhost = ghost;
-                ghost.body.MoveToPosition(target);
-            }
+            GhostBehavior ghost = CreateGhost(pos);
+            ghost.body.MoveToPosition(target);
+            BoneManager.Instance.NewBone(pref, new Vector3(0,0,100), pref.transform.rotation,ghost);
             pos += spacing;
         }
     }

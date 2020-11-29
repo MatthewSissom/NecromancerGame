@@ -33,11 +33,42 @@ public class BoneManager : MonoBehaviour
         return currentID++;
     }
 
-    public Bone NewBone(GameObject pref, Vector3 location, Quaternion rotation)
+    public void SetBoneLayer(Bone toSet,int layer)
+    {
+        void SetLayerOfAllChildren(Transform t)
+        {
+            t.gameObject.layer = layer;
+            for (int i = 0; i < t.childCount; i++)
+            {
+                SetLayerOfAllChildren(t.GetChild(i));
+            }
+        }
+        SetLayerOfAllChildren(toSet.transform);
+    }
+
+    public void SetBoneLayer(Bone toSet, int layer, float delay)
+    {
+        IEnumerator DelayedSet()
+        {
+            yield return new WaitForSeconds(delay);
+            SetBoneLayer(toSet, layer);
+            yield break;
+        }
+        StartCoroutine(DelayedSet());
+    }
+
+    public Bone NewBone(GameObject pref, Vector3 location, Quaternion rotation, GhostBehavior heldBy = null)
     {
         var go = Instantiate(pref, location, rotation);
         Bone bone = go.GetComponent<Bone>();
         activeBones.AddLast(bone);
+        if(heldBy)
+        {
+            heldBy.mBone = bone;
+            bone.mGhost = heldBy;
+            SetBoneLayer(bone, 8);
+        }
+
         return bone;
     }
 
@@ -76,9 +107,9 @@ public class BoneManager : MonoBehaviour
     {
         //search for any ids that aren't the same 
         int id = (activeBones.Count > 0) ? activeBones.First.Value.Group.GroupID : -1;
-        foreach(Bone b in activeBones)
+        foreach (Bone b in activeBones)
         {
-            if(b.Group.GroupID != id)
+            if (b.Group.GroupID != id)
             {
                 id = -1;
                 break;

@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class Bone : MonoBehaviour
 {
+    const int physicsLayer = 10;
+
     private BoneGroup group;
     private Rigidbody rb;
     public GhostBehavior mGhost;
 
-    public Rigidbody Rb { get { return rb; }}
+    public Rigidbody Rb { get { return rb; } }
     public BoneGroup Group { get { return group; } }
 
     // Start is called before the first frame update
@@ -16,13 +18,8 @@ public class Bone : MonoBehaviour
     {
         //get values
         rb = gameObject.GetComponent<Rigidbody>();
-        gameObject.layer = 8;
-        for(int i = 0; i < transform.childCount; i++)
-        {
-            transform.GetChild(i).gameObject.layer = 8;
-        }
         group = gameObject.GetComponent<BoneGroup>();
-        if(!group) group = (BoneGroup)gameObject.AddComponent(typeof(BoneGroup));
+        if (!group) group = (BoneGroup)gameObject.AddComponent(typeof(BoneGroup));
     }
 
     public void PickedUp()
@@ -33,67 +30,60 @@ public class Bone : MonoBehaviour
         }
         mGhost = null;
         rb.useGravity = true;
-        gameObject.layer = 1;
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            transform.GetChild(i).gameObject.layer = 1;
-        }
+        BoneManager.Instance.SetBoneLayer(this, physicsLayer,0.25f);
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (!mGhost)
+        Bone colliding = collision.gameObject.GetComponent<Bone>();
+        //if colliding with a bone and not in the same group already
+        //then connect the two bones together
+        if (colliding && group.GroupID < colliding.group.GroupID)
         {
-            Bone colliding = collision.gameObject.GetComponent<Bone>();
-            //if colliding with a bone and not in the same group already
-            //then connect the two bones together
-            if (colliding && group.GroupID < colliding.group.GroupID)
+            //---Bone Connection---//
+
+            //update group trees
+            BoneGroup.combineGroups(group, colliding.group);
+            FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
+
+            //get joint info from collision
+            Vector3 jointWorldPoint;
+            Vector3 jointDirection;
+            if (collision.contactCount == 1)
             {
-                //---Bone Connection---//
-
-                //update group trees
-                BoneGroup.combineGroups(group, colliding.group);
-                FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
-
-                //get joint info from collision
-                Vector3 jointWorldPoint;
-                Vector3 jointDirection;
-                if (collision.contactCount == 1)
-                {
-                    ContactPoint contact = collision.GetContact(0);
-                    jointWorldPoint = contact.point;
-                    jointDirection = contact.normal;
-                }
-                else
-                {
-                    jointWorldPoint = new Vector3();
-                    jointDirection = new Vector3();
-                    ContactPoint[] points = new ContactPoint[collision.contactCount];
-                    collision.GetContacts(points);
-                    foreach (ContactPoint c in points)
-                    {
-                        jointWorldPoint += c.point;
-                        jointDirection += c.normal;
-                    }
-                    jointWorldPoint /= collision.contactCount;
-                    jointDirection /= collision.contactCount;
-                }
-
-                //create joint
-                SpringJoint newJoint = gameObject.AddComponent(typeof(SpringJoint)) as SpringJoint;
-                newJoint.anchor = transform.InverseTransformPoint(jointWorldPoint);
-                newJoint.connectedBody = colliding.Rb;
-                newJoint.autoConfigureConnectedAnchor = false;
-                newJoint.connectedAnchor = colliding.transform.InverseTransformPoint(jointWorldPoint);
-                newJoint.spring = 500;
-                newJoint.damper = 10;
-                newJoint.minDistance = 0.0f;
-                newJoint.maxDistance = .025f;
-                newJoint.enableCollision = true;
-
-                //create particle effect
-                ParticleManager.CreateEffect("CombineFX", jointWorldPoint);
+                ContactPoint contact = collision.GetContact(0);
+                jointWorldPoint = contact.point;
+                jointDirection = contact.normal;
             }
+            else
+            {
+                jointWorldPoint = new Vector3();
+                jointDirection = new Vector3();
+                ContactPoint[] points = new ContactPoint[collision.contactCount];
+                collision.GetContacts(points);
+                foreach (ContactPoint c in points)
+                {
+                    jointWorldPoint += c.point;
+                    jointDirection += c.normal;
+                }
+                jointWorldPoint /= collision.contactCount;
+                jointDirection /= collision.contactCount;
+            }
+
+            //create joint
+            SpringJoint newJoint = gameObject.AddComponent(typeof(SpringJoint)) as SpringJoint;
+            newJoint.anchor = transform.InverseTransformPoint(jointWorldPoint);
+            newJoint.connectedBody = colliding.Rb;
+            newJoint.autoConfigureConnectedAnchor = false;
+            newJoint.connectedAnchor = colliding.transform.InverseTransformPoint(jointWorldPoint);
+            newJoint.spring = 500;
+            newJoint.damper = 10;
+            newJoint.minDistance = 0.0f;
+            newJoint.maxDistance = .025f;
+            newJoint.enableCollision = true;
+
+            //create particle effect
+            ParticleManager.CreateEffect("CombineFX", jointWorldPoint);
         }
     }
 }

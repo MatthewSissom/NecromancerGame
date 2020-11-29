@@ -149,8 +149,6 @@ public class GhostPhysics : MonoBehaviour
         if (length > .01f || speed > .5f)
         {
             Vector3 toTargetNormal = toTarget / length;
-            //transform.up = new Vector3(0, 1, 0);
-            //transform.forward = toTargetNormal;
 
             ////make sure the ghost is moving in the twards the target
             //if (Vector3.Angle(rb.velocity,toTarget) > 10)
