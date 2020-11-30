@@ -27,9 +27,12 @@ public class GameManager : StateManagerBase
         //bone delivery loop
         while (!GhostManager.Instance.done)
         {
-            yield return SetState("GhostTrans");
+            //yield return SetState("GhostTrans");
+            //yield return SetState("GhostManager");
+            //yield return SetState("TableTrans");
+            yield return SetState("GhostTest");
             yield return SetState("GhostManager");
-            yield return SetState("TableTrans");
+            yield return SetState("GhostTest");
             CountDown.SetParams("Bone Delivery", "Grab Bones", 15);
             yield return SetState("CountDown");
         }

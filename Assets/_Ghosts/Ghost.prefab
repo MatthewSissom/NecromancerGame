@@ -92,15 +92,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {x: 0, y: -1, z: 0}
-  maxAcceleration: 0.5
-  maxSpeed: 1
+  maxAcceleration: 0.2
+  maxSpeed: 0.3
   maxAngularVelocity: 360
   torque: 1
   maxYSpeed: 1
   wobbleTollerance: 15
   ballanceRotationThreshold: 30
   bobTollerance: 0.1
-  ballanceHeightThreshold: 0.1
+  ballanceHeightThreshold: 0.2
 --- !u!1 &7071229383301650499
 GameObject:
   m_ObjectHideFlags: 0

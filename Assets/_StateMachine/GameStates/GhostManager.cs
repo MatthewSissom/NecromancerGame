@@ -18,30 +18,42 @@ public class GhostManager : State
     public GameObject ghostPref;
     private List<GhostBehavior> ghosts;
 
-
-    //instantiates the bones given 
-    public void CreateBones(in List<GameObject> bones)
+    public GhostBehavior CreateGhost(List<GameObject> path)
     {
-        Vector3 spacing = new Vector3(-.15f, 0, 0);
-        Vector3 pos = transform.position;
-
-
-        //instantiate bones
-        foreach(GameObject pref in bones)
+        GhostBehavior newGhost = Instantiate(ghostPref, path[0].transform.position, path[0].transform.rotation).GetComponent<GhostBehavior>();
+        ghosts.Add(newGhost);
+        for(int i = 0; i < path.Count; i++)
         {
-            Vector3 target = pos + new Vector3(0,0,-1.2f);
-            GhostBehavior ghost = CreateGhost(pos);
-            ghost.body.MoveToPosition(target);
-            BoneManager.Instance.NewBone(pref, new Vector3(0,0,100), pref.transform.rotation,ghost);
-            pos += spacing;
+            newGhost.AddToPath(path[i], i == path.Count - 1);
         }
+        newGhost.FollowPath();
+        return newGhost;
     }
 
-    public GhostBehavior CreateGhost(Vector3 position)
+    private void InitObjects(GameObject boneShipment)
     {
-        GhostBehavior newGhost = Instantiate(ghostPref, position, Quaternion.Euler(0, 90, 0)).GetComponent<GhostBehavior>();
-        ghosts.Add(newGhost);
-        return newGhost;
+        List<GameObject> bones = boneShipment.GetComponent<BoneShipment>().bones;
+    #if UNITY_EDITOR
+        if (boneShipment.transform.childCount != bones.Count)
+            Debug.LogError("Number of bones is different than number of paths on" + boneShipment.name);
+#endif
+        Transform pathRoot;
+        List<GameObject> path;
+        for(int i = 0, size = bones.Count; i< size; i++)
+        {
+            pathRoot = boneShipment.transform.GetChild(i);
+            path = new List<GameObject>();
+            for(int p = 0; p < pathRoot.childCount; p++)
+            {
+                path.Add(pathRoot.GetChild(p).gameObject);
+            }
+            GhostBehavior ghost = CreateGhost(path);
+            BoneManager.Instance.NewBone(bones[i], 
+                new Vector3(0, 0, 100), 
+                bones[i].transform.rotation, 
+                ghost
+            );
+        }
     }
 
     public void DestroyGhost(GhostBehavior toRemove)
@@ -78,7 +90,7 @@ public class GhostManager : State
 
     private IEnumerator BoneShipment()
     {
-        CreateBones(boneShipments[currentShipment].GetComponent<BoneShipment>().bones);
+        InitObjects(boneShipments[currentShipment]);
         done = ++currentShipment == boneShipments.Count;
         yield return new WaitForSeconds(timePerShipment);
         RecallGhosts();
