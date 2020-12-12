@@ -159,9 +159,9 @@ public class InputManager : MonoBehaviour
             FloatingTouch active = proxies[0] as FloatingTouch;
             if (active != null)
             {
-                float toRotate = -10* Input.mouseScrollDelta.y;
+                float toRotate = -30* Input.mouseScrollDelta.y;
                 Vector3 axis = Vector3.up;
-                Vector3 pos = active.transform.root.position;
+                Vector3 pos = active.activeBone.transform.root.position;
                 active.applyToAll((Bone toApply, FunctionArgs e) =>
                 {
                     toApply.transform.RotateAround(pos, axis ,toRotate);
