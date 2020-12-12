@@ -23,9 +23,8 @@ public class CameraTransition : State
         Begin();
 
         initalPos = transform.localPosition;
-        initalForward = transform.forward;
 
-        if (initalPos == pos && initalForward == forward)
+        if (initalPos == pos && forward == transform.forward && up == transform.up)
         {
             End();
             yield break;
@@ -33,34 +32,21 @@ public class CameraTransition : State
 
         initalTime = Time.time;
         initalQuat = transform.rotation;
+        Quaternion endQuat = Quaternion.LookRotation(forward, up);
         elapsedTime = 0;
-        float dot = Vector3.Dot(initalForward, forward);
-        if (Mathf.Abs(dot) == 1)
-        {
-            axis = new Vector3(1, 0, 0);
-            degrees = 180;
-        }
-        else
-        {
-            axis = Vector3.Cross(initalForward, forward);
-            degrees = Mathf.Acos(dot) / Mathf.PI * 180;
-        }
-        //positive or negitive rotation?
-
 
         yield return null;
 
         while(elapsedTime < time)
         {
             transform.localPosition = Vector3.Lerp(initalPos, pos, elapsedTime / time);
-            transform.rotation = initalQuat;
-            transform.Rotate(axis, degrees * elapsedTime / time);
+            transform.rotation = Quaternion.Slerp(initalQuat, endQuat, elapsedTime / time);
             elapsedTime = Time.time - initalTime;
             yield return null;
         }
 
         transform.localPosition = pos;
-        transform.up = up;
+        transform.rotation = endQuat;
 
         End();
         yield break;

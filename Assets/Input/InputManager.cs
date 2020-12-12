@@ -154,6 +154,20 @@ public class InputManager : MonoBehaviour
             holdingMouseDown = false;
             remove(0);
         }
+        if(Input.mouseScrollDelta.y != 0)
+        {
+            FloatingTouch active = proxies[0] as FloatingTouch;
+            if (active != null)
+            {
+                float toRotate = -10* Input.mouseScrollDelta.y;
+                Vector3 axis = Vector3.up;
+                Vector3 pos = active.transform.root.position;
+                active.applyToAll((Bone toApply, FunctionArgs e) =>
+                {
+                    toApply.transform.RotateAround(pos, axis ,toRotate);
+                });
+            }
+        }
         #endregion
 
 

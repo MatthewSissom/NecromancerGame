@@ -18,9 +18,8 @@ public class CameraTransitionEditor : Editor
         if (GUILayout.Button("Set Camera To Location"))
         {
             Transform cameraTrans = myScript.transform;
-            cameraTrans.position = myScript.pos;
-            cameraTrans.up = myScript.up;
-            cameraTrans.forward = myScript.forward;
+            cameraTrans.localPosition = myScript.pos;
+            cameraTrans.rotation = Quaternion.LookRotation(myScript.forward, myScript.up);
         }
         DrawDefaultInspector();
     }

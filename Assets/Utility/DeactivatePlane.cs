@@ -6,11 +6,6 @@ public class DeactivatePlane : MonoBehaviour
 {
     // Start is called before the first frame update
 
-    private void Start()
-    {
-        gameObject.GetComponent<MeshRenderer>().material.mainTextureScale = new Vector2(15, 15);
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         Bone b;
