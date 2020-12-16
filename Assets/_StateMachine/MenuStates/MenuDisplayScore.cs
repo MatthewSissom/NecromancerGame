@@ -41,6 +41,8 @@ public class MenuDisplayScore : State
         textBox.text = partialList + "\nTotal: " + totalScore.ToString();
 
         yield return new WaitUntil(() => { return buttonName == "Main"; });
+        MenuManager.Instance.GoToMenu(buttonName);
+        buttonName = "";
 
         End();
         yield break;

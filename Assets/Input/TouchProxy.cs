@@ -5,6 +5,8 @@ using UnityEngine;
 //Base class for all touches that has no functionality
 public class TouchProxy : MonoBehaviour
 {
+    public int id;
+    public bool moved;
     public float radius { get; set; }
 
     public delegate void destroyCallback();
@@ -12,6 +14,7 @@ public class TouchProxy : MonoBehaviour
 
     public virtual void Move(Vector3 pos, float rad)
     {
+        moved = true;
         transform.position = pos;
         radius = rad;
     }

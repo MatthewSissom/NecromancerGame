@@ -12,11 +12,36 @@ public class GhostManager : State
     public List<GameObject> boneShipments;
     [SerializeField]
     float timePerShipment;
+    [SerializeField]
+    public float timeBetweenShipments;
     private int currentShipment = 0;
 
     [Header("Ghosts")]
     public GameObject ghostPref;
     private List<GhostBehavior> ghosts;
+
+
+    public void ManagerInit()
+    {
+        currentShipment = 0;
+        done = false;
+        ghosts = new List<GhostBehavior>();
+    }
+
+    public void DestroyAll()
+    {
+        if (ghosts != null)
+        {
+            int ghostCount = ghosts.Count;
+            while (ghostCount > 0)
+            {
+                Destroy(ghosts[ghostCount - 1]);
+                ghosts.RemoveAt(ghostCount - 1);
+                ghostCount -= 1;
+            }
+        }
+        ghosts = new List<GhostBehavior>();
+    }
 
     public GhostBehavior CreateGhost(List<GameObject> path)
     {
@@ -33,9 +58,12 @@ public class GhostManager : State
     private void InitObjects(GameObject boneShipment)
     {
         List<GameObject> bones = boneShipment.GetComponent<BoneShipment>().bones;
-    #if UNITY_EDITOR
+#if UNITY_EDITOR
         if (boneShipment.transform.childCount != bones.Count)
+        {
             Debug.LogError("Number of bones is different than number of paths on" + boneShipment.name);
+            return;
+        }
 #endif
         Transform pathRoot;
         List<GameObject> path;
@@ -66,11 +94,11 @@ public class GhostManager : State
         Destroy(toRemove.transform.root.gameObject);
     }
 
-    public void RecallGhosts()
+    public void RecallGhosts(float lifeSpan)
     {
         foreach(GhostBehavior b in ghosts)
         {
-            b.Recall();
+            b.Recall(lifeSpan);
         }
     }
 
@@ -93,7 +121,7 @@ public class GhostManager : State
         InitObjects(boneShipments[currentShipment]);
         done = ++currentShipment == boneShipments.Count;
         yield return new WaitForSeconds(timePerShipment);
-        RecallGhosts();
+        RecallGhosts(timeBetweenShipments - 2);
         yield break;
     }
 
@@ -118,7 +146,6 @@ public class GhostManager : State
         {
             Instance = this;
         }
-        ghosts = new List<GhostBehavior>();
     }
 }
 

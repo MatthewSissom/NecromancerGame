@@ -35,9 +35,9 @@ public class SearchingTouch : TouchProxy
         Bone b = other.GetComponentInParent<Bone>();
         if (b)
         {
-            FloatingTouch newTouch = InputManager.Instance.ReplaceWith<FloatingTouch>(this);
-            b.PickedUp();
-            newTouch?.SetBone(b);
+            //FloatingTouch newTouch = InputManager.Instance.ReplaceWith<FloatingTouch>(this);
+            //b.PickedUp();
+            //newTouch?.SetBone(b);
         }
     }
 }

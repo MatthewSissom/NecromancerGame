@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotationProxy : TouchProxy
+public class RotationTouch : TouchProxy
 {
-    private FloatingTouch parent;
-    public FloatingTouch Parent
-    { 
+    private BoneMovingTouch parent;
+    public BoneMovingTouch Parent
+    {
         get { return parent; }
-        set 
-        { 
+        set
+        {
             parent = value;
             //replace this touch with a functionless one if the floating touch is removed
             parent.DestroyEvent += () => { InputManager.Instance.DisableTouch(this); };
@@ -26,10 +26,11 @@ public class RotationProxy : TouchProxy
 
     protected void Update()
     {
-        parent.applyToAll((Bone toApply, FunctionArgs e) =>
-        {
-            toApply.transform.RotateAround(parent.activeBone.transform.root.position, Vector3.up, toRotate);
-        });
+        if(parent.activeBone)
+            parent.applyToAll((Bone toApply, FunctionArgs e) =>
+            {
+                toApply.transform.RotateAround(parent.activeBone.transform.root.position, Vector3.up, toRotate);
+            });
         toRotate = 0;
     }
 }

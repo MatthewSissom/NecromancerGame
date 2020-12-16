@@ -21,8 +21,6 @@ public class GameManager : StateManagerBase
     public IEnumerator Game()
     {
         yield return SetState("GameInit");
-        
-        //yield return SetState("CountDown");
 
         //bone delivery loop
         while (!GhostManager.Instance.done)
@@ -30,19 +28,12 @@ public class GameManager : StateManagerBase
             yield return SetState("GhostTrans");
             yield return SetState("GhostManager");
             yield return SetState("TableTrans");
-            CountDown.SetParams("Bone Delivery", "Grab Bones", 15);
-            yield return SetState("CountDown");
+            yield return new WaitForSeconds(GhostManager.Instance.timeBetweenShipments);
         }
         yield return SetState("CalculateScore");
 
         yield return SetState("GameCleanUp");
 
-        yield break;
-    }
-
-    public IEnumerator Reset()
-    {
-        //TODO implement reset
         yield break;
     }
 

@@ -59,6 +59,10 @@ public class BoneManager : MonoBehaviour
 
     public Bone NewBone(GameObject pref, Vector3 location, Quaternion rotation, GhostBehavior heldBy = null)
     {
+        if(heldBy)
+        {
+            location = heldBy.boneLocation.position;
+        }
         var go = Instantiate(pref, location, rotation);
         Bone bone = go.GetComponent<Bone>();
         activeBones.AddLast(bone);
@@ -75,12 +79,12 @@ public class BoneManager : MonoBehaviour
 
     public void DeactivateBone(Bone toDeactivate)
     {
-        if (toDeactivate && !deactivatedBones.Contains(toDeactivate))
-        {
-            activeBones.Remove(toDeactivate);
-            deactivatedBones.AddLast(toDeactivate);
-            toDeactivate.enabled = false;
-        }
+        //if (toDeactivate && !deactivatedBones.Contains(toDeactivate))
+        //{
+        //    activeBones.Remove(toDeactivate);
+        //    deactivatedBones.AddLast(toDeactivate);
+        //    toDeactivate.enabled = false;
+        //}
     }
 
     public void DestroyBone(Bone toDestroy)
@@ -91,13 +95,10 @@ public class BoneManager : MonoBehaviour
 
     public void DestroyAll()
     {
-        foreach (Bone b in activeBones)
+        var allBone = GameObject.FindObjectsOfType<Bone>();
+        foreach (Bone b in allBone)
         {
-            Destroy(b);
-        }
-        foreach (Bone b in deactivatedBones)
-        {
-            Destroy(b);
+            Destroy(b.transform.root.gameObject);
         }
         activeBones = new LinkedList<Bone>();
         deactivatedBones = new LinkedList<Bone>();

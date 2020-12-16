@@ -8,6 +8,9 @@ public class GameInit : State
     {
         Begin();
 
+        GhostManager.Instance.ManagerInit();
+        BoneManager.Instance.DestroyAll();
+
         End();
         yield break;
     }

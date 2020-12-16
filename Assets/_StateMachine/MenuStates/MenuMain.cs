@@ -4,26 +4,25 @@ using UnityEngine;
 
 public class MenuMain : State
 {
-    private string buttonName = null;
+    private bool exit;
 
     public override IEnumerator Routine()
     {
         base.Begin();
 
-        while (buttonName == null)
+        exit = false;
+        while (!exit)
         {
             yield return null;
         }
 
-        MenuManager.Instance.buttonName = buttonName;
-
         base.End();
-        buttonName = null;
         yield break;
     }
 
     public void ButtonPressed(string name)
     {
-        buttonName = name;
+        exit = true;
+        MenuManager.Instance.GoToMenu(name);
     }
 }

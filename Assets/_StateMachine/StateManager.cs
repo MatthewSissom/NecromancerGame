@@ -9,12 +9,13 @@ public class StateManager : StateManagerBase
 
     private IEnumerator StateFlow()
     {
-        while(true)
+        MenuManager.Instance.GoToMenu("Main");
+        yield return SetState(MenuManager.Instance.Main());
+        while (true)
         {
-            yield return SetState(MenuManager.Instance.Main());
-            yield return SetState(GameManager.Instance.Reset());
             yield return SetState(GameManager.Instance.Game());
-            yield return SetState(MenuManager.Instance.Score());
+            MenuManager.Instance.GoToMenu("Score");
+            yield return SetState(MenuManager.Instance.Main());
         }
     }
 

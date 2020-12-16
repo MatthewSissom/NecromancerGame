@@ -10,14 +10,14 @@ GameObject:
   m_Component:
   - component: {fileID: 8541954969113094319}
   - component: {fileID: 4830337078421668812}
-  - component: {fileID: 8282091890079889789}
+  - component: {fileID: -2500729752334165743}
   m_Layer: 0
-  m_Name: SearchingTouch
+  m_Name: BoneMovingTouch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8541954969113094319
 Transform:
   m_ObjectHideFlags: 0
@@ -45,7 +45,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.01, y: 10, z: 0.01}
   m_Center: {x: 0, y: -5, z: 0}
---- !u!114 &8282091890079889789
+--- !u!114 &-2500729752334165743
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -54,6 +54,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7669088987514535589}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f6d96c8cc2a4c2d4f89058d752694627, type: 3}
+  m_Script: {fileID: 11500000, guid: ed5ab1cd8a91c154db8f21efcf5a9877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  offset: {x: 0, y: 0, z: 0}
+  heightThreshold: 100
+  speed: 0
+  previousLocation: {x: 0, y: 0, z: 0}

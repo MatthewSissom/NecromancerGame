@@ -5,39 +5,44 @@ using UnityEngine;
 public class MenuManager : StateManagerBase
 {
     public static MenuManager Instance;
-    public string buttonName;
+    public string state;
 
     public IEnumerator Main()
     {
         yield return new WaitForSeconds(0.5f);
         while (true)
         {
-            //camera + board transition
-            yield return SetState("TransMain");
-            yield return SetState("BoardMain");
-            yield return SetState("Main");
-            switch (buttonName)
+            switch (state)
             {
+                case "Main":
+                    state = null;
+                    yield return SetState("TransMain");
+                    yield return SetState("BoardMain");
+                    yield return SetState("Main");
+                    break;
                 case "Play":
-                    buttonName = null;
                     yield break;
                 case "Instructions":
-                    buttonName = null;
+                    state = null;
                     yield return SetState("BoardFlipped");
                     yield return SetState("Instructions");
                     break;
-                default:
-                    buttonName = null;
-                    yield break;
+                case "Score":
+                    state = null;
+                    yield return SetState("TransMain");
+                    yield return SetState("BoardFlipped");
+                    yield return SetState("DisplayScore");
+                    break;
+                case null:
+                    yield return null;
+                    break;
             }
         }
     }
 
-    public IEnumerator Score()
+    public void GoToMenu(string name)
     {
-        yield return SetState("TransMain");
-        yield return SetState("BoardFlipped");
-        yield return SetState("DisplayScore");
+        state = name;
     }
 
     protected override void Awake()

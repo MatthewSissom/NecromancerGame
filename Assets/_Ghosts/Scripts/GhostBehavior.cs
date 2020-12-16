@@ -12,19 +12,13 @@ public class GhostBehavior : MonoBehaviour
 
     //bone values
     public Bone mBone;
-    private Transform boneLocation;
+    public Transform boneLocation { get; private set; }
 
     public GhostPhysics body { get; private set; }
 
     private void Awake()
     {
         body = gameObject.GetComponent<GhostPhysics>();
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        mBone.mGhost = this;
         boneLocation = transform.Find("BoneLocation");
     }
 
@@ -80,12 +74,12 @@ public class GhostBehavior : MonoBehaviour
         mBone = null;
     }
 
-    public void Recall()
+    public void Recall(float lifeSpan = 3)
     {
         IEnumerator RecallRoutine()
         {
             body.MoveToPosition(path[0],0);
-            yield return new WaitForSeconds(3);
+            yield return new WaitForSeconds(lifeSpan);
             GhostManager.Instance.DestroyGhost(this);
             yield break;
         }
