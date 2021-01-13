@@ -16,24 +16,40 @@ public class MainCameraCustomEditory : Editor
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
-        if(GUILayout.Button("New Transition"))
+        if(GUILayout.Button("New Transition at Main Camera"))
         {
-            //if the name given is the same name as an older transition
-            //add an (old) to the end of the other script's name
-            foreach(CameraTransition c in myScript.gameObject.GetComponents<CameraTransition>())
-            {
-                if(c.transitionName == myScript.NewStateName)
-                {
-                    c.transitionName += " (old)";
-                }
-            }
+            changeOldNames();
 
-            CameraTransition newTrans = (CameraTransition)myScript.gameObject.AddComponent(typeof(CameraTransition));
-            newTrans.pos = newTrans.transform.position;
-            newTrans.up = newTrans.transform.up;
-            newTrans.forward = newTrans.transform.forward;
-            newTrans.transitionName = myScript.NewStateName;
-            newTrans.time = 1;
+            setTransitionPos(myScript.transform);
         }
+        if (GUILayout.Button("New Transition at SceneView"))
+        {
+            changeOldNames();
+
+            setTransitionPos(SceneView.lastActiveSceneView.camera.transform);
+        }
+    }
+
+    private void changeOldNames()
+    {
+        //if the name given is the same name as an older transition
+        //add an (old) to the end of the other script's name
+        foreach (CameraTransition c in myScript.gameObject.GetComponents<CameraTransition>())
+        {
+            if (c.transitionName == myScript.NewStateName)
+            {
+                c.transitionName += " (old)";
+            }
+        }
+    }
+
+    private void setTransitionPos(Transform newPos)
+    {
+        CameraTransition newTrans = (CameraTransition)myScript.gameObject.AddComponent(typeof(CameraTransition));
+        newTrans.pos = newPos.position;
+        newTrans.up = newPos.up;
+        newTrans.forward = newPos.forward;
+        newTrans.transitionName = myScript.NewStateName;
+        newTrans.time = 1;
     }
 }

@@ -144,7 +144,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -3033667219593020291, guid: 14b5101ed9614ea40a52d1819296e741, type: 3}
+  - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -211,7 +211,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5959651662311369288}
-  - component: {fileID: 4080990015148110940}
+  - component: {fileID: 6602385080391771221}
   m_Layer: 0
   m_Name: GameObject (2)
   m_TagString: Untagged
@@ -226,15 +226,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8842816019245772421}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.448, z: -1.31}
+  m_LocalRotation: {x: 0.2721992, y: -0, z: -0, w: 0.96224093}
+  m_LocalPosition: {x: 0, y: -1.7212231, z: -1.2208765}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7946559770330850282}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!135 &4080990015148110940
-SphereCollider:
+  m_LocalEulerAnglesHint: {x: 31.590002, y: 0, z: 0}
+--- !u!65 &6602385080391771221
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -244,5 +244,5 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.40173888
-  m_Center: {x: 0, y: -0.1956048, z: 0.11005998}
+  m_Size: {x: 0.46997, y: 0.73326063, z: 0.5807559}
+  m_Center: {x: -0.008548751, y: -0.011964616, z: -0.022928992}

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 //Highest level state manager, controls the game flow 
 public class StateManager : StateManagerBase

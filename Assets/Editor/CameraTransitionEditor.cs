@@ -15,11 +15,19 @@ public class CameraTransitionEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        if (GUILayout.Button("Set Camera To Location"))
+        if (GUILayout.Button("Set Camera"))
         {
             Transform cameraTrans = myScript.transform;
             cameraTrans.localPosition = myScript.pos;
             cameraTrans.rotation = Quaternion.LookRotation(myScript.forward, myScript.up);
+        }
+        if (GUILayout.Button("Set Scene View"))
+        {
+            GameObject temp = new GameObject();
+            temp.transform.localPosition = myScript.pos;
+            temp.transform.rotation = Quaternion.LookRotation(myScript.forward, myScript.up);
+            SceneView.lastActiveSceneView.AlignViewToObject(temp.transform);
+            DestroyImmediate(temp);
         }
         DrawDefaultInspector();
     }
