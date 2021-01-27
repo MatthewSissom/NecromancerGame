@@ -52,7 +52,7 @@ public partial class InputManager : MonoBehaviour
         #region mouseInput
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
-        if (Input.GetMouseButton(0))
+        if(Input.GetMouseButton(0))
         {
             Vector3 pos = Input.mousePosition;
             pos.z = Camera.main.transform.position.y - height;
@@ -90,17 +90,28 @@ public partial class InputManager : MonoBehaviour
             pos = Camera.main.ScreenToWorldPoint(pos);
             DisableTouch(pos);
         }
-        if(Input.mouseScrollDelta.y != 0)
+
+
+        const float rotationSpeed = -5f;
+        float rotation = 0;
+        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        {
+            rotation += rotationSpeed;
+        }
+        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        {
+            rotation -= rotationSpeed;
+        }
+        if (rotation != 0)
         {
             BoneMovingTouch active = activeTouches[0] as BoneMovingTouch;
             if (active != null)
             {
-                float toRotate = -30* Input.mouseScrollDelta.y;
                 Vector3 axis = Vector3.up;
                 Vector3 pos = active.activeBone.transform.root.position;
                 active.applyToAll((Bone toApply, FunctionArgs e) =>
                 {
-                    toApply.transform.RotateAround(pos, axis ,toRotate);
+                    toApply.transform.RotateAround(pos, axis ,rotation);
                 });
             }
         }

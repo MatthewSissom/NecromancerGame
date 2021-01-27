@@ -72,7 +72,7 @@ MonoBehaviour:
   - tail
   value: 64000000c80000004b000000410000004b000000410000005000000064000000
   scoreAreaRenderer: {fileID: 7032003958696192227}
-  small: {fileID: 0}
+  tempMarker: {fileID: 0}
 --- !u!1 &1069675870278974121
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,61 +430,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 559537520518874582}
     m_Modifications:
-    - target: {fileID: -1606995071302942416, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 7b574546f391ede4a8c98f28a559b390,
-        type: 3}
-    - target: {fileID: -1606995071302942416, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_Size.x
-      value: 1920
-      objectReference: {fileID: 0}
-    - target: {fileID: -1606995071302942416, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 1160
-      objectReference: {fileID: 0}
-    - target: {fileID: -1606995071302942416, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_WasSpriteAssigned
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -1606995071302942416, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -1606995071302942416, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -1606995071302942416, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -1606995071302942416, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_Color.a
-      value: 0.3529412
-      objectReference: {fileID: 0}
-    - target: {fileID: -1606995071302942416, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3104035216564944652, guid: 4bec1e27babc1494c99494a34821b24c,
         type: 3}
       propertyPath: m_Name
       value: pixelGrid
-      objectReference: {fileID: 0}
-    - target: {fileID: 3104035216564944652, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 5695343819301046884, guid: 4bec1e27babc1494c99494a34821b24c,
         type: 3}
@@ -541,23 +490,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: -179.99998
       objectReference: {fileID: 0}
-    - target: {fileID: 5695343819301046884, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 0.17
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695343819301046884, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 0.17
-      objectReference: {fileID: 0}
-    - target: {fileID: 5695343819301046884, guid: 4bec1e27babc1494c99494a34821b24c,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 4124683568221905956, guid: 4bec1e27babc1494c99494a34821b24c, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4bec1e27babc1494c99494a34821b24c, type: 3}
 --- !u!4 &5128915184197477303 stripped
 Transform:

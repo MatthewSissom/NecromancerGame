@@ -23,8 +23,9 @@ public class CalculateScore : State
 
     [Header("Refrences")]
     public SpriteRenderer scoreAreaRenderer;
-    public GameObject small;
     private Texture2D scoreAreaImage;
+
+    public GameObject tempMarker;
 
     bool RayAtPixelLocation(Vector2 location)
     {
