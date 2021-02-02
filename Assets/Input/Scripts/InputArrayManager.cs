@@ -37,6 +37,8 @@ public partial class InputManager : MonoBehaviour
 
     public void DisableTouch(TouchProxy toDisable)
     {
+        if (!toDisable.isActiveAndEnabled) return;
+
         if (toDisable is BoneMovingTouch)
         {
             moveIndex--;
@@ -57,21 +59,6 @@ public partial class InputManager : MonoBehaviour
 
     void DisableTouch(Vector3 position)
     {
-        if (activeTouches.Count == 1)
-        {
-            if (activeTouches[0] is BoneMovingTouch)
-            {
-                moveIndex--;
-            }
-            else
-            {
-                rotationIndex--;
-            }
-            activeTouches[0].gameObject.SetActive(false);
-            activeTouches.Clear();
-            return;
-        }
-
         DisableTouch(FindNearestActive(position));
     }
 
@@ -96,7 +83,7 @@ public partial class InputManager : MonoBehaviour
         activeTouches.Add(mTouch);
 
         mTouch.Parent = parent;
-        mTouch.Move(position, 0);
+        mTouch.ResetTouch(position, 0);
         mTouch.gameObject.SetActive(true);
         mTouch.id = id;
 

@@ -50,6 +50,7 @@ public partial class InputManager : MonoBehaviour
     void FixedUpdate()
     {
         #region mouseInput
+        /*
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
         if(Input.GetMouseButton(0))
@@ -72,12 +73,6 @@ public partial class InputManager : MonoBehaviour
             else
             {
                 activeTouches[id].Move(pos, rad);
-                if (recordingVelocities)
-                {
-                    FloatingTouch ft = activeTouches[id] as FloatingTouch;
-                    if (ft)
-                        touchVelocities.Add(ft.speed);
-                }
             }
         }
         else if(holdingMouseDown)
@@ -115,8 +110,8 @@ public partial class InputManager : MonoBehaviour
                 });
             }
         }
+        */
         #endregion
-        
 
 
 

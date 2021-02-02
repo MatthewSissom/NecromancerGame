@@ -1583,6 +1583,7 @@ GameObject:
   - component: {fileID: 963194228}
   - component: {fileID: 963194231}
   - component: {fileID: 963194227}
+  - component: {fileID: 963194238}
   - component: {fileID: 963194226}
   - component: {fileID: 963194229}
   - component: {fileID: 963194232}
@@ -1630,8 +1631,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
-  far clip plane: 1000
+  near clip plane: 0.1
+  far clip plane: 10
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -1813,6 +1814,19 @@ MonoBehaviour:
   pos: {x: 1.8965917, y: 0.74041176, z: 0.3125105}
   forward: {x: -0.015527694, y: -0.6243756, z: -0.7809701}
   up: {x: -0.012232607, y: 0.7811243, z: -0.6242558}
+--- !u!114 &963194238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 963194225}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ListenerNumber: -1
 --- !u!1 &1041857647
 GameObject:
   m_ObjectHideFlags: 0

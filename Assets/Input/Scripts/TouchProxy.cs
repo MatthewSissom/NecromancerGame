@@ -9,8 +9,8 @@ public class TouchProxy : MonoBehaviour
     public bool moved;
     public float radius { get; set; }
 
-    public delegate void destroyCallback();
-    public event destroyCallback DestroyEvent;
+    public delegate void disabledType();
+    public event disabledType DisableEvent;
 
     public virtual void Move(Vector3 pos, float rad)
     {
@@ -19,9 +19,9 @@ public class TouchProxy : MonoBehaviour
         radius = rad;
     }
 
-    protected virtual void OnDestroy()
+    protected virtual void OnDisable()
     {
-        DestroyEvent?.Invoke();
+        DisableEvent?.Invoke();
     }
 }
 

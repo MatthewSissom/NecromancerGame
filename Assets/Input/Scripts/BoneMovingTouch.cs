@@ -22,7 +22,6 @@ public class BoneMovingTouch : TouchProxy
     //the outside of the rad instead of bones closer to the center
     private float radMult;
 
-
     //speed
     public float speed;
     public Vector3 previousLocation;
@@ -33,8 +32,10 @@ public class BoneMovingTouch : TouchProxy
         radMult = .1f;
     }
 
-    public void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
+
         //touchLights.Stop();
 
         //limit the upwards velocity of bones
@@ -89,7 +90,7 @@ public class BoneMovingTouch : TouchProxy
             const float maxVelocity = 7.0f;
             const float baseMult = 20;
 
-            Vector3 toProxy = (transform.position + offset - activeBone.transform.position) * baseMult;
+            Vector3 toProxy = (transform.position + offset - activeBone.Rb.worldCenterOfMass) * baseMult;
             if (toProxy.y > heightThreshold)
             {
                 toProxy = new Vector3(0, toProxy.y, 0);
@@ -99,7 +100,6 @@ public class BoneMovingTouch : TouchProxy
             void SetVelocity(Bone toApply, FunctionArgs e)
             {
                 toApply.Rb.velocity = toProxy;
-                toApply.Rb.angularVelocity = new Vector3();
             }
             applyToAll(SetVelocity);
         }
@@ -120,11 +120,5 @@ public class BoneMovingTouch : TouchProxy
         touchLights = lightTransform.GetComponent<ParticleSystem>();
         height = transform.position.y;
         radMult = .1f;
-    }
-
-    protected override void OnDestroy()
-    {
-        base.OnDestroy();
-        Destroy(lightTransform);
     }
 }
