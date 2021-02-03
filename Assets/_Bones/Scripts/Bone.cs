@@ -30,7 +30,19 @@ public class Bone : MonoBehaviour
         }
         mGhost = null;
         rb.useGravity = true;
+        rb.freezeRotation = true;
         BoneManager.Instance.SetBoneLayer(this, physicsLayer,0.25f);
+    }
+
+    public void Dropped()
+    {
+        const float maxReleaseYVelocity = 1.0f;
+        Vector3 velocity = Rb.velocity;
+        if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
+        {
+            Rb.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
+        }
+        rb.freezeRotation = false;
     }
 
     private void OnCollisionEnter(Collision collision)

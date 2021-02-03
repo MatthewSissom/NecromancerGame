@@ -10,6 +10,7 @@ public class RotationTouch : TouchProxy
     public float toParentMagnitude;
 
     const float angleMult = 400;
+    private bool aroundUp = true;
 
     private BoneMovingTouch parent;
     public BoneMovingTouch Parent
@@ -58,12 +59,20 @@ public class RotationTouch : TouchProxy
         if (!parent.activeBone)
             return;
 
-        parent.applyToAll((Bone toApply, FunctionArgs e) =>
+        if (aroundUp && rotAngleAroundToParent > rotAngleAroundUp * 5)
         {
-            toApply.transform.RotateAround(parent.activeBone.transform.root.position, Vector3.up, rotAngleAroundUp);
-            toApply.transform.RotateAround(parent.activeBone.transform.root.position, toParent, rotAngleAroundToParent);
-        });
-        rotAngleAroundUp = 0;
+            parent.SetAxisOfRotation(toParent);
+            aroundUp = false;
+        }
+        if (!aroundUp && rotAngleAroundUp > rotAngleAroundToParent * 5)
+        {
+            parent.SetAxisOfRotation(Vector3.up);
+            aroundUp = true;
+        }
+
+        parent.angularVelocity += aroundUp? rotAngleAroundUp: rotAngleAroundToParent;
+
         rotAngleAroundToParent = 0;
+        rotAngleAroundUp = 0;
     }
 }
