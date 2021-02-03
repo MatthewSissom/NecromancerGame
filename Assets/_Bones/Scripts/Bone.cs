@@ -52,11 +52,13 @@ public class Bone : MonoBehaviour
         //then connect the two bones together
         if (colliding && group.GroupID < colliding.group.GroupID)
         {
+            //---SFX---//
+            FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
+
             //---Bone Connection---//
 
             //update group trees
             BoneGroup.combineGroups(group, colliding.group);
-            FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
 
             //get joint info from collision
             Vector3 jointWorldPoint;
