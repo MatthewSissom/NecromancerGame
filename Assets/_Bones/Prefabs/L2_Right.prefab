@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 6012547502945824604}
   - component: {fileID: 576348723082755016}
   - component: {fileID: -4581871158356691994}
+  - component: {fileID: 8908293137498238615}
   m_Layer: 0
   m_Name: L2_Right
-  m_TagString: Untagged
+  m_TagString: Bone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -113,6 +114,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &8908293137498238615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 492156262034071375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5158ecb77b0672445843db4e14daa49e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6476195614406366224
 GameObject:
   m_ObjectHideFlags: 0

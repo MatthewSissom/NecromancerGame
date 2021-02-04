@@ -417,9 +417,10 @@ GameObject:
   - component: {fileID: 9078201081059933632}
   - component: {fileID: 1945812922257416872}
   - component: {fileID: 1095107279816441777}
+  - component: {fileID: 1809062639587812119}
   m_Layer: 0
   m_Name: Spine Chunk (1)
-  m_TagString: Untagged
+  m_TagString: Bone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -473,6 +474,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+--- !u!114 &1809062639587812119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8491219896673670364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5158ecb77b0672445843db4e14daa49e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8843419411020421258
 GameObject:
   m_ObjectHideFlags: 0
