@@ -80,12 +80,12 @@ public class BoneMovingTouch : TouchProxy
             const float maxVelocity = 7.0f;
             const float baseMult = 20;
             //find movement vector
-            Vector3 toProxy = (transform.position + offset - activeBone.Rb.worldCenterOfMass) * baseMult;
+            Vector3 toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
             //move straight up if far away from the proxy
-            if (toProxy.y > heightThreshold)
-            {
-                toProxy = new Vector3(0, toProxy.y, 0);
-            }
+            //if (toProxy.y > heightThreshold)
+            //{
+            //    toProxy = new Vector3(0, toProxy.y, 0);
+            //}
             Vector3.ClampMagnitude(toProxy, maxVelocity);
 
             void SetVelocity(Bone toApply, FunctionArgs e)
@@ -135,9 +135,7 @@ public class BoneMovingTouch : TouchProxy
 
         if (activeBone)
         {
-            activeBone.Group.applyToAll(
-                (Bone b, FunctionArgs e) => { b.Dropped(); }
-            );
+            activeBone.Dropped();
         }
     }
 }

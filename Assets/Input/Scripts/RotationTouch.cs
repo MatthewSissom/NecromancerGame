@@ -9,7 +9,7 @@ public class RotationTouch : TouchProxy
     public Vector3 toParent;
     public float toParentMagnitude;
 
-    const float angleMult = 400;
+    const float angleMult = 1000;
     private bool aroundUp = true;
 
     private BoneMovingTouch parent;
@@ -59,12 +59,12 @@ public class RotationTouch : TouchProxy
         if (!parent.activeBone)
             return;
 
-        if (aroundUp && rotAngleAroundToParent > rotAngleAroundUp * 5)
+        if (aroundUp && Mathf.Abs(rotAngleAroundToParent) > Mathf.Abs(rotAngleAroundUp * 5))
         {
-            parent.SetAxisOfRotation(toParent);
+            parent.SetAxisOfRotation(Vector3.Cross(Vector3.up,toParent));
             aroundUp = false;
         }
-        if (!aroundUp && rotAngleAroundUp > rotAngleAroundToParent * 5)
+        if (!aroundUp && Mathf.Abs(rotAngleAroundUp) > Mathf.Abs(rotAngleAroundToParent * 5))
         {
             parent.SetAxisOfRotation(Vector3.up);
             aroundUp = true;

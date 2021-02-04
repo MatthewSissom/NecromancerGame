@@ -20,7 +20,6 @@ public class GhostManager : State
     public GameObject ghostPref;
     private List<GhostBehavior> ghosts;
 
-
     public void ManagerInit()
     {
         currentShipment = 0;

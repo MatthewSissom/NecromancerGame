@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 8968713153293957143}
   - component: {fileID: 4201267829573862468}
   - component: {fileID: 3341860568162897711}
+  - component: {fileID: 3750347730929473071}
   m_Layer: 0
   m_Name: Rib Chunk Left (1)
-  m_TagString: Untagged
+  m_TagString: Bone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -64,6 +65,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3750347730929473071
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6547796760771874807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5158ecb77b0672445843db4e14daa49e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &203891742958798106
 PrefabInstance:
   m_ObjectHideFlags: 0

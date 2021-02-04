@@ -546,7 +546,7 @@ GameObject:
   - component: {fileID: 288486067}
   - component: {fileID: 288486066}
   m_Layer: 0
-  m_Name: EastWa;;
+  m_Name: EastWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1694,8 +1694,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.122, z: 0.089}
+  m_LocalRotation: {x: 0.09602194, y: 0.391863, z: -0.041163694, w: 0.91407263}
+  m_LocalPosition: {x: -2.478179, y: 1.0404043, z: -0.66854954}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2516,7 +2516,7 @@ GameObject:
   - component: {fileID: 1559847640}
   m_Layer: 0
   m_Name: Floor
-  m_TagString: Untagged
+  m_TagString: Horizontal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 4294967295
@@ -4046,6 +4046,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Table
+      objectReference: {fileID: 0}
+    - target: {fileID: 559537520518874570, guid: c14691308bb5f384195e1782aa47782d,
+        type: 3}
+      propertyPath: m_TagString
+      value: Horizontal
       objectReference: {fileID: 0}
     - target: {fileID: 559537520518874582, guid: c14691308bb5f384195e1782aa47782d,
         type: 3}
