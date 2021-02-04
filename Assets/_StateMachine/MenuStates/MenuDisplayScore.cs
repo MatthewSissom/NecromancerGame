@@ -21,6 +21,7 @@ public class MenuDisplayScore : State
         PartialScore ps = ScoreManager.Instance.Next();
         textBox.text = "";
         yield return new WaitForSeconds(0.5f);
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/UI/ChalkboardSFX");
 
         while (ps != null)
         {
@@ -36,6 +37,7 @@ public class MenuDisplayScore : State
 
             ps = ScoreManager.Instance.Next();
             yield return new WaitForSeconds(0.5f);
+            FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/UI/ChalkboardSFX");
         }
 
         textBox.text = partialList + "\nTotal: " + totalScore.ToString();

@@ -18,6 +18,70 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &-8527832473205734890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/ChalkboadSFX_04-001
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/ChalkboadSFX_04-001
+  guid: e0938ac9bcf0174897ee609caf9a8bb1
+  Banks:
+  - {fileID: -6380535671084827646}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2800
+--- !u!114 &-7683609979072444097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/ChalkboadSFX_04-006
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/ChalkboadSFX_04-006
+  guid: 5dde4a3255e9444db552e8246ded2d1d
+  Banks:
+  - {fileID: -6380535671084827646}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2800
+--- !u!114 &-6380535671084827646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FMODAssets/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637480563940007244
+  LoadResult: 0
+  FileSizes: []
+  Exists: 1
 --- !u!114 &-5625429686817235811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52,7 +116,7 @@ MonoBehaviour:
   guid: d0f68e661bc71543b1d782cc6566f644
   Banks:
   - {fileID: 5258885408862248677}
-  - {fileID: -4717912088237600652}
+  - {fileID: -6380535671084827646}
   IsStream: 1
   Is3D: 0
   IsOneShot: 0
@@ -76,7 +140,6 @@ MonoBehaviour:
   guid: 0796ce55d5fb444d87a0839d7fcf06f1
   Banks:
   - {fileID: 5258885408862248677}
-  - {fileID: -4717912088237600652}
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -101,7 +164,89 @@ MonoBehaviour:
   lastModified: 637374270914487870
   LoadResult: 0
   FileSizes: []
-  Exists: 1
+  Exists: 0
+--- !u!114 &-3270551045042940973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FMODAssets/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637480557290749611
+  LoadResult: 0
+  FileSizes: []
+  Exists: 0
+--- !u!114 &-3166933663965966753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/ChalkboadSFX_04-003
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/ChalkboadSFX_04-003
+  guid: 3855a218ce23214c96e773777aab6222
+  Banks:
+  - {fileID: -6380535671084827646}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2800
+--- !u!114 &-2656330528392589312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/ChalkboadSFX_04-008
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/ChalkboadSFX_04-008
+  guid: 3342f5ceccaf344799441a7411bdd9a9
+  Banks:
+  - {fileID: -6380535671084827646}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2072
+--- !u!114 &-1303900159231593841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FMODAssets/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637480556466690274
+  LoadResult: 0
+  FileSizes: []
+  Exists: 0
 --- !u!114 &-1194673519973929815
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -134,17 +279,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EditorBanks:
   - {fileID: 8676388831887474980}
-  - {fileID: -4717912088237600652}
+  - {fileID: -6380535671084827646}
   EditorEvents:
   - {fileID: -5012127333993288561}
   - {fileID: -5210944324495790507}
+  - {fileID: 2013174670743562095}
+  - {fileID: 8203780904330674445}
+  - {fileID: -2656330528392589312}
+  - {fileID: -3166933663965966753}
+  - {fileID: 7439337041717443962}
+  - {fileID: -7683609979072444097}
+  - {fileID: -8527832473205734890}
+  - {fileID: 197315462379813891}
+  - {fileID: 2812688718949404873}
+  - {fileID: 6139593077707770308}
   EditorParameters: []
   MasterBanks:
-  - {fileID: -4717912088237600652}
+  - {fileID: -6380535671084827646}
   StringsBanks:
   - {fileID: 8676388831887474980}
-  stringsBankWriteTime: 637374270914497846
+  stringsBankWriteTime: 637480563940166865
   cacheVersion: 3
+--- !u!114 &197315462379813891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/ChalkboadSFX_04-004
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/ChalkboadSFX_04-004
+  guid: e67ecc7fa28775478cd4f5b93dfbdbf5
+  Banks:
+  - {fileID: -6380535671084827646}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2800
 --- !u!114 &989442486768353387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,6 +359,52 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &2013174670743562095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Bones/BoneConnections
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Bones/BoneConnections
+  guid: 0796ce55d5fb444d87a0839d7fcf06f1
+  Banks:
+  - {fileID: -6380535671084827646}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2000
+--- !u!114 &2812688718949404873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/ChalkboadSFX_04-007
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/ChalkboadSFX_04-007
+  guid: e82f794fd75e704e828160b6c01eff41
+  Banks:
+  - {fileID: -6380535671084827646}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2400
 --- !u!114 &3062795638696732001
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,6 +420,24 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.bank
   SubDir: 
   lastModified: 637373417387936379
+  LoadResult: 0
+  FileSizes: []
+  Exists: 0
+--- !u!114 &3694754539568993909
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FMODAssets/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637477766141946272
   LoadResult: 0
   FileSizes: []
   Exists: 0
@@ -235,6 +477,70 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &5543139654035419372
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FMODAssets/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637480551192165572
+  LoadResult: 0
+  FileSizes: []
+  Exists: 0
+--- !u!114 &6139593077707770308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/ChalkboardSFX
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/ChalkboardSFX
+  guid: fdc5db27494428438c026a308375b1f3
+  Banks:
+  - {fileID: -6380535671084827646}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 1500
+--- !u!114 &7439337041717443962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/ChalkboadSFX_04-002
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/ChalkboadSFX_04-002
+  guid: 4eb7deb93b9e724f95ffc5c128609e03
+  Banks:
+  - {fileID: -6380535671084827646}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2800
 --- !u!114 &7583003054412846813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,6 +559,47 @@ MonoBehaviour:
   LoadResult: 0
   FileSizes: []
   Exists: 0
+--- !u!114 &7670883328472603097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c18180ecb35941f4682ae60107b85b7c, type: 3}
+  m_Name: bank:/Master.bank
+  m_EditorClassIdentifier: 
+  Path: FMODAssets/Desktop/Master.bank
+  SubDir: 
+  lastModified: 637480557118110487
+  LoadResult: 0
+  FileSizes: []
+  Exists: 0
+--- !u!114 &8203780904330674445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/ChalkboadSFX_04-005
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/ChalkboadSFX_04-005
+  guid: a79ab910825e3b478254b9972c39317e
+  Banks:
+  - {fileID: -6380535671084827646}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2800
 --- !u!114 &8336566461794898983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,9 +632,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: FMODAssets/Desktop/Master.strings.bank
   SubDir: 
-  lastModified: 637374270914497846
+  lastModified: 637480563940166865
   LoadResult: 0
   FileSizes:
   - Name: 
-    Value: 822
+    Value: 1176
   Exists: 1

@@ -56,7 +56,7 @@ public class Bone : MonoBehaviour
 
             //update group trees
             BoneGroup.combineGroups(group, colliding.group);
-            FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
+            FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Bones/BoneConnections");
 
             //get joint info from collision
             Vector3 jointWorldPoint;
