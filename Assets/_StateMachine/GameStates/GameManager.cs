@@ -16,6 +16,16 @@ public class GameManager : StateManagerBase
         }
         else
             Instance = this;
+
+        foreach (State s in allStates)
+        {
+            string name = s.Name;
+            string managerKey = name.Substring(0, 4);
+            if (managerKey != "StMn" && managerKey != "Menu")
+            {
+                states.Add(s.Name.ToLower().Trim(), s);
+            }
+        }
     }
 
     public IEnumerator Game()
@@ -35,20 +45,5 @@ public class GameManager : StateManagerBase
         yield return SetState("GameCleanUp");
 
         yield break;
-    }
-
-    override protected void Start()
-    {
-        base.Start();
-
-        foreach (State s in allStates)
-        {
-            string name = s.Name;
-            string managerKey = name.Substring(0, 4);
-            if (managerKey != "StMn" && managerKey != "Menu")
-            {
-                states.Add(s.Name.ToLower().Trim(), s);
-            }
-        }
     }
 }

@@ -33,10 +33,16 @@ public abstract class State : MonoBehaviour
         }
     }
 
+    public virtual void SetName()
+    {
+        Name = this.GetType().ToString();
+    }
+
     protected void Begin()
     {
         BeginEvent?.Invoke();
     }
+
     protected void End()
     {
         EndEvent?.Invoke();
@@ -44,6 +50,7 @@ public abstract class State : MonoBehaviour
 
     protected virtual void Awake()
     {
-        Name = this.GetType().ToString();
+        SetName();
     }
+
 }

@@ -8,15 +8,15 @@ public class StateManager : StateManagerBase
 {
     public static StateManager Instance;
 
-    private IEnumerator StateFlow()
+    private IEnumerator MainLoop()
     {
         MenuManager.Instance.GoToMenu("Main");
-        yield return SetState(MenuManager.Instance.Main());
+        yield return SetState(MenuManager.Instance.InMenus());
         while (true)
         {
             yield return SetState(GameManager.Instance.Game());
             MenuManager.Instance.GoToMenu("Score");
-            yield return SetState(MenuManager.Instance.Main());
+            yield return SetState(MenuManager.Instance.InMenus());
         }
     }
 
@@ -27,12 +27,8 @@ public class StateManager : StateManagerBase
             Destroy(this);
         else
             Instance = this;
-    }
-    // Start is called before the first frame update
-    override protected void Start()
-    {
-        base.Start();
-        foreach(State s in allStates)
+
+        foreach (State s in allStates)
         {
             string name = s.Name;
             if (name.Substring(0, 4) == "StMn")
@@ -40,6 +36,10 @@ public class StateManager : StateManagerBase
                 states.Add(s.Name.ToLower().Trim(), s);
             }
         }
-        StartCoroutine(StateFlow());
+    }
+    // Start is called before the first frame update
+    protected void Start()
+    {
+        StartCoroutine(MainLoop());
     }
 }

@@ -7,9 +7,8 @@ public class MenuManager : StateManagerBase
     public static MenuManager Instance;
     public string state;
 
-    public IEnumerator Main()
+    public IEnumerator InMenus()
     {
-        yield return new WaitForSeconds(0.5f);
         while (true)
         {
             switch (state)
@@ -52,11 +51,7 @@ public class MenuManager : StateManagerBase
             Destroy(gameObject);
         else
             Instance = this;
-    }
 
-    override protected void Start()
-    {
-        base.Start();
         foreach (State s in allStates)
         {
             string name = s.Name;
