@@ -24,7 +24,12 @@ public class ExampleAudioManager : MonoBehaviour
         //attach methods to events. To see all events in a given manager, go to the manager file and look 
         //at their main enumerator. The same strings used for the "SetState" method are also used for AddEventMethod
         //All states have both a begin and end event, and more events can be added by overriding the state's "AddToEvent" method
+
+        /*
         GameManager.Instance.AddEventMethod("GameInit", "begin", startMusic);
         GameManager.Instance.AddEventMethod("GameCleanUp", "end", stopMusic);
+        */
+
+        startMusic();
     }
 }

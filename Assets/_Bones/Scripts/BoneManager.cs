@@ -26,6 +26,7 @@ public class BoneManager : MonoBehaviour
 
         activeBones = new LinkedList<Bone>();
         deactivatedBones = new LinkedList<Bone>();
+        CustomGravity.SetOrigin(Camera.main.transform);
     }
 
     public int GetID()

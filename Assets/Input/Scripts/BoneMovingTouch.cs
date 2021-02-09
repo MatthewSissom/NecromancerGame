@@ -7,49 +7,42 @@ using UnityEngine;
 public class BoneMovingTouch : TouchProxy
 {
     public Bone activeBone { private set; get; }
-    public BoneGroup.applyToAllType applyToAll;
+    public BoneGroup.applyToAllType applyToActiveGroup;
 
+    //the offset of the bone from the touch on the screen,
+    //makes the bone more visable
     public Vector3 offset;
+
+    //when the bone is farther away than this threshold it will only move straight up
+    //afterwards it will move directly to the proxy
     public float heightThreshold;
 
+    //particle fx
     private GameObject lightTransform;
     private ParticleSystem touchLights;
 
-    private float height;
-
+    //the collider of this touch, used to find bones underneath it
     private BoxCollider myVolume;
     //rad starts smaller and grows larger over a fraction of a second to avoid picking up bones on
     //the outside of the rad instead of bones closer to the center
     private float radMult;
 
-
     //speed
     public float speed;
     public Vector3 previousLocation;
 
-    public void OnEnable()
-    {
-        activeBone = null;
-        radMult = .1f;
-    }
+    //angular velocity
+    public float angularVelocity;
+    const float angularDrag = 10;
+    Vector3 axisOfRotation;
 
-    public void OnDisable()
+    public void SetBone(Bone bone)
     {
-        //touchLights.Stop();
-
-        //limit the upwards velocity of bones
-        void clampYVel(Bone toApply, FunctionArgs e)
+        if (!activeBone)
         {
-            const float maxReleaseYVelocity = 1.0f;
-            Vector3 velocity = toApply.Rb.velocity;
-            if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
-            {
-                toApply.Rb.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
-            }
+            activeBone = bone;
+            applyToActiveGroup = bone.Group.applyToAll;
         }
-
-        if(activeBone)
-            activeBone.Group.applyToAll(clampYVel);
     }
 
     public override void Move(Vector3 pos, float rad)
@@ -60,13 +53,10 @@ public class BoneMovingTouch : TouchProxy
         //lightTransform.transform.position = transform.position + offset;
     }
 
-    public void SetBone(Bone bone)
+    public void SetAxisOfRotation(Vector3 newAxis)
     {
-        if (!activeBone)
-        {
-            activeBone = bone;
-            applyToAll = bone.Group.applyToAll;
-        }
+        axisOfRotation = newAxis;
+        angularVelocity = 0;
     }
 
     protected virtual void OnTriggerEnter(Collider other)
@@ -85,23 +75,32 @@ public class BoneMovingTouch : TouchProxy
     {
         if (activeBone)
         {
-            //move the active object to the proxy
+            //-move the active object to the proxy-//
+
             const float maxVelocity = 7.0f;
             const float baseMult = 20;
-
-            Vector3 toProxy = (transform.position + offset - activeBone.transform.position) * baseMult;
-            if (toProxy.y > heightThreshold)
-            {
-                toProxy = new Vector3(0, toProxy.y, 0);
-            }
+            //find movement vector
+            Vector3 toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
+            //move straight up if far away from the proxy
+            //if (toProxy.y > heightThreshold)
+            //{
+            //    toProxy = new Vector3(0, toProxy.y, 0);
+            //}
             Vector3.ClampMagnitude(toProxy, maxVelocity);
 
             void SetVelocity(Bone toApply, FunctionArgs e)
             {
                 toApply.Rb.velocity = toProxy;
-                toApply.Rb.angularVelocity = new Vector3();
             }
-            applyToAll(SetVelocity);
+            applyToActiveGroup(SetVelocity);
+
+            //-rotate the bone group-//
+
+            applyToActiveGroup((Bone toApply, FunctionArgs e) =>
+            {
+                toApply.transform.RotateAround(activeBone.transform.root.position, axisOfRotation, angularVelocity*Time.deltaTime);
+            });
+            angularVelocity -= Mathf.Sign(angularVelocity) * Mathf.Min(angularDrag * Time.deltaTime, Mathf.Abs(angularVelocity));
         }
         else if (radMult < 1)
         {
@@ -118,13 +117,25 @@ public class BoneMovingTouch : TouchProxy
         myVolume = gameObject.GetComponent<BoxCollider>();
         lightTransform = ParticleManager.CreateEffect("TouchLight", transform.position);
         touchLights = lightTransform.GetComponent<ParticleSystem>();
-        height = transform.position.y;
         radMult = .1f;
     }
 
-    protected override void OnDestroy()
+    public void OnEnable()
     {
-        base.OnDestroy();
-        Destroy(lightTransform);
+        activeBone = null;
+        radMult = .1f;
+    }
+
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+
+        //touchLights.Stop();
+        angularVelocity = 0;
+
+        if (activeBone)
+        {
+            activeBone.Dropped();
+        }
     }
 }

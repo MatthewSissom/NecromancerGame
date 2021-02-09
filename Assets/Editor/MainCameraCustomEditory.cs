@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEditor;
 
@@ -15,8 +16,7 @@ public class MainCameraCustomEditory : Editor
 
     public override void OnInspectorGUI()
     {
-        DrawDefaultInspector();
-        if(GUILayout.Button("New Transition at Main Camera"))
+        if (GUILayout.Button("New Transition at Main Camera"))
         {
             changeOldNames();
 
@@ -27,6 +27,11 @@ public class MainCameraCustomEditory : Editor
             changeOldNames();
 
             setTransitionPos(SceneView.lastActiveSceneView.camera.transform);
+        }
+        DrawDefaultInspector();
+        if (GUILayout.Button("Set To Main Menu"))
+        {
+            setCameraPos("menuTransMain");
         }
     }
 
@@ -51,5 +56,13 @@ public class MainCameraCustomEditory : Editor
         newTrans.forward = newPos.forward;
         newTrans.transitionName = myScript.NewStateName;
         newTrans.time = 1;
+    }
+
+    private void setCameraPos(string stateName)
+    {
+        Transform cameraTrans = myScript.transform;
+        CameraTransition cameraTransition = Array.Find(cameraTrans.gameObject.GetComponents<CameraTransition>(), c => c.transitionName.ToLowerInvariant() == stateName.ToLowerInvariant());
+        cameraTrans.localPosition = cameraTransition.pos;
+        cameraTrans.rotation = Quaternion.LookRotation(cameraTransition.forward, cameraTransition.up);
     }
 }
