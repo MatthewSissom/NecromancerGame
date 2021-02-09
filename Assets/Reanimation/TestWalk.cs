@@ -33,10 +33,13 @@ public class TestWalk : MonoBehaviour
 
         //create feet
         feet = new List<FootData>();
-        foreach (var foot in feetTransforms)
-        {
-            feet.Add(new FootData(foot,footToOriginLimit));
-        }
+        feet.Add(new FootData(feetTransforms[0], new Vector3(0, 0, -footToOriginLimit)));
+        feet.Add(new FootData(feetTransforms[1], new Vector3(0, 0, footToOriginLimit * 10/15)));
+        feet.Add(new FootData(feetTransforms[2], new Vector3(0, 0, -footToOriginLimit * 9 / 25)));
+        feet.Add(new FootData(feetTransforms[3], new Vector3(0, 0, footToOriginLimit)));
+
+        feet[0].stepable = true;
+        feet[3].stepable = false;
     }
 
     // Update is called once per frame
@@ -55,11 +58,15 @@ public class TestWalk : MonoBehaviour
                 float dist = foot.GetDistFromOrigin();
                 if (dist > footToOriginLimit)
                 {
-                    StartCoroutine(foot.Step(stepTime,
-                        dist + footToOriginLimit - 0.01f,
-                        stepHeight
-                    ));
+                    if (foot.stepable)
+                        StartCoroutine(foot.Step(stepTime,
+                            dist + footToOriginLimit,
+                            //dist + footToOriginLimit - 0.01f,
+                            stepHeight
+                        ));
                 }
+                else
+                    foot.stepable = true;
             }
         }
     }
@@ -69,15 +76,15 @@ class FootData
 {
     Transform target;
     Transform origin;
-    Vector3 pinPos;
+    public Vector3 pinPos;
     public bool stepping { get; private set; }
+    public bool stepable { get; set; }
 
-    public FootData(Transform target, float randRange)
+    public FootData(Transform target, Vector3 offset)
     {
         this.target = target;
         origin = GameObject.Instantiate(target.gameObject, target.parent).transform;
-        target.transform.position += new Vector3(0, 0, Random.Range(-randRange, randRange));
-        pinPos = target.position;
+        pinPos = target.position + offset;
     }
 
     public float GetDistFromOrigin()
@@ -111,6 +118,7 @@ class FootData
 
         pinPos = target.position;
         stepping = false;
+        stepable = stepping;
         yield break;
     }
 }
