@@ -8,7 +8,7 @@ import math
 
 def loadBase(debug = False):
     while True :
-        if type(debug) is bool:
+        if type(debug) is bool and debug:
             __baseName__ = "Untitled"
         elif type(debug) is str:
             __baseName__ = debug
