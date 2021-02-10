@@ -77,6 +77,27 @@ public class BoneManager : MonoBehaviour
         return bone;
     }
 
+    // Will 2/10/2021 - Added parameter for theme, default normal for normal themed bones
+    public Bone NewBone(GameObject pref, Vector3 location, Quaternion rotation, GhostBehavior heldBy = null, string theme = "normal")
+    {
+        if (heldBy)
+        {
+            location = heldBy.boneLocation.position;
+        }
+        var go = Instantiate(pref, location, rotation);
+        Bone bone = go.GetComponent<Bone>();
+        bone.Theme = theme;
+        activeBones.AddLast(bone);
+        if (heldBy)
+        {
+            heldBy.mBone = bone;
+            bone.mGhost = heldBy;
+            SetBoneLayer(bone, 8);
+        }
+
+        return bone;
+    }
+
 
     public void DeactivateBone(Bone toDeactivate)
     {

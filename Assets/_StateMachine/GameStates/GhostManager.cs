@@ -75,10 +75,12 @@ public class GhostManager : State
                 path.Add(pathRoot.GetChild(p).gameObject);
             }
             GhostBehavior ghost = CreateGhost(path);
+
             BoneManager.Instance.NewBone(bones[i], 
                 new Vector3(0, 0, 100), 
                 bones[i].transform.rotation, 
-                ghost
+                ghost,
+                "robot"
             );
         }
     }

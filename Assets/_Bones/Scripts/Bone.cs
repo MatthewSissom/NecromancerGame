@@ -10,8 +10,18 @@ public class Bone : MonoBehaviour
     private Rigidbody rb;
     public GhostBehavior mGhost;
 
+    // Will's code
+    //private ThemeManager themeManager;
+    private string theme;
+    // end
+
     public Rigidbody Rb { get { return rb; } }
     public BoneGroup Group { get { return group; } }
+    public string Theme 
+    { 
+        get { return theme; } 
+        set { theme = value; } 
+    }
 
     // Start is called before the first frame update
     void Awake()
@@ -60,7 +70,8 @@ public class Bone : MonoBehaviour
             if (colliding && group.GroupID < colliding.group.GroupID)
             {
                 //---SFX---//
-                FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
+                //FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
+                //FMODUnity.RuntimeManager.PlayOneShot(themeManager.GetThemeSoundPath(theme));
 
                 //---Bone Connection---//
 
