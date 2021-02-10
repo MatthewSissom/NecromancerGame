@@ -66,7 +66,8 @@ public class GhostManager : State
 #endif
         Transform pathRoot;
         List<GameObject> path;
-        for(int i = 0, size = bones.Count; i< size; i++)
+        string themeName = "normal";
+        for (int i = 0, size = bones.Count; i< size; i++)
         {
             pathRoot = boneShipment.transform.GetChild(i);
             path = new List<GameObject>();
@@ -76,12 +77,19 @@ public class GhostManager : State
             }
             GhostBehavior ghost = CreateGhost(path);
 
+            // Will 2/20/2021 - make half of the bones normal, half of them robot theme
+            if (i % 2 == 0)
+                themeName = "normal";
+            else
+                themeName = "robot";
+
             BoneManager.Instance.NewBone(bones[i], 
                 new Vector3(0, 0, 100), 
                 bones[i].transform.rotation, 
                 ghost,
-                "robot"
+                themeName
             );
+            //end
         }
     }
 

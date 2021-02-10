@@ -11,8 +11,9 @@ public class Bone : MonoBehaviour
     public GhostBehavior mGhost;
 
     // Will's code
-    //private ThemeManager themeManager;
+    private Dictionary<string, string> themeSoundsDictionary;
     private string theme;
+    private const string testSound = "event:/SFX/TestSound";
     // end
 
     public Rigidbody Rb { get { return rb; } }
@@ -30,6 +31,8 @@ public class Bone : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody>();
         group = gameObject.GetComponent<BoneGroup>();
         if (!group) group = (BoneGroup)gameObject.AddComponent(typeof(BoneGroup));
+
+        SetupSoundsDictionary();
     }
 
     public void PickedUp()
@@ -71,7 +74,7 @@ public class Bone : MonoBehaviour
             {
                 //---SFX---//
                 //FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
-                //FMODUnity.RuntimeManager.PlayOneShot(themeManager.GetThemeSoundPath(theme));
+                FMODUnity.RuntimeManager.PlayOneShot(GetThemeSoundPath(theme));
 
                 //---Bone Connection---//
 
@@ -125,4 +128,19 @@ public class Bone : MonoBehaviour
             rb.useGravity = true;
         }
     }
+
+    // Will - 2/20/2021
+    public string GetThemeSoundPath(string themeName)
+    {
+        return themeSoundsDictionary[themeName];
+    }
+
+    private void SetupSoundsDictionary()
+    {
+        themeSoundsDictionary = new Dictionary<string, string>();
+
+        themeSoundsDictionary.Add("normal", "event:/SFX/Bones/BoneConnections");
+        themeSoundsDictionary.Add("robot", testSound);
+    }
+    //end
 }

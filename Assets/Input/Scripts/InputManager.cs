@@ -50,7 +50,7 @@ public partial class InputManager : MonoBehaviour
     void FixedUpdate()
     {
         #region mouseInput
-        /*
+        
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
         if(Input.GetMouseButton(0))
@@ -104,62 +104,62 @@ public partial class InputManager : MonoBehaviour
             {
                 Vector3 axis = Vector3.up;
                 Vector3 pos = active.activeBone.transform.root.position;
-                active.applyToAll((Bone toApply, FunctionArgs e) =>
-                {
-                    toApply.transform.RotateAround(pos, axis ,rotation);
-                });
+                //active.applytoall((bone toapply, functionargs e) =>
+                //{
+                //    toapply.transform.rotatearound(pos, axis ,rotation);
+                //});
             }
         }
-        */
+        
         #endregion
 
 
 
-        foreach (Touch t in Input.touches)
-        {
-            //pos represents the point in world space at the specified height
-            Vector3 pos = t.position;
-            pos.z = Camera.main.transform.position.y - height;
-            Vector3 radVec = pos + new Vector3(t.radius, 0, 0);
+        //foreach (Touch t in Input.touches)
+        //{
+        //    //pos represents the point in world space at the specified height
+        //    Vector3 pos = t.position;
+        //    pos.z = Camera.main.transform.position.y - height;
+        //    Vector3 radVec = pos + new Vector3(t.radius, 0, 0);
 
-            pos = Camera.main.ScreenToWorldPoint(pos);
-            float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
+        //    pos = Camera.main.ScreenToWorldPoint(pos);
+        //    float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
 
-            int id = t.fingerId;
-            TouchProxy mProxy = activeTouches.Find(a => a.id == id);
-            if(!mProxy)
-            {
-                BoneMovingTouch parent = isRotationTouch(pos);
-                if (parent)
-                {
-                    mProxy = NewRotationTouch(pos, id,parent);
-                }
-                else
-                {
-                    mProxy = NewMoveTouch(pos, id);
-                }
-            }
-            mProxy.Move(pos, rad);
-        }
+        //    int id = t.fingerId;
+        //    TouchProxy mProxy = activeTouches.Find(a => a.id == id);
+        //    if(!mProxy)
+        //    {
+        //        BoneMovingTouch parent = isRotationTouch(pos);
+        //        if (parent)
+        //        {
+        //            mProxy = NewRotationTouch(pos, id,parent);
+        //        }
+        //        else
+        //        {
+        //            mProxy = NewMoveTouch(pos, id);
+        //        }
+        //    }
+        //    mProxy.Move(pos, rad);
+        //}
 
-        foreach(TouchProxy tp in activeTouches)
-        {
-            if(!tp.moved)
-            {
-                if (toDeactivate == null)
-                    toDeactivate = new List<TouchProxy>();
-                toDeactivate.Add(tp);
-            }
-            tp.moved = false;
-        }
-        if(toDeactivate != null)
-        {
-            foreach(TouchProxy tp in toDeactivate)
-            {
-                DisableTouch(tp);
-            }
-            toDeactivate = null;
-        }
+        //foreach(TouchProxy tp in activeTouches)
+        //{
+        //    if(!tp.moved)
+        //    {
+        //        if (toDeactivate == null)
+        //            toDeactivate = new List<TouchProxy>();
+        //        toDeactivate.Add(tp);
+        //    }
+        //    tp.moved = false;
+        //}
+        //if(toDeactivate != null)
+        //{
+        //    foreach(TouchProxy tp in toDeactivate)
+        //    {
+        //        DisableTouch(tp);
+        //    }
+        //    toDeactivate = null;
+        //}
     }
 
     private void Awake()
