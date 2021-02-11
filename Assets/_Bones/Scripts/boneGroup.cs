@@ -45,7 +45,7 @@ public class BoneGroup : MonoBehaviour
     // Start is called before the first frame update
     virtual protected void Start()
     {
-        myID = BoneManager.Instance.GetID();
+        myID = BoneManager.Instance.GetNewID();
 
         //only set group id if not on the conveyer
         if (!parent)
@@ -54,23 +54,25 @@ public class BoneGroup : MonoBehaviour
         mBone = gameObject.GetComponent<Bone>();
     }
 
-    public static void combineGroups(BoneGroup one, BoneGroup two)
+    public static void CombineGroups(BoneGroup preferedParent, BoneGroup other)
     {
-        if (!one.parent)
+        if (preferedParent.groupID == other.groupID)
+            return;
+        if (!other.parent)
         {
-            two.addChild(one);
-            one.resetID();
+            preferedParent.addChild(other);
+            other.resetID();
         }
-        else if (!two.parent)
+        else if (!preferedParent.parent)
         {
-            one.addChild(two);
-            two.resetID();
+            other.addChild(preferedParent);
+            preferedParent.resetID();
         }
         else
         {
-            two.makeRoot();
-            one.addChild(two);
-            two.resetID();
+            other.makeRoot();
+            preferedParent.addChild(other);
+            other.resetID();
         }
     }
 
@@ -138,7 +140,9 @@ public class BoneGroup : MonoBehaviour
         //root reached, recursively call the function on all children
         else
         {
-            func(mBone, e);
+            //TEMP shouldn't need null check, result of tableConArea
+            if(mBone)
+                func(mBone, e);
             foreach (BoneGroup b in children)
             {
                 b.applyToAll(func, e, true);

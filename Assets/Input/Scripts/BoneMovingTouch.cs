@@ -62,7 +62,7 @@ public class BoneMovingTouch : TouchProxy
     protected virtual void OnTriggerEnter(Collider other)
     {
         Bone b = other.GetComponentInParent<Bone>();
-        if (b)
+        if (b && !b.connecting)
         {
             b.PickedUp();
             SetBone(b);

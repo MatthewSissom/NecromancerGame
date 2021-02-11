@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class BoneManager : MonoBehaviour
+public partial class BoneManager : MonoBehaviour
 {
     static public BoneManager Instance { get; private set; }
 
     private LinkedList<Bone> activeBones;
     private LinkedList<Bone> deactivatedBones;
+
+    private Dictionary<string, TableConnectionArea> limbTags;
 
     private int currentID = 0;
 
@@ -26,36 +28,14 @@ public class BoneManager : MonoBehaviour
 
         activeBones = new LinkedList<Bone>();
         deactivatedBones = new LinkedList<Bone>();
-        CustomGravity.SetOrigin(Camera.main.transform);
+        limbTags = new Dictionary<string, TableConnectionArea>();
+
+        PhysicsInit();
     }
 
-    public int GetID()
+    public int GetNewID()
     {
         return currentID++;
-    }
-
-    public void SetBoneLayer(Bone toSet,int layer)
-    {
-        void SetLayerOfAllChildren(Transform t)
-        {
-            t.gameObject.layer = layer;
-            for (int i = 0; i < t.childCount; i++)
-            {
-                SetLayerOfAllChildren(t.GetChild(i));
-            }
-        }
-        SetLayerOfAllChildren(toSet.transform);
-    }
-
-    public void SetBoneLayer(Bone toSet, int layer, float delay)
-    {
-        IEnumerator DelayedSet()
-        {
-            yield return new WaitForSeconds(delay);
-            SetBoneLayer(toSet, layer);
-            yield break;
-        }
-        StartCoroutine(DelayedSet());
     }
 
     public Bone NewBone(GameObject pref, Vector3 location, Quaternion rotation, GhostBehavior heldBy = null)
@@ -71,12 +51,21 @@ public class BoneManager : MonoBehaviour
         {
             heldBy.mBone = bone;
             bone.mGhost = heldBy;
-            SetBoneLayer(bone, 8);
+            SetPhysicsLayer(bone, 8);
+            bone.Rb.freezeRotation = true;
         }
 
         return bone;
     }
 
+    //creates limb tag dictionary used for bone animation from a list of TableConnectionAreas
+    public void CreateLimbTags(List<TableConnectionArea> connectionAreas)
+    {
+        foreach(var area in connectionAreas)
+        {
+            limbTags.Add(area.gameObject.name, area);
+        }
+    }
 
     public void DeactivateBone(Bone toDeactivate)
     {
@@ -96,8 +85,11 @@ public class BoneManager : MonoBehaviour
 
     public void DestroyAll()
     {
-        var allBone = GameObject.FindObjectsOfType<Bone>();
-        foreach (Bone b in allBone)
+        foreach (Bone b in activeBones)
+        {
+            Destroy(b.transform.root.gameObject);
+        }
+        foreach (Bone b in deactivatedBones)
         {
             Destroy(b.transform.root.gameObject);
         }
