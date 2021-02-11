@@ -2320,6 +2320,7 @@ GameObject:
   - component: {fileID: 8301480201069755595}
   - component: {fileID: 6037868699870387846}
   - component: {fileID: 7252164498012490067}
+  - component: {fileID: -8595435615637326417}
   m_Layer: 0
   m_Name: MidSpine
   m_TagString: Untagged
@@ -2384,6 +2385,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5158ecb77b0672445843db4e14daa49e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-8595435615637326417
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8681569674231407083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6d4ebe4b8d17534a86e5aee2ee591d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
 --- !u!1 &9028879927275824325
 GameObject:
   m_ObjectHideFlags: 0

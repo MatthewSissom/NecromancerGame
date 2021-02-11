@@ -9,7 +9,7 @@ public class RotationTouch : TouchProxy
     public Vector3 toParent;
     public float toParentMagnitude;
 
-    const float angleMult = 1000;
+    const float aroundToParentMult = 1000;
     private bool aroundUp = true;
 
     private BoneMovingTouch parent;
@@ -19,6 +19,7 @@ public class RotationTouch : TouchProxy
         set
         {
             parent = value;
+            parent.RemoveAngularDragMult();
             //replace this touch with a functionless one if the floating touch is removed
             parent.DisableEvent += () => { InputManager.Instance.DisableTouch(this); };
         }
@@ -51,7 +52,7 @@ public class RotationTouch : TouchProxy
         rotAngleAroundUp += Vector3.SignedAngle(oldToParent, toParent, Vector3.up);
         //calculate difference between old (stored in rotAngleAroudToParent) and new then
         //multiply to get the angle to rotate
-        rotAngleAroundToParent = (rotAngleAroundToParent-toParentMagnitude) * angleMult;
+        rotAngleAroundToParent = (rotAngleAroundToParent-toParentMagnitude) * aroundToParentMult;
     }
 
     protected void Update()
@@ -70,9 +71,15 @@ public class RotationTouch : TouchProxy
             aroundUp = true;
         }
 
-        parent.angularVelocity += aroundUp? rotAngleAroundUp: rotAngleAroundToParent;
+        parent.angularVelocity += (aroundUp? rotAngleAroundUp: rotAngleAroundToParent)*2;
 
         rotAngleAroundToParent = 0;
         rotAngleAroundUp = 0;
+    }
+
+    protected void OnDisable()
+    {
+        if(parent)
+            parent.ApplyAngularDragMult();
     }
 }

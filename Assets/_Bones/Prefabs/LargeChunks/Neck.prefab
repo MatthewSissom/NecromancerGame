@@ -436,6 +436,7 @@ GameObject:
   - component: {fileID: 5701462648885669431}
   - component: {fileID: 2715853301997769405}
   - component: {fileID: -285752856894285577}
+  - component: {fileID: 5568454057991173761}
   m_Layer: 0
   m_Name: Neck
   m_TagString: Bone
@@ -506,6 +507,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5158ecb77b0672445843db4e14daa49e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5568454057991173761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4403942450086851822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6d4ebe4b8d17534a86e5aee2ee591d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
 --- !u!1 &7156922658558829371
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,9 +29,9 @@ public class MainCameraCustomEditory : Editor
             setTransitionPos(SceneView.lastActiveSceneView.camera.transform);
         }
         DrawDefaultInspector();
-        if (GUILayout.Button("Set To Main Menu"))
+        if (GUILayout.Button("Set To Start"))
         {
-            setCameraPos("menuTransMain");
+            setCameraPos("Start");
         }
     }
 

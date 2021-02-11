@@ -33,7 +33,9 @@ public class BoneMovingTouch : TouchProxy
 
     //angular velocity
     public float angularVelocity;
-    const float angularDrag = 10;
+    float angularDrag = 1;
+    float angularDragMult = 50;
+    bool dragMultApplied = false;
     Vector3 axisOfRotation;
 
     public void SetBone(Bone bone)
@@ -57,6 +59,19 @@ public class BoneMovingTouch : TouchProxy
     {
         axisOfRotation = newAxis;
         angularVelocity = 0;
+    }
+
+    public void ApplyAngularDragMult()
+    {
+        if(!dragMultApplied)
+            angularDrag *= angularDragMult;
+        dragMultApplied = true;
+    }
+    public void RemoveAngularDragMult()
+    {
+        if(dragMultApplied)
+            angularDrag /= angularDragMult;
+        dragMultApplied = false;
     }
 
     protected virtual void OnTriggerEnter(Collider other)

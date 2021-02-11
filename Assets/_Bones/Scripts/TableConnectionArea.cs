@@ -17,6 +17,8 @@ public class TableConnectionArea : MonoBehaviour
     {
         bone.Rb.isKinematic = true;
         bone.connecting = true;
+        var gatherer = bone.gameObject.GetComponent<RendererGatherer>();
+        if(gatherer) gatherer.ChangeMat();
         
         BoneGroup.CombineGroups(group, bone.Group);
     }

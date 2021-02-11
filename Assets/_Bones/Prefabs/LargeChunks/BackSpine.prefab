@@ -617,6 +617,7 @@ GameObject:
   - component: {fileID: 6535929943173408608}
   - component: {fileID: 2734104867133350086}
   - component: {fileID: 1878089781576458015}
+  - component: {fileID: -5293330741622214726}
   m_Layer: 0
   m_Name: BackSpine
   m_TagString: Untagged
@@ -682,6 +683,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5158ecb77b0672445843db4e14daa49e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-5293330741622214726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6420342891581815629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a6d4ebe4b8d17534a86e5aee2ee591d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
 --- !u!1 &7404679882057015554
 GameObject:
   m_ObjectHideFlags: 0
