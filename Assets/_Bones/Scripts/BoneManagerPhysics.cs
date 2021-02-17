@@ -34,7 +34,7 @@ public partial class BoneManager : MonoBehaviour
     private void AttachBoneToTable(Bone toAttach)
     {
         int areaCount = connectionAreaOverlaps[toAttach].Count;
-        if (areaCount == 0){ return; }
+        if (areaCount == 0 || !toAttach){ return; }
 
         FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
 

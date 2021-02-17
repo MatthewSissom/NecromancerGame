@@ -43,7 +43,7 @@ public class BoneMovingTouch : TouchProxy
         if (!activeBone)
         {
             activeBone = bone;
-            applyToActiveGroup = bone.Group.applyToAll;
+            applyToActiveGroup = bone.Group.ApplyToAll;
         }
     }
 

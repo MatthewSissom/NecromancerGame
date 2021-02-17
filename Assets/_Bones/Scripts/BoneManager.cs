@@ -10,8 +10,6 @@ public partial class BoneManager : MonoBehaviour
     private LinkedList<Bone> activeBones;
     private LinkedList<Bone> deactivatedBones;
 
-    private Dictionary<string, TableConnectionArea> limbTags;
-
     private int currentID = 0;
 
     private void Awake()
@@ -28,7 +26,6 @@ public partial class BoneManager : MonoBehaviour
 
         activeBones = new LinkedList<Bone>();
         deactivatedBones = new LinkedList<Bone>();
-        limbTags = new Dictionary<string, TableConnectionArea>();
 
         PhysicsInit();
     }
@@ -38,33 +35,31 @@ public partial class BoneManager : MonoBehaviour
         return currentID++;
     }
 
-    public Bone NewBone(GameObject pref, Vector3 location, Quaternion rotation, GhostBehavior heldBy = null)
+    public void Register(Bone newBone)
     {
-        if(heldBy)
-        {
-            location = heldBy.boneLocation.position;
-        }
-        var go = Instantiate(pref, location, rotation);
-        Bone bone = go.GetComponent<Bone>();
-        activeBones.AddLast(bone);
-        if(heldBy)
-        {
-            heldBy.mBone = bone;
-            bone.mGhost = heldBy;
-            SetPhysicsLayer(bone, 8);
-            bone.Rb.freezeRotation = true;
-        }
-
-        return bone;
+        if(!newBone.GetComponent<BoneGroup>())
+            newBone.gameObject.AddComponent(typeof(BoneGroup));
+        activeBones.AddLast(newBone);
     }
 
-    //creates limb tag dictionary used for bone animation from a list of TableConnectionAreas
-    public void CreateLimbTags(List<TableConnectionArea> connectionAreas)
+    //removes all refrences to this bone from the manager
+    public void Release(Bone toRelease)
     {
-        foreach(var area in connectionAreas)
-        {
-            limbTags.Add(area.gameObject.name, area);
-        }
+        activeBones.Remove(toRelease);
+        deactivatedBones.Remove(toRelease);
+    }
+
+    public Bone NewBone(GameObject pref, GhostBehavior heldBy)
+    {
+        var go = Instantiate(pref, heldBy.boneLocation.position, pref.transform.rotation);
+        Bone bone = go.GetComponent<Bone>();
+
+        heldBy.mBone = bone;
+        bone.mGhost = heldBy;
+        SetPhysicsLayer(bone, 8);
+        bone.Rb.freezeRotation = true;
+
+        return bone;
     }
 
     public void DeactivateBone(Bone toDeactivate)

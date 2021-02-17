@@ -75,11 +75,7 @@ public class GhostManager : State
                 path.Add(pathRoot.GetChild(p).gameObject);
             }
             GhostBehavior ghost = CreateGhost(path);
-            BoneManager.Instance.NewBone(bones[i], 
-                new Vector3(0, 0, 100), 
-                bones[i].transform.rotation, 
-                ghost
-            );
+            BoneManager.Instance.NewBone(bones[i], ghost);
         }
     }
 
@@ -119,7 +115,9 @@ public class GhostManager : State
     {
         InitObjects(boneShipments[currentShipment]);
         done = ++currentShipment == boneShipments.Count;
+
         yield return new WaitForSeconds(timePerShipment);
+
         RecallGhosts(timeBetweenShipments - 2);
         yield break;
     }

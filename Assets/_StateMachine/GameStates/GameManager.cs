@@ -38,9 +38,15 @@ public class GameManager : StateManagerBase
             yield return SetState("GhostTrans");
             yield return SetState("GhostManager");
             yield return SetState("TableTrans");
+            yield return SetState("DestroyRoot");
             yield return new WaitForSeconds(GhostManager.Instance.timeBetweenShipments);
         }
-        yield return SetState("CalculateScore");
+        yield return SetState("BoneAssembler");
+        yield return SetState("CatWalkStart");
+        yield return SetState("TestCatState");
+        yield return SetState("CatWalkEnd");
+
+        //yield return SetState("CalculateScore");
 
         yield return SetState("GameCleanUp");
 

@@ -36,7 +36,6 @@ public class StateManagerBase : MonoBehaviour
         if (states.ContainsKey(stateName))
         #endif
         {
-            //Debug.Log(GetType() + "setting state to" + stateName);
             currentRoutine = StartCoroutine(states[stateName].Routine());
             return currentRoutine;
         }
@@ -67,20 +66,4 @@ public class StateManagerBase : MonoBehaviour
         }
         states[stateName].AddToEvent(eventName, method);
     }
-    //public void AddEventMethod(string stateName, string eventName, State.StateMethod method)
-    //{
-    //    IEnumerator HookUpEvent()
-    //    {
-    //        stateName = stateName.ToLower().Trim();
-    //        yield return new WaitForSeconds(0.2f);
-    //        if (!states.ContainsKey(stateName))
-    //        {
-    //            Debug.LogError(GetType() + " does not contain state \"" + stateName + "\"");
-    //            yield break;
-    //        }
-    //        states[stateName].AddToEvent(eventName, method);
-    //        yield break;
-    //    }
-    //    StartCoroutine(HookUpEvent());
-    //}
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TableConnectionArea : MonoBehaviour
+public class TableConnectionArea : BoneGroup
 {
     //maps a boneID to the number of colliders that a bone is touching in this area
     Dictionary<Bone, int> collisionCounts;
@@ -19,8 +19,9 @@ public class TableConnectionArea : MonoBehaviour
         bone.connecting = true;
         var gatherer = bone.gameObject.GetComponent<RendererGatherer>();
         if(gatherer) gatherer.ChangeMat();
-        
-        BoneGroup.CombineGroups(group, bone.Group);
+        //assume ownership of this bone
+        BoneManager.Instance.Release(bone);
+        CombineGroups(group, bone.Group, true);
     }
 
     public void AddCollision(Bone bone)
@@ -51,8 +52,10 @@ public class TableConnectionArea : MonoBehaviour
         BoneManager.Instance.RemoveTableAreaCollision(bone, this);
     }
 
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         collisionCounts = new Dictionary<Bone, int>();
 
         group = gameObject.GetComponent<BoneGroup>();

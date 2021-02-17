@@ -37,7 +37,7 @@ public class BoneGroup : MonoBehaviour
         }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         children = new List<BoneGroup>();
     }
@@ -47,106 +47,133 @@ public class BoneGroup : MonoBehaviour
     {
         myID = BoneManager.Instance.GetNewID();
 
-        //only set group id if not on the conveyer
-        if (!parent)
-            groupID = myID;
+        groupID = myID;
 
         mBone = gameObject.GetComponent<Bone>();
     }
 
-    public static void CombineGroups(BoneGroup preferedParent, BoneGroup other)
+    //Combines two groups in to a single group
+    //prefered parent is usually made the parent of the tree, unless it would be expensive to do so.
+    //if making the prefered group node the parent is important set preferedMustBeParent to true
+    public static void CombineGroups(BoneGroup preferedParent, BoneGroup other, bool preferedMustBeParent = false)
     {
+        //check to see if groups are already the same
         if (preferedParent.groupID == other.groupID)
             return;
+        //if other has no parent make prefered the parent
         if (!other.parent)
         {
             preferedParent.addChild(other);
-            other.resetID();
+            other.ResetID();
         }
-        else if (!preferedParent.parent)
+        //make other the parent if possible to avoid rearanging trees
+        else if (!preferedParent.parent && !preferedMustBeParent)
         {
             other.addChild(preferedParent);
-            preferedParent.resetID();
+            preferedParent.ResetID();
         }
+        //if needed rearange the tree of other so that prefered can be it's parent
         else
         {
             other.makeRoot();
             preferedParent.addChild(other);
-            other.resetID();
+            other.ResetID();
         }
     }
 
-    public void addChild(BoneGroup child)
+
+    public delegate void applyToAllType(GroupFunction func, FunctionArgs e = null);
+    //calls the passeed function on each member of the bone group, passing in the bone and the given function args as peramiters
+    public virtual void ApplyToAll(GroupFunction func, FunctionArgs e = null)
+    {
+        void ApplyFuncRecursive(BoneGroup toApply)
+        {
+            //TEMP shouldn't need null check, result of tableConArea
+            if (toApply.mBone)
+                func(toApply.mBone, e);
+            foreach (BoneGroup bg in toApply.children)
+            {
+                ApplyFuncRecursive(bg);
+            }
+        }
+
+        //start at group root and filer down to all children
+        ApplyFuncRecursive(GetRoot());
+    }
+
+    //gets a list of all bone components in this tree
+    public List<Bone> GetAllBones()
+    {
+        List<Bone> allBones = new List<Bone>();
+
+        void GetBoneRecursive(BoneGroup toCheck)
+        {
+            if (toCheck.mBone)
+                allBones.Add(toCheck.mBone);
+            foreach(BoneGroup bg in toCheck.children)
+            {
+                GetBoneRecursive(bg);
+            }
+        }
+
+        GetBoneRecursive(GetRoot());
+        return allBones;
+    }
+
+
+    #region Helpers
+
+    //returns the root of this tree
+    private BoneGroup GetRoot()
+    {
+        if (parent)
+            return parent.GetRoot();
+        return this;
+    }
+
+    //changes the id of this node to match it's parent
+    private void ResetID()
+    {
+        if (parent) GroupID = parent.groupID;
+        else GroupID = myID;
+    }
+
+    //adds a child to this group
+    private void addChild(BoneGroup child)
     {
         children.Add(child);
         child.Parent = this;
     }
 
-    public void removeChild(BoneGroup child)
+    //removes a child from this group
+    private void removeChild(BoneGroup child)
     {
         children.Remove(child);
         child.parent = null;
-    }
-
-    public void removeFromConvayer()
-    {
-        if (parent)
-        {
-            if (parent.myID != 0)
-            {
-                parent.removeFromConvayer();
-                return;
-            }
-            parent.removeChild(this);
-            resetID();
-        }
-    }
-
-    public void resetID()
-    {
-        if (parent) GroupID = parent.groupID;
-        else GroupID = myID;
     }
 
     //makes this bone the root of the tree
     public void makeRoot()
     {
         BoneGroup temp = this;
+        //find the path from this node to the root
         List<BoneGroup> path = new List<BoneGroup>();
-        while(temp)
+        while (temp)
         {
             path.Add(temp);
             temp = temp.parent;
         }
 
+        //swap nodes along the path until this node is the root
         BoneGroup child;
-        for(int i = path.Count-2; i != -1; --i)
+        for (int i = path.Count - 2; i != -1; --i)
         {
             child = path[i];
             child.addChild(child.parent);
             child.parent.removeChild(child);
-            child.resetID();
+            child.ResetID();
         }
     }
 
-    public delegate void applyToAllType(GroupFunction func, FunctionArgs e = null, bool rootReached = false);
-    public virtual void applyToAll(GroupFunction func, FunctionArgs e = null, bool rootReached = false)
-    {
-        //traverse up the tree until the root is reached
-        if (!rootReached && parent)
-        {
-            parent.applyToAll(func, e);
-        }
-        //root reached, recursively call the function on all children
-        else
-        {
-            //TEMP shouldn't need null check, result of tableConArea
-            if(mBone)
-                func(mBone, e);
-            foreach (BoneGroup b in children)
-            {
-                b.applyToAll(func, e, true);
-            }
-        }
-    }
+    #endregion
 }

@@ -18,10 +18,14 @@ public class Bone : MonoBehaviour
     // Start is called before the first frame update
     protected virtual void Awake()
     {
-        //get values
         rb = gameObject.GetComponent<Rigidbody>();
+    }
+
+    protected virtual void Start()
+    {
+        //register w/ boneManager
+        BoneManager.Instance.Register(this);
         group = gameObject.GetComponent<BoneGroup>();
-        if (!group) group = (BoneGroup)gameObject.AddComponent(typeof(BoneGroup));
         //before collisions groups will always have a unique ID which the bone can use as it's own
         ID = group.GroupID;
     }
@@ -33,7 +37,7 @@ public class Bone : MonoBehaviour
             mGhost.LostBone();
         }
         mGhost = null;
-        group.applyToAll((Bone b, FunctionArgs a)=> { b.rb.freezeRotation = true; b.rb.useGravity = false;});
+        group.ApplyToAll((Bone b, FunctionArgs a)=> { b.rb.freezeRotation = true; b.rb.useGravity = false;});
         BoneManager.Instance.SetPhysicsLayer(this, physicsLayer,0.25f);
     }
 
@@ -42,7 +46,7 @@ public class Bone : MonoBehaviour
         const float maxReleaseYVelocity = 1.0f;
         //rb.useGravity = true; gravity was initally in picked up
 
-        group.applyToAll((Bone b, FunctionArgs a) => { 
+        group.ApplyToAll((Bone b, FunctionArgs a) => { 
             b.GetComponent<CustomGravity>().enabled = true; 
             b.rb.freezeRotation = false;
 
@@ -59,6 +63,7 @@ public class Bone : MonoBehaviour
         
     }
 
+        /*
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Bone"))
@@ -126,4 +131,5 @@ public class Bone : MonoBehaviour
             rb.useGravity = true;
         }
     }
+        */
 }
