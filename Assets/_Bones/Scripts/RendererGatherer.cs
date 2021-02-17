@@ -5,7 +5,7 @@ using UnityEngine;
 public class RendererGatherer : MonoBehaviour
 {
     [SerializeField]
-    Material material;
+    Material material = default;
     List<Renderer> renderers;
 
 

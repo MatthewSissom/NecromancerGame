@@ -5,9 +5,9 @@ using UnityEngine;
 public class destroyRoot : MonoBehaviour
 {
     [SerializeField]
-    string activateOnState;
+    string activateOnState = default;
     [SerializeField]
-    int skips;
+    int skips = default;
 
     public void RemoveChildren()
     {

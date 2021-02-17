@@ -11,9 +11,9 @@ public class GhostManager : State
     [Header("Bones")]
     public List<GameObject> boneShipments;
     [SerializeField]
-    float timePerShipment;
+    float timePerShipment = default;
     [SerializeField]
-    public float timeBetweenShipments;
+    public float timeBetweenShipments = default;
     private int currentShipment = 0;
 
     [Header("Ghosts")]

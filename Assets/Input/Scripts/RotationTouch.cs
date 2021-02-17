@@ -57,7 +57,7 @@ public class RotationTouch : TouchProxy
 
     protected void Update()
     {
-        if (!parent.activeBone)
+        if (parent.activeObj != null)
             return;
 
         if (aroundUp && Mathf.Abs(rotAngleAroundToParent) > Mathf.Abs(rotAngleAroundUp * 5))
@@ -77,8 +77,9 @@ public class RotationTouch : TouchProxy
         rotAngleAroundUp = 0;
     }
 
-    protected void OnDisable()
+    protected override void OnDisable()
     {
+        base.OnDisable();
         if(parent)
             parent.ApplyAngularDragMult();
     }

@@ -4,10 +4,6 @@ using UnityEngine;
 
 public partial class InputManager : MonoBehaviour
 {
-    //TEMP stats for input
-    bool recordingVelocities = false;
-    List<float> touchVelocities = new List<float>();
-
     [Header ("GameObjects")]
     public GameObject moveTouchPref;
     public GameObject rotationTouchPref;
@@ -182,25 +178,6 @@ public partial class InputManager : MonoBehaviour
         {
             enabled = true;
         });
-
-        //TEMP stats for input
-        void RecordStats()
-        {
-            touchVelocities = new List<float>();
-            recordingVelocities = true;
-        }
-        void CalcStats()
-        {
-            touchVelocities.Sort();
-            Debug.Log(string.Format("Median: {0}\n" +
-                "80 per over {1}\n" +
-                "80 per under {3}\n",
-                touchVelocities[Mathf.FloorToInt(touchVelocities.Count/2)],
-                touchVelocities[Mathf.FloorToInt(touchVelocities.Count * .2f)],
-                touchVelocities[Mathf.FloorToInt(touchVelocities.Count * .8f)]
-                ));
-            recordingVelocities = false;
-        }
         //GameManager.Instance.AddEventMethod("GhostManager", "begin", RecordStats);
         //GameManager.Instance.AddEventMethod("TableTrans", "begin", CalcStats);
     }

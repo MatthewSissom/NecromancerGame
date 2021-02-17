@@ -2,20 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bone : MonoBehaviour
+public class Bone : MonoBehaviour, IGrabbable
 {
+    //physics
     const int physicsLayer = 10;
-
-    protected BoneGroup group;
     protected Rigidbody rb;
+
+    //bone group, used to store relationships
+    //between bones
+    protected BoneGroup group;
+    //stores the ghost that is holding this bone
     public GhostBehavior mGhost;
     public bool connecting = false;
 
+    //properties
+    Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return rb; } }
     public BoneGroup Group { get { return group; } }
     public int ID { get; private set; }
 
-    // Start is called before the first frame update
     protected virtual void Awake()
     {
         rb = gameObject.GetComponent<Rigidbody>();
@@ -30,7 +35,7 @@ public class Bone : MonoBehaviour
         ID = group.GroupID;
     }
 
-    public void PickedUp()
+    void IGrabbable.PickedUp()
     {
         if (mGhost)
         {
@@ -41,7 +46,7 @@ public class Bone : MonoBehaviour
         BoneManager.Instance.SetPhysicsLayer(this, physicsLayer,0.25f);
     }
 
-    public void Dropped()
+    void IGrabbable.Dropped()
     {
         const float maxReleaseYVelocity = 1.0f;
         //rb.useGravity = true; gravity was initally in picked up

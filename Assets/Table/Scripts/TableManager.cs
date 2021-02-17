@@ -10,13 +10,13 @@ public class TableManager : MonoBehaviour
     //transforms in the collider higharchy used to enable and disable colliders during shipments
     //colliders are owned by the most specific transform given, and enabled during the shipment
     //given in the shipment numbers array
-    private List<Transform> shipmentAreas;
+    private List<Transform> shipmentAreas = default;
     [SerializeField]
-    private List<int> areaShipmentNumbers;
+    private List<int> areaShipmentNumbers = default;
 
     //outlines in the order that they appear for shipments
     [SerializeField]
-    private List<GameObject> outlineRenders;
+    private List<GameObject> outlineRenders = default;
     private List<SpriteRenderer> outlines;
 
     private List<TableConnectionArea> allAreas;

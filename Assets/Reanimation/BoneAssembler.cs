@@ -7,7 +7,7 @@ public class BoneAssembler : State
     [SerializeField]
     //root gameObject for connection colliders, the higharchy of this gameObject and the
     //empty armature must be identical except for objects with the TableConnectionArea component
-    Transform connectionColliders;
+    Transform connectionColliders = default;
 
     //list of all connection areas, joints at the same index at their corresponding 
     List<TableConnectionArea> connectionAreas;

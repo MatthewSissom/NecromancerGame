@@ -7,19 +7,19 @@ public class TestWalk : MonoBehaviour
     [Header("WalkSettings")]
     [SerializeField]
     //how long steps take
-    private float stepTime;
+    private float stepTime = default;
     [SerializeField]
     //how far from the origin limbs will get before moving
-    private float footToOriginLimit;
+    private float footToOriginLimit = default;
     [SerializeField]
     //how fast the cat is walking
-    private float walkSpeed;
+    private float walkSpeed = default;
     [SerializeField]
-    private float stepHeight;
+    private float stepHeight = default;
 
     [Header("Transforms")]
     [SerializeField]
-    private List<Transform> feetTransforms;
+    private List<Transform> feetTransforms = default;
 
     private List<FootData> feet;
 
