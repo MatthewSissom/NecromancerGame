@@ -368,7 +368,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &66122280
 Transform:
   m_ObjectHideFlags: 0
@@ -1353,7 +1353,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &897217545
 Transform:
   m_ObjectHideFlags: 0
@@ -1382,7 +1382,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   boneShipments:
   - {fileID: 7467571634110518170, guid: 7403660fe374bc4498782d63980cdc5f, type: 3}
-  - {fileID: 7467571634110518170, guid: 6543d3f584d19a0499e582fb7832fadc, type: 3}
   - {fileID: 7467571634110518170, guid: 6543d3f584d19a0499e582fb7832fadc, type: 3}
   timePerShipment: 15
   timeBetweenShipments: 20
@@ -4022,7 +4021,7 @@ PrefabInstance:
     - target: {fileID: 2490182504392057553, guid: 661bf0eb3044faf44b31d345790e0c32,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2996989496420991416, guid: 661bf0eb3044faf44b31d345790e0c32,
         type: 3}

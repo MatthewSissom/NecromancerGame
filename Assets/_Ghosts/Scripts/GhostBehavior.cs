@@ -38,6 +38,8 @@ public class GhostBehavior : MonoBehaviour
         if(pathIndex >= path.Count)
         {
             body.RotateTo(endForward);
+            // Plays sound when cats reach destination
+            //AudioManager.Instance.PlayTestSound();
         }
         else
         {

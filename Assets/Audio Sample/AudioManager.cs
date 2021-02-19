@@ -60,11 +60,12 @@ public class AudioManager : MonoBehaviour
         themeSoundsDictionary = new Dictionary<string, string>();
 
         themeSoundsDictionary.Add("normal", "event:/SFX/Bones/BoneConnections");
+        themeSoundsDictionary.Add("catTest", "event:/SFX/Cats/CatGhostTEST");
         themeSoundsDictionary.Add("test", "event:/SFX/TestSound");
     }
 
     // Plays a sound according to a bone's theme
-    public void PlayBoneConnectionSound(string themeName)
+    public void PlaySound(string themeName)
     {
         FMODUnity.RuntimeManager.PlayOneShot(themeSoundsDictionary[themeName]);
     }
