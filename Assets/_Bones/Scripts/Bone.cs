@@ -40,6 +40,9 @@ public class Bone : MonoBehaviour, IGrabbable
         if (mGhost)
         {
             mGhost.LostBone();
+
+            // Will - Plays a sound when bones are picked up (for testing purposes only)
+            // AudioManager.Instance.PlayTestSound();
         }
         mGhost = null;
         group.ApplyToAll((Bone b, FunctionArgs a)=> { b.rb.freezeRotation = true; b.rb.useGravity = false;});

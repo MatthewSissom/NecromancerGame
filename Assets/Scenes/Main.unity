@@ -233,6 +233,7 @@ GameObject:
   m_Component:
   - component: {fileID: 44981199}
   - component: {fileID: 44981198}
+  - component: {fileID: 44981200}
   m_Layer: 0
   m_Name: ExampleAudio
   m_TagString: Untagged
@@ -247,7 +248,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 44981197}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0a94dd50d5825e4ca5ef5f9d6611d56, type: 3}
   m_Name: 
@@ -266,6 +267,18 @@ Transform:
   m_Father: {fileID: 137129391}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &44981200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 44981197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eb2f9f0cdc2df04e91d67ccaa761102, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &48418211
 GameObject:
   m_ObjectHideFlags: 0
@@ -1914,6 +1927,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86c6556701af9e04380698b89f691b6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attenuationObject: {fileID: 0}
   ListenerNumber: -1
 --- !u!1 &1041857647
 GameObject:
@@ -4003,6 +4017,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TestCatBonesGrouped
+      objectReference: {fileID: 0}
+    - target: {fileID: 2490182504392057553, guid: 661bf0eb3044faf44b31d345790e0c32,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2996989496420991416, guid: 661bf0eb3044faf44b31d345790e0c32,
         type: 3}

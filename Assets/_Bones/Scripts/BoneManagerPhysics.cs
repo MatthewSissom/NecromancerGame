@@ -36,7 +36,7 @@ public partial class BoneManager : MonoBehaviour
         int areaCount = connectionAreaOverlaps[toAttach].Count;
         if (areaCount == 0 || !toAttach){ return; }
 
-        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
+        //FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
 
         ParticleManager.CreateEffect("CombineFX", toAttach.Rb.worldCenterOfMass);
 

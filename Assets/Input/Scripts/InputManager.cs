@@ -46,71 +46,71 @@ public partial class InputManager : MonoBehaviour
     void FixedUpdate()
     {
         #region mouseInput
-        /*
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Application.Quit();
-        if(Input.GetMouseButton(0))
-        {
-            Vector3 pos = Input.mousePosition;
-            pos.z = Camera.main.transform.position.y - height;
-            Vector3 radVec = pos + new Vector3(5, 0, 0);
 
-            pos = Camera.main.ScreenToWorldPoint(pos);
-            float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
+        //if (Input.GetKeyDown(KeyCode.Escape))
+        //    Application.Quit();
+        //if(Input.GetMouseButton(0))
+        //{
+        //    Vector3 pos = Input.mousePosition;
+        //    pos.z = Camera.main.transform.position.y - height;
+        //    Vector3 radVec = pos + new Vector3(5, 0, 0);
 
-            int id = 0;
+        //    pos = Camera.main.ScreenToWorldPoint(pos);
+        //    float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
 
-
-            if (!holdingMouseDown)
-            {
-                holdingMouseDown = true;
-                NewMoveTouch(pos,id);
-            }
-            else
-            {
-                activeTouches[id].Move(pos, rad);
-            }
-        }
-        else if(holdingMouseDown)
-        {
-            holdingMouseDown = false;
-            Vector3 pos = Input.mousePosition;
-            pos.z = Camera.main.transform.position.y - height;
-            Vector3 radVec = pos + new Vector3(5, 0, 0);
-
-            pos = Camera.main.ScreenToWorldPoint(pos);
-            DisableTouch(pos);
-        }
+        //    int id = 0;
 
 
-        const float rotationSpeed = -5f;
-        float rotation = 0;
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            rotation += rotationSpeed;
-        }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
-            rotation -= rotationSpeed;
-        }
-        if (rotation != 0)
-        {
-            BoneMovingTouch active = activeTouches[0] as BoneMovingTouch;
-            if (active != null)
-            {
-                Vector3 axis = Vector3.up;
-                Vector3 pos = active.activeBone.transform.root.position;
-                active.applyToAll((Bone toApply, FunctionArgs e) =>
-                {
-                    toApply.transform.RotateAround(pos, axis ,rotation);
-                });
-            }
-        }
-        */
+        //    if (!holdingMouseDown)
+        //    {
+        //        holdingMouseDown = true;
+        //        NewMoveTouch(pos,id);
+        //    }
+        //    else
+        //    {
+        //        activeTouches[id].Move(pos, rad);
+        //    }
+        //}
+        //else if(holdingMouseDown)
+        //{
+        //    holdingMouseDown = false;
+        //    Vector3 pos = Input.mousePosition;
+        //    pos.z = Camera.main.transform.position.y - height;
+        //    Vector3 radVec = pos + new Vector3(5, 0, 0);
+
+        //    pos = Camera.main.ScreenToWorldPoint(pos);
+        //    DisableTouch(pos);
+        //}
+
+
+        //const float rotationSpeed = -5f;
+        //float rotation = 0;
+        //if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+        //{
+        //    rotation += rotationSpeed;
+        //}
+        //if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+        //{
+        //    rotation -= rotationSpeed;
+        //}
+        //if (rotation != 0)
+        //{
+        //    BoneMovingTouch active = activeTouches[0] as BoneMovingTouch;
+        //    if (active != null)
+        //    {
+        //        Vector3 axis = Vector3.up;
+        //        //Vector3 pos = active.activeBone.transform.root.position;
+        //        //active.applyToAll((Bone toApply, FunctionArgs e) =>
+        //        //{
+        //        //    toApply.transform.RotateAround(pos, axis ,rotation);
+        //        //});
+        //    }
+        //}
+
         #endregion
 
 
-
+        #region touchInput
         foreach (Touch t in Input.touches)
         {
             //pos represents the point in world space at the specified height
@@ -123,12 +123,12 @@ public partial class InputManager : MonoBehaviour
 
             int id = t.fingerId;
             TouchProxy mProxy = activeTouches.Find(a => a.id == id);
-            if(!mProxy)
+            if (!mProxy)
             {
                 BoneMovingTouch parent = isRotationTouch(pos);
                 if (parent)
                 {
-                    mProxy = NewRotationTouch(pos, id,parent);
+                    mProxy = NewRotationTouch(pos, id, parent);
                 }
                 else
                 {
@@ -138,9 +138,9 @@ public partial class InputManager : MonoBehaviour
             mProxy.Move(pos, rad);
         }
 
-        foreach(TouchProxy tp in activeTouches)
+        foreach (TouchProxy tp in activeTouches)
         {
-            if(!tp.moved)
+            if (!tp.moved)
             {
                 if (toDeactivate == null)
                     toDeactivate = new List<TouchProxy>();
@@ -148,14 +148,15 @@ public partial class InputManager : MonoBehaviour
             }
             tp.moved = false;
         }
-        if(toDeactivate != null)
+        if (toDeactivate != null)
         {
-            foreach(TouchProxy tp in toDeactivate)
+            foreach (TouchProxy tp in toDeactivate)
             {
                 DisableTouch(tp);
             }
             toDeactivate = null;
         }
+        #endregion
     }
 
     private void Awake()

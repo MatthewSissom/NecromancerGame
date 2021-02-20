@@ -140,6 +140,11 @@ public class BoneAssembler : State
                 {
                     b.transform.position += offset;
                 }
+
+                // Plays a sound when bones are assembling
+                // This is cursed.
+                // AudioManager.Instance.PlaySound("normal");
+
                 yield return null;
             }
 
@@ -156,6 +161,12 @@ public class BoneAssembler : State
                 Destroy(b.GetComponent<CustomGravity>());
                 Destroy(b.GetComponent<Rigidbody>());
                 Destroy(b.GetComponent<BoneGroup>());
+
+                // Plays a sound when the bones have reached their final position
+                // This is not cursed.
+                // When themes are implemented, can use theme field as parameter for PlaySound
+                // Ex. AudioManager.Instance.PlaySound(b.theme);
+                AudioManager.Instance.PlaySound("normal");
             }
 
         }

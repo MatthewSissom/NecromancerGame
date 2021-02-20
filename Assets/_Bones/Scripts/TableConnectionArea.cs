@@ -22,6 +22,9 @@ public class TableConnectionArea : BoneGroup
         //assume ownership of this bone
         BoneManager.Instance.Release(bone);
         CombineGroups(group, bone.Group, true);
+
+        // Plays a sound when bones attach to the table connection areas
+        AudioManager.Instance.PlaySound("normal");
     }
 
     public void AddCollision(Bone bone)

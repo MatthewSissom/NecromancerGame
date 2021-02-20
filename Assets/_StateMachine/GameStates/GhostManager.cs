@@ -116,6 +116,9 @@ public class GhostManager : State
         InitObjects(boneShipments[currentShipment]);
         done = ++currentShipment == boneShipments.Count;
 
+        // Plays sound when cats fist spawn for bone shipment
+        AudioManager.Instance.PlaySound("catTest");
+
         yield return new WaitForSeconds(timePerShipment);
 
         RecallGhosts(timeBetweenShipments - 2);
