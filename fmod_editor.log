@@ -7,7 +7,7 @@
 [LOG] OutputWASAPI::init                       : Output buffer size: 4096 samples, latency: 0.00ms, period: 10.00ms, DSP buffer: 1024 * 4
 [LOG] Thread::initThread                       : Init FMOD stream thread. Affinity: 0x8000000000000003, Priority: 0xFFFF7FFB, Stack Size: 98304, Semaphore: No, Sleep Time: 10, Looping: Yes.
 [LOG] Thread::initThread                       : Init FMOD mixer thread. Affinity: 0x8000000000000001, Priority: 0xFFFF7FFA, Stack Size: 81920, Semaphore: No, Sleep Time: 0, Looping: Yes.
-[LOG] AsyncManager::init                       : manager 0000023BAE30E978 isAsync 0 updatePeriod 0.02
+[LOG] AsyncManager::init                       : manager 00000286A761D528 isAsync 0 updatePeriod 0.02
 [LOG] AsyncManager::init                       : done
 [LOG] PlaybackSystem::init                     : 
 [LOG] Thread::initThread                       : Init FMOD Studio sample load thread. Affinity: 0x8000000000000003, Priority: 0xFFFF7FFD, Stack Size: 98304, Semaphore: No, Sleep Time: 1, Looping: No.
@@ -15,117 +15,16 @@
 [LOG] Thread::initThread                       : Init FMOD Studio bank load thread. Affinity: 0x8000000000000003, Priority: 0xFFFF7FFD, Stack Size: 98304, Semaphore: No, Sleep Time: 1, Looping: No.
 [LOG] Manager::init                            : done.
 [LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
-[LOG] SystemI::createSoundInternal             : Create name='', mode=0x02000202
-[LOG] SystemI::createSoundInternal             : exinfo->cbsize             = 224
-[LOG] SystemI::createSoundInternal             : exinfo->length             = 1285280
-[LOG] SystemI::createSoundInternal             : exinfo->fileoffset         = 17120
-[LOG] SystemI::createSoundInternal             : exinfo->numsubsounds       = 1
-[LOG] SystemI::createSoundInternal             : exinfo->inclusionlist      = 000000A2201FF0F8
-[LOG] SystemI::createSoundInternal             : exinfo->inclusionlistnum   = 1
-[LOG] SystemI::createSoundInternal             : exinfo->suggestedsoundtype = 5
-[LOG] SystemI::createSoundInternal             : exinfo->useropen           = 00007FF9FAC87B10
-[LOG] SystemI::createSoundInternal             : exinfo->userclose          = 00007FF9FAC87AE0
-[LOG] SystemI::createSoundInternal             : exinfo->userread           = 00007FF9FAC87BE0
-[LOG] SystemI::createSoundInternal             : exinfo->userseek           = 00007FF9FAC87CA0
-[LOG] SystemI::createSoundInternal             : exinfo->fileuserdata       = 0000023BACC69398
-[LOG] SystemI::createSoundInternal             : exinfo->initialseekpostype = 1
-[LOG] SystemI::DSPCodecPoolRegister            : register codec pool for pool type 5
-[LOG] SystemI::createSoundInternal             : Sample 0/1: name='CatGhostSFX_Take2_EthrealLowPass', format=5, channels=2, frequency=48000, lengthbytes=32128, lengthpcm=175104, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.352081.
-[LOG] SystemI::createSoundInternal             : Create name='', mode=0x02000202
-[LOG] SystemI::createSoundInternal             : exinfo->cbsize             = 224
-[LOG] SystemI::createSoundInternal             : exinfo->length             = 1285280
-[LOG] SystemI::createSoundInternal             : exinfo->fileoffset         = 17120
-[LOG] SystemI::createSoundInternal             : exinfo->numsubsounds       = 1
-[LOG] SystemI::createSoundInternal             : exinfo->inclusionlist      = 000000A2201FF0F8
-[LOG] SystemI::createSoundInternal             : exinfo->inclusionlistnum   = 1
-[LOG] SystemI::createSoundInternal             : exinfo->suggestedsoundtype = 5
-[LOG] SystemI::createSoundInternal             : exinfo->useropen           = 00007FF9FAC87B10
-[LOG] SystemI::createSoundInternal             : exinfo->userclose          = 00007FF9FAC87AE0
-[LOG] SystemI::createSoundInternal             : exinfo->userread           = 00007FF9FAC87BE0
-[LOG] SystemI::createSoundInternal             : exinfo->userseek           = 00007FF9FAC87CA0
-[LOG] SystemI::createSoundInternal             : exinfo->fileuserdata       = 0000023C515FE4F8
-[LOG] SystemI::createSoundInternal             : exinfo->initialseekpostype = 1
-[LOG] SystemI::DSPCodecPoolRegister            : register codec pool for pool type 5
-[LOG] SystemI::createSoundInternal             : Sample 0/1: name='NormalBoneConnection_1', format=5, channels=2, frequency=48000, lengthbytes=21120, lengthpcm=96000, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.968384.
-[LOG] SystemI::createSoundInternal             : Create name='', mode=0x02000202
-[LOG] SystemI::createSoundInternal             : exinfo->cbsize             = 224
-[LOG] SystemI::createSoundInternal             : exinfo->length             = 1285280
-[LOG] SystemI::createSoundInternal             : exinfo->fileoffset         = 17120
-[LOG] SystemI::createSoundInternal             : exinfo->numsubsounds       = 1
-[LOG] SystemI::createSoundInternal             : exinfo->inclusionlist      = 000000A2201FF0F8
-[LOG] SystemI::createSoundInternal             : exinfo->inclusionlistnum   = 1
-[LOG] SystemI::createSoundInternal             : exinfo->suggestedsoundtype = 5
-[LOG] SystemI::createSoundInternal             : exinfo->useropen           = 00007FF9FAC87B10
-[LOG] SystemI::createSoundInternal             : exinfo->userclose          = 00007FF9FAC87AE0
-[LOG] SystemI::createSoundInternal             : exinfo->userread           = 00007FF9FAC87BE0
-[LOG] SystemI::createSoundInternal             : exinfo->userseek           = 00007FF9FAC87CA0
-[LOG] SystemI::createSoundInternal             : exinfo->fileuserdata       = 0000023C515FE4F8
-[LOG] SystemI::createSoundInternal             : exinfo->initialseekpostype = 1
-[LOG] SystemI::DSPCodecPoolRegister            : register codec pool for pool type 5
-[LOG] SystemI::createSoundInternal             : Sample 0/1: name='SmallBoneConnection_2', format=5, channels=2, frequency=48000, lengthbytes=20640, lengthpcm=96000, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.734222.
-[LOG] SystemI::createSoundInternal             : Create name='', mode=0x02000202
-[LOG] SystemI::createSoundInternal             : exinfo->cbsize             = 224
-[LOG] SystemI::createSoundInternal             : exinfo->length             = 1285280
-[LOG] SystemI::createSoundInternal             : exinfo->fileoffset         = 17120
-[LOG] SystemI::createSoundInternal             : exinfo->numsubsounds       = 1
-[LOG] SystemI::createSoundInternal             : exinfo->inclusionlist      = 000000A2201FF0F8
-[LOG] SystemI::createSoundInternal             : exinfo->inclusionlistnum   = 1
-[LOG] SystemI::createSoundInternal             : exinfo->suggestedsoundtype = 5
-[LOG] SystemI::createSoundInternal             : exinfo->useropen           = 00007FF9FAC87B10
-[LOG] SystemI::createSoundInternal             : exinfo->userclose          = 00007FF9FAC87AE0
-[LOG] SystemI::createSoundInternal             : exinfo->userread           = 00007FF9FAC87BE0
-[LOG] SystemI::createSoundInternal             : exinfo->userseek           = 00007FF9FAC87CA0
-[LOG] SystemI::createSoundInternal             : exinfo->fileuserdata       = 0000023C515FE4F8
-[LOG] SystemI::createSoundInternal             : exinfo->initialseekpostype = 1
-[LOG] SystemI::DSPCodecPoolRegister            : register codec pool for pool type 5
-[LOG] SystemI::createSoundInternal             : Sample 0/1: name='LargeBoneConnection_1', format=5, channels=2, frequency=48000, lengthbytes=3072, lengthpcm=10500, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.562134.
-[LOG] SystemI::createSoundInternal             : Create name='', mode=0x02000202
-[LOG] SystemI::createSoundInternal             : exinfo->cbsize             = 224
-[LOG] SystemI::createSoundInternal             : exinfo->length             = 1285280
-[LOG] SystemI::createSoundInternal             : exinfo->fileoffset         = 17120
-[LOG] SystemI::createSoundInternal             : exinfo->numsubsounds       = 1
-[LOG] SystemI::createSoundInternal             : exinfo->inclusionlist      = 000000A2201FF0F8
-[LOG] SystemI::createSoundInternal             : exinfo->inclusionlistnum   = 1
-[LOG] SystemI::createSoundInternal             : exinfo->suggestedsoundtype = 5
-[LOG] SystemI::createSoundInternal             : exinfo->useropen           = 00007FF9FAC87B10
-[LOG] SystemI::createSoundInternal             : exinfo->userclose          = 00007FF9FAC87AE0
-[LOG] SystemI::createSoundInternal             : exinfo->userread           = 00007FF9FAC87BE0
-[LOG] SystemI::createSoundInternal             : exinfo->userseek           = 00007FF9FAC87CA0
-[LOG] SystemI::createSoundInternal             : exinfo->fileuserdata       = 0000023C515FE4F8
-[LOG] SystemI::createSoundInternal             : exinfo->initialseekpostype = 1
-[LOG] SystemI::DSPCodecPoolRegister            : register codec pool for pool type 5
-[LOG] SystemI::createSoundInternal             : Sample 0/1: name='SmallBoneConnection_1', format=5, channels=2, frequency=48000, lengthbytes=20096, lengthpcm=96000, pcmblocksize=0, loopstart=0, loopend=0, mode=0x00000000, channelmask=0x00000000, channelorder=0, peakvolume=0.991913.
-[LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
-[LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
-[LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
-[LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
-[LOG] SoundI::release                          : NecromancerAcademyDemo_Take4 (0000023BAE3C07D8)
-[LOG] SoundI::release                          :     NecromancerAcademyDemo_Take4 (0000023BD2B19578)
-[LOG] SoundI::release                          :     NecromancerAcademyDemo_Take4 (0000023BAE3C1048)
-[LOG] SoundI::release                          :  (0000023C51B97658)
-[LOG] SoundI::release                          :     CatGhostSFX_Take2_EthrealLowPass (0000023BD460DBE8)
-[LOG] SoundI::release                          :  (0000023C51B97C18)
-[LOG] SoundI::release                          :     NormalBoneConnection_1 (0000023BD2B19A58)
-[LOG] SoundI::release                          :  (0000023C51B98798)
-[LOG] SoundI::release                          :     SmallBoneConnection_1 (0000023BD274E0C8)
-[LOG] SoundI::release                          :  (0000023C51B981D8)
-[LOG] SoundI::release                          :     SmallBoneConnection_2 (0000023BD274E268)
-[LOG] SoundI::release                          :  (0000023C51B98628)
-[LOG] SoundI::release                          :     LargeBoneConnection_1 (0000023BD274E748)
-[LOG] Thread::callback                         : FMOD Studio update thread finished.
-[LOG] Thread::callback                         : FMOD Studio bank load thread finished.
-[LOG] Profile::disconnectAll                   : Profiler disconnecting all clients
-[LOG] Thread::callback                         : FMOD Studio sample load thread finished.
-[LOG] LiveUpdate::release                      : 
-[LOG] LiveUpdate::reset                        : Reset connection (reason Disconnected)
-[LOG] Thread::callback                         : FMOD stream thread finished.
-[LOG] Thread::callback                         : FMOD mixer thread finished.
-[LOG] Profile::disconnectAll                   : Profiler disconnecting all clients
-[LOG] SystemI::close                           : Closed.
-[LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
 [LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
 [LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
 [LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
 [LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
 [LOG] Manager::readBank                        : fileversion = 135, compatVersion = 132 (oldest = 44, newest = 135)
 [LOG] PlaybackSystem::acquireMasterBus         : Setting master channel group format to 6
+[LOG] Thread::callback                         : FMOD Studio bank load thread finished.
+[LOG] Thread::callback                         : FMOD Studio sample load thread finished.
+[LOG] LiveUpdate::release                      : 
+[LOG] LiveUpdate::reset                        : Reset connection (reason Disconnected)
+[LOG] Thread::callback                         : FMOD stream thread finished.
+[LOG] Thread::callback                         : FMOD mixer thread finished.
+[LOG] SystemI::close                           : Closed.
