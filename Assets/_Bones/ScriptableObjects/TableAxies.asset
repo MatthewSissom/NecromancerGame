@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 691bbed52b2cdd941889306dd063591b, type: 3}
+  m_Name: TableAxies
+  m_EditorClassIdentifier: 
+  axisPairs:
+  - key: UpperSpine
+    values:
+    - {x: 0.019873928, y: 0.049825255, z: 0.0019208994}
+    - {x: -0.04432878, y: 0.04979635, z: 0.0016860384}
+  - key: MidSpine
+    values:
+    - {x: 0.022951685, y: 0.053091273, z: 0.0007530624}
+    - {x: -0.041501757, y: 0.053089574, z: -0.00046140098}
+  - key: LowerSpine
+    values:
+    - {x: 0.015912883, y: 0.05246563, z: -0.00044739613}
+    - {x: -0.03560288, y: 0.052477747, z: 0.00035254675}
+  - key: Pelvis
+    values: []
+  - key: UpperBackLeg
+    values:
+    - {x: -0.00013743973, y: -0.000034159315, z: -0.026335057}
+    - {x: 0.0052771424, y: -0.000011231029, z: 0.035597716}
+  - key: BackPaw
+    values: []
+  - key: LowerBackLeg
+    values:
+    - {x: -0.0007949286, y: -0.000003913666, z: -0.02487439}
+    - {x: -0.005135095, y: -0.000012751124, z: 0.036764484}
+  - key: MidBackLeg
+    values:
+    - {x: 0.0017707389, y: -0.0000036926642, z: -0.04094575}
+    - {x: -0.0029328414, y: -0.0000064785213, z: 0.03791407}
+  - key: TailEnd
+    values:
+    - {x: -0.0014626287, y: -0.0000027509168, z: -0.038996384}
+    - {x: -0.0019200885, y: -0.000008266161, z: 0.033684883}
+  - key: LowerTail
+    values:
+    - {x: -0.0032670815, y: -0.0000048548063, z: 0.021735862}
+    - {x: 0.004499383, y: -0.000009302589, z: -0.040558096}
+  - key: BackRib
+    values: []
+  - key: FrontRib
+    values: []
+  - key: FrontPaw
+    values: []
+  - key: LowerFrontLeg
+    values:
+    - {x: -0.00092562794, y: -0.0000031570207, z: -0.040872615}
+    - {x: 0.0048988955, y: -0.000008643987, z: 0.03711016}
+  - key: UpperFrontLeg
+    values:
+    - {x: -0.00071657595, y: -0.0000015401637, z: -0.037553456}
+    - {x: 0.005765058, y: -0.000014098941, z: 0.034819774}
+  - key: Scapula
+    values:
+    - {x: -0.022918588, y: -0.00014420127, z: -0.018793581}
+    - {x: 0.016175244, y: -0.000033923312, z: -0.00903153}

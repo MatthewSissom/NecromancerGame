@@ -10,13 +10,13 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 
-#Ignore bone axis backup files
-/[Aa]ssets/_Bones/ScriptableObjects/BoneAxisBackups/**
-!/[Aa]ssets/_Bones/ScriptableObjects/BoneAxisBackups/about.txt
-
-
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
+
+#Ignore bone axis backup files
+/[Aa]ssets/_Bones/ScriptableObjects/BoneAxisBackups/**
+/[Aa]ssets/_Bones/ScriptableObjects/TableAxiesBackups/**
+!/[Aa]ssets/_Bones/ScriptableObjects/BoneAxisBackups/about.txt
 
 # Uncomment this line if you wish to ignore the asset store tools plugin
 # /[Aa]ssets/AssetStoreTools*
