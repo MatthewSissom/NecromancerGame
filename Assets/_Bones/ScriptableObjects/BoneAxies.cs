@@ -37,6 +37,10 @@ public class BoneAxies : ScriptableObject
         }
     }
 
+    #if UNITY_EDITOR
+    float timeSinceSave = -1;
+    #endif
+
     void ForceSerialization()
     {
         #if UNITY_EDITOR

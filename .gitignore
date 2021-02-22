@@ -10,6 +10,11 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 
+#Ignore bone axis backup files
+/[Aa]ssets/_Bones/ScriptableObjects/BoneAxisBackups/**
+!/[Aa]ssets/_Bones/ScriptableObjects/BoneAxisBackups/about.txt
+
+
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
 

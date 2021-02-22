@@ -29,8 +29,10 @@ public class BoneEditor : EditorTool
     float handleScale = 1;
     bool newAxisMode = false;
 
-
-
+    //saving / loading values
+    float timeSaved;
+    const string boneAxiesPath = "Assets/_Bones/ScriptableObjects/BoneAxies.asset";
+    const string backUpPath = "Assets/_Bones/ScriptableObjects/BoneAxisBackups/";
 
     //set the active manipulator and it's compliment
     private void SetActiveManipulator(int index)
@@ -41,7 +43,7 @@ public class BoneEditor : EditorTool
 
     private void OnEnable()
     {
-        savedAxies = AssetDatabase.LoadAssetAtPath("Assets/_Bones/ScriptableObjects/BoneAxies.asset", typeof(BoneAxies)) as BoneAxies;
+        savedAxies = AssetDatabase.LoadAssetAtPath(boneAxiesPath, typeof(BoneAxies)) as BoneAxies;
 
         mStyle = new GUIStyle();
         mStyle.padding = new RectOffset(10,10,10,10);
@@ -116,6 +118,7 @@ public class BoneEditor : EditorTool
         boneTrans = newTarget.transform;
         ResetManipulatorTool();
         ResetNewAxisTool();
+        CheckForBackUp();
     }
 
     void ResetManipulatorTool()
@@ -253,7 +256,7 @@ public class BoneEditor : EditorTool
                 {
                     Handles.color = Color.white;
                     if (i == activeManipulatorCompliment)
-                        Handles.color = new Color(.5f, .5f, 1f);
+                        Handles.color = new Color(.5f, 1f, .5f);
 
                     //check if the user clicked on another manipulator
                     if (Handles.Button(
@@ -269,7 +272,7 @@ public class BoneEditor : EditorTool
                 }
                 else
                 {
-                    Handles.color = new Color(.25f, .25f, 1f);
+                    Handles.color = new Color(.1f, 1f, .1f);
                     Handles.SphereHandleCap(0,
                         script.transform.localToWorldMatrix.MultiplyPoint(axisManipulators[i]),
                         Quaternion.identity,
@@ -285,7 +288,7 @@ public class BoneEditor : EditorTool
             }
             if (activeManipulator != -1)
             {
-                Handles.color = new Color(.5f, .5f, 1f);
+                Handles.color = new Color(.5f, 1f, .5f);
                 Handles.DrawLine(
                     script.transform.localToWorldMatrix.MultiplyPoint(axisManipulators[activeManipulator]),
                     script.transform.localToWorldMatrix.MultiplyPoint(axisManipulators[activeManipulatorCompliment])
@@ -300,7 +303,7 @@ public class BoneEditor : EditorTool
         else
         {
             Handles.TransformHandle(ref newAxisCenter, ref newAxisOrientation);
-            Handles.color = new Color(.5f, .5f, 1f);
+            Handles.color = new Color(.5f, 1f, .5f);
             Handles.SphereHandleCap(0, newAxisIndiactors[0], Quaternion.identity, baseHandleSize, EventType.Repaint);
             Handles.SphereHandleCap(0, newAxisIndiactors[1], Quaternion.identity, baseHandleSize, EventType.Repaint);
             Handles.DrawLine(newAxisIndiactors[0], newAxisIndiactors[1]);
@@ -309,5 +312,32 @@ public class BoneEditor : EditorTool
                 CalculateNewAxisIndicators();
             }
         }
+    }
+
+    //checks the time since the last back up was made, if it was greater than five minutes
+    //the script will duplicate the current scriptable object
+    private void CheckForBackUp()
+    {
+        #if UNITY_EDITOR
+        //init time if needed
+        if (timeSaved == -1)
+        {
+            timeSaved = Time.realtimeSinceStartup;
+            return;
+        }
+        //only save every five minutes
+        if (Time.realtimeSinceStartup - timeSaved < 5 * 60)
+        {
+            return;
+        }
+
+        //create a copy of the scriptable object as a backup
+        string fileName = DateTime.Now.ToString("MM_dd_hh_mm_Backup") + ".asset";
+        AssetDatabase.CopyAsset(boneAxiesPath, backUpPath + fileName);
+        timeSaved = Time.realtimeSinceStartup;
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+
+        #endif
     }
 }
