@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2633563301004878479}
   - component: {fileID: 8955064010712000648}
   - component: {fileID: 7960730066809628897}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 4630105083903372460}
   - component: {fileID: 684104850265073684}
   - component: {fileID: 7126472706625365273}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,7 +170,7 @@ GameObject:
   - component: {fileID: 3869381963965140895}
   - component: {fileID: 8864476992177536677}
   - component: {fileID: 2435334713367115654}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine Chunk (3)
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -227,6 +227,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
   connecting: 0
+  axisKey: Spine Chunk (3)
 --- !u!114 &2435334713367115654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -250,7 +251,7 @@ GameObject:
   - component: {fileID: 5471455070200255784}
   - component: {fileID: 7343451680001309017}
   - component: {fileID: 9220520727183153589}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +330,7 @@ GameObject:
   - component: {fileID: 1407137976211380669}
   - component: {fileID: 8018931213612742549}
   - component: {fileID: 9196216558130971552}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -408,7 +409,7 @@ GameObject:
   - component: {fileID: 1944934707928335880}
   - component: {fileID: 3108009301472638041}
   - component: {fileID: 1193664617236904592}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -486,7 +487,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2495259825455751631}
   - component: {fileID: 7457927808755776095}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2877138392374710453}
   - component: {fileID: 9097593818496287732}
   - component: {fileID: 1515513858171531134}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Skull
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -117,6 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
   connecting: 0
+  axisKey: Skull
 --- !u!114 &1515513858171531134
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,7 +140,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2239972829652994285}
   - component: {fileID: 3298745008799416013}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +185,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7049689920028219762}
   - component: {fileID: 8263271884670120936}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -228,7 +229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3365714180147544881}
   - component: {fileID: 8956899615011821262}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2206048517055008310}
   - component: {fileID: 5483928898577293800}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -316,7 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5916152157300126312}
   - component: {fileID: 4174935139996335830}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

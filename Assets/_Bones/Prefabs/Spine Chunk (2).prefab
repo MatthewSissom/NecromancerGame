@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2978436413044792788}
   - component: {fileID: 6168339226845311996}
   - component: {fileID: 4993689996090361801}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 8159435993101816129}
   - component: {fileID: 6862235476337376560}
   - component: {fileID: 4983090137819110876}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4901294951880250588}
   - component: {fileID: 238789086657654335}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -215,7 +215,7 @@ GameObject:
   - component: {fileID: 5764627036465691816}
   - component: {fileID: -1503833104684095804}
   - component: {fileID: -5436198043272873794}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine Chunk (2)
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -271,6 +271,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+  connecting: 0
+  axisKey: Spine Chunk (2)
 --- !u!114 &-5436198043272873794
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,7 +296,7 @@ GameObject:
   - component: {fileID: 8832632685342976197}
   - component: {fileID: 3723576490776783997}
   - component: {fileID: 6355970509749805424}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -373,7 +375,7 @@ GameObject:
   - component: {fileID: 2188445360692897510}
   - component: {fileID: 5085804151188401377}
   - component: {fileID: 6100285652729900168}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -452,7 +454,7 @@ GameObject:
   - component: {fileID: 2319190412489687649}
   - component: {fileID: 1293515325022138416}
   - component: {fileID: 3045030446079327993}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

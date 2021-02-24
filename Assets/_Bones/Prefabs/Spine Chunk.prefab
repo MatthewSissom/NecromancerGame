@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6371900995985750855}
   - component: {fileID: 8159523554616459072}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 6513317120620398763}
   - component: {fileID: 3328317493677809674}
   - component: {fileID: 1206422477439175595}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine Chunk
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -114,6 +114,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+  connecting: 0
+  axisKey: Spine Chunk
 --- !u!114 &1206422477439175595
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -136,7 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5619294696574340307}
   - component: {fileID: 9193382041022807998}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,6 +184,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Vertebra (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3557415653212202629, guid: fcb192d446f422f4790ce0222da52fd3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5844580320257362256, guid: fcb192d446f422f4790ce0222da52fd3,
         type: 3}
@@ -258,6 +265,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Vertebra (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3557415653212202629, guid: fcb192d446f422f4790ce0222da52fd3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5844580320257362256, guid: fcb192d446f422f4790ce0222da52fd3,
         type: 3}
@@ -350,6 +362,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vertebra (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 3557415653212202629, guid: fcb192d446f422f4790ce0222da52fd3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5844580320257362256, guid: fcb192d446f422f4790ce0222da52fd3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -441,6 +458,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vertebra (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 3557415653212202629, guid: fcb192d446f422f4790ce0222da52fd3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5844580320257362256, guid: fcb192d446f422f4790ce0222da52fd3,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -531,6 +553,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Vertebra (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3557415653212202629, guid: fcb192d446f422f4790ce0222da52fd3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5844580320257362256, guid: fcb192d446f422f4790ce0222da52fd3,
         type: 3}

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4228872909431339831}
   - component: {fileID: 6798677561921454583}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 4129652657877160543}
   - component: {fileID: -1689365423846162810}
   - component: {fileID: -7010208812565169247}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Paw
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -74,7 +74,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2431325389565282801}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.8852606, y: 3.2702296, z: -18.710701}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.033, y: 0.033, z: 0.033}
   m_Children:
   - {fileID: 4228872909431339831}
@@ -97,6 +97,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+  connecting: 0
+  axisKey: Paw
 --- !u!33 &5240370674639315382
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -182,7 +184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8349979652835819259}
   - component: {fileID: 8602437489748172679}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1898762823422382688}
   - component: {fileID: 7334280237256989375}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -272,7 +274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3653615593685640126}
   - component: {fileID: 6033847890366760725}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

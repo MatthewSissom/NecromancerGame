@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class TableConnectionArea : BoneGroup
 {
+    //neighbors who are part of the same chain, used for bone assembly
+    [SerializeField]
+    public List<TableConnectionArea> chainNeighbors = default;
+    //if this area has had it's bones remove for assembly, new axis will be set to the axis of the bone
+    public List<Vector3> newAxis = null;
+
     //maps a boneID to the number of colliders that a bone is touching in this area
     Dictionary<Bone, int> collisionCounts;
     BoneGroup group;

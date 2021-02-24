@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 576348723082755016}
   - component: {fileID: -4581871158356691994}
   - component: {fileID: 8908293137498238615}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: L2_Right
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -52,6 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
   connecting: 0
+  axisKey: L2_Right
 --- !u!33 &6012547502945824604
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -137,7 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4283742974170344067}
   - component: {fileID: 2493368271641451212}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -182,7 +183,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4584583282840237668}
   - component: {fileID: 3448172646575065542}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -227,7 +228,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8239143011995855619}
   - component: {fileID: 3530602717743649116}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

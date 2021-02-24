@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4860036917079643174}
   - component: {fileID: 3214552825955184296}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2401253996036297757}
   - component: {fileID: 8970521048636282434}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: 7946559770330850286}
   - component: {fileID: -8778997130051474620}
   - component: {fileID: -1955560716070314779}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: L1
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -188,6 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
   connecting: 0
+  axisKey: L1
 --- !u!54 &-8778997130051474620
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -226,7 +227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5959651662311369288}
   - component: {fileID: 6602385080391771221}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

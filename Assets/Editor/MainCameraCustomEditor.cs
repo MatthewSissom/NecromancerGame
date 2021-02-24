@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 
 [CustomEditor(typeof(MainCamera))]
-public class MainCameraCustomEditory : Editor
+public class MainCameraCustomEditor : Editor
 {
     MainCamera myScript;
 

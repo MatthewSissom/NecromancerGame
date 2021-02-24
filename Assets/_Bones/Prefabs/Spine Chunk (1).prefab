@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1644753399010303797}
   - component: {fileID: 4907053317898831643}
   - component: {fileID: 9198664522187557330}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5604587864561100223}
   - component: {fileID: 2180029857215007301}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -151,7 +151,7 @@ GameObject:
   - component: {fileID: 4149708540811841984}
   - component: {fileID: 779590462239984155}
   - component: {fileID: 1210722555669850871}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -244,7 +244,7 @@ GameObject:
   - component: {fileID: 8989096383691320063}
   - component: {fileID: 31648839669384407}
   - component: {fileID: 1199929183989903586}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 799894744099732895}
   - component: {fileID: 1404630802188098506}
   - component: {fileID: 90835952327744419}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -418,7 +418,7 @@ GameObject:
   - component: {fileID: 1945812922257416872}
   - component: {fileID: 1095107279816441777}
   - component: {fileID: 1809062639587812119}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spine Chunk (1)
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -474,6 +474,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+  connecting: 0
+  axisKey: Spine Chunk (1)
 --- !u!114 &1809062639587812119
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -498,7 +500,7 @@ GameObject:
   - component: {fileID: 533711101643814023}
   - component: {fileID: 7369835936811195222}
   - component: {fileID: 999471647835166299}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Vertebra (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

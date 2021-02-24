@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4201267829573862468}
   - component: {fileID: 3341860568162897711}
   - component: {fileID: 3750347730929473071}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Rib Chunk Left (1)
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -50,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
   connecting: 0
+  axisKey: Rib Chunk Left (1)
 --- !u!54 &3341860568162897711
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -85,6 +86,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8968713153293957143}
     m_Modifications:
+    - target: {fileID: 238961783100059516, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739949636149349571, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367079336490026675, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6067934371132684144, guid: bcd6603da4451e2469d124e09ecbbd8b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -155,10 +171,25 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.8245725
       objectReference: {fileID: 0}
+    - target: {fileID: 9073046139157601941, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 9088458291851306552, guid: bcd6603da4451e2469d124e09ecbbd8b,
         type: 3}
       propertyPath: m_Name
       value: Rib (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9088458291851306552, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133491915669291249, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4386896184723661460, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
@@ -176,6 +207,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8968713153293957143}
     m_Modifications:
+    - target: {fileID: 238961783100059516, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739949636149349571, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367079336490026675, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6067934371132684144, guid: bcd6603da4451e2469d124e09ecbbd8b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -246,10 +292,25 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.7896436
       objectReference: {fileID: 0}
+    - target: {fileID: 9073046139157601941, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 9088458291851306552, guid: bcd6603da4451e2469d124e09ecbbd8b,
         type: 3}
       propertyPath: m_Name
       value: Rib (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9088458291851306552, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133491915669291249, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4386896184723661460, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}
@@ -267,6 +328,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8968713153293957143}
     m_Modifications:
+    - target: {fileID: 238961783100059516, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2739949636149349571, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3367079336490026675, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6067934371132684144, guid: bcd6603da4451e2469d124e09ecbbd8b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -337,10 +413,25 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.88828
       objectReference: {fileID: 0}
+    - target: {fileID: 9073046139157601941, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 9088458291851306552, guid: bcd6603da4451e2469d124e09ecbbd8b,
         type: 3}
       propertyPath: m_Name
       value: Rib (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 9088458291851306552, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133491915669291249, guid: bcd6603da4451e2469d124e09ecbbd8b,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 4386896184723661460, guid: bcd6603da4451e2469d124e09ecbbd8b, type: 3}

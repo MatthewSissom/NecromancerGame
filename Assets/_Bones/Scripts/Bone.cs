@@ -15,11 +15,15 @@ public class Bone : MonoBehaviour, IGrabbable
     public GhostBehavior mGhost;
     public bool connecting = false;
 
+    [SerializeField]
+    private string axisKey; 
+
     //properties
     Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return rb; } }
     public BoneGroup Group { get { return group; } }
     public int ID { get; private set; }
+    public string AxisKey { get { return axisKey; } private set { axisKey = value; } }
 
     protected virtual void Awake()
     {
