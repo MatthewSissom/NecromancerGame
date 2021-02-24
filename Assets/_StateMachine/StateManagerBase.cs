@@ -16,13 +16,16 @@ public class StateManagerBase : MonoBehaviour
     protected virtual void Awake()
     {
         states = new Dictionary<string, State>();
-    }
-
-    protected virtual void Start()
-    {
         if (allStates == null)
         {
             allStates = GameObject.FindObjectsOfType<State>();
+        }
+        foreach(var state in allStates)
+        {
+            if(state.Name == null)
+            {
+                state.SetName();
+            }
         }
     }
 
@@ -33,7 +36,6 @@ public class StateManagerBase : MonoBehaviour
         if (states.ContainsKey(stateName))
         #endif
         {
-            //Debug.Log(GetType() + "setting state to" + stateName);
             currentRoutine = StartCoroutine(states[stateName].Routine());
             return currentRoutine;
         }
@@ -56,18 +58,12 @@ public class StateManagerBase : MonoBehaviour
     //All states have a "begin" and "end" event and can implement custom events as well.
     public void AddEventMethod(string stateName, string eventName, State.StateMethod method)
     {
-        IEnumerator HookUpEvent()
+        stateName = stateName.ToLower().Trim();
+        if (!states.ContainsKey(stateName))
         {
-            stateName = stateName.ToLower().Trim();
-            yield return new WaitForSeconds(0.2f);
-            if (!states.ContainsKey(stateName))
-            {
-                Debug.LogError(GetType() + " does not contain state \"" + stateName + "\"");
-                yield break;
-            }
-            states[stateName].AddToEvent(eventName, method);
-            yield break;
+            Debug.LogError(GetType() + " does not contain state \"" + stateName + "\"");
+            return;
         }
-        StartCoroutine(HookUpEvent());
+        states[stateName].AddToEvent(eventName, method);
     }
 }

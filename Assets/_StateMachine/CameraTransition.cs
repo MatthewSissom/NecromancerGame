@@ -52,9 +52,14 @@ public class CameraTransition : State
         yield break;
     }
 
-    protected override void Awake()
+    public override void SetName()
     {
         Name = transitionName;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
         forward.Normalize();
     }
 }

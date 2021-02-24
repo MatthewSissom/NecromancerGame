@@ -11,9 +11,9 @@ public class GhostManager : State
     [Header("Bones")]
     public List<GameObject> boneShipments;
     [SerializeField]
-    float timePerShipment;
+    float timePerShipment = default;
     [SerializeField]
-    public float timeBetweenShipments;
+    public float timeBetweenShipments = default;
     private int currentShipment = 0;
 
     [Header("Ghosts")]
@@ -66,8 +66,7 @@ public class GhostManager : State
 #endif
         Transform pathRoot;
         List<GameObject> path;
-        string themeName = "normal";
-        for (int i = 0, size = bones.Count; i< size; i++)
+        for(int i = 0, size = bones.Count; i< size; i++)
         {
             pathRoot = boneShipment.transform.GetChild(i);
             path = new List<GameObject>();
@@ -76,20 +75,7 @@ public class GhostManager : State
                 path.Add(pathRoot.GetChild(p).gameObject);
             }
             GhostBehavior ghost = CreateGhost(path);
-
-            // Will 2/20/2021 - make half of the bones normal, half of them robot theme
-            if (i % 2 == 0)
-                themeName = "normal";
-            else
-                themeName = "robot";
-
-            BoneManager.Instance.NewBone(bones[i], 
-                new Vector3(0, 0, 100), 
-                bones[i].transform.rotation, 
-                ghost,
-                themeName
-            );
-            //end
+            BoneManager.Instance.NewBone(bones[i], ghost);
         }
     }
 
@@ -129,7 +115,12 @@ public class GhostManager : State
     {
         InitObjects(boneShipments[currentShipment]);
         done = ++currentShipment == boneShipments.Count;
+
+        // Plays sound when cats fist spawn for bone shipment
+        AudioManager.Instance.PlaySound("catTest");
+
         yield return new WaitForSeconds(timePerShipment);
+
         RecallGhosts(timeBetweenShipments - 2);
         yield break;
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class BoneManager : MonoBehaviour
+public partial class BoneManager : MonoBehaviour
 {
     static public BoneManager Instance { get; private set; }
 
@@ -26,78 +26,41 @@ public class BoneManager : MonoBehaviour
 
         activeBones = new LinkedList<Bone>();
         deactivatedBones = new LinkedList<Bone>();
-        CustomGravity.SetOrigin(Camera.main.transform);
+
+        PhysicsInit();
     }
 
-    public int GetID()
+    public int GetNewID()
     {
         return currentID++;
     }
 
-    public void SetBoneLayer(Bone toSet,int layer)
+    public void Register(Bone newBone)
     {
-        void SetLayerOfAllChildren(Transform t)
-        {
-            t.gameObject.layer = layer;
-            for (int i = 0; i < t.childCount; i++)
-            {
-                SetLayerOfAllChildren(t.GetChild(i));
-            }
-        }
-        SetLayerOfAllChildren(toSet.transform);
+        if(!newBone.GetComponent<BoneGroup>())
+            newBone.gameObject.AddComponent(typeof(BoneGroup));
+        activeBones.AddLast(newBone);
     }
 
-    public void SetBoneLayer(Bone toSet, int layer, float delay)
+    //removes all refrences to this bone from the manager
+    public void Release(Bone toRelease)
     {
-        IEnumerator DelayedSet()
-        {
-            yield return new WaitForSeconds(delay);
-            SetBoneLayer(toSet, layer);
-            yield break;
-        }
-        StartCoroutine(DelayedSet());
+        activeBones.Remove(toRelease);
+        deactivatedBones.Remove(toRelease);
     }
 
-    public Bone NewBone(GameObject pref, Vector3 location, Quaternion rotation, GhostBehavior heldBy = null)
+    public Bone NewBone(GameObject pref, GhostBehavior heldBy)
     {
-        if(heldBy)
-        {
-            location = heldBy.boneLocation.position;
-        }
-        var go = Instantiate(pref, location, rotation);
+        var go = Instantiate(pref, heldBy.boneLocation.position, pref.transform.rotation);
         Bone bone = go.GetComponent<Bone>();
-        activeBones.AddLast(bone);
-        if(heldBy)
-        {
-            heldBy.mBone = bone;
-            bone.mGhost = heldBy;
-            SetBoneLayer(bone, 8);
-        }
+
+        heldBy.mBone = bone;
+        bone.mGhost = heldBy;
+        SetPhysicsLayer(bone, 8);
+        bone.Rb.freezeRotation = true;
 
         return bone;
     }
-
-    // Will 2/10/2021 - Added parameter for theme, default normal for normal themed bones
-    public Bone NewBone(GameObject pref, Vector3 location, Quaternion rotation, GhostBehavior heldBy = null, string theme = "normal")
-    {
-        if (heldBy)
-        {
-            location = heldBy.boneLocation.position;
-        }
-        var go = Instantiate(pref, location, rotation);
-        Bone bone = go.GetComponent<Bone>();
-        bone.Theme = theme;
-        activeBones.AddLast(bone);
-        if (heldBy)
-        {
-            heldBy.mBone = bone;
-            bone.mGhost = heldBy;
-            SetBoneLayer(bone, 8);
-        }
-
-        return bone;
-    }
-
 
     public void DeactivateBone(Bone toDeactivate)
     {
@@ -117,8 +80,11 @@ public class BoneManager : MonoBehaviour
 
     public void DestroyAll()
     {
-        var allBone = GameObject.FindObjectsOfType<Bone>();
-        foreach (Bone b in allBone)
+        foreach (Bone b in activeBones)
+        {
+            Destroy(b.transform.root.gameObject);
+        }
+        foreach (Bone b in deactivatedBones)
         {
             Destroy(b.transform.root.gameObject);
         }

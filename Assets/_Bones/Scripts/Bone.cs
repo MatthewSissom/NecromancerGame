@@ -2,56 +2,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bone : MonoBehaviour
+public class Bone : MonoBehaviour, IGrabbable
 {
+    //physics
     const int physicsLayer = 10;
+    protected Rigidbody rb;
 
-    private BoneGroup group;
-    private Rigidbody rb;
+    //bone group, used to store relationships
+    //between bones
+    protected BoneGroup group;
+    //stores the ghost that is holding this bone
     public GhostBehavior mGhost;
+    public bool connecting = false;
 
-    // Will's code
-    private Dictionary<string, string> themeSoundsDictionary;
-    private string theme;
-    private const string testSound = "event:/SFX/TestSound";
-    // end
-
+    //properties
+    Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return rb; } }
     public BoneGroup Group { get { return group; } }
-    public string Theme 
-    { 
-        get { return theme; } 
-        set { theme = value; } 
-    }
+    public int ID { get; private set; }
 
-    // Start is called before the first frame update
-    void Awake()
+    protected virtual void Awake()
     {
-        //get values
         rb = gameObject.GetComponent<Rigidbody>();
-        group = gameObject.GetComponent<BoneGroup>();
-        if (!group) group = (BoneGroup)gameObject.AddComponent(typeof(BoneGroup));
-
-        SetupSoundsDictionary();
     }
 
-    public void PickedUp()
+    protected virtual void Start()
+    {
+        //register w/ boneManager
+        BoneManager.Instance.Register(this);
+        group = gameObject.GetComponent<BoneGroup>();
+        //before collisions groups will always have a unique ID which the bone can use as it's own
+        ID = group.GroupID;
+    }
+
+    void IGrabbable.PickedUp()
     {
         if (mGhost)
         {
             mGhost.LostBone();
+
+            // Will - Plays a sound when bones are picked up (for testing purposes only)
+            // AudioManager.Instance.PlayTestSound();
         }
         mGhost = null;
-        group.applyToAll((Bone b, FunctionArgs a)=> { b.rb.freezeRotation = true; b.rb.useGravity = false;});
-        BoneManager.Instance.SetBoneLayer(this, physicsLayer,0.25f);
+        group.ApplyToAll((Bone b, FunctionArgs a)=> { b.rb.freezeRotation = true; b.rb.useGravity = false;});
+        BoneManager.Instance.SetPhysicsLayer(this, physicsLayer,0.25f);
     }
 
-    public void Dropped()
+    void IGrabbable.Dropped()
     {
         const float maxReleaseYVelocity = 1.0f;
         //rb.useGravity = true; gravity was initally in picked up
 
-        group.applyToAll((Bone b, FunctionArgs a) => { 
+        group.ApplyToAll((Bone b, FunctionArgs a) => { 
             b.GetComponent<CustomGravity>().enabled = true; 
             b.rb.freezeRotation = false;
 
@@ -63,6 +66,12 @@ public class Bone : MonoBehaviour
         });
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        
+    }
+
+        /*
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Bone"))
@@ -70,55 +79,57 @@ public class Bone : MonoBehaviour
             Bone colliding = collision.gameObject.GetComponent<Bone>();
             //if colliding with a bone and not in the same group already
             //then connect the two bones together
-            if (colliding && group.GroupID < colliding.group.GroupID)
+            if (
+                (connecting || colliding.connecting) 
+                && colliding && group.GroupID < colliding.group.GroupID
+            )
             {
                 //---SFX---//
-                //FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
-                FMODUnity.RuntimeManager.PlayOneShot(GetThemeSoundPath(theme));
+                FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
 
                 //---Bone Connection---//
 
-                //update group trees
-                BoneGroup.combineGroups(group, colliding.group);
+                ////update group trees
+                //BoneGroup.CombineGroups(group, colliding.group);
 
-                //get joint info from collision
-                Vector3 jointWorldPoint;
-                Vector3 jointDirection;
-                if (collision.contactCount == 1)
-                {
-                    ContactPoint contact = collision.GetContact(0);
-                    jointWorldPoint = contact.point;
-                    jointDirection = contact.normal;
-                }
-                else
-                {
-                    jointWorldPoint = new Vector3();
-                    jointDirection = new Vector3();
-                    ContactPoint[] points = new ContactPoint[collision.contactCount];
-                    collision.GetContacts(points);
-                    foreach (ContactPoint c in points)
-                    {
-                        jointWorldPoint += c.point;
-                        jointDirection += c.normal;
-                    }
-                    jointWorldPoint /= collision.contactCount;
-                    jointDirection /= collision.contactCount;
-                }
+                ////get joint info from collision
+                //Vector3 jointWorldPoint;
+                //Vector3 jointDirection;
+                //if (collision.contactCount == 1)
+                //{
+                //    ContactPoint contact = collision.GetContact(0);
+                //    jointWorldPoint = contact.point;
+                //    jointDirection = contact.normal;
+                //}
+                //else
+                //{
+                //    jointWorldPoint = new Vector3();
+                //    jointDirection = new Vector3();
+                //    ContactPoint[] points = new ContactPoint[collision.contactCount];
+                //    collision.GetContacts(points);
+                //    foreach (ContactPoint c in points)
+                //    {
+                //        jointWorldPoint += c.point;
+                //        jointDirection += c.normal;
+                //    }
+                //    jointWorldPoint /= collision.contactCount;
+                //    jointDirection /= collision.contactCount;
+                //}
 
-                //create joint
-                SpringJoint newJoint = gameObject.AddComponent(typeof(SpringJoint)) as SpringJoint;
-                newJoint.anchor = transform.InverseTransformPoint(jointWorldPoint);
-                newJoint.connectedBody = colliding.Rb;
-                newJoint.autoConfigureConnectedAnchor = false;
-                newJoint.connectedAnchor = colliding.transform.InverseTransformPoint(jointWorldPoint);
-                newJoint.spring = 500;
-                newJoint.damper = 10;
-                newJoint.minDistance = 0.0f;
-                newJoint.maxDistance = .025f;
-                newJoint.enableCollision = true;
+                ////create joint
+                //SpringJoint newJoint = gameObject.AddComponent(typeof(SpringJoint)) as SpringJoint;
+                //newJoint.anchor = transform.InverseTransformPoint(jointWorldPoint);
+                //newJoint.connectedBody = colliding.Rb;
+                //newJoint.autoConfigureConnectedAnchor = false;
+                //newJoint.connectedAnchor = colliding.transform.InverseTransformPoint(jointWorldPoint);
+                //newJoint.spring = 500;
+                //newJoint.damper = 10;
+                //newJoint.minDistance = 0.0f;
+                //newJoint.maxDistance = .025f;
+                //newJoint.enableCollision = true;
 
-                //create particle effect
-                ParticleManager.CreateEffect("CombineFX", jointWorldPoint);
+                ////create particle effect
+                //ParticleManager.CreateEffect("CombineFX", jointWorldPoint);
             }
         }
         else if (collision.gameObject.CompareTag("Horizontal"))
@@ -128,19 +139,5 @@ public class Bone : MonoBehaviour
             rb.useGravity = true;
         }
     }
-
-    // Will - 2/20/2021
-    public string GetThemeSoundPath(string themeName)
-    {
-        return themeSoundsDictionary[themeName];
-    }
-
-    private void SetupSoundsDictionary()
-    {
-        themeSoundsDictionary = new Dictionary<string, string>();
-
-        themeSoundsDictionary.Add("normal", "event:/SFX/Bones/BoneConnections");
-        themeSoundsDictionary.Add("robot", testSound);
-    }
-    //end
+        */
 }

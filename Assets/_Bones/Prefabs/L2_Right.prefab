@@ -51,6 +51,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+  connecting: 0
 --- !u!33 &6012547502945824604
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -58,7 +59,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 492156262034071375}
-  m_Mesh: {fileID: -2432090755550338912, guid: b457d719879785b42a67f7bf5af490f0, type: 3}
+  m_Mesh: {fileID: -2432090755550338912, guid: 673b1fc602eb0c34ba802206501389c7, type: 3}
 --- !u!23 &576348723082755016
 MeshRenderer:
   m_ObjectHideFlags: 0

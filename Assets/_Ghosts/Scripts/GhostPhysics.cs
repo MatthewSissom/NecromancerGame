@@ -30,7 +30,7 @@ public class GhostPhysics : MonoBehaviour
     //angular velocity values
     [Header("Angular Velocity")]
     [SerializeField]
-    private float maxAngularVelocity;
+    private float maxAngularVelocity = default;
     [SerializeField]
     private float torque = 0;
     private Vector3 targetForward;
@@ -39,7 +39,7 @@ public class GhostPhysics : MonoBehaviour
     [Header("Stabilization")]
     private float targetHeight = 0;
     [SerializeField]
-    private float maxYSpeed;
+    private float maxYSpeed = default;
     [SerializeField]
     private float wobbleTollerance = 0;
     [SerializeField]

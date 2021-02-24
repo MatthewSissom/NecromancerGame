@@ -27,7 +27,7 @@ public class TouchProxy : MonoBehaviour
 
 //drag init code//
 //[SerializeField]
-//private float dragPower;
+//private float dragPower = default;
 //bool dragging = false;
 //Vector3 localDragPoint;
 

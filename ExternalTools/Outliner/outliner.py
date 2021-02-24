@@ -11,7 +11,8 @@ height = 0
 def outline(image, rad = 0.1, radWidth = 0.05, circleResolution = 20, ratio = 0):
     ctx = moderngl.create_standalone_context()
 
-    points = getRadPoints(rad - radWidth,rad,circleResolution)
+    yScale = image.size[0] / image.size[1]
+    points = getRadPoints(rad - radWidth,rad,circleResolution,yScale)
     totalPoints = len(points*2)
 
     pointsStr = "{"
@@ -72,7 +73,7 @@ def outline(image, rad = 0.1, radWidth = 0.05, circleResolution = 20, ratio = 0)
     vbo = ctx.buffer(vertices)
     vao = ctx.vertex_array(prog, [(vbo, "2f4", "in_vert"),])
 
-    fbo = ctx.simple_framebuffer((512, 512))
+    fbo = ctx.simple_framebuffer(image.size)
     fbo.use()
     fbo.clear(1, 1, 1, 1.0)
     vao.render()
@@ -81,7 +82,7 @@ def outline(image, rad = 0.1, radWidth = 0.05, circleResolution = 20, ratio = 0)
 
     return Image.frombytes('RGB', fbo.size, fbo.read(), 'raw', 'RGB', 0, -1)
 
-def getRadPoints(innerRad, outerRad, resolution):
+def getRadPoints(innerRad, outerRad, resolution,yScale):
     points = []
 
     #perform calculations as if outerRad == 1
@@ -91,7 +92,7 @@ def getRadPoints(innerRad, outerRad, resolution):
         for y in range(-resolution,resolution):
             dist = math.sqrt( math.pow(x/resolution,2) + math.pow(y/resolution,2))
             if dist <= 1 and dist >= adjustedInner:
-                points.append((x*outerRad,y*outerRad))  #scale values to propper size
+                points.append((x*outerRad,y*outerRad*yScale))  #scale values to propper size
     return points   
 
 

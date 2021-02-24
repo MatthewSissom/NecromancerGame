@@ -6,7 +6,7 @@ using UnityEngine;
 //players finger
 public class BoneMovingTouch : TouchProxy
 {
-    public Bone activeBone { private set; get; }
+    public IGrabbable activeObj { private set; get; }
     public BoneGroup.applyToAllType applyToActiveGroup;
 
     //the offset of the bone from the touch on the screen,
@@ -33,15 +33,17 @@ public class BoneMovingTouch : TouchProxy
 
     //angular velocity
     public float angularVelocity;
-    const float angularDrag = 10;
+    float angularDrag = 1;
+    float angularDragMult = 50;
+    bool dragMultApplied = false;
     Vector3 axisOfRotation;
 
     public void SetBone(Bone bone)
     {
-        if (!activeBone)
+        if (activeObj != null)
         {
-            activeBone = bone;
-            applyToActiveGroup = bone.Group.applyToAll;
+            activeObj = bone;
+            applyToActiveGroup = bone.Group.ApplyToAll;
         }
     }
 
@@ -59,12 +61,25 @@ public class BoneMovingTouch : TouchProxy
         angularVelocity = 0;
     }
 
+    public void ApplyAngularDragMult()
+    {
+        if(!dragMultApplied)
+            angularDrag *= angularDragMult;
+        dragMultApplied = true;
+    }
+    public void RemoveAngularDragMult()
+    {
+        if(dragMultApplied)
+            angularDrag /= angularDragMult;
+        dragMultApplied = false;
+    }
+
     protected virtual void OnTriggerEnter(Collider other)
     {
         Bone b = other.GetComponentInParent<Bone>();
-        if (b)
+        if (b && !b.connecting)
         {
-            b.PickedUp();
+            (b as IGrabbable).PickedUp();
             SetBone(b);
             //touchLights.Play();
         }
@@ -73,14 +88,14 @@ public class BoneMovingTouch : TouchProxy
     // Update is called once per frame
     void Update()
     {
-        if (activeBone)
+        if (activeObj != null)
         {
             //-move the active object to the proxy-//
 
             const float maxVelocity = 7.0f;
             const float baseMult = 20;
             //find movement vector
-            Vector3 toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
+            Vector3 toProxy = (transform.position + offset - activeObj.transform.root.position) * baseMult;
             //move straight up if far away from the proxy
             //if (toProxy.y > heightThreshold)
             //{
@@ -98,7 +113,7 @@ public class BoneMovingTouch : TouchProxy
 
             applyToActiveGroup((Bone toApply, FunctionArgs e) =>
             {
-                toApply.transform.RotateAround(activeBone.transform.root.position, axisOfRotation, angularVelocity*Time.deltaTime);
+                toApply.transform.RotateAround(activeObj.transform.root.position, axisOfRotation, angularVelocity*Time.deltaTime);
             });
             angularVelocity -= Mathf.Sign(angularVelocity) * Mathf.Min(angularDrag * Time.deltaTime, Mathf.Abs(angularVelocity));
         }
@@ -113,7 +128,7 @@ public class BoneMovingTouch : TouchProxy
     // Start is called before the first frame update
     void Awake()
     {
-        activeBone = null;
+        activeObj = null;
         myVolume = gameObject.GetComponent<BoxCollider>();
         lightTransform = ParticleManager.CreateEffect("TouchLight", transform.position);
         touchLights = lightTransform.GetComponent<ParticleSystem>();
@@ -122,7 +137,7 @@ public class BoneMovingTouch : TouchProxy
 
     public void OnEnable()
     {
-        activeBone = null;
+        activeObj = null;
         radMult = .1f;
     }
 
@@ -133,9 +148,9 @@ public class BoneMovingTouch : TouchProxy
         //touchLights.Stop();
         angularVelocity = 0;
 
-        if (activeBone)
+        if (activeObj != null)
         {
-            activeBone.Dropped();
+            activeObj.Dropped();
         }
     }
 }
