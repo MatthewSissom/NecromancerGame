@@ -6,11 +6,11 @@ using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine.SceneManagement;
 
-[EditorTool("Table Axis Editor",typeof(TableConnectionArea))]
-public class TableConnectionAreaAxisTool : EditorTool
+[EditorTool("Bone Axis Editor",typeof(Bone))]
+public class BoneAxisTool : EditorTool
 {
     //bone data
-    TableConnectionArea script;
+    Bone script;
     Transform boneTrans;
     BoneAxis savedAxies;
 
@@ -31,14 +31,14 @@ public class TableConnectionAreaAxisTool : EditorTool
 
     //saving / loading values
     float timeSaved;
-    const string boneAxiesPath = "Assets/_Bones/ScriptableObjects/TableAxies.asset";
-    const string backUpPath = "Assets/_Bones/ScriptableObjects/TableAxiesBackups/";
+    const string boneAxiesPath = "Assets/_Bones/ScriptableObjects/BoneAxis.asset";
+    const string backUpPath = "Assets/_Bones/ScriptableObjects/BoneAxisBackups/";
 
     //set the active manipulator and it's compliment
     private void SetActiveManipulator(int index)
     {
         activeManipulator = index;
-        activeManipulatorCompliment = Mathf.FloorToInt(index / 2) * 2 + (index + 1) % 2;
+        activeManipulatorCompliment = savedAxies.GetComplimentIndex(index);
     }
 
     private void OnEnable()
@@ -54,7 +54,7 @@ public class TableConnectionAreaAxisTool : EditorTool
         EditorTools.activeToolChanging += OnActiveToolWillChange;
         Selection.selectionChanged += OnSelcecionChange;
 
-        Load(target as TableConnectionArea);
+        Load(target as Bone);
     }
 
     private void OnDisable()
@@ -86,14 +86,14 @@ public class TableConnectionAreaAxisTool : EditorTool
         ResetTool();
     }
 
-    void Save(TableConnectionArea toSave)
+    void Save(Bone toSave)
     {
         if (!toSave)
             return;
         savedAxies[toSave.gameObject.name] = axisManipulators;
     }
 
-    void Load(TableConnectionArea toLoad)
+    void Load(Bone toLoad)
     {
         if (!toLoad)
             return;
@@ -105,9 +105,7 @@ public class TableConnectionAreaAxisTool : EditorTool
 
     void ResetTool()
     {
-        TableConnectionArea newTarget = target as TableConnectionArea;
-        if (!newTarget)
-            return;
+        Bone newTarget = target as Bone;
 
         if (script == null)
             Load(newTarget);
@@ -333,11 +331,10 @@ public class TableConnectionAreaAxisTool : EditorTool
             return;
         }
 
-        //reset time saved
-        timeSaved = Time.realtimeSinceStartup;
         //create a copy of the scriptable object as a backup
         string fileName = DateTime.Now.ToString("MM_dd_hh_mm_Backup") + ".asset";
         AssetDatabase.CopyAsset(boneAxiesPath, backUpPath + fileName);
+        timeSaved = Time.realtimeSinceStartup;
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
 

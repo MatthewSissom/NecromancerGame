@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6693146649023034791}
   - component: {fileID: 5533974619486334172}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -54,7 +54,7 @@ GameObject:
   m_Component:
   - component: {fileID: 551492142800286876}
   - component: {fileID: 2504695803724538355}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -103,7 +103,7 @@ GameObject:
   - component: {fileID: -2838464781552824879}
   - component: {fileID: 5835177830141482757}
   - component: {fileID: 4075549635053651573}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: L3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,6 +188,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
   connecting: 0
+  axisKey: L3
 --- !u!54 &5835177830141482757
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -226,7 +227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5607841767656567319}
   - component: {fileID: 1726190092759802851}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

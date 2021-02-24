@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5892310461668372689}
   - component: {fileID: 8471900082739647750}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 6024971659323131173}
   - component: {fileID: -468963269324860452}
   - component: {fileID: -260874421875797936}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pelvis
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -73,14 +73,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3654807093091182846}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.2233717, y: 3.0483599, z: -19.0037}
+  m_LocalRotation: {x: 0.331128, y: -0, z: -0, w: 0.9435859}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.033, y: 0.033, z: 0.033}
   m_Children:
   - {fileID: 421551558924591372}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 38.675003, y: 0, z: 0}
 --- !u!33 &1747900916929304795
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -141,6 +141,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+  connecting: 0
+  axisKey: Pelvis
 --- !u!54 &-468963269324860452
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -178,7 +180,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 421551558924591372}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Axis
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3799115970356330723}
   - component: {fileID: 439076485762543346}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -257,7 +259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6763252209644826636}
   - component: {fileID: 7785496413622773444}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -301,7 +303,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8697785685037481615}
   - component: {fileID: 1177487446339957099}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

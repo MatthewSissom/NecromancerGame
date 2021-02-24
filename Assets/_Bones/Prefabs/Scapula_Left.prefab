@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1082238621909519211}
   - component: {fileID: 551972911601380490}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6491083694070727547}
   - component: {fileID: 1673392363503071807}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7170940101726760421}
   - component: {fileID: 5507987987526854927}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,7 +143,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8412448987002944831}
   - component: {fileID: 2248077674395095157}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 5538400811469072156}
   - component: {fileID: 4209681084750312226}
   - component: {fileID: 1561652368881444450}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Scapula_Left
   m_TagString: Bone
   m_Icon: {fileID: 0}
@@ -277,6 +277,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+  connecting: 0
+  axisKey: Scapula_Left
 --- !u!54 &4209681084750312226
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -315,7 +317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 503475312564195181}
   - component: {fileID: 700331187599579063}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: GameObject (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
