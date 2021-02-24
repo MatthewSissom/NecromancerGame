@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Bone
   - Horizontal
+  - Root
   layers:
   - Default
   - TransparentFX
