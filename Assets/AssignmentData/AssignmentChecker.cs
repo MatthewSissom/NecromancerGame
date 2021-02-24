@@ -4,43 +4,38 @@ using UnityEngine;
 
 public class AssignmentChecker : MonoBehaviour
 {
-    // Loops through the table connection areas on a gameObject and returns true/false if they have bones
-    private bool GetBoneData(Transform node)
+    public AssignementDataBase currentAssignment;   // Current assignment details
+    private List<Bone> bones;                       // List of bones present at end of construction phase
+    private bool success;                           // Success of current assignment
+
+    private void AssignmentInit()
     {
-        // Get list of bones from a table connection area
-        List<Bone> bones = GetComponent<TableConnectionArea>().GetAllBones();
-
-        // set hasBones to true/false if there are bones in the table connection area
-        bool hasBones = bones != null && bones.Count > 0;
-
-        // loop through children of the parent node and get bone data from them
-        foreach (Transform child in node.transform)
-        {
-            hasBones = GetBoneData(child) || hasBones;
-        }
-
-        // Display the bone in colsode log for testing purposes
-        foreach (Bone bone in bones)
-        {
-            Debug.Log("Found Bone - " + bone);
-        }
-
-        // return hasBones for recursive search purposes
-        return hasBones;
+        bones = new List<Bone>();
+        success = false;
     }
+
+
 
     // Depth First search of a parent node
     public void DFSearch(Transform parent)
     {
+        //Debug.Log("Searching Depth");
+
         // Check if there is table connection area component 
         if (parent.GetComponent<TableConnectionArea>() != null)
         {
-            // Get bone data if there is a table connection area
-            GetBoneData(parent);
+            // Get list of bones from a table connection area
+            List<Bone> bones = parent.GetComponent<TableConnectionArea>().GetAllBones();
+
+            // Display the bone in colsode log for testing purposes
+            foreach (Bone bone in bones)
+            {
+                Debug.Log("Found Bone - " + bone);
+            }
         }
 
         // Loop trhough each child of the parent node
-        foreach (Transform child in parent)
+        foreach (Transform child in parent.transform)
         {
             // If a child has a child itself, search more recursively
             if (child.childCount > 0)
@@ -51,6 +46,15 @@ public class AssignmentChecker : MonoBehaviour
             {
                 return;
             }
+        }
+    }
+
+    // Checks if the bones at the end of construction phase satisfy the current assignment
+    public void AssignmentCheck()
+    {
+        foreach (AssignementDataBase.LimbRequrementData limbRequirements in currentAssignment.limbRequirements)
+        {
+
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using RootMotion.FinalIK;
+//using RootMotion.FinalIK;
 
 public class BoneAssembler : State
 {
@@ -17,8 +17,8 @@ public class BoneAssembler : State
     //dictionary of joints in the armature that correspond to connecction areas on the table
     Dictionary<TableConnectionArea,Transform> joints;
 
-    FABRIKRoot mFABRIKRoot;
-    List<FABRIK> chains;
+    //FABRIKRoot mFABRIKRoot;
+    //List<FABRIK> chains;
 
     //total number of joints, conneciton areas, and targets
     int count;
@@ -39,8 +39,8 @@ public class BoneAssembler : State
     {
         connectionAreas = new List<TableConnectionArea>();
         joints = new Dictionary<TableConnectionArea, Transform>();
-        mFABRIKRoot = emptyArmature.GetComponentInChildren<FABRIKRoot>();
-        chains = new List<FABRIK>();
+        //mFABRIKRoot = emptyArmature.GetComponentInChildren<FABRIKRoot>();
+        //chains = new List<FABRIK>();
 
         //Queue for bredth first search. Both armature and connection transforms are stored in the same structure
         //values should always be enqueued / dequeued in pairs with aramature nodes coming first.
@@ -76,9 +76,9 @@ public class BoneAssembler : State
             connectionAreas.Add(area);
             joints.Add(area,armatureNode);
 
-            FABRIK chain = armatureNode.GetComponent<FABRIK>();
-            if (chain)
-                chains.Add(chain);
+            //FABRIK chain = armatureNode.GetComponent<FABRIK>();
+            //if (chain)
+            //    chains.Add(chain);
         }
 
         //check root values and search the entire tree
@@ -403,20 +403,20 @@ public class BoneAssembler : State
 
     void RebuildIKChains()
     {
-        foreach (var chain in mFABRIKRoot.solver.chains)
-        {
-            var bones = chain.ik.solver.bones;
-            Transform[] transforms = new Transform[bones.Length];
-            for(int i = 0; i < bones.Length; i++)
-            {
-                transforms[i] = bones[i].transform;
-            }
-            chain.ik.solver.SetChain(transforms, chain.ik.solver.GetRoot());
-        }
+        //foreach (var chain in mFABRIKRoot.solver.chains)
+        //{
+        //    var bones = chain.ik.solver.bones;
+        //    Transform[] transforms = new Transform[bones.Length];
+        //    for(int i = 0; i < bones.Length; i++)
+        //    {
+        //        transforms[i] = bones[i].transform;
+        //    }
+        //    chain.ik.solver.SetChain(transforms, chain.ik.solver.GetRoot());
+        //}
 
-        mFABRIKRoot.enabled = true;
-        foreach (var chain in chains)
-            chain.enabled = true;
+        //mFABRIKRoot.enabled = true;
+        //foreach (var chain in chains)
+        //    chain.enabled = true;
     }
 }
 

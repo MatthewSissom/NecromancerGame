@@ -42,16 +42,16 @@ public class GameManager : StateManagerBase
         }
 
         // Testing assignment checker
-        GetComponent<AssignmentChecker>().DFSearch(GameObject.FindGameObjectWithTag("Root").transform);
+        gameObject.GetComponent<AssignmentChecker>().DFSearch(GameObject.FindGameObjectWithTag("Root").transform);
 
-        yield return SetState("BoneAssembler");
-        yield return SetState("CatWalkStart");
-        yield return SetState("TestCatState");
-        yield return SetState("CatWalkEnd");
+        //yield return SetState("BoneAssembler");
+        //yield return SetState("CatWalkStart");
+        //yield return SetState("TestCatState");
+        //yield return SetState("CatWalkEnd");
 
-        //yield return SetState("CalculateScore");
+        yield return SetState("CalculateScore");
 
-        yield return SetState("GameCleanUp");
+        //yield return SetState("GameCleanUp");
 
         yield break;
     }
