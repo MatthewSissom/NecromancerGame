@@ -3640,7 +3640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Tail
+  axisKey: Tail (1)
 --- !u!114 &324573099616727251
 MonoBehaviour:
   m_ObjectHideFlags: 0

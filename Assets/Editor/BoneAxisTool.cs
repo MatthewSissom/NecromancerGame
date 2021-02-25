@@ -98,7 +98,10 @@ public class BoneAxisTool : EditorTool
         if (!toLoad)
             return;
         script = toLoad;
-        axisManipulators = savedAxies[script.gameObject.name];
+        if(toLoad.AxisKey != null && toLoad.AxisKey != "")
+            axisManipulators = savedAxies[script.AxisKey];
+        else
+            axisManipulators = savedAxies[script.gameObject.name];
         if(axisManipulators == null)
             axisManipulators = new List<Vector3>();
     }
