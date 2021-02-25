@@ -17,6 +17,12 @@ public class PartialScore
         return "Has" + (value > 0 ? " a " : " no ") + name + " , +" + value.ToString() + "!\n";
     }
 
+    // Will - For only printing out text, no score values
+    public string TextOnly()
+    {
+        return name + "\n";
+    }
+
     public PartialScore(string name, float value = 0, string text = "")
     {
         this.name = name;
@@ -25,5 +31,12 @@ public class PartialScore
             this.text = text;
         else
             this.text = Text();
+    }
+
+    // Will - new contructor for only printing text
+    public PartialScore(string name)
+    {
+        this.name = name;
+        this.text = TextOnly();
     }
 }

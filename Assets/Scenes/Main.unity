@@ -232,7 +232,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 44981199}
-  - component: {fileID: 44981198}
   - component: {fileID: 44981200}
   m_Layer: 0
   m_Name: Audio
@@ -241,18 +240,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &44981198
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 44981197}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0a94dd50d5825e4ca5ef5f9d6611d56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &44981199
 Transform:
   m_ObjectHideFlags: 0
@@ -2245,6 +2232,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Untagged
       objectReference: {fileID: 0}
+    - target: {fileID: 3882849666716835170, guid: 455d4126656949e6adf7e68e46d498f5,
+        type: 3}
+      propertyPath: assignmentChecker
+      value: 
+      objectReference: {fileID: 1416826189}
     - target: {fileID: 4420778679248569665, guid: 455d4126656949e6adf7e68e46d498f5,
         type: 3}
       propertyPath: m_Enabled

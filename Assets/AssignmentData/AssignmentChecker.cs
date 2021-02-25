@@ -8,6 +8,9 @@ public class AssignmentChecker : MonoBehaviour
     private List<Bone> bones;                       // List of bones present at end of construction phase
     private bool success;                           // Success of current assignment
 
+    public bool Success
+    { get { return success; } }
+
     public void AssignmentInit()
     {
         bones = new List<Bone>();
