@@ -8,13 +8,11 @@ public class AssignmentChecker : MonoBehaviour
     private List<Bone> bones;                       // List of bones present at end of construction phase
     private bool success;                           // Success of current assignment
 
-    private void AssignmentInit()
+    public void AssignmentInit()
     {
         bones = new List<Bone>();
         success = false;
     }
-
-
 
     // Depth First search of a parent node
     public void DFSearch(Transform parent)
@@ -25,12 +23,13 @@ public class AssignmentChecker : MonoBehaviour
         if (parent.GetComponent<TableConnectionArea>() != null)
         {
             // Get list of bones from a table connection area
-            List<Bone> bones = parent.GetComponent<TableConnectionArea>().GetAllBones();
+            List<Bone> tableBones = parent.GetComponent<TableConnectionArea>().GetAllBones();
 
             // Display the bone in colsode log for testing purposes
-            foreach (Bone bone in bones)
+            foreach (Bone bone in tableBones)
             {
-                Debug.Log("Found Bone - " + bone);
+                bones.Add(bone);
+                //Debug.Log("Found Bone - " + bone);
             }
         }
 
@@ -52,9 +51,25 @@ public class AssignmentChecker : MonoBehaviour
     // Checks if the bones at the end of construction phase satisfy the current assignment
     public void AssignmentCheck()
     {
-        foreach (AssignementDataBase.LimbRequrementData limbRequirements in currentAssignment.limbRequirements)
+        foreach (AssignementDataBase.LimbRequrementData limbRequrement in currentAssignment.limbRequirements)
         {
+            foreach (Bone bone in bones)
+            {
+                string boneName = bone.ToString();
+                string limbReqName = limbRequrement.currentSelectedLimb.ToString() + "(Bone)";
 
+                Debug.Log("Bone found - " + boneName);
+
+                Debug.Log("test - " + limbReqName);
+
+                if (limbReqName == boneName)
+                {
+                    success = true;
+                    break;
+                }
+            }
         }
+
+        Debug.Log("Assignement Success = " + success);
     }
 }

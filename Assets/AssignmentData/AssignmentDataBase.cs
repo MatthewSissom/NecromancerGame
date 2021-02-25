@@ -26,6 +26,7 @@ public class AssignementDataBase : ScriptableObject
             Arm,
             Rib,
             Skull,
+            Neck,
             Tail,
             Spine
         }

@@ -42,7 +42,9 @@ public class GameManager : StateManagerBase
         }
 
         // Testing assignment checker
+        gameObject.GetComponent<AssignmentChecker>().AssignmentInit();
         gameObject.GetComponent<AssignmentChecker>().DFSearch(GameObject.FindGameObjectWithTag("Root").transform);
+        gameObject.GetComponent<AssignmentChecker>().AssignmentCheck();
 
         //yield return SetState("BoneAssembler");
         //yield return SetState("CatWalkStart");

@@ -10,13 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: AssignmentTest
+  m_Name: TestAssignment
   m_EditorClassIdentifier: Assembly-CSharp::AssignementDataBase
-  assignmentName: 
+  assignmentName: testAssignment
   assignmentReward: {fileID: 0}
   limbRequirements:
-  - currentSelectedLimb: 0
+  - currentSelectedLimb: 4
     excludeLimb: 0
-  themeRequirements:
-  - currentSelectedTheme: 0
-    excludeTheme: 0
+  themeRequirements: []
