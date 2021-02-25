@@ -56,11 +56,11 @@ public class AssignmentChecker : MonoBehaviour
             foreach (Bone bone in bones)
             {
                 string boneName = bone.ToString();
-                string limbReqName = limbRequrement.currentSelectedLimb.ToString() + "(Bone)";
+                string limbReqName = limbRequrement.currentSelectedLimb.ToString() + " (Bone)";
 
-                Debug.Log("Bone found - " + boneName);
+                //Debug.Log("Bone found - " + boneName);
 
-                Debug.Log("test - " + limbReqName);
+                //Debug.Log("test - " + limbReqName);
 
                 if (limbReqName == boneName)
                 {
@@ -70,6 +70,6 @@ public class AssignmentChecker : MonoBehaviour
             }
         }
 
-        Debug.Log("Assignement Success = " + success);
+        //Debug.Log("Assignement Success = " + success);
     }
 }
