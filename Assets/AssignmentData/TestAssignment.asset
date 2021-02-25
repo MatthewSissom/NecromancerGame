@@ -15,6 +15,6 @@ MonoBehaviour:
   assignmentName: testAssignment
   assignmentReward: {fileID: 0}
   limbRequirements:
-  - currentSelectedLimb: 4
+  - currentSelectedLimb: 8
     excludeLimb: 0
   themeRequirements: []

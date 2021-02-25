@@ -28,7 +28,9 @@ public class AssignementDataBase : ScriptableObject
             Skull,
             Neck,
             Tail,
-            Spine
+            Spine,
+            Paw,
+            Model
         }
     }
 

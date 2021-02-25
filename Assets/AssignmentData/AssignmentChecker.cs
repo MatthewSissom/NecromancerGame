@@ -56,19 +56,24 @@ public class AssignmentChecker : MonoBehaviour
     {
         foreach (AssignementDataBase.LimbRequrementData limbRequrement in currentAssignment.limbRequirements)
         {
+            string limbReqName = limbRequrement.currentSelectedLimb.ToString() + " (Bone)";
+            Debug.Log("Searching for - " + limbReqName);
+
             foreach (Bone bone in bones)
             {
                 string boneName = bone.ToString();
-                string limbReqName = limbRequrement.currentSelectedLimb.ToString() + " (Bone)";
 
-                //Debug.Log("Bone found - " + boneName);
-
-                //Debug.Log("test - " + limbReqName);
+                Debug.Log("Bone found - " + boneName);
 
                 if (limbReqName == boneName)
                 {
+                    Debug.Log("FOUND BONE");
                     success = true;
                     break;
+                }
+                else
+                {
+                    Debug.Log("No bone...");
                 }
             }
         }

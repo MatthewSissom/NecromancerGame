@@ -8899,6 +8899,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 399829937056017106, guid: 455d4126656949e6adf7e68e46d498f5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Root
+      objectReference: {fileID: 0}
     - target: {fileID: 559537520518874570, guid: 455d4126656949e6adf7e68e46d498f5,
         type: 3}
       propertyPath: m_Name
@@ -8974,6 +8979,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3882849666716835170, guid: 455d4126656949e6adf7e68e46d498f5,
+        type: 3}
+      propertyPath: assignmentChecker
+      value: 
+      objectReference: {fileID: 1416826189}
     - target: {fileID: 4420778679248569665, guid: 455d4126656949e6adf7e68e46d498f5,
         type: 3}
       propertyPath: m_Enabled
@@ -10352,6 +10362,7 @@ GameObject:
   - component: {fileID: 1416826188}
   - component: {fileID: 1416826187}
   - component: {fileID: 1416826190}
+  - component: {fileID: 1416826189}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -10462,6 +10473,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e79c58b59ea71f4dba50af3881ea17d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1416826189
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416826180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f280f47454b840646bb806e655d1bd23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentAssignment: {fileID: 11400000, guid: 65b1e6b37795e49459a837c07ef15c98, type: 2}
 --- !u!114 &1416826190
 MonoBehaviour:
   m_ObjectHideFlags: 0
