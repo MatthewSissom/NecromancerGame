@@ -422,7 +422,7 @@ public class BoneAssembler : State
         {
             var bones = chain.ik.solver.bones;
             Transform[] transforms = new Transform[bones.Length];
-            for(int i = 0; i < bones.Length; i++)
+            for (int i = 0; i < bones.Length; i++)
             {
                 transforms[i] = bones[i].transform;
             }

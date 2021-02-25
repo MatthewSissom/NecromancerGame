@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Plugins/FMOD/platforms/android/src/PlatformAndroid.cs.meta
+guid: e87d0075e4ac4ff469980464a3599636
+=======
 guid: 736a5e95bc8883a48b98a734078c01e6
+>>>>>>> master:Assets/AssignmentData/AssignmentDataBase.cs.meta
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2

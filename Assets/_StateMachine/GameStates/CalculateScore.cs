@@ -27,6 +27,8 @@ public class CalculateScore : State
 
     public GameObject tempMarker;
 
+    public AssignmentChecker assignmentChecker;
+
     bool RayAtPixelLocation(Vector2 location)
     {
         return Physics.Raycast(
@@ -41,40 +43,55 @@ public class CalculateScore : State
     {
         Begin();
 
-        //create circles of pixels for each location
-        for (int i = 0; i < names.Count; i++)
+        ////create circles of pixels for each location
+        //for (int i = 0; i < names.Count; i++)
+        //{
+        //    foreach (Vector2 location in specialCircles[names[i]])
+        //    {
+        //        if (RayAtPixelLocation(location))
+        //        {
+        //            ScoreManager.Instance.Add(new PartialScore(names[i], value[i]));
+        //            break;
+        //        }
+        //    }
+        //}
+
+        //yield return new WaitForEndOfFrame();
+
+        ////check for bones outside the outline
+        //int outCount = 0;
+        //for (int x = 0; x < imageDimensions.x; x += step)
+        //{
+        //    for(int y = 0; y < imageDimensions.y; y += step)
+        //    {
+        //        if (scoreAreaImage.GetPixel(x, y) == Color.white && RayAtPixelLocation(new Vector2(x, y)))
+        //            outCount++;
+        //    }
+        //}
+
+        ////normalize the raw count by accounting for step size
+        //outCount = (int)(outCount * step * step / (imageDimensions.x * imageDimensions.y) * maxOutsideOutlinePenalty);
+
+        //if (outCount > 0)
+        //    ScoreManager.Instance.Add(new PartialScore("outPenalty", -outCount, "Bones outside the line " + (-outCount).ToString() + "\n"));
+
+        //ScoreManager.Instance.Add(BoneManager.Instance.ConnectionScore());
+        //ScoreManager.Instance.Add(BoneManager.Instance.LostBones());
+
+        ScoreManager.Instance.Add(new PartialScore("Assignment: " + assignmentChecker.currentAssignment.assignmentName));
+
+        ScoreManager.Instance.Add(new PartialScore("Checking for:"));
+
+        foreach (AssignementDataBase.LimbRequrementData limbReqData in assignmentChecker.currentAssignment.limbRequirements)
         {
-            foreach (Vector2 location in specialCircles[names[i]])
-            {
-                if (RayAtPixelLocation(location))
-                {
-                    ScoreManager.Instance.Add(new PartialScore(names[i], value[i]));
-                    break;
-                }
-            }
+            ScoreManager.Instance.Add(new PartialScore(limbReqData.currentSelectedLimb.ToString()));
         }
 
-        yield return new WaitForEndOfFrame();
-        
-        //check for bones outside the outline
-        int outCount = 0;
-        for (int x = 0; x < imageDimensions.x; x += step)
-        {
-            for(int y = 0; y < imageDimensions.y; y += step)
-            {
-                if (scoreAreaImage.GetPixel(x, y) == Color.white && RayAtPixelLocation(new Vector2(x, y)))
-                    outCount++;
-            }
-        }
+        if (assignmentChecker.Success)
+            ScoreManager.Instance.Add(new PartialScore("Success!"));
+        else
+            ScoreManager.Instance.Add(new PartialScore("Fail..."));
 
-        //normalize the raw count by accounting for step size
-        outCount = (int)(outCount * step * step / (imageDimensions.x * imageDimensions.y) * maxOutsideOutlinePenalty);
-
-        if (outCount > 0)
-            ScoreManager.Instance.Add(new PartialScore("outPenalty", -outCount, "Bones outside the line " + (-outCount).ToString() + "\n"));
-
-        ScoreManager.Instance.Add(BoneManager.Instance.ConnectionScore());
-        ScoreManager.Instance.Add(BoneManager.Instance.LostBones());
 
         End();
         yield break;

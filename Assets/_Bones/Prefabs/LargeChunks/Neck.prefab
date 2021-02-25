@@ -439,7 +439,7 @@ GameObject:
   - component: {fileID: 5568454057991173761}
   m_Layer: 0
   m_Name: Neck
-  m_TagString: Bone
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -479,6 +479,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
   connecting: 0
+  axisKey: 
 --- !u!54 &2715853301997769405
 Rigidbody:
   m_ObjectHideFlags: 0

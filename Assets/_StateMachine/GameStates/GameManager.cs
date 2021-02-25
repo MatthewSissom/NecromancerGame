@@ -40,14 +40,20 @@ public class GameManager : StateManagerBase
             yield return SetState("TableTrans");
             yield return new WaitForSeconds(GhostManager.Instance.timeBetweenShipments);
         }
-        yield return SetState("BoneAssembler");
-        yield return SetState("CatWalkStart");
-        yield return SetState("TestCatState");
-        yield return SetState("CatWalkEnd");
 
-        //yield return SetState("CalculateScore");
+        // Testing assignment checker
+        gameObject.GetComponent<AssignmentChecker>().AssignmentInit();
+        gameObject.GetComponent<AssignmentChecker>().DFSearch(GameObject.FindGameObjectWithTag("Root").transform);
+        gameObject.GetComponent<AssignmentChecker>().AssignmentCheck();
 
-        yield return SetState("GameCleanUp");
+        //yield return SetState("BoneAssembler");
+        //yield return SetState("CatWalkStart");
+        //yield return SetState("TestCatState");
+        //yield return SetState("CatWalkEnd");
+
+        yield return SetState("CalculateScore");
+
+        //yield return SetState("GameCleanUp");
 
         yield break;
     }
