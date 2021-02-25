@@ -10,13 +10,17 @@ public class TableVoxel : MonoBehaviour
     {
         //all tableVoxels are on the boneTrigger layer which only collides with bones
         //so no checks need to be performed
-        parent.AddCollision(other.transform.root.GetComponent<Bone>());
+        Bone temp = other.transform.root.GetComponent<Bone>();
+        if(temp)
+            parent.AddCollision(temp);
     }
 
     private void OnTriggerExit(Collider other)
     {
         //all tableVoxels are on the boneTrigger layer which only collides with bones
         //so no checks need to be performed
-        parent.RemoveCollision(other.transform.root.GetComponent<Bone>());
+        Bone temp = other.transform.root.GetComponent<Bone>();
+        if (temp)
+            parent.RemoveCollision(temp);
     }
 }

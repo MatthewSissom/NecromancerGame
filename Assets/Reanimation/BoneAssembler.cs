@@ -121,6 +121,7 @@ public class BoneAssembler : State
         {
             connectionArea = connectionAreas[i];
             armatureNode = joints[connectionArea];
+
             //init vars for the group of bones moving in to the skeleton
             timer = 0;
             bones = connectionArea.GetAllBones();
@@ -201,17 +202,13 @@ public class BoneAssembler : State
                 // Ex. AudioManager.Instance.PlaySound(b.theme);
                 AudioManager.Instance.PlaySound("normal");
             }
+        yield return new WaitForSeconds(0.2f);
+
         }
 
-        Debug.Break();
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(1.5f);
 
         RebuildIKChains();
-
-        yield return new WaitForSeconds(1);
-
-        Debug.Break();
-
         End();
         yield break;
     }

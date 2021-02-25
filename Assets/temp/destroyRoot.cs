@@ -16,18 +16,27 @@ public class destroyRoot : MonoBehaviour
             skips--;
             return;
         }
-
-        while (transform.childCount != 0)
+        IEnumerator Routine()
         {
-            transform.GetChild(0).gameObject.SetActive(true);
-            transform.GetChild(0).parent = null;
+            while (transform.childCount != 0)
+            {
+                int count = transform.childCount;
+                while (count > 0)
+                {
+                    int index = Random.Range(0, count);
+                    transform.GetChild(index).gameObject.SetActive(true);
+                    transform.GetChild(index).parent = null;
+                    count = transform.childCount;
+                    yield return new WaitForSeconds(0.2f);
+                }
+                yield return null;
+            }
         }
-
-        //Destroy(gameObject);
+        StartCoroutine(Routine());
     }
 
     private void Start()
     {
-        GameManager.Instance.AddEventMethod(activateOnState, "Begin", RemoveChildren);
+        GameManager.Instance.AddEventMethod(activateOnState, "End", RemoveChildren);
     }
 }

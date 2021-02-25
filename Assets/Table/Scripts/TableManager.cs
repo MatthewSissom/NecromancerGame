@@ -100,7 +100,7 @@ public class TableManager : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.AddEventMethod("TableTrans", "Begin", NextShipment);
+        GameManager.Instance.AddEventMethod("TableTrans", "End", NextShipment);
     }
 
 
