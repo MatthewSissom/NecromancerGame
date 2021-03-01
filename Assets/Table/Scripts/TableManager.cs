@@ -81,12 +81,14 @@ public class TableManager : MonoBehaviour
     {
         void ToggleGroupActive(int deliveryNumber)
         {
-            if (shipmentNumber < 0 || shipmentNumber == deliveryAreas.Count)
+            if (shipmentNumber < 0 || shipmentNumber >= deliveryAreas.Count)
                 return;
             //toggle areas
             foreach (TableConnectionArea area in deliveryAreas[deliveryNumber])
             {
-                area.gameObject.SetActive(!area.isActiveAndEnabled);
+                bool isActive = !area.isActiveAndEnabled;
+                area.gameObject.SetActive(isActive);
+                area.ApplyToAll((Bone b, FunctionArgs args) => { b.connecting = isActive; });
             }
             //toggle outline
             outlines[deliveryNumber].enabled = !outlines[deliveryNumber].enabled;

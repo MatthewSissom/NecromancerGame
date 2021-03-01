@@ -119,7 +119,7 @@ public class GhostManager : State
         // Plays sound when cats fist spawn for bone shipment
         AudioManager.Instance.PlaySound("catTest");
 
-        yield return new WaitForSeconds(timePerShipment);
+        //yield return new WaitForSeconds(timePerShipment);
 
         RecallGhosts(timeBetweenShipments - 2);
         yield break;

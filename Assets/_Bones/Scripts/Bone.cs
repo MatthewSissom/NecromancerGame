@@ -7,6 +7,7 @@ public class Bone : MonoBehaviour, IGrabbable
     //physics
     const int physicsLayer = 10;
     protected Rigidbody rb;
+    protected static BoneCollisionHandler collisionHandler;
 
     //bone group, used to store relationships
     //between bones
@@ -34,6 +35,8 @@ public class Bone : MonoBehaviour, IGrabbable
     {
         //register w/ boneManager
         BoneManager.Instance.Register(this);
+        if(collisionHandler == null)
+            collisionHandler = BoneManager.Collision;
         group = gameObject.GetComponent<BoneGroup>();
         //before collisions groups will always have a unique ID which the bone can use as it's own
         ID = group.GroupID;
@@ -50,7 +53,7 @@ public class Bone : MonoBehaviour, IGrabbable
         }
         mGhost = null;
         group.ApplyToAll((Bone b, FunctionArgs a)=> { b.rb.freezeRotation = true; b.rb.useGravity = false;});
-        BoneManager.Instance.SetPhysicsLayer(this, physicsLayer,0.25f);
+        BoneManager.Collision.SetPhysicsLayer(this, physicsLayer);
     }
 
     void IGrabbable.Dropped()
@@ -70,78 +73,23 @@ public class Bone : MonoBehaviour, IGrabbable
         });
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
         
+    private void OnCollisionEnter(Collision collision)
+    {
+        collisionHandler.AddBoneCollision(this, collision);
     }
 
-        /*
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionExit(Collision collision)
     {
         if (collision.gameObject.CompareTag("Bone"))
         {
             Bone colliding = collision.gameObject.GetComponent<Bone>();
-            //if colliding with a bone and not in the same group already
-            //then connect the two bones together
-            if (
-                (connecting || colliding.connecting) 
-                && colliding && group.GroupID < colliding.group.GroupID
-            )
-            {
-                //---SFX---//
-                FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
-
-                //---Bone Connection---//
-
-                ////update group trees
-                //BoneGroup.CombineGroups(group, colliding.group);
-
-                ////get joint info from collision
-                //Vector3 jointWorldPoint;
-                //Vector3 jointDirection;
-                //if (collision.contactCount == 1)
-                //{
-                //    ContactPoint contact = collision.GetContact(0);
-                //    jointWorldPoint = contact.point;
-                //    jointDirection = contact.normal;
-                //}
-                //else
-                //{
-                //    jointWorldPoint = new Vector3();
-                //    jointDirection = new Vector3();
-                //    ContactPoint[] points = new ContactPoint[collision.contactCount];
-                //    collision.GetContacts(points);
-                //    foreach (ContactPoint c in points)
-                //    {
-                //        jointWorldPoint += c.point;
-                //        jointDirection += c.normal;
-                //    }
-                //    jointWorldPoint /= collision.contactCount;
-                //    jointDirection /= collision.contactCount;
-                //}
-
-                ////create joint
-                //SpringJoint newJoint = gameObject.AddComponent(typeof(SpringJoint)) as SpringJoint;
-                //newJoint.anchor = transform.InverseTransformPoint(jointWorldPoint);
-                //newJoint.connectedBody = colliding.Rb;
-                //newJoint.autoConfigureConnectedAnchor = false;
-                //newJoint.connectedAnchor = colliding.transform.InverseTransformPoint(jointWorldPoint);
-                //newJoint.spring = 500;
-                //newJoint.damper = 10;
-                //newJoint.minDistance = 0.0f;
-                //newJoint.maxDistance = .025f;
-                //newJoint.enableCollision = true;
-
-                ////create particle effect
-                //ParticleManager.CreateEffect("CombineFX", jointWorldPoint);
-            }
-        }
-        else if (collision.gameObject.CompareTag("Horizontal"))
-        {
-            rb.velocity = new Vector3(0,rb.velocity.y,0);
-            rb.gameObject.GetComponent<CustomGravity>().enabled = false;
-            rb.useGravity = true;
+            //have the bone with the lower group id send the message to the 
+            //handler to avoid redundant messages
+            //bones within the same group will not send collision messages
+            if (colliding && group.GroupID < colliding.group.GroupID)
+                collisionHandler.RemoveBoneCollision(this, colliding);
         }
     }
-        */
+
 }

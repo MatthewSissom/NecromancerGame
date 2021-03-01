@@ -20,25 +20,11 @@ public class TableConnectionArea : BoneGroup
         return collisionCounts[bone];
     }
 
-    public void ConnectBone(Bone bone)
-    {
-        bone.Rb.isKinematic = true;
-        bone.connecting = true;
-        var gatherer = bone.gameObject.GetComponent<RendererGatherer>();
-        if(gatherer) gatherer.ChangeMat();
-        //assume ownership of this bone
-        BoneManager.Instance.Release(bone);
-        CombineGroups(group, bone.Group, true);
-
-        // Plays a sound when bones attach to the table connection areas
-        AudioManager.Instance.PlaySound("normal");
-    }
-
     public void AddCollision(Bone bone)
     {
         if (!collisionCounts.ContainsKey(bone))
             collisionCounts.Add(bone, 0);
-        if(collisionCounts[bone] == 0)
+        if (collisionCounts[bone] == 0)
             NewCollision(bone);
         collisionCounts[bone]++;
     }
@@ -46,7 +32,7 @@ public class TableConnectionArea : BoneGroup
     public void RemoveCollision(Bone bone)
     {
         collisionCounts[bone]--;
-        if(collisionCounts[bone] == 0)
+        if (collisionCounts[bone] == 0)
         {
             EndedCollision(bone);
         }
@@ -54,12 +40,12 @@ public class TableConnectionArea : BoneGroup
 
     private void NewCollision(Bone bone)
     {
-        BoneManager.Instance.AddTableAreaCollision(bone, this);
+        BoneManager.Collision.AddTableAreaCollision(bone, this);
     }
 
     private void EndedCollision(Bone bone)
     {
-        BoneManager.Instance.RemoveTableAreaCollision(bone, this);
+        BoneManager.Collision.RemoveTableAreaCollision(bone, this);
     }
 
     protected override void Awake()
@@ -77,11 +63,17 @@ public class TableConnectionArea : BoneGroup
             if (tv) tv.parent = this;
 
             int children = toCheck.childCount;
-            for(int i = 0; i < children; i++)
+            for (int i = 0; i < children; i++)
             {
                 SetVoxelParent(toCheck.GetChild(i));
             }
         }
         SetVoxelParent(transform);
+    }
+
+    protected override void Start()
+    {
+        myID = BoneManager.Collision.Regester(this);
+        groupID = myID;
     }
 }

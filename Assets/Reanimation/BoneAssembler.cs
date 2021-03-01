@@ -30,9 +30,9 @@ public class BoneAssembler : State
 
     //axis data
     [SerializeField]
-    BoneAxis boneAxisDict;
+    BoneAxis boneAxisDict = default;
     [SerializeField]
-    BoneAxis tableAxisDict;
+    BoneAxis tableAxisDict = default;
 
     // Start is called before the first frame update
     void Start()
@@ -165,15 +165,22 @@ public class BoneAssembler : State
             }
 
             //move bones in to position over time
+            Vector3 distMoved = new Vector3();
             while (timer < timePerBone)
             {
                 timer += Time.deltaTime;
-                Vector3 offset = totalOffset * (Time.deltaTime / timePerBone);
+                Vector3 offset = totalOffset * Time.deltaTime / timePerBone;
+                distMoved += offset;
                 foreach (Bone b in bones)
                 {
                     b.transform.position += offset;
                 }
                 yield return null;
+            }
+            //ensure all bones end at propper location
+            foreach (Bone b in bones)
+            {
+                b.transform.position += totalOffset - distMoved;
             }
 
             //if the bone is part of a chain move it's joint position to one end of the bone axis

@@ -6,6 +6,8 @@ using TMPro;
 public partial class BoneManager : MonoBehaviour
 {
     static public BoneManager Instance { get; private set; }
+    static public BoneCollisionHandler Collision { get; private set; }
+
 
     private LinkedList<Bone> activeBones;
     private LinkedList<Bone> deactivatedBones;
@@ -27,17 +29,22 @@ public partial class BoneManager : MonoBehaviour
         activeBones = new LinkedList<Bone>();
         deactivatedBones = new LinkedList<Bone>();
 
-        PhysicsInit();
+        Collision = new BoneCollisionHandler();
     }
 
-    public int GetNewID()
+    private void Update()
+    {
+        Collision.Update(Time.deltaTime);
+    }
+
+    public int GetNewGroupID()
     {
         return currentID++;
     }
 
     public void Register(Bone newBone)
     {
-        if(!newBone.GetComponent<BoneGroup>())
+        if (!newBone.GetComponent<BoneGroup>())
             newBone.gameObject.AddComponent(typeof(BoneGroup));
         activeBones.AddLast(newBone);
     }
@@ -56,7 +63,7 @@ public partial class BoneManager : MonoBehaviour
 
         heldBy.mBone = bone;
         bone.mGhost = heldBy;
-        SetPhysicsLayer(bone, 8);
+        Collision.SetPhysicsLayer(bone, 8);
         bone.Rb.freezeRotation = true;
 
         return bone;

@@ -14,7 +14,7 @@ public class BoneAxis : ScriptableObject
     [SerializeField]
     //work around for serialization, shouldn't be accessed directly in code
     //use axies instead if at all possible
-    List<AxisPair> axisPairs;
+    List<AxisPair> axisPairs = default;
 
     //holds all axis for a given bone, stored by it's name
     private Dictionary<string, List<Vector3>> axis;
@@ -80,10 +80,6 @@ public class BoneAxis : ScriptableObject
         }
         return worldAxis;
     }
-
-    #if UNITY_EDITOR
-    float timeSinceSave = -1;
-    #endif
 
     void ForceSerialization()
     {

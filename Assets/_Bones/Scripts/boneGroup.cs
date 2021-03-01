@@ -45,7 +45,7 @@ public class BoneGroup : MonoBehaviour
     // Start is called before the first frame update
     virtual protected void Start()
     {
-        myID = BoneManager.Instance.GetNewID();
+        myID = BoneManager.Instance.GetNewGroupID();
 
         groupID = myID;
 
