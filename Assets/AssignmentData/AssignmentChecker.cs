@@ -100,9 +100,9 @@ public class AssignmentChecker : MonoBehaviour
         }
 
         if (success)
-            ScoreManager.Instance.Add(new PartialScore("Passed Assignment!"));
+            ScoreManager.Instance.Add(new PartialScore("\n" + "Passed Assignment!"));
         else
-            ScoreManager.Instance.Add(new PartialScore("Failed Assignment..."));
+            ScoreManager.Instance.Add(new PartialScore("\n" + "Failed Assignment..."));
     }
 
     // Wrapper function for ease of access

@@ -40,7 +40,7 @@ public class MenuDisplayScore : State
             FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/UI/ChalkboardSFX");
         }
 
-        textBox.text = partialList + "\nTotal: " + totalScore.ToString();
+        //textBox.text = partialList + "\nTotal: " + totalScore.ToString();
 
         yield return new WaitUntil(() => { return buttonName == "Main"; });
         MenuManager.Instance.GoToMenu(buttonName);
