@@ -12,14 +12,14 @@ public class AssignmentChecker : MonoBehaviour
     { get { return success; } }
 
     // Initialize variables
-    public void AssignmentInit()
+    private void AssignmentInit()
     {
         bones = new List<Bone>();
         success = false;
     }
 
     // Depth First search of a parent node
-    public void DFSearch(Transform parent)
+    private void DFSearch(Transform parent)
     {
         //Debug.Log("Searching Depth");
 
@@ -53,7 +53,7 @@ public class AssignmentChecker : MonoBehaviour
     }
 
     // Checks if the bones at the end of construction phase satisfy the current assignment
-    public void CheckConditions()
+    private void CheckConditions()
     {
         // loop through each assignemt's limb requirement data in the current assignment
         foreach (AssignementDataBase.LimbRequrementData limbRequrement in currentAssignment.limbRequirements)
@@ -70,20 +70,39 @@ public class AssignmentChecker : MonoBehaviour
 
                 Debug.Log("Bone found - " + boneName);
 
-                // compare bone name to the name of the bone int he assignment
-                if (limbReqName == boneName)
+                // compare bone name to the name of the bone int he assignment and if we are not excluding the limb
+                if ((limbReqName == boneName) && (!limbRequrement.excludeLimb))
                 {
-                    // if a match was found, change success to true
+                    // if a match was found and the bone is not excluded, change success to true
                     Debug.Log("FOUND BONE");
                     success = true;
                     break;
                 }
                 else
                 {
+                    success = false;
                     Debug.Log("No bone...");
                 }
             }
         }
+    }
+
+    // Prints out results to chalkboard
+    public void PrintResults()
+    {
+        ScoreManager.Instance.Add(new PartialScore("Assignment: " + currentAssignment.assignmentName));
+
+        ScoreManager.Instance.Add(new PartialScore("Checking for:"));
+
+        foreach (AssignementDataBase.LimbRequrementData limbReqData in currentAssignment.limbRequirements)
+        {
+            ScoreManager.Instance.Add(new PartialScore(limbReqData.currentSelectedLimb.ToString()));
+        }
+
+        if (success)
+            ScoreManager.Instance.Add(new PartialScore("Passed Assignment!"));
+        else
+            ScoreManager.Instance.Add(new PartialScore("Failed Assignment..."));
     }
 
     // Wrapper function for ease of access
