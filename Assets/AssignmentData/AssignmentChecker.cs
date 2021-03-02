@@ -11,6 +11,7 @@ public class AssignmentChecker : MonoBehaviour
     public bool Success
     { get { return success; } }
 
+    // Initialize variables
     public void AssignmentInit()
     {
         bones = new List<Bone>();
@@ -39,7 +40,7 @@ public class AssignmentChecker : MonoBehaviour
         // Loop trhough each child of the parent node
         foreach (Transform child in parent.transform)
         {
-            // If a child has a child itself, search more recursively
+            // If a child has a child itself, search more recursively otherwise return out of function
             if (child.childCount > 0)
             {
                 DFSearch(child);
@@ -52,21 +53,27 @@ public class AssignmentChecker : MonoBehaviour
     }
 
     // Checks if the bones at the end of construction phase satisfy the current assignment
-    public void AssignmentCheck()
+    public void CheckConditions()
     {
+        // loop through each assignemt's limb requirement data in the current assignment
         foreach (AssignementDataBase.LimbRequrementData limbRequrement in currentAssignment.limbRequirements)
         {
+            // Get string for the required limb name
             string limbReqName = limbRequrement.currentSelectedLimb.ToString() + " (Bone)";
             Debug.Log("Searching for - " + limbReqName);
 
+            // loop through each bone in the found bones
             foreach (Bone bone in bones)
             {
+                // get string name of the bone
                 string boneName = bone.ToString();
 
                 Debug.Log("Bone found - " + boneName);
 
+                // compare bone name to the name of the bone int he assignment
                 if (limbReqName == boneName)
                 {
+                    // if a match was found, change success to true
                     Debug.Log("FOUND BONE");
                     success = true;
                     break;
@@ -77,7 +84,13 @@ public class AssignmentChecker : MonoBehaviour
                 }
             }
         }
+    }
 
-        //Debug.Log("Assignement Success = " + success);
+    // Wrapper function for ease of access
+    public void AssignmentCheck(Transform parent)
+    {
+        AssignmentInit();
+        DFSearch(parent);
+        CheckConditions();
     }
 }
