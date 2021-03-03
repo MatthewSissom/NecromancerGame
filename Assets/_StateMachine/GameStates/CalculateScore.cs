@@ -78,19 +78,21 @@ public class CalculateScore : State
         //ScoreManager.Instance.Add(BoneManager.Instance.ConnectionScore());
         //ScoreManager.Instance.Add(BoneManager.Instance.LostBones());
 
-        ScoreManager.Instance.Add(new PartialScore("Assignment: " + assignmentChecker.currentAssignment.assignmentName));
+        //ScoreManager.Instance.Add(new PartialScore("Assignment: " + assignmentChecker.currentAssignment.assignmentName));
 
-        ScoreManager.Instance.Add(new PartialScore("Checking for:"));
+        //ScoreManager.Instance.Add(new PartialScore("Checking for:"));
 
-        foreach (AssignementDataBase.LimbRequrementData limbReqData in assignmentChecker.currentAssignment.limbRequirements)
-        {
-            ScoreManager.Instance.Add(new PartialScore(limbReqData.currentSelectedLimb.ToString()));
-        }
+        //foreach (AssignementDataBase.LimbRequrementData limbReqData in assignmentChecker.currentAssignment.limbRequirements)
+        //{
+        //    ScoreManager.Instance.Add(new PartialScore(limbReqData.currentSelectedLimb.ToString()));
+        //}
 
-        if (assignmentChecker.Success)
-            ScoreManager.Instance.Add(new PartialScore("Success!"));
-        else
-            ScoreManager.Instance.Add(new PartialScore("Fail..."));
+        //if (assignmentChecker.Success)
+        //    ScoreManager.Instance.Add(new PartialScore("Success!"));
+        //else
+        //    ScoreManager.Instance.Add(new PartialScore("Fail..."));
+
+        assignmentChecker.PrintResults();
 
 
         End();

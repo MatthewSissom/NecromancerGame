@@ -6,12 +6,13 @@ public class AudioManager : MonoBehaviour
 {
     // Instance of audio manager singleton
     public static AudioManager Instance { get; private set; }
+
     private FMOD.Studio.EventInstance musicInstance;
 
     // Dictionary of themes (keys) for audio file paths (value)
     public Dictionary<string, string> themeSoundsDictionary;
 
-    // reate instance of singleton
+    // create instance of singleton
     private void Awake()
     {
         if (Instance)
