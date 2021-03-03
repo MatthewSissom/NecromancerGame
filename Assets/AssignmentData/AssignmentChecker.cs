@@ -60,7 +60,7 @@ public class AssignmentChecker : MonoBehaviour
         {
             // Get string for the required limb name
             string limbReqName = limbRequrement.currentSelectedLimb.ToString() + " (Bone)";
-            Debug.Log("Searching for - " + limbReqName);
+            //Debug.Log("Searching for - " + limbReqName);
 
             // loop through each bone in the found bones
             foreach (Bone bone in bones)
@@ -68,20 +68,19 @@ public class AssignmentChecker : MonoBehaviour
                 // get string name of the bone
                 string boneName = bone.ToString();
 
-                Debug.Log("Bone found - " + boneName);
+                //Debug.Log("Bone found - " + boneName);
 
                 // compare bone name to the name of the bone int he assignment and if we are not excluding the limb
                 if ((limbReqName == boneName) && (!limbRequrement.excludeLimb))
                 {
-                    // if a match was found and the bone is not excluded, change success to true
-                    Debug.Log("FOUND BONE");
+                    //Debug.Log("FOUND BONE");
                     success = true;
                     break;
                 }
                 else
                 {
+                    //Debug.Log("No bone...");
                     success = false;
-                    Debug.Log("No bone...");
                 }
             }
         }

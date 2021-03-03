@@ -11,7 +11,7 @@ public class GhostBehavior : MonoBehaviour
     private Vector3 endForward;
 
     //bone values
-    public Bone mBone;
+    public GrabbableGroup mBone;
     public Transform boneLocation { get; private set; }
 
     public GhostPhysics body { get; private set; }
@@ -73,6 +73,7 @@ public class GhostBehavior : MonoBehaviour
 
     public void LostBone()
     {
+        mBone.mGhost = null;
         mBone = null;
     }
 

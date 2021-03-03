@@ -101,6 +101,14 @@ public class BoneGroup : MonoBehaviour
         ApplyFuncRecursive(GetRoot());
     }
 
+    //returns the root of this tree
+    public BoneGroup GetRoot()
+    {
+        if (parent)
+            return parent.GetRoot();
+        return this;
+    }
+
     //gets a list of all bone components in this tree
     public List<Bone> GetAllBones()
     {
@@ -120,16 +128,14 @@ public class BoneGroup : MonoBehaviour
         return allBones;
     }
 
+    protected void RemoveChild(BoneGroup toRemove)
+    {
+        removeChild(toRemove);
+        toRemove.ResetID();
+    }
 
     #region Helpers
 
-    //returns the root of this tree
-    private BoneGroup GetRoot()
-    {
-        if (parent)
-            return parent.GetRoot();
-        return this;
-    }
 
     //changes the id of this node to match it's parent
     private void ResetID()

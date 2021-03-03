@@ -9,8 +9,7 @@ public partial class BoneManager : MonoBehaviour
     static public BoneCollisionHandler Collision { get; private set; }
 
 
-    private LinkedList<Bone> activeBones;
-    private LinkedList<Bone> deactivatedBones;
+    private HashSet<Bone> activeBones;
 
     private int currentID = 0;
 
@@ -26,8 +25,7 @@ public partial class BoneManager : MonoBehaviour
             Instance = this;
         }
 
-        activeBones = new LinkedList<Bone>();
-        deactivatedBones = new LinkedList<Bone>();
+        activeBones = new HashSet<Bone>();
 
         Collision = new BoneCollisionHandler();
     }
@@ -44,39 +42,49 @@ public partial class BoneManager : MonoBehaviour
 
     public void Register(Bone newBone)
     {
-        if (!newBone.GetComponent<BoneGroup>())
-            newBone.gameObject.AddComponent(typeof(BoneGroup));
-        activeBones.AddLast(newBone);
+        //avoid duplicates
+        if (activeBones.Contains(newBone))
+            return;
+
+        BoneGroup group = newBone.GetComponent<BoneGroup>();
+        if (!group)
+            group = newBone.gameObject.AddComponent(typeof(BoneGroup)) as BoneGroup;
+
+        GrabbableGroup grabbableGroup = newBone.transform.root.gameObject.GetComponent<GrabbableGroup>();
+        if(!grabbableGroup)
+        {
+            Debug.LogError("Bone is not grabbable, please add a grabbableGroup component");
+            return;
+        }
+        BoneGroup.CombineGroups(grabbableGroup, group);
+
+        activeBones.Add(newBone);
     }
 
     //removes all refrences to this bone from the manager
     public void Release(Bone toRelease)
     {
         activeBones.Remove(toRelease);
-        deactivatedBones.Remove(toRelease);
     }
 
-    public Bone NewBone(GameObject pref, GhostBehavior heldBy)
+    public GrabbableGroup NewBoneGroup(GameObject pref, GhostBehavior heldBy)
     {
         var go = Instantiate(pref, heldBy.boneLocation.position, pref.transform.rotation);
-        Bone bone = go.GetComponent<Bone>();
+        GrabbableGroup heldGroup = go.GetComponent<GrabbableGroup>();
 
-        heldBy.mBone = bone;
-        bone.mGhost = heldBy;
-        Collision.SetPhysicsLayer(bone, 8);
-        bone.Rb.freezeRotation = true;
 
-        return bone;
-    }
+        heldBy.mBone = heldGroup;
+        heldGroup.Rb.freezeRotation = true;
+        heldGroup.mGhost = heldBy;
+        //set physics layers
+        heldGroup.gameObject.layer = 8;
+        foreach (Bone b in go.GetComponentsInChildren<Bone>())
+        {
+            Collision.SetPhysicsLayer(b, 8);
+            b.AttachedEvent += heldGroup.BoneWasConnected;
+        }
 
-    public void DeactivateBone(Bone toDeactivate)
-    {
-        //if (toDeactivate && !deactivatedBones.Contains(toDeactivate))
-        //{
-        //    activeBones.Remove(toDeactivate);
-        //    deactivatedBones.AddLast(toDeactivate);
-        //    toDeactivate.enabled = false;
-        //}
+        return heldGroup;
     }
 
     public void DestroyBone(Bone toDestroy)
@@ -91,43 +99,6 @@ public partial class BoneManager : MonoBehaviour
         {
             Destroy(b.transform.root.gameObject);
         }
-        foreach (Bone b in deactivatedBones)
-        {
-            Destroy(b.transform.root.gameObject);
-        }
-        activeBones = new LinkedList<Bone>();
-        deactivatedBones = new LinkedList<Bone>();
-    }
-
-    public PartialScore ConnectionScore()
-    {
-        //search for any ids that aren't the same 
-        int id = (activeBones.Count > 0) ? activeBones.First.Value.Group.GroupID : -1;
-        foreach (Bone b in activeBones)
-        {
-            if (b.Group.GroupID != id)
-            {
-                id = -1;
-                break;
-            }
-        }
-
-        if (id == -1)
-        {
-            return new PartialScore("connection", 0, "Skeleton is not connected, + 0\n");
-        }
-        {
-            return new PartialScore("connection", 1000, "Skeleton is fully connected, + 1000!\n");
-        }
-    }
-
-    public PartialScore LostBones()
-    {
-        int lostCount = deactivatedBones.Count;
-        if (lostCount == 0)
-        {
-            return new PartialScore("lostBone", 1000, "No lost bones, + 1000!");
-        }
-        return new PartialScore("lostBone", -50 * lostCount, "Lost " + lostCount.ToString() + " bone" + (lostCount > 1 ? "s " : " ") + ", " + (lostCount * -50).ToString());
+        activeBones = new HashSet<Bone>();
     }
 }

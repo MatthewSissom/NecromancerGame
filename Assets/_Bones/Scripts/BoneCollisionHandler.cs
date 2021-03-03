@@ -142,14 +142,6 @@ public class BoneCollisionHandler
             else if (other.connecting)
                 AddCollisionWithGroup(bone, other.Group);
         }
-
-        //---Bone on horizontal surface---//
-        else if (collision.gameObject.CompareTag("Horizontal"))
-        {
-            bone.Rb.velocity = new Vector3(0, bone.Rb.velocity.y, 0);
-            bone.Rb.gameObject.GetComponent<CustomGravity>().enabled = false;
-            bone.Rb.useGravity = true;
-        }
     }
 
     public void RemoveBoneCollision(Bone bone1, Bone bone2)
@@ -232,9 +224,8 @@ public class BoneCollisionHandler
         if (!toAttachTo.enabled)
             return false;
 
-        //physics
-        attaching.Rb.isKinematic = true;
-        attaching.connecting = true;
+        //events
+        attaching.WasAttached();
 
         //managers
         BoneManager.Instance.Release(attaching);
@@ -243,7 +234,7 @@ public class BoneCollisionHandler
         //visuals
         var gatherer = attaching.gameObject.GetComponent<RendererGatherer>();
         if (gatherer) gatherer.ChangeMat();
-        ParticleManager.CreateEffect("CombineFX", attaching.Rb.worldCenterOfMass);
+        ParticleManager.CreateEffect("CombineFX", attaching.transform.position);
 
         //audio
         //FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
