@@ -75,7 +75,7 @@ public class GhostManager : State
                 path.Add(pathRoot.GetChild(p).gameObject);
             }
             GhostBehavior ghost = CreateGhost(path);
-            BoneManager.Instance.NewBone(bones[i], ghost);
+            BoneManager.Instance.NewBoneGroup(bones[i], ghost);
         }
     }
 
@@ -84,7 +84,10 @@ public class GhostManager : State
         ghosts.Remove(toRemove);
         if(toRemove.mBone)
         {
-            BoneManager.Instance.DestroyBone(toRemove.mBone);
+            toRemove.mBone.ApplyToAll((Bone b, FunctionArgs args) =>
+            {
+                BoneManager.Instance.DestroyBone(b);
+            });
         }
         Destroy(toRemove.transform.root.gameObject);
     }
@@ -119,7 +122,7 @@ public class GhostManager : State
         // Plays sound when cats fist spawn for bone shipment
         AudioManager.Instance.PlaySound("catTest");
 
-        //yield return new WaitForSeconds(timePerShipment);
+        yield return new WaitForSeconds(timePerShipment);
 
         RecallGhosts(timeBetweenShipments - 2);
         yield break;

@@ -56,8 +56,7 @@ GameObject:
   - component: {fileID: 3575241092405416005}
   - component: {fileID: 4371200650476879061}
   - component: {fileID: 2492151798220074164}
-  - component: {fileID: 7231329407105064758}
-  - component: {fileID: 2212261130918425549}
+  - component: {fileID: -3708652778186461592}
   m_Layer: 10
   m_Name: Scapula_Right
   m_TagString: Bone
@@ -143,26 +142,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mGhost: {fileID: 0}
   connecting: 0
   axisKey: Scapula_Right
---- !u!54 &7231329407105064758
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5255945772029447957}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &2212261130918425549
+--- !u!114 &-3708652778186461592
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,9 +153,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5255945772029447957}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5158ecb77b0672445843db4e14daa49e, type: 3}
+  m_Script: {fileID: 11500000, guid: a6d4ebe4b8d17534a86e5aee2ee591d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  material: {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
 --- !u!1 &5946716706561017556
 GameObject:
   m_ObjectHideFlags: 0

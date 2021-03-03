@@ -10,7 +10,10 @@ public class TableVoxel : MonoBehaviour
     {
         //all tableVoxels are on the boneTrigger layer which only collides with bones
         //so no checks need to be performed
-        Bone temp = other.transform.root.GetComponent<Bone>();
+        var group = other.transform.root.GetComponent<GrabbableGroup>();
+        if (!group)
+            return;
+        Bone temp = group.BoneFromCollider(other);
         if(temp)
             parent.AddCollision(temp);
     }

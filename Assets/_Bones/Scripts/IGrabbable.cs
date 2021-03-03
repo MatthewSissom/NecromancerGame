@@ -5,6 +5,7 @@ using UnityEngine;
 public interface IGrabbable
 {
     Transform transform { get; }
+    Rigidbody Rb { get; }
     void PickedUp();
     void Dropped();
 }

@@ -29,15 +29,23 @@ public partial class InputManager : MonoBehaviour
 
     private BoneMovingTouch isRotationTouch(Vector3 pos)
     {
+        HashSet<BoneMovingTouch> cantBeParent = new HashSet<BoneMovingTouch>();
+        for (int i = 0; i < activeTouches.Count; i++)
+        {
+            RotationTouch rt = activeTouches[i] as RotationTouch;
+            if (rt
+                && rt.Parent != null)
+            {
+                cantBeParent.Add(rt.Parent);
+            }
+        }
         for (int i = 0; i < activeTouches.Count; i++)
         {
             BoneMovingTouch ft = activeTouches[i] as BoneMovingTouch;
-            if (ft &&
-                //ft.velocity.magnitude < rotationVelocityThreshold &&
-                (ft.transform.position - pos).sqrMagnitude < rotationRadSquared)
-            {
+            if (ft
+                && (ft.transform.position - pos).sqrMagnitude < rotationRadSquared
+                && !cantBeParent.Contains(ft))
                 return ft;
-            }
         }
         return null;
     }
@@ -179,8 +187,6 @@ public partial class InputManager : MonoBehaviour
         {
             enabled = true;
         });
-        //GameManager.Instance.AddEventMethod("GhostManager", "begin", RecordStats);
-        //GameManager.Instance.AddEventMethod("TableTrans", "begin", CalcStats);
     }
 }
 

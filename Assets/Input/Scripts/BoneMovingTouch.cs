@@ -7,7 +7,7 @@ using UnityEngine;
 public class BoneMovingTouch : TouchProxy
 {
     public IGrabbable activeObj { private set; get; }
-    public BoneGroup.applyToAllType applyToActiveGroup;
+    //public BoneGroup.applyToAllType applyToActiveGroup;
 
     //the offset of the bone from the touch on the screen,
     //makes the bone more visable
@@ -31,20 +31,12 @@ public class BoneMovingTouch : TouchProxy
     public float speed;
     public Vector3 previousLocation;
 
-    //angular velocity
-    public float angularVelocity;
-    float angularDrag = 1;
-    float angularDragMult = 50;
-    bool dragMultApplied = false;
-    Vector3 axisOfRotation;
+    //rotation
+    Coroutine decelerationRoutine;
 
-    public void SetBone(Bone bone)
+    public void SetActive(IGrabbable bone)
     {
-        if (activeObj != null)
-        {
-            activeObj = bone;
-            applyToActiveGroup = bone.Group.ApplyToAll;
-        }
+        activeObj = bone;
     }
 
     public override void Move(Vector3 pos, float rad)
@@ -55,32 +47,42 @@ public class BoneMovingTouch : TouchProxy
         //lightTransform.transform.position = transform.position + offset;
     }
 
-    public void SetAxisOfRotation(Vector3 newAxis)
+    public void CancleStopRotation()
     {
-        axisOfRotation = newAxis;
-        angularVelocity = 0;
+        if (decelerationRoutine != null)
+            StopCoroutine(decelerationRoutine);
     }
 
-    public void ApplyAngularDragMult()
+    public void StopRotation(float deceleration)
     {
-        if(!dragMultApplied)
-            angularDrag *= angularDragMult;
-        dragMultApplied = true;
-    }
-    public void RemoveAngularDragMult()
-    {
-        if(dragMultApplied)
-            angularDrag /= angularDragMult;
-        dragMultApplied = false;
+        IEnumerator StopRoutine()
+        {
+            float time= 0;
+            float magnitude = 1;
+            while (isActiveAndEnabled && activeObj != null && magnitude > 0)
+            {
+                time = Time.deltaTime;
+                magnitude = activeObj.Rb.angularVelocity.magnitude;
+                float scaleFactor = 1 - (deceleration * time / magnitude);
+                if (scaleFactor < 0)
+                    activeObj.Rb.angularVelocity = new Vector3();
+                else
+                    activeObj.Rb.angularVelocity = activeObj.Rb.angularVelocity * scaleFactor;
+                yield return null;
+            }
+        }
+        decelerationRoutine = StartCoroutine(StopRoutine());
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        Bone b = other.GetComponentInParent<Bone>();
-        if (b && !b.connecting)
+        if (activeObj != null)
+            return;
+        IGrabbable b = other.GetComponentInParent<GrabbableGroup>();
+        if (b != null)
         {
             (b as IGrabbable).PickedUp();
-            SetBone(b);
+            SetActive(b);
             //touchLights.Play();
         }
     }
@@ -96,27 +98,10 @@ public class BoneMovingTouch : TouchProxy
             const float baseMult = 20;
             //find movement vector
             Vector3 toProxy = (transform.position + offset - activeObj.transform.root.position) * baseMult;
-            //move straight up if far away from the proxy
-            //if (toProxy.y > heightThreshold)
-            //{
-            //    toProxy = new Vector3(0, toProxy.y, 0);
-            //}
             Vector3.ClampMagnitude(toProxy, maxVelocity);
-
-            void SetVelocity(Bone toApply, FunctionArgs e)
-            {
-                toApply.Rb.velocity = toProxy;
-            }
-            applyToActiveGroup(SetVelocity);
-
-            //-rotate the bone group-//
-
-            applyToActiveGroup((Bone toApply, FunctionArgs e) =>
-            {
-                toApply.transform.RotateAround(activeObj.transform.root.position, axisOfRotation, angularVelocity*Time.deltaTime);
-            });
-            angularVelocity -= Mathf.Sign(angularVelocity) * Mathf.Min(angularDrag * Time.deltaTime, Mathf.Abs(angularVelocity));
+            activeObj.Rb.velocity = toProxy;
         }
+        //the rad of the touch collider quickly increases to the normal size when first being reenabled
         else if (radMult < 1)
         {
             radMult += Time.deltaTime * 5;
@@ -144,9 +129,6 @@ public class BoneMovingTouch : TouchProxy
     protected override void OnDisable()
     {
         base.OnDisable();
-
-        //touchLights.Stop();
-        angularVelocity = 0;
 
         if (activeObj != null)
         {
