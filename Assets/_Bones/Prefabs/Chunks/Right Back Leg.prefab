@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7327010334824238447}
   - component: {fileID: 6762894342292357181}
   - component: {fileID: 4346978155250477304}
+  - component: {fileID: -7964686319162727877}
   m_Layer: 0
   m_Name: Right Back Leg
   m_TagString: Untagged
@@ -76,6 +77,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+--- !u!114 &-7964686319162727877
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5426715947578482954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e93893c643b912408d4bb46a0fd8c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneType: 5
+  themeType: 0
 --- !u!1001 &1133936087199443257
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,9 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: TestAssignment
   m_EditorClassIdentifier: Assembly-CSharp::AssignementDataBase
-  assignmentName: testAssignment
+  assignmentName: Test Assignment
   assignmentReward: {fileID: 0}
   limbRequirements:
-  - currentSelectedLimb: 8
+  - requiredBone: 0
+    boneCount: 0
     excludeLimb: 0
-  themeRequirements: []
+  themeRequirements:
+  - currentSelectedTheme: 0
+    excludeTheme: 0

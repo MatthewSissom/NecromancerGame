@@ -5,7 +5,7 @@ using UnityEngine;
 public class AssignmentChecker : MonoBehaviour
 {
     public AssignementDataBase currentAssignment;   // Current assignment details
-    private List<Bone> bones;                       // List of bones present at end of construction phase
+    private List<BoneChunk> bones;                       // List of bones present at end of construction phase
     private bool success;                           // Success of current assignment
 
     public bool Success
@@ -14,12 +14,12 @@ public class AssignmentChecker : MonoBehaviour
     // Initialize variables
     private void AssignmentInit()
     {
-        bones = new List<Bone>();
+        bones = new List<BoneChunk>();
         success = false;
     }
 
-    // Depth First search of a parent node
-    private void DFSearch(Transform parent)
+    // Depth First search of a parent node for bone chinks
+    private void SearchForBoneChunk(Transform parent)
     {
         //Debug.Log("Searching Depth");
 
@@ -27,12 +27,12 @@ public class AssignmentChecker : MonoBehaviour
         if (parent.GetComponent<TableConnectionArea>() != null)
         {
             // Get list of bones from a table connection area
-            List<Bone> tableBones = parent.GetComponent<TableConnectionArea>().GetAllBones();
+            List<BoneChunk> tableBones = parent.GetComponent<TableConnectionArea>().GetAllBoneChunks();
 
             // Display the bone in colsode log for testing purposes
-            foreach (Bone bone in tableBones)
+            foreach (BoneChunk chunk in tableBones)
             {
-                bones.Add(bone);
+                bones.Add(chunk);
                 //Debug.Log("Found Bone - " + bone);
             }
         }
@@ -43,7 +43,7 @@ public class AssignmentChecker : MonoBehaviour
             // If a child has a child itself, search more recursively otherwise return out of function
             if (child.childCount > 0)
             {
-                DFSearch(child);
+                SearchForBoneChunk(child);
             }
             else 
             {
@@ -56,22 +56,22 @@ public class AssignmentChecker : MonoBehaviour
     private void CheckConditions()
     {
         // loop through each assignemt's limb requirement data in the current assignment
-        foreach (AssignementDataBase.LimbRequrementData limbRequrement in currentAssignment.limbRequirements)
+        foreach (AssignementDataBase.BoneRequrementData boneRequrement in currentAssignment.boneRequirements)
         {
             // Get string for the required limb name
-            string limbReqName = limbRequrement.currentSelectedLimb.ToString() + " (Bone)";
+            //string limbReqName = limbRequrement.currentSelectedLimb.ToString() + " (Bone)";
             //Debug.Log("Searching for - " + limbReqName);
 
             // loop through each bone in the found bones
-            foreach (Bone bone in bones)
+            foreach (BoneChunk boneChunk in bones)
             {
                 // get string name of the bone
-                string boneName = bone.ToString();
+                // string boneName = bone.ToString();
 
-                //Debug.Log("Bone found - " + boneName);
+                Debug.Log("Bone found - " + boneChunk.boneType.ToString());
 
                 // compare bone name to the name of the bone int he assignment and if we are not excluding the limb
-                if ((limbReqName == boneName) && (!limbRequrement.excludeLimb))
+                if (boneRequrement.requiredBone == boneChunk.boneType)
                 {
                     //Debug.Log("FOUND BONE");
                     success = true;
@@ -93,9 +93,9 @@ public class AssignmentChecker : MonoBehaviour
 
         ScoreManager.Instance.Add(new PartialScore("Checking for:"));
 
-        foreach (AssignementDataBase.LimbRequrementData limbReqData in currentAssignment.limbRequirements)
+        foreach (AssignementDataBase.BoneRequrementData boneReqData in currentAssignment.boneRequirements)
         {
-            ScoreManager.Instance.Add(new PartialScore(limbReqData.currentSelectedLimb.ToString()));
+            ScoreManager.Instance.Add(new PartialScore(boneReqData.requiredBone.ToString()));
         }
 
         if (success)
@@ -108,7 +108,7 @@ public class AssignmentChecker : MonoBehaviour
     public void AssignmentCheck(Transform parent)
     {
         AssignmentInit();
-        DFSearch(parent);
+        SearchForBoneChunk(parent);
         CheckConditions();
     }
 }

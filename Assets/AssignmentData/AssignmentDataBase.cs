@@ -8,30 +8,17 @@ public class AssignementDataBase : ScriptableObject
     public string assignmentName;   // The name of the assignemnt
     public Bone assignmentReward;   // The reward(s) the player will get after completing the assignment
 
-    public List<LimbRequrementData> limbRequirements;   // The limbs required to complete the assignement
+    public List<BoneRequrementData> boneRequirements;   // The limbs required to complete the assignement
     public List<ThemeRequirements> themeRequirements;   // The themes reuiqred to complete the assignent
 
     // Struct for limbs required to complete assignment
 
     [System.Serializable]
-    public class LimbRequrementData
+    public class BoneRequrementData
     {
-        public LimbName currentSelectedLimb;   // Limb selected to check for
-        public bool excludeLimb;               // Exclude one of the limbs from LimbName from being checked to complete the assignment
-
-        // The names of possible limbs in assignments
-        public enum LimbName
-        {
-            Leg,
-            Arm,
-            Rib,
-            Skull,
-            Neck,
-            Tail,
-            Spine,
-            Paw,
-            Model
-        }
+        public BoneChunk.BoneType requiredBone; // Required bone type to search for
+        public int boneCount;                   // Required number of bones to look for
+        public bool excludeLimb;                // Exclude one of the limbs from LimbName from being checked to complete the assignment
     }
 
     [System.Serializable]
