@@ -13,7 +13,6 @@ public class TableConnectionArea : BoneGroup
 
     //maps a boneID to the number of colliders that a bone is touching in this area
     Dictionary<Bone, int> collisionCounts;
-    BoneGroup group;
 
     public int GetCollisionCount(Bone bone)
     {
@@ -51,12 +50,6 @@ public class TableConnectionArea : BoneGroup
     protected override void Awake()
     {
         base.Awake();
-
-        collisionCounts = new Dictionary<Bone, int>();
-
-        group = gameObject.GetComponent<BoneGroup>();
-        if (!group) group = (BoneGroup)gameObject.AddComponent(typeof(BoneGroup));
-
         void SetVoxelParent(Transform toCheck)
         {
             TableVoxel tv = toCheck.GetComponent<TableVoxel>();
@@ -69,6 +62,16 @@ public class TableConnectionArea : BoneGroup
             }
         }
         SetVoxelParent(transform);
+    }
+
+    public void ResetArea()
+    {
+        children = children ?? new List<BoneGroup>();
+        while(children.Count != 0)
+        {
+            RemoveChild(children[children.Count-1]);
+        }
+        collisionCounts = new Dictionary<Bone, int>();
     }
 
     protected override void Start()

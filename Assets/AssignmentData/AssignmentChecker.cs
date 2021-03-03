@@ -110,5 +110,6 @@ public class AssignmentChecker : MonoBehaviour
         AssignmentInit();
         DFSearch(parent);
         CheckConditions();
+        PrintResults();
     }
 }

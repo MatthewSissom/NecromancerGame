@@ -61,6 +61,6 @@ public class MenuDisplayScore : State
             textBox.text = "";
             canvas.SetActive(false); 
         });
-        GameManager.Instance.AddEventMethod("CalculateScore", "end", () => { canvas.SetActive(true); });
+        GameManager.Instance.AddEventMethod("GameCleanUp", "end", () => { canvas.SetActive(true); });
     }
 }

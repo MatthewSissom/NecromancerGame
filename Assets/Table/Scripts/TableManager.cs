@@ -4,7 +4,12 @@ using UnityEngine;
 
 public class TableManager : MonoBehaviour
 {
+    static TableManager Instance;
     private int shipmentNumber;
+
+    [SerializeField]
+    GameObject emptyArmaturePrefab;
+    public GameObject EmptyArmature { get; private set; }
 
     [SerializeField]
     //transforms in the collider higharchy used to enable and disable colliders during shipments
@@ -24,7 +29,11 @@ public class TableManager : MonoBehaviour
 
     void Awake()
     {
-        shipmentNumber = -1;
+        if (Instance)
+            Destroy(this);
+        else
+            Instance = this;
+
         allAreas = new List<TableConnectionArea>();
         deliveryAreas = new List<List<TableConnectionArea>>();
         outlines = new List<SpriteRenderer>(); 
@@ -32,6 +41,8 @@ public class TableManager : MonoBehaviour
         {
             outlines.Add(go.GetComponent<SpriteRenderer>());
         }
+
+        ResetTable();
 
         TableConnectionArea temp;
         void FindAreasRecursive(Transform toCheck,int shipmentNumber)
@@ -100,9 +111,20 @@ public class TableManager : MonoBehaviour
         ToggleGroupActive(++shipmentNumber);
     }
 
+    private void ResetTable()
+    {
+        shipmentNumber = -1;
+        EmptyArmature = Instantiate(emptyArmaturePrefab, new Vector3(-.093f,.183f,.053f), Quaternion.Euler(0,-90,-90), transform);
+        foreach (TableConnectionArea ta in allAreas)
+        {
+            ta.ResetArea();
+        }
+    }
+
     private void Start()
     {
         GameManager.Instance.AddEventMethod("TableTrans", "End", NextShipment);
+        GameManager.Instance.AddEventMethod("GameInit", "Begin", ResetTable);
     }
 
 

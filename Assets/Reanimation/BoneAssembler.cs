@@ -9,7 +9,6 @@ public class BoneAssembler : State
     //root gameObject for connection colliders, the higharchy of this gameObject and the
     //empty armature must be identical except for objects with the TableConnectionArea component
     Transform connectionColliders = default;
-    [SerializeField]
     Transform emptyArmature = default;
 
     //list of all connection areas
@@ -34,13 +33,25 @@ public class BoneAssembler : State
     [SerializeField]
     BoneAxis tableAxisDict = default;
 
-    // Start is called before the first frame update
-    void Start()
+    private void ResetAssembler()
     {
-        connectionAreas = new List<TableConnectionArea>();
+        emptyArmature = FindObjectOfType<TableManager>().EmptyArmature.transform;
         joints = new Dictionary<TableConnectionArea, Transform>();
         mFABRIKRoot = emptyArmature.GetComponentInChildren<FABRIKRoot>();
         chains = new List<FABRIK>();
+
+        ConnectionAreasInit();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        GameManager.Instance.AddEventMethod("GameInit", "End", ResetAssembler);
+    }
+
+    void ConnectionAreasInit()
+    {
+        connectionAreas = new List<TableConnectionArea>();
 
         //Queue for bredth first search. Both armature and connection transforms are stored in the same structure
         //values should always be enqueued / dequeued in pairs with aramature nodes coming first.
@@ -74,7 +85,7 @@ public class BoneAssembler : State
                 return;
 
             connectionAreas.Add(area);
-            joints.Add(area,armatureNode);
+            joints.Add(area, armatureNode);
 
             FABRIK chain = armatureNode.GetComponent<FABRIK>();
             if (chain)
@@ -90,6 +101,7 @@ public class BoneAssembler : State
 
         count = connectionAreas.Count;
     }
+
 
     //assembles the skeleton
     public override IEnumerator Routine()

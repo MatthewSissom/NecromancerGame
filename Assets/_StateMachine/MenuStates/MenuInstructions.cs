@@ -30,6 +30,6 @@ public class MenuInstructions : State
     private void Start()
     {
         MenuManager.Instance.AddEventMethod("MenuMain", "begin", () => { canvas.SetActive(true); });
-        GameManager.Instance.AddEventMethod("CalculateScore", "end", () => { canvas.SetActive(false); });
+        GameManager.Instance.AddEventMethod("GameCleanUp", "end", () => { canvas.SetActive(false); });
     }
 }
