@@ -57,7 +57,7 @@ public partial class InputManager : MonoBehaviour
 
         //if (Input.GetKeyDown(KeyCode.Escape))
         //    Application.Quit();
-        //if(Input.GetMouseButton(0))
+        //if (Input.GetMouseButton(0))
         //{
         //    Vector3 pos = Input.mousePosition;
         //    pos.z = Camera.main.transform.position.y - height;
@@ -72,14 +72,14 @@ public partial class InputManager : MonoBehaviour
         //    if (!holdingMouseDown)
         //    {
         //        holdingMouseDown = true;
-        //        NewMoveTouch(pos,id);
+        //        NewMoveTouch(pos, id);
         //    }
         //    else
         //    {
         //        activeTouches[id].Move(pos, rad);
         //    }
         //}
-        //else if(holdingMouseDown)
+        //else if (holdingMouseDown)
         //{
         //    holdingMouseDown = false;
         //    Vector3 pos = Input.mousePosition;

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2715853301997769405}
   - component: {fileID: -285752856894285577}
   - component: {fileID: -1638403512171476761}
+  - component: {fileID: 1344914481807307491}
   m_Layer: 0
   m_Name: Neck
   m_TagString: Untagged
@@ -77,6 +78,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+--- !u!114 &1344914481807307491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4403942450086851822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e93893c643b912408d4bb46a0fd8c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneType: 4
+  themeType: 0
 --- !u!1001 &2359785267626631167
 PrefabInstance:
   m_ObjectHideFlags: 0

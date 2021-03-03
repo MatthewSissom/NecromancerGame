@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3105935992460541720}
   - component: {fileID: 2521039374162111853}
   - component: {fileID: 9074197535791914502}
+  - component: {fileID: 6175298710009342264}
   m_Layer: 0
   m_Name: FRight Leg
   m_TagString: Untagged
@@ -76,6 +77,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+--- !u!114 &6175298710009342264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7135591711045641832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e93893c643b912408d4bb46a0fd8c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boneType: 1
+  themeType: 0
 --- !u!1001 &7582638390491978873
 PrefabInstance:
   m_ObjectHideFlags: 0
