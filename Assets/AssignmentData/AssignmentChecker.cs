@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AssignmentChecker : MonoBehaviour
+public class AssignmentChecker : State
 {
     public AssignementDataBase currentAssignment;   // Current assignment details
-    private List<BoneChunk> bones;                       // List of bones present at end of construction phase
+    private List<Bone> bones;                       // List of bones present at end of construction phase
     private bool success;                           // Success of current assignment
 
     public bool Success
@@ -14,7 +14,7 @@ public class AssignmentChecker : MonoBehaviour
     // Initialize variables
     private void AssignmentInit()
     {
-        bones = new List<BoneChunk>();
+        bones = new List<Bone>();
         success = false;
     }
 
@@ -27,10 +27,10 @@ public class AssignmentChecker : MonoBehaviour
         if (parent.GetComponent<TableConnectionArea>() != null)
         {
             // Get list of bones from a table connection area
-            List<BoneChunk> tableBones = parent.GetComponent<TableConnectionArea>().GetAllBoneChunks();
+            List<Bone> tableBones = parent.GetComponent<TableConnectionArea>().GetAllBones();
 
             // Display the bone in colsode log for testing purposes
-            foreach (BoneChunk chunk in tableBones)
+            foreach (Bone chunk in tableBones)
             {
                 bones.Add(chunk);
                 //Debug.Log("Found Bone - " + bone);
@@ -63,25 +63,25 @@ public class AssignmentChecker : MonoBehaviour
             //Debug.Log("Searching for - " + limbReqName);
 
             // loop through each bone in the found bones
-            foreach (BoneChunk boneChunk in bones)
+            foreach (Bone boneChunk in bones)
             {
                 // get string name of the bone
                 // string boneName = bone.ToString();
 
-                Debug.Log("Bone found - " + boneChunk.boneType.ToString());
+                Debug.Log("Bone found - " + boneChunk.ToString());
 
-                // compare bone name to the name of the bone int he assignment and if we are not excluding the limb
-                if (boneRequrement.requiredBone == boneChunk.boneType)
-                {
-                    //Debug.Log("FOUND BONE");
-                    success = true;
-                    break;
-                }
-                else
-                {
-                    //Debug.Log("No bone...");
-                    success = false;
-                }
+                //// compare bone name to the name of the bone int he assignment and if we are not excluding the limb
+                //if (boneRequrement.requiredBone == boneChunk.boneType)
+                //{
+                //    //Debug.Log("FOUND BONE");
+                //    success = true;
+                //    break;
+                //}
+                //else
+                //{
+                //    //Debug.Log("No bone...");
+                //    success = false;
+                //}
             }
         }
     }
@@ -105,11 +105,17 @@ public class AssignmentChecker : MonoBehaviour
     }
 
     // Wrapper function for ease of access
-    public void AssignmentCheck(Transform parent)
+    public override IEnumerator Routine()
     {
+        Begin();
+
         AssignmentInit();
-        SearchForBoneChunk(parent);
+        SearchForBoneChunk(GameObject.FindGameObjectWithTag("Root").transform);
         CheckConditions();
         PrintResults();
+
+        End();
+
+        yield return new WaitForSeconds(1.5f);
     }
 }
