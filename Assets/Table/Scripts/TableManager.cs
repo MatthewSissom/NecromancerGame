@@ -126,6 +126,4 @@ public class TableManager : MonoBehaviour
         GameManager.Instance.AddEventMethod("TableTrans", "End", NextShipment);
         GameManager.Instance.AddEventMethod("GameInit", "Begin", ResetTable);
     }
-
-
 }

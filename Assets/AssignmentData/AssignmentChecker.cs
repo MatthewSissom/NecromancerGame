@@ -18,8 +18,14 @@ public class AssignmentChecker : State
         success = false;
     }
 
-    // Depth First search of a parent node for bone chinks
-    private void SearchForBoneChunk(Transform parent)
+    private void Start()
+    {
+        GameManager.Instance.AddEventMethod("AssignmentChecker", "Begin", AssignmentInit);
+        GameManager.Instance.AddEventMethod("AssignmentChecker", "End", PrintResults);
+    }
+
+    // Depth First search of a parent node for bones
+    private void SearchForBone(Transform parent)
     {
         //Debug.Log("Searching Depth");
 
@@ -29,22 +35,27 @@ public class AssignmentChecker : State
             // Get list of bones from a table connection area
             List<Bone> tableBones = parent.GetComponent<TableConnectionArea>().GetAllBones();
 
-            // Display the bone in colsode log for testing purposes
-            foreach (Bone chunk in tableBones)
+            if (tableBones.Count != 0)
             {
-                bones.Add(chunk);
-                //Debug.Log("Found Bone - " + bone);
+                // Display the bone in colsode log for testing purposes
+                foreach (Bone bone in tableBones)
+                {
+                    bones.Add(bone);
+                    //Debug.Log("Found Bone - " + bone);
+                }
             }
+
         }
 
         // Loop trhough each child of the parent node
         foreach (Transform child in parent.transform)
         {
-            // If a child has a child itself, search more recursively otherwise return out of function
+            // If a child has a child itself, search further recursively
             if (child.childCount > 0)
             {
-                SearchForBoneChunk(child);
+                SearchForBone(child);
             }
+            // Otherwise, return out of the function
             else 
             {
                 return;
@@ -58,31 +69,9 @@ public class AssignmentChecker : State
         // loop through each assignemt's limb requirement data in the current assignment
         foreach (AssignementDataBase.BoneRequrementData boneRequrement in currentAssignment.boneRequirements)
         {
-            // Get string for the required limb name
-            //string limbReqName = limbRequrement.currentSelectedLimb.ToString() + " (Bone)";
-            //Debug.Log("Searching for - " + limbReqName);
-
-            // loop through each bone in the found bones
-            foreach (Bone boneChunk in bones)
-            {
-                // get string name of the bone
-                // string boneName = bone.ToString();
-
-                Debug.Log("Bone found - " + boneChunk.ToString());
-
-                //// compare bone name to the name of the bone int he assignment and if we are not excluding the limb
-                //if (boneRequrement.requiredBone == boneChunk.boneType)
-                //{
-                //    //Debug.Log("FOUND BONE");
-                //    success = true;
-                //    break;
-                //}
-                //else
-                //{
-                //    //Debug.Log("No bone...");
-                //    success = false;
-                //}
-            }
+            // Check if there is a bone in the specified areas
+            // If there is, make success = true
+            // If not, make success = false
         }
     }
 
@@ -93,10 +82,10 @@ public class AssignmentChecker : State
 
         ScoreManager.Instance.Add(new PartialScore("Checking for:"));
 
-        foreach (AssignementDataBase.BoneRequrementData boneReqData in currentAssignment.boneRequirements)
-        {
-            ScoreManager.Instance.Add(new PartialScore(boneReqData.requiredBone.ToString()));
-        }
+        //foreach (AssignementDataBase.BoneRequrementData boneReqData in currentAssignment.boneRequirements)
+        //{
+        //    ScoreManager.Instance.Add(new PartialScore(boneReqData.requiredBone.ToString()));
+        //}
 
         if (success)
             ScoreManager.Instance.Add(new PartialScore("\n" + "Passed Assignment!"));
@@ -104,15 +93,14 @@ public class AssignmentChecker : State
             ScoreManager.Instance.Add(new PartialScore("\n" + "Failed Assignment..."));
     }
 
-    // Wrapper function for ease of access
     public override IEnumerator Routine()
     {
         Begin();
 
-        AssignmentInit();
-        SearchForBoneChunk(GameObject.FindGameObjectWithTag("Root").transform);
+        //AssignmentInit();
+        SearchForBone(GameObject.FindGameObjectWithTag("Root").transform);
         CheckConditions();
-        PrintResults();
+        //PrintResults();
 
         End();
 

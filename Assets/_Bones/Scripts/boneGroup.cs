@@ -10,7 +10,6 @@ public class BoneGroup : MonoBehaviour
     protected BoneGroup parent;
     protected List<BoneGroup> children;
     protected Bone mBone;
-    protected BoneChunk mBoneChunk;
     protected int groupID;
     protected int myID;
 
@@ -127,25 +126,6 @@ public class BoneGroup : MonoBehaviour
 
         GetBoneRecursive(GetRoot());
         return allBones;
-    }
-
-    //gets a list of all bone chunk components in this tree
-    public List<BoneChunk> GetAllBoneChunks()
-    {
-        List<BoneChunk> allBoneChunks = new List<BoneChunk>();
-
-        void GetBoneRecursive(BoneGroup toCheck)
-        {
-            if (toCheck.mBone)
-                allBoneChunks.Add(toCheck.mBoneChunk);
-            foreach (BoneGroup bg in toCheck.children)
-            {
-                GetBoneRecursive(bg);
-            }
-        }
-
-        GetBoneRecursive(GetRoot());
-        return allBoneChunks;
     }
 
     protected void RemoveChild(BoneGroup toRemove)

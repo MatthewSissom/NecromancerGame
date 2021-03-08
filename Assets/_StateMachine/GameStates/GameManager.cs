@@ -44,7 +44,7 @@ public class GameManager : StateManagerBase
         // Testing assignment checker
         //gameObject.GetComponent<AssignmentChecker>().AssignmentCheck(GameObject.FindGameObjectWithTag("Root").transform
 
-        yield return SetState("AssigmentChecker");
+        yield return SetState("AssignmentChecker");
 
         //yield return SetState("BoneAssembler");
 

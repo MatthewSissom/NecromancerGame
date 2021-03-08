@@ -11738,8 +11738,8 @@ MonoBehaviour:
   - {fileID: 7467571634110518170, guid: 7403660fe374bc4498782d63980cdc5f, type: 3}
   - {fileID: 7467571634110518170, guid: 6543d3f584d19a0499e582fb7832fadc, type: 3}
   - {fileID: 7467571634110518170, guid: 7403660fe374bc4498782d63980cdc5f, type: 3}
-  timePerShipment: 15
-  timeBetweenShipments: 25
+  timePerShipment: 1
+  timeBetweenShipments: 1
   ghostPref: {fileID: 6224480179685692120, guid: e78191e8a3482ac459c8b8c39c29257f,
     type: 3}
 --- !u!1 &898439879
