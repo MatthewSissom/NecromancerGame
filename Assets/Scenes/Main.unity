@@ -1075,8 +1075,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!114 &54750088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1480,8 +1480,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Jaw
 --- !u!54 &73053862
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1609,8 +1609,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!54 &73187366
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2669,8 +2669,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Scapula_Left
 --- !u!54 &156079907
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2844,8 +2844,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Scapula_Right
 --- !u!54 &164103858
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2972,8 +2972,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!54 &164815097
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3636,8 +3636,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!114 &240683163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4518,8 +4518,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!114 &319565145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5562,8 +5562,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!54 &414886846
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5768,8 +5768,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Paw
 --- !u!114 &422769739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7845,8 +7845,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!114 &531779881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8586,8 +8586,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Paw
 --- !u!54 &600481165
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -8761,8 +8761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Scapula_Left
 --- !u!54 &630103604
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9434,8 +9434,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Tail (1)
 --- !u!54 &713930789
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9758,8 +9758,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Skull
 --- !u!54 &718645036
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10122,8 +10122,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!54 &737325107
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10686,8 +10686,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!54 &801038647
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -10852,8 +10852,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!54 &819702486
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11024,8 +11024,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!54 &850084311
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -11613,8 +11613,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Paw
 --- !u!114 &896291741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11885,8 +11885,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Tail
 --- !u!114 &907132281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13472,8 +13472,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!54 &1023522174
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -14537,8 +14537,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!54 &1089431531
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -14661,8 +14661,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Jaw
 --- !u!54 &1096014295
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -15509,8 +15509,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!114 &1156128745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15959,8 +15959,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!54 &1183434310
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -16075,8 +16075,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Paw
 --- !u!114 &1197051277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18821,8 +18821,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Paw
 --- !u!114 &1388801460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19258,8 +19258,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connectionColliders: {fileID: 1218086296}
-  boneAxisDict: {fileID: 11400000, guid: 352b3446ccf791a478df0920c872c49a, type: 2}
-  tableAxisDict: {fileID: 11400000, guid: 2d6c16acf46ab424c977c3552147785e, type: 2}
 --- !u!114 &1416826185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19397,8 +19395,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Paw
 --- !u!54 &1419603632
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -19900,8 +19898,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!114 &1473436353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20164,8 +20162,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!54 &1488794195
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -20681,8 +20679,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!54 &1548290207
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -21147,8 +21145,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Scapula_Right
 --- !u!54 &1558601764
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -21640,8 +21638,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!54 &1569498868
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -21935,8 +21933,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!54 &1602511638
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -22374,8 +22372,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Pelvis
 --- !u!54 &1626287475
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -23183,8 +23181,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Pelvis
 --- !u!54 &1670509078
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -23398,8 +23396,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!54 &1697906231
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -24971,8 +24969,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Tail (1)
 --- !u!54 &1799271862
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -25179,8 +25177,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!54 &1813888084
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -25763,8 +25761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Skull
 --- !u!54 &1849776173
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -26012,8 +26010,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!114 &1870933622
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26817,8 +26815,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!54 &1968201206
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -27748,8 +27746,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!54 &2050513092
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -27955,8 +27953,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!114 &2069699223
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28167,8 +28165,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Paw
 --- !u!114 &2075287837
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28340,8 +28338,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Paw
 --- !u!114 &2084349557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28481,8 +28479,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!54 &2084869164
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -28599,8 +28597,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Tail
 --- !u!114 &2089282449
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29514,8 +29512,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!54 &2133286557
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -29838,8 +29836,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L2_Left
 --- !u!1 &81211999704870515
 GameObject:
   m_ObjectHideFlags: 0
@@ -30005,8 +30003,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!65 &114325691626123944
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31706,8 +31704,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!4 &1564470696483019811
 Transform:
   m_ObjectHideFlags: 0
@@ -31899,8 +31897,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!4 &1725601322068203740
 Transform:
   m_ObjectHideFlags: 0
@@ -32390,8 +32388,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!1 &2180797623365982064
 GameObject:
   m_ObjectHideFlags: 0
@@ -32618,8 +32616,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Skull
 --- !u!1 &2335969166164073920
 GameObject:
   m_ObjectHideFlags: 0
@@ -33797,8 +33795,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!33 &3250743816670984860
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -33819,8 +33817,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Tail (1)
 --- !u!114 &3252291545844817150
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33833,8 +33831,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L2_Left
 --- !u!114 &3261617236000432448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34027,8 +34025,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!136 &3425305241607242183
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34372,8 +34370,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!33 &3742204981882832640
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -34738,8 +34736,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Paw
 --- !u!54 &3873456010798170015
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -36268,8 +36266,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Tail
 --- !u!136 &5093810773060714452
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36692,8 +36690,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!136 &5385896566472713290
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36830,8 +36828,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Jaw
 --- !u!4 &5520329446423136137
 Transform:
   m_ObjectHideFlags: 0
@@ -36929,8 +36927,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Paw
 --- !u!23 &5608144463695948103
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -37370,8 +37368,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L1
 --- !u!136 &5873049918483981084
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -37907,8 +37905,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: L2_Left
 --- !u!23 &6511498016874446593
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -38140,8 +38138,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Scapula_Left
 --- !u!4 &6753303914834115625
 Transform:
   m_ObjectHideFlags: 0
@@ -38418,8 +38416,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Scapula_Right
 --- !u!114 &6978000869591483588
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38432,8 +38430,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Pelvis
 --- !u!136 &7020301803448608137
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -39181,8 +39179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!4 &7507985950527419056
 Transform:
   m_ObjectHideFlags: 0
@@ -39950,8 +39948,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mGhost: {fileID: 0}
   connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!1 &8424005980178093153
 GameObject:
   m_ObjectHideFlags: 0
