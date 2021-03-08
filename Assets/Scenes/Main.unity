@@ -11738,7 +11738,7 @@ MonoBehaviour:
   - {fileID: 7467571634110518170, guid: 7403660fe374bc4498782d63980cdc5f, type: 3}
   - {fileID: 7467571634110518170, guid: 6543d3f584d19a0499e582fb7832fadc, type: 3}
   - {fileID: 7467571634110518170, guid: 7403660fe374bc4498782d63980cdc5f, type: 3}
-  timePerShipment: 1
+  timePerShipment: 5
   timeBetweenShipments: 1
   ghostPref: {fileID: 6224480179685692120, guid: e78191e8a3482ac459c8b8c39c29257f,
     type: 3}
@@ -16474,15 +16474,35 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5546857692644368386, guid: 455d4126656949e6adf7e68e46d498f5,
+        type: 3}
+      propertyPath: m_TagString
+      value: FRightLeg
+      objectReference: {fileID: 0}
+    - target: {fileID: 6208070180983462461, guid: 455d4126656949e6adf7e68e46d498f5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Head
+      objectReference: {fileID: 0}
     - target: {fileID: 7085485722991258542, guid: 455d4126656949e6adf7e68e46d498f5,
         type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7541995017879698959, guid: 455d4126656949e6adf7e68e46d498f5,
+        type: 3}
+      propertyPath: m_TagString
+      value: FLeftLeg
+      objectReference: {fileID: 0}
     - target: {fileID: 8140354283627625424, guid: 455d4126656949e6adf7e68e46d498f5,
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8272706241369510680, guid: 455d4126656949e6adf7e68e46d498f5,
+        type: 3}
+      propertyPath: m_TagString
+      value: MidSpine
       objectReference: {fileID: 0}
     - target: {fileID: 8491596881520254488, guid: 455d4126656949e6adf7e68e46d498f5,
         type: 3}
@@ -16493,6 +16513,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8825792191861973152, guid: 455d4126656949e6adf7e68e46d498f5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Skull
       objectReference: {fileID: 0}
     - target: {fileID: 8971368725370525807, guid: 455d4126656949e6adf7e68e46d498f5,
         type: 3}

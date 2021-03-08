@@ -25,53 +25,99 @@ public class AssignmentChecker : State
     }
 
     // Depth First search of a parent node for bones
-    private void SearchForBone(Transform parent)
+    private bool SearchForBone(Transform current)
     {
         //Debug.Log("Searching Depth");
+        bool complete;
 
-        // Check if there is table connection area component 
-        if (parent.GetComponent<TableConnectionArea>() != null)
+        //// if the current node has no children and no tableconnection area, return true because we have reach the end of the and it is complete
+        //if (current.childCount == 0 && current.GetComponent<TableConnectionArea>() == null)
+        //    return true;
+
+        // if a tableconnectionarea was found, set complete to true if bones were found in that area or false if there are no bones found in that area
+        if (current.GetComponent<TableConnectionArea>() != null)
+            complete = current.GetComponent<TableConnectionArea>().GetAllBones().Count != 0;
+        else
+            complete = false;
+
+        // Loop through each child of the current node
+        foreach (Transform child in current.transform)
         {
-            // Get list of bones from a table connection area
-            List<Bone> tableBones = parent.GetComponent<TableConnectionArea>().GetAllBones();
+            complete = complete | SearchForBone(child);
 
-            if (tableBones.Count != 0)
-            {
-                // Display the bone in colsode log for testing purposes
-                foreach (Bone bone in tableBones)
-                {
-                    bones.Add(bone);
-                    //Debug.Log("Found Bone - " + bone);
-                }
-            }
+            /*
+            //// Check if there is table connection area component 
+            //if (current.GetComponent<TableConnectionArea>() != null)
+            //{
+            //    // Get list of bones from a table connection area
+            //    List<Bone> tableBones = current.GetComponent<TableConnectionArea>().GetAllBones();
+            //    complete = tableBones.Count != 0;
 
-        }
+            //    // loop through all of the bone's children to determine if bone is compelte
+            //    foreach (Bone bone in tableBones)
+            //    {
+            //        complete = complete & SearchForBone(current);
+            //    }
 
-        // Loop trhough each child of the parent node
-        foreach (Transform child in parent.transform)
-        {
-            // If a child has a child itself, search further recursively
-            if (child.childCount > 0)
-            {
-                SearchForBone(child);
-            }
+            //    return complete;
+            //}
+
+            //// If a child has a child itself, search further recursively
+            //if (child.childCount > 0)
+            //{
+            //    SearchForBone(child);
+            //}
             // Otherwise, return out of the function
-            else 
-            {
-                return;
-            }
+            //else
+            //{
+            //    Debug.Log("No further children bones found at " + current.tag + "!");
+
+            //    complete = true;
+            //}
+            */
         }
+
+        if (complete)
+            Debug.Log("FOUND Full bone at " + current.tag + "!");
+        else
+            Debug.Log("NOT FOUND bone's child is missing a bone at " + current.tag);
+
+        return complete;
     }
 
     // Checks if the bones at the end of construction phase satisfy the current assignment
     private void CheckConditions()
     {
-        // loop through each assignemt's limb requirement data in the current assignment
-        foreach (AssignementDataBase.BoneRequrementData boneRequrement in currentAssignment.boneRequirements)
+        success = true;
+
+        // loop through each of the bone requirement data objects
+        foreach(AssignementDataBase.BoneRequrementData boneReqData in currentAssignment.boneRequirements)
         {
-            // Check if there is a bone in the specified areas
-            // If there is, make success = true
-            // If not, make success = false
+            GameObject boneLocation = GameObject.FindGameObjectWithTag(boneReqData.requiredBone.ToString());
+
+            if (boneLocation != null)
+            {
+                // check if the bone that is required is completed
+                if (SearchForBone(boneLocation.transform))
+                {
+                    // if the bone is found, check if the bone is suppost to be excluded
+                    if (boneReqData.excludeLimb == true)
+                    {
+                        // if there is one failure with the assignemnt, the whole assignment is failed so return out to save the time from checking further
+                        success = false;
+                        return;
+                    }
+                }
+                else
+                {
+                    success = false;
+                    return;
+                }
+            }
+            else
+            {
+                Debug.Log("No Bone Location Found");
+            }
         }
     }
 
@@ -80,12 +126,15 @@ public class AssignmentChecker : State
     {
         ScoreManager.Instance.Add(new PartialScore("Assignment: " + currentAssignment.assignmentName));
 
-        ScoreManager.Instance.Add(new PartialScore("Checking for:"));
+        ScoreManager.Instance.Add(new PartialScore("Assignment Detail:"));
 
-        //foreach (AssignementDataBase.BoneRequrementData boneReqData in currentAssignment.boneRequirements)
-        //{
-        //    ScoreManager.Instance.Add(new PartialScore(boneReqData.requiredBone.ToString()));
-        //}
+        foreach (AssignementDataBase.BoneRequrementData boneReqData in currentAssignment.boneRequirements)
+        {
+            if (boneReqData.excludeLimb == false)
+                ScoreManager.Instance.Add(new PartialScore("Include " + boneReqData.requiredBone.ToString()));
+            else
+                ScoreManager.Instance.Add(new PartialScore("Exclude " + boneReqData.requiredBone.ToString()));
+        }
 
         if (success)
             ScoreManager.Instance.Add(new PartialScore("\n" + "Passed Assignment!"));
@@ -98,7 +147,7 @@ public class AssignmentChecker : State
         Begin();
 
         //AssignmentInit();
-        SearchForBone(GameObject.FindGameObjectWithTag("Root").transform);
+        //SearchForBone(GameObject.FindGameObjectWithTag("Root").transform);
         CheckConditions();
         //PrintResults();
 
