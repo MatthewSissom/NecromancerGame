@@ -30,6 +30,9 @@ public class MenuInstructions : State
     private void Start()
     {
         MenuManager.Instance.AddEventMethod("MenuMain", "begin", () => { canvas.SetActive(true); });
+
+        MenuManager.Instance.AddEventMethod("MenuShowAssignments", "begin", () => { canvas.SetActive(false); });
+
         GameManager.Instance.AddEventMethod("GameCleanUp", "end", () => { canvas.SetActive(false); });
     }
 }
