@@ -4,25 +4,27 @@ using UnityEngine;
 
 public class MenuShowAssignments : State
 {
-    private bool exit;
-    public GameObject canvas;
+    private bool exit;                              // Bool for exiting state
+    public GameObject canvas;                       // Canvas for displaying assignmetn data
+
+    // fields for assignemnt displays
     public AssignmentDisplay assignment1;
     public AssignmentDisplay assignment2;
     public AssignmentDisplay assignment3;
-    public AssignmentChecker assignmentChecker;
-    public AssignementDataBase selectedAssignment;
 
-    // for testing
+    public AssignmentChecker assignmentChecker;     // Reference to assignment checker
+    public AssignementDataBase selectedAssignment;  // The selected assignment to check for when building
+
+    // for testing - will be replaced when more assignments are made
     public AssignementDataBase data1;
     public AssignementDataBase data2;
     public AssignementDataBase data3;
 
     private void Start()
     {
+        // AddEventMethods to set states
         MenuManager.Instance.AddEventMethod("MenuMain", "begin", () => { canvas.SetActive(false); });
-
         MenuManager.Instance.AddEventMethod("MenuShowAssignments", "begin", () => { canvas.SetActive(true); });
-
         GameManager.Instance.AddEventMethod("GameCleanUp", "end", () => { canvas.SetActive(false); });
 
         //MenuManager.Instance.AddEventMethod("MenuShowAssignments", "begin", () => { canvas.SetActive(true); });
@@ -45,8 +47,10 @@ public class MenuShowAssignments : State
         yield break;
     }
 
+    // Method for button presses
     public void ButtonPressed(string name)
     {
+        // If we want to play the game, set the current assignmetn first
         if (name == "Play")
         {
             assignmentChecker.currentAssignment = selectedAssignment;
@@ -56,9 +60,10 @@ public class MenuShowAssignments : State
         exit = true;
     }
 
-    // Gets assignments and attached them to assignment template prefabs
+    // Gets assignments and attaches them to assignment template prefabs
     private void GetAssignments()
     {
+        // Test code, will need something different for when more assignments are
         assignment1.assignmentData = data1;
         assignment2.assignmentData = data2;
         assignment3.assignmentData = data3;
@@ -67,4 +72,6 @@ public class MenuShowAssignments : State
         assignment2.Init();
         assignment3.Init();
     }
+
+    // Note: Still need systems for selecting from more than 3 assignments, sorting assignemnts, and deciding which ones to display
 }

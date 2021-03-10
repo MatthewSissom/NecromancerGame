@@ -15,7 +15,7 @@ public class AssignmentChecker : State
     private void AssignmentInit()
     {
         bones = new List<Bone>();
-        success = false;
+        success = true;
     }
 
     private void Start()
@@ -27,6 +27,9 @@ public class AssignmentChecker : State
     // Depth First search of a parent node for bones
     private bool SearchForBone(Transform current)
     {
+        if (success == false)
+            return false;
+
         //Debug.Log("Searching Depth");
         bool complete;
 
@@ -117,6 +120,7 @@ public class AssignmentChecker : State
             else
             {
                 Debug.Log("No Bone Location Found");
+                success = false;
             }
         }
     }

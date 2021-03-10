@@ -32,6 +32,7 @@ public class MenuManager : StateManagerBase
                     yield return SetState("BoardFlipped");
                     yield return SetState("DisplayScore");
                     break;
+                // Will - used for displaying assignments
                 case "Assignment":
                     state = null;
                     yield return SetState("BoardFlipped");
