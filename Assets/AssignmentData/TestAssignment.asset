@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 0}
   m_Name: TestAssignment
   m_EditorClassIdentifier: Assembly-CSharp::AssignementDataBase
-  assignmentName: Include One (1) Head
+  assignmentName: Include One (1) Skull
   assignmentReward: {fileID: 0}
   boneRequirements:
   - requiredBone: 0

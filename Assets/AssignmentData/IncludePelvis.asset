@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 0}
-  m_Name: IncludeTail
+  m_Name: IncludePelvis
   m_EditorClassIdentifier: Assembly-CSharp::AssignementDataBase
-  assignmentName: Include One (1) Tail
+  assignmentName: Include One (1) Pelvis
   assignmentReward: {fileID: 0}
   boneRequirements:
-  - requiredBone: 5
+  - requiredBone: 6
     excludeLimb: 0
   themeRequirements: []

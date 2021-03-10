@@ -14,6 +14,7 @@ TagManager:
   - MidSpine
   - Head
   - Tail
+  - Pelvis
   layers:
   - Default
   - TransparentFX

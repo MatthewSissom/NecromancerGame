@@ -16,5 +16,5 @@ MonoBehaviour:
   assignmentReward: {fileID: 0}
   boneRequirements:
   - requiredBone: 4
-    excludeLimb: 0
+    excludeLimb: 1
   themeRequirements: []

@@ -38227,6 +38227,11 @@ PrefabInstance:
       propertyPath: m_TagString
       value: FRightLeg
       objectReference: {fileID: 0}
+    - target: {fileID: 6174841399039333492, guid: 455d4126656949e6adf7e68e46d498f5,
+        type: 3}
+      propertyPath: m_TagString
+      value: Pelvis
+      objectReference: {fileID: 0}
     - target: {fileID: 6208070180983462461, guid: 455d4126656949e6adf7e68e46d498f5,
         type: 3}
       propertyPath: m_TagString

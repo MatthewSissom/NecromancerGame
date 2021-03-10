@@ -28,6 +28,7 @@ public class AssignementDataBase : ScriptableObject
             MidSpine,
             Head,
             Tail,
+            Pelvis,
         }
     }
 
