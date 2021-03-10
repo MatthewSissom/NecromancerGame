@@ -13,6 +13,7 @@ TagManager:
   - Skull
   - MidSpine
   - Head
+  - Tail
   layers:
   - Default
   - TransparentFX

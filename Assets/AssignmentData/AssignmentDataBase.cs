@@ -27,6 +27,7 @@ public class AssignementDataBase : ScriptableObject
             FLeftLeg,
             MidSpine,
             Head,
+            Tail,
         }
     }
 

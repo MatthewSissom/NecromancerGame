@@ -5,7 +5,6 @@ using UnityEngine;
 public class AssignmentChecker : State
 {
     public AssignementDataBase currentAssignment;   // Current assignment details
-    private List<Bone> bones;                       // List of bones present at end of construction phase
     private bool success;                           // Success of current assignment
 
     public bool Success
@@ -14,7 +13,22 @@ public class AssignmentChecker : State
     // Initialize variables
     private void AssignmentInit()
     {
-        bones = new List<Bone>();
+        GameObject root = GameObject.FindGameObjectWithTag("Root");
+
+        root.SetActive(true);
+
+        void ReEnableInit(GameObject current)
+        {
+            // If there are children loop through each child of the current node
+            foreach (Transform child in current.transform)
+            {
+                child.gameObject.SetActive(true);
+                ReEnableInit(child.gameObject);
+            }
+        }
+
+        ReEnableInit(root);
+
         success = true;
     }
 
@@ -31,60 +45,43 @@ public class AssignmentChecker : State
             return false;
 
         //Debug.Log("Searching Depth");
-        bool complete;
+        bool complete = false;
 
         //// if the current node has no children and no tableconnection area, return true because we have reach the end of the and it is complete
         //if (current.childCount == 0 && current.GetComponent<TableConnectionArea>() == null)
         //    return true;
 
+        //// Check if there are children in the currnet table area before continuing
+        //if (current.childCount == 0)
+        //{
+        //    // if there are no chidlren, return true if there were bones found before, false if there are no bones found before
+        //    complete = complete & true;
+        //}
+        //else
+        //{
+
         // if a tableconnectionarea was found, set complete to true if bones were found in that area or false if there are no bones found in that area
         if (current.GetComponent<TableConnectionArea>() != null)
-            complete = current.GetComponent<TableConnectionArea>().GetAllBones().Count != 0;
-        else
-            complete = false;
-
-        // Loop through each child of the current node
-        foreach (Transform child in current.transform)
         {
-            complete = complete | SearchForBone(child);
-
-            /*
-            //// Check if there is table connection area component 
-            //if (current.GetComponent<TableConnectionArea>() != null)
-            //{
-            //    // Get list of bones from a table connection area
-            //    List<Bone> tableBones = current.GetComponent<TableConnectionArea>().GetAllBones();
-            //    complete = tableBones.Count != 0;
-
-            //    // loop through all of the bone's children to determine if bone is compelte
-            //    foreach (Bone bone in tableBones)
-            //    {
-            //        complete = complete & SearchForBone(current);
-            //    }
-
-            //    return complete;
-            //}
-
-            //// If a child has a child itself, search further recursively
-            //if (child.childCount > 0)
-            //{
-            //    SearchForBone(child);
-            //}
-            // Otherwise, return out of the function
-            //else
-            //{
-            //    Debug.Log("No further children bones found at " + current.tag + "!");
-
-            //    complete = true;
-            //}
-            */
+            // bone areas are complete when there are bones in the area and the current bone area's children
+            complete = current.GetComponent<TableConnectionArea>().GetAllBones().Count != 0;
         }
 
-        if (complete)
-            Debug.Log("FOUND Full bone at " + current.tag + "!");
-        else
-            Debug.Log("NOT FOUND bone's child is missing a bone at " + current.tag);
+        // If there are children loop through each child of the current node
+        foreach (Transform child in current.transform)
+            {
+                // Checkfor the next table conneciton area
+                complete = complete & SearchForBone(child);
+            }
+        //}
 
+        // Priting for debugging
+        if (complete)
+            Debug.Log("FOUND Full bone at Name: " + current.name + " Tag: " + current.tag + "!");
+        else
+            Debug.Log("NOT FOUND bone's child is missing a bone at " + "Name: " + current.name + " Tag: " + current.tag);
+
+        // Return complete if bones were found or not
         return complete;
     }
 
@@ -101,6 +98,8 @@ public class AssignmentChecker : State
             if (boneLocation != null)
             {
                 // check if the bone that is required is completed
+                Debug.Log("HAVE WE FOUND A BONE?" + SearchForBone(boneLocation.transform));
+
                 if (SearchForBone(boneLocation.transform))
                 {
                     // if the bone is found, check if the bone is suppost to be excluded
@@ -113,8 +112,13 @@ public class AssignmentChecker : State
                 }
                 else
                 {
-                    success = false;
-                    return;
+                    // if the bone was not found, check if we were supposet to not exclude it
+                    if (boneReqData.excludeLimb == false)
+                    {
+                        // if we were suppost to include a bone but a bone was not found, return false
+                        success = false;
+                        return;
+                    }
                 }
             }
             else
