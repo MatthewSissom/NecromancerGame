@@ -81,7 +81,6 @@ public partial class BoneManager : MonoBehaviour
         foreach (Bone b in go.GetComponentsInChildren<Bone>())
         {
             Collision.SetPhysicsLayer(b, 8);
-            b.AttachedEvent += heldGroup.BoneWasConnected;
         }
 
         return heldGroup;

@@ -69,7 +69,12 @@ public class TableConnectionArea : BoneGroup
         children = children ?? new List<BoneGroup>();
         while(children.Count != 0)
         {
-            RemoveChild(children[children.Count-1]);
+            BoneGroup child = children[children.Count - 1];
+            if (child != null)
+            {
+                RemoveChild(child);
+                Destroy(child.transform.root);
+            }
         }
         collisionCounts = new Dictionary<Bone, int>();
     }
@@ -78,5 +83,7 @@ public class TableConnectionArea : BoneGroup
     {
         myID = BoneManager.Collision.Regester(this);
         groupID = myID;
+
+        GameManager.Instance.AddEventMethod("BoneAssembler", "Start", () => { gameObject.SetActive(false); });
     }
 }

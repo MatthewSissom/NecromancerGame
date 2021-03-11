@@ -26,14 +26,13 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         {
             if (!bone)
             {
-                bone = toCheck.GetComponent<Bone>();
+                if(TryGetComponent(out bone))
+                    bone.AttachedEvent += BoneWasConnected;
             }
             else
             {
-                Collider c = toCheck.GetComponent<Collider>();
-                if (c)
+                if(TryGetComponent(out Collider c))
                     colliderToBone.Add(c,bone);
-
             }
 
             for (int i = 0; i < toCheck.childCount; i++)
@@ -72,6 +71,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     public void Dropped()
     {
         const float maxReleaseYVelocity = 1.0f;
+        //TEMP cash custom gravity
         GetComponent<CustomGravity>().enabled = true;
         rb.freezeRotation = false;
         Vector3 velocity = rb.velocity;
@@ -103,6 +103,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (collision.gameObject.CompareTag("Horizontal"))
         {
             Rb.velocity = new Vector3(0, Rb.velocity.y, 0);
+            //TEMP cash custom gravity 
             Rb.gameObject.GetComponent<CustomGravity>().enabled = false;
             Rb.useGravity = true;
         }

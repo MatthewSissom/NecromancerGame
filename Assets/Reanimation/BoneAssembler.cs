@@ -13,6 +13,8 @@ public class BoneAssembler : State
 
     //list of all connection areas
     List<TableConnectionArea> connectionAreas;
+    //holds all areas that belong to a limb starting from sections closest to the body
+    List<List<TableConnectionArea>> limbs;
     //dictionary of joints in the armature that correspond to connecction areas on the table
     Dictionary<TableConnectionArea,Transform> joints;
 
@@ -108,7 +110,7 @@ public class BoneAssembler : State
     {
         Start();
 
-        //early return if start was never called
+        //early return if connection areas weren't initalized
         if (connectionAreas == null || joints == null)
         {
             End();
@@ -121,6 +123,7 @@ public class BoneAssembler : State
         const float timePerBone = 0.2f;
         //the current connection area
         TableConnectionArea connectionArea;
+        //the current joint
         Transform armatureNode;
 
         //a list of bones that are attached to a table connection areaa
@@ -215,12 +218,14 @@ public class BoneAssembler : State
                 Destroy(b.GetComponent<Rigidbody>());
                 Destroy(b.GetComponent<BoneGroup>());
 
-                // Plays a sound when the bones have reached their final position
-                // This is not cursed.
-                // When themes are implemented, can use theme field as parameter for PlaySound
-                // Ex. AudioManager.Instance.PlaySound(b.theme);
-                AudioManager.Instance.PlaySound("normal");
             }
+            // Plays a sound when the bones have reached their final position
+            // This is not cursed.
+            // When themes are implemented, can use theme field as parameter for PlaySound
+            // Ex. AudioManager.Instance.PlaySound(b.theme);
+            AudioManager.Instance.PlaySound("normal");
+
+
         yield return new WaitForSeconds(0.2f);
 
         }
@@ -428,10 +433,12 @@ public class BoneAssembler : State
 
         connectionArea.newAxis = new List<Vector3> { newAxis[selectedAxisIndex], newAxis[(selectedAxisIndex+1) %2] };
 
+        //move children to the oppisite end of the main axis
         joint.position = newAxis[selectedAxisIndex];
         for (int c = 0; c < joint.childCount; c++)
         {
-            joint.GetChild(c).position = connectionArea.newAxis[1];
+            //small offset is added to avoid bone lengths being equal to zero
+            joint.GetChild(c).position = connectionArea.newAxis[1] + new Vector3(0,0.005f,0);
         }
     }
 
