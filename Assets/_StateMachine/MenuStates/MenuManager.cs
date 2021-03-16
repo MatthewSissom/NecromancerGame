@@ -32,6 +32,12 @@ public class MenuManager : StateManagerBase
                     yield return SetState("BoardFlipped");
                     yield return SetState("DisplayScore");
                     break;
+                // Will - used for displaying assignments
+                case "Assignment":
+                    state = null;
+                    yield return SetState("BoardFlipped");
+                    yield return SetState("ShowAssignments");
+                    break;
                 case null:
                     yield return null;
                     break;
@@ -47,6 +53,7 @@ public class MenuManager : StateManagerBase
     protected override void Awake()
     {
         base.Awake();
+
         if (Instance)
             Destroy(gameObject);
         else
@@ -66,5 +73,4 @@ public class MenuManager : StateManagerBase
     {
         return base.SetState("Menu" + stateName);
     }
-
 }

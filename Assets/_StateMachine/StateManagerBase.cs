@@ -16,10 +16,12 @@ public class StateManagerBase : MonoBehaviour
     protected virtual void Awake()
     {
         states = new Dictionary<string, State>();
+
         if (allStates == null)
         {
             allStates = GameObject.FindObjectsOfType<State>();
         }
+
         foreach(var state in allStates)
         {
             if(state.Name == null)

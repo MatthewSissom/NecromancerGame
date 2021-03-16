@@ -8,6 +8,13 @@ TagManager:
   - Horizontal
   - Root
   - Neck
+  - FRightLeg
+  - FLeftLeg
+  - Skull
+  - MidSpine
+  - Head
+  - Tail
+  - Pelvis
   layers:
   - Default
   - TransparentFX

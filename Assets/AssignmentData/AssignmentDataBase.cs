@@ -16,9 +16,20 @@ public class AssignementDataBase : ScriptableObject
     [System.Serializable]
     public class BoneRequrementData
     {
-        public BoneChunk.BoneType requiredBone; // Required bone type to search for
-        public int boneCount;                   // Required number of bones to look for
+        public BoneType requiredBone;           // Required bone type to search for
+        //public int boneCount;                   // Required number of bones to look for
         public bool excludeLimb;                // Exclude one of the limbs from LimbName from being checked to complete the assignment
+
+        public enum BoneType
+        {
+            Skull,
+            FRightLeg,
+            FLeftLeg,
+            MidSpine,
+            Head,
+            Tail,
+            Pelvis,
+        }
     }
 
     [System.Serializable]
