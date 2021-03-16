@@ -25,6 +25,7 @@ public class MenuShowAssignments : State
         // AddEventMethods to set states
         MenuManager.Instance.AddEventMethod("MenuMain", "begin", () => { canvas.SetActive(false); });
         MenuManager.Instance.AddEventMethod("MenuShowAssignments", "begin", () => { canvas.SetActive(true); });
+
         GameManager.Instance.AddEventMethod("GameCleanUp", "end", () => { canvas.SetActive(false); });
 
         //MenuManager.Instance.AddEventMethod("MenuShowAssignments", "begin", () => { canvas.SetActive(true); });
