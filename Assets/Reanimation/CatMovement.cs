@@ -9,73 +9,44 @@ public class CatMovement
 {
     GameObject mCat;
 
-    public delegate void CommandsExaustedDelegate(LimbMovementCommand currentlyExecuting);
-    public event CommandsExaustedDelegate CommandsExaustedEvent;
+    Vector3 shoulderDirection;
+    bool rotating;
+    Vector3 hipDirection;
 
-    public struct LimbMovementCommand
+    float groundLevelY;
+
+    CatPath path;
+
+    public CatMovement(List<LimbEnd> limbEnds, GameObject mCat, float groundHeight, CatPath path)
     {
-        public LimbEnd limb;
-        public Vector3 destination;
-
-        public LimbMovementCommand(LimbEnd limb, Vector3 destination)
-        {
-            this.limb = limb;
-            this.destination = destination;
-        }
-    }
-    Queue<LimbMovementCommand> commands;
-
-    int stablizerCount = 0;
-    int maxStablizerCount = 0;
-
-
-    public CatMovement(List<LimbEnd> limbEnds, GameObject mCat)
-    {
-        commands = new Queue<LimbMovementCommand>();
         this.mCat = mCat;
+        this.path = path;
 
         foreach (var limb in limbEnds)
         {
             limb.StepStartEvent += LimbStartedStep;
             limb.StepEndEvent += LimbEndedStep;
         }
-
-        stablizerCount = limbEnds.Count;
-        maxStablizerCount = limbEnds.Count;
-    }
-
-    public void AddCommand(LimbEnd limb, Vector3 destination)
-    {
-        commands.Enqueue(new LimbMovementCommand(limb,destination));
-    }
-
-    public void StepWithNextLimb()
-    {
-        if (commands.Count == 0)
-            return;
-
-        LimbMovementCommand command = commands.Dequeue();
-        command.limb.StartStep(command.destination);
-        if (commands.Count == 0)
-            CommandsExaustedEvent?.Invoke(command);
     }
 
     void LimbStartedStep(LimbEnd limb)
     {
-        stablizerCount -= 1;
+        //Calculate the new position for the limb
+        
     }
 
     void LimbEndedStep(LimbEnd calling, Vector3? collisionPoint)
     {
-        if (collisionPoint != null)
-        {
-            stablizerCount += 1;
-            if (stablizerCount == maxStablizerCount)
-            {
-                StepWithNextLimb();
-            }
+        //if (collisionPoint != null)
+        //{
+        //    stablizerCount += 1;
+        //    if (stablizerCount == maxStablizerCount)
+        //    {
+        //        StepWithNextLimb();
+        //    }
 
-            calling.StartPush();
-        }
+        //    calling.StartPush();
+        //}
+        calling.StartPush();
     }
 }

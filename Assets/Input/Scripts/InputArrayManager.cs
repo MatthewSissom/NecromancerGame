@@ -102,7 +102,9 @@ public partial class InputManager : MonoBehaviour
         for(int i = 0; i < 5; i++)
         {
             movingTouches[i] = Instantiate(moveTouchPref).GetComponent<BoneMovingTouch>();
+            movingTouches[i].gameObject.SetActive(false);
             rotationTouches[i] = Instantiate(rotationTouchPref).GetComponent<RotationTouch>();
+            rotationTouches[i].gameObject.SetActive(false);
         }
     }
 }

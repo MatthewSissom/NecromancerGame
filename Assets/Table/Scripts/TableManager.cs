@@ -116,9 +116,9 @@ public class TableManager : MonoBehaviour
         shipmentNumber = -1;
         EmptyArmature = Instantiate(emptyArmaturePrefab, new Vector3(-.093f,.183f,.053f), Quaternion.Euler(0,-90,-90), transform);
         foreach (TableConnectionArea ta in allAreas)
-        {
             ta.ResetArea();
-        }
+        foreach (var outline in outlines)
+            outline.enabled = false;
     }
 
     private void Start()

@@ -467,7 +467,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370958129164020444}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fb82f19cc3ce412892b525300de1141, type: 3}
   m_Name: 
@@ -476,38 +476,38 @@ MonoBehaviour:
   solver:
     executedInEditor: 0
     IKPosition: {x: 0, y: 0, z: 0}
-    IKPositionWeight: 0.489
+    IKPositionWeight: 0.53
     root: {fileID: 0}
     iterations: 4
-    rootPin: 0.483
+    rootPin: 0.58
     chains:
     - ik: {fileID: 8900058991057480713}
       pull: 1
-      pin: 0
+      pin: 1
       children: 
     - ik: {fileID: 6349520540478663412}
       pull: 0.455
-      pin: 0
+      pin: 1
       children: 
     - ik: {fileID: 3484644539850205223}
       pull: 0.477
-      pin: 0
+      pin: 1
       children: 
     - ik: {fileID: 4116233653067513371}
-      pull: 0.512
-      pin: 0
+      pull: 0
+      pin: 0.51
       children: 040000000500000006000000
     - ik: {fileID: 3621328716521160920}
       pull: 0.512
-      pin: 0
+      pin: 1
       children: 
     - ik: {fileID: 4108254494579535440}
       pull: 0.512
-      pin: 0
+      pin: 1
       children: 
     - ik: {fileID: 8708278506811405182}
       pull: 0
-      pin: 0
+      pin: 1
       children: 
 --- !u!1 &1497386023552230191
 GameObject:
@@ -863,7 +863,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7263244047530817204}
-  - component: {fileID: 5723629280537456983}
   - component: {fileID: 6609227355997390136}
   - component: {fileID: 2009171087798651872}
   m_Layer: 0
@@ -889,25 +888,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &5723629280537456983
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2490182504392057553}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 750e44ef347c056488c156ce166134f5, type: 3}
-  m_Controller: {fileID: 9100000, guid: 43ccbcc5d8745df4aabb1313d35ef5f3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &6609227355997390136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -924,11 +904,13 @@ MonoBehaviour:
   footToOriginLimit: 0.15
   walkSpeed: 1
   stepHeight: 0.1
+  sholderMovementMult: 0
   feetTransforms:
   - {fileID: 2445571960859140093}
   - {fileID: 7378481392430804427}
   - {fileID: 5827459413320459236}
   - {fileID: 6712904332773770665}
+  hipTarget: {fileID: 5750491859503318300}
 --- !u!114 &2009171087798651872
 MonoBehaviour:
   m_ObjectHideFlags: 0

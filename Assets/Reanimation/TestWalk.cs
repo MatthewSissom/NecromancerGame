@@ -16,12 +16,19 @@ public class TestWalk : MonoBehaviour
     private float walkSpeed = default;
     [SerializeField]
     private float stepHeight = default;
+    [SerializeField]
+    private float sholderMovementMult;
 
     [Header("Transforms")]
     [SerializeField]
     private List<Transform> feetTransforms = default;
-
+    [SerializeField]
+    private Transform hipTarget;
     private List<FootData> feet;
+
+    private Transform root;
+    private float baseHipHeight;
+    private float baseRootHeight;
 
     void Start()
     {
@@ -38,6 +45,14 @@ public class TestWalk : MonoBehaviour
         feet.Add(new FootData(feetTransforms[2], new Vector3(0, 0, -footToOriginLimit * 9 / 25)));
         feet.Add(new FootData(feetTransforms[3], new Vector3(0, 0, footToOriginLimit)));
 
+        foreach (var foot in feet)
+            foot.isBackFoot = foot.target.transform.position.z < transform.position.z;
+                
+
+        baseHipHeight = hipTarget.transform.position.y;
+        root = transform.GetChild(0);
+        baseRootHeight = root.position.y;
+
         feet[0].stepable = true;
         feet[3].stepable = false;
     }
@@ -50,6 +65,8 @@ public class TestWalk : MonoBehaviour
         transform.position += distMoved;
 
         //update feet to check for step
+        float rootHeight = 0;
+        float hipHeight = 0;
         foreach (var foot in feet)
         {
             if(!foot.stepping)
@@ -67,6 +84,8 @@ public class TestWalk : MonoBehaviour
                 }
                 else
                     foot.stepable = true;
+
+
             }
         }
     }
@@ -74,11 +93,12 @@ public class TestWalk : MonoBehaviour
 
 class FootData
 {
-    Transform target;
+    public Transform target;
     Transform origin;
     public Vector3 pinPos;
     public bool stepping { get; private set; }
     public bool stepable { get; set; }
+    public bool isBackFoot;
 
     public FootData(Transform target, Vector3 offset)
     {
@@ -90,6 +110,11 @@ class FootData
     public float GetDistFromOrigin()
     {
         return (target.position - origin.position).magnitude;
+    }
+
+    public float GetAbsZDist()
+    {
+        return Mathf.Abs(target.position.z - origin.position.z);
     }
 
     //pin the foot to a point in world space

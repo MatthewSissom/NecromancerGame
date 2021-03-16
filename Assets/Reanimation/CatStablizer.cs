@@ -9,6 +9,9 @@ public class CatStablizer
 
     public CatStablizer(Rigidbody toStablize, float acceleration, float groundYVal)
     {
+        if (toStablize == null)
+            return;
+
         rb = toStablize;
         maxAcceleration = acceleration;
 

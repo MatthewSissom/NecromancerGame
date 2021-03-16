@@ -2338,6 +2338,7 @@ Transform:
   m_Children:
   - {fileID: 3390346668614592117}
   - {fileID: 6343737476021804871}
+  - {fileID: 2498023323558896572}
   m_Father: {fileID: 2102842313671347762}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2410,11 +2411,13 @@ MonoBehaviour:
   footToOriginLimit: 0.15
   walkSpeed: 1
   stepHeight: 0.1
+  sholderMovementMult: 0.2
   feetTransforms:
   - {fileID: 2445571960859140093}
   - {fileID: 7378481392430804427}
   - {fileID: 5827459413320459236}
   - {fileID: 6712904332773770665}
+  hipTarget: {fileID: 5750491859503318300}
 --- !u!1 &2625304745404510694
 GameObject:
   m_ObjectHideFlags: 0
@@ -6271,6 +6274,36 @@ CapsuleCollider:
   m_Height: 0.06435863
   m_Direction: 1
   m_Center: {x: -0.027381793, y: 0.0107884, z: 0.0032038689}
+--- !u!1 &9136659495053050592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2498023323558896572}
+  m_Layer: 0
+  m_Name: MidSpineEnd
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2498023323558896572
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9136659495053050592}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.0694, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8514723275856451778}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9156600238342720493
 GameObject:
   m_ObjectHideFlags: 0

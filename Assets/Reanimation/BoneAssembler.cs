@@ -108,7 +108,7 @@ public class BoneAssembler : State
     //assembles the skeleton
     public override IEnumerator Routine()
     {
-        Start();
+        Begin();
 
         //early return if connection areas weren't initalized
         if (connectionAreas == null || joints == null)

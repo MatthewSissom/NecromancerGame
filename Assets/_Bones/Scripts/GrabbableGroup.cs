@@ -70,9 +70,13 @@ public class GrabbableGroup : BoneGroup, IGrabbable
 
     public void Dropped()
     {
+        if (!this)
+            return;
         const float maxReleaseYVelocity = 1.0f;
         //TEMP cash custom gravity
-        GetComponent<CustomGravity>().enabled = true;
+        var gravity = GetComponent<CustomGravity>();
+        if(gravity)
+            gravity.enabled = true;
         rb.freezeRotation = false;
         Vector3 velocity = rb.velocity;
         if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)

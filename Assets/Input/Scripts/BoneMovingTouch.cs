@@ -115,8 +115,8 @@ public class BoneMovingTouch : TouchProxy
     {
         activeObj = null;
         myVolume = gameObject.GetComponent<BoxCollider>();
-        lightTransform = ParticleManager.CreateEffect("TouchLight", transform.position);
-        touchLights = lightTransform.GetComponent<ParticleSystem>();
+        //lightTransform = ParticleManager.CreateEffect("TouchLight", transform.position);
+        //touchLights = lightTransform.GetComponent<ParticleSystem>();
         radMult = .1f;
     }
 
@@ -134,5 +134,6 @@ public class BoneMovingTouch : TouchProxy
         {
             activeObj.Dropped();
         }
+        activeObj = null;
     }
 }

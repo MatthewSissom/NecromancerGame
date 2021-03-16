@@ -1198,38 +1198,38 @@ MonoBehaviour:
   solver:
     executedInEditor: 0
     IKPosition: {x: 0, y: 0, z: 0}
-    IKPositionWeight: 0.489
+    IKPositionWeight: 0.53
     root: {fileID: 0}
     iterations: 4
-    rootPin: 0.483
+    rootPin: 0.58
     chains:
     - ik: {fileID: 8900058991057480713}
       pull: 1
-      pin: 0
+      pin: 1
       children: 
     - ik: {fileID: 6349520540478663412}
       pull: 0.455
-      pin: 0
+      pin: 1
       children: 
     - ik: {fileID: 3484644539850205223}
       pull: 0.477
-      pin: 0
+      pin: 1
       children: 
     - ik: {fileID: 4116233653067513371}
-      pull: 0.512
-      pin: 0
+      pull: 0
+      pin: 0.51
       children: 040000000500000006000000
     - ik: {fileID: 3621328716521160920}
       pull: 0.512
-      pin: 0
+      pin: 1
       children: 
     - ik: {fileID: 4108254494579535440}
       pull: 0.512
-      pin: 0
+      pin: 1
       children: 
     - ik: {fileID: 8708278506811405182}
       pull: 0
-      pin: 0
+      pin: 1
       children: 
 --- !u!1 &1403774159778937104
 GameObject:
@@ -1907,7 +1907,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneAxisDict: {fileID: 0}
   StepSpeed: 0
   StepHeight: 0.05
   <Type>k__BackingField: 0
@@ -2369,9 +2368,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7263244047530817204}
-  - component: {fileID: 5723629280537456983}
-  - component: {fileID: 3913781892627310576}
-  - component: {fileID: 6609227355997390136}
   - component: {fileID: 2133478938875215102}
   m_Layer: 0
   m_Name: TestCatTwo
@@ -2396,62 +2392,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &5723629280537456983
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2490182504392057553}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 750e44ef347c056488c156ce166134f5, type: 3}
-  m_Controller: {fileID: 9100000, guid: 43ccbcc5d8745df4aabb1313d35ef5f3, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!54 &3913781892627310576
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2490182504392057553}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
---- !u!114 &6609227355997390136
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2490182504392057553}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 391e635666993b64b96be31effc8714e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stepTime: 0.5
-  footToOriginLimit: 0.15
-  walkSpeed: 1
-  stepHeight: 0.1
-  feetTransforms:
-  - {fileID: 2445571960859140093}
-  - {fileID: 7378481392430804427}
-  - {fileID: 5827459413320459236}
-  - {fileID: 6712904332773770665}
 --- !u!114 &2133478938875215102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2466,13 +2406,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followTarget: {fileID: 0}
   speed: 0.2
-  footPeriod: 1
   limbEnds:
   - {fileID: 8344809999884225324}
   - {fileID: 1449528777897906738}
   - {fileID: 6499594792462967228}
   - {fileID: 8877774101091694432}
-  toMove: {x: 0, y: 0, z: 0}
+  stepHeight: 0
+  chestHeight: 0
+  shoulderVelocity: {x: 0, y: 0, z: 0}
+  hipVelocity: {x: 0, y: 0, z: 0}
 --- !u!1 &2625304745404510694
 GameObject:
   m_ObjectHideFlags: 0
@@ -2693,7 +2635,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneAxisDict: {fileID: 0}
   StepSpeed: 0
   StepHeight: 0.05
   <Type>k__BackingField: 2
@@ -3718,7 +3659,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneAxisDict: {fileID: 0}
   StepSpeed: 0
   StepHeight: 0.05
   <Type>k__BackingField: 1
@@ -6272,7 +6212,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boneAxisDict: {fileID: 0}
   StepSpeed: 0
   StepHeight: 0.05
   <Type>k__BackingField: 1
@@ -7718,15 +7657,15 @@ PrefabInstance:
     - {fileID: 8734992346905706837, guid: 95a60e09cde338647ba50b0c04cf26a4, type: 3}
     - {fileID: -7010208812565169247, guid: 95a60e09cde338647ba50b0c04cf26a4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 95a60e09cde338647ba50b0c04cf26a4, type: 3}
---- !u!4 &463788186063839356 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6587603090560950204, guid: 95a60e09cde338647ba50b0c04cf26a4,
-    type: 3}
-  m_PrefabInstance: {fileID: 6702599786056204224}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8987398636057949745 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2431325389565282801, guid: 95a60e09cde338647ba50b0c04cf26a4,
+    type: 3}
+  m_PrefabInstance: {fileID: 6702599786056204224}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &463788186063839356 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6587603090560950204, guid: 95a60e09cde338647ba50b0c04cf26a4,
     type: 3}
   m_PrefabInstance: {fileID: 6702599786056204224}
   m_PrefabAsset: {fileID: 0}

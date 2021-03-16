@@ -4,21 +4,27 @@ using UnityEngine;
 
 public class LimbEnd : MonoBehaviour
 {
-    //TEMP for calculating length (should be done by assembler)
-    [SerializeField]
-    BoneAxis boneAxisDict = default;
-
     //---Enums---//
+
+    //Describes what type of animation this leg should use
     public enum LimbTag
     {
-        FrontRight,
-        FrontLeft,
-        BackRight,
-        BackLeft,
-        SingleFront,
-        SingleBack,
-        SpineLimb
+        Pair,   //There two legs on this half of the body (two front or two back)
+        Single, //There is only one leg on this half of the body
+        Spine,  //There are are no legs on the back part of the body
+        Worm,   //There are no legs anywhere on the body
     }
+
+    //Where this limb starts on the body
+    public enum LimbLocationTag
+    {
+        FrontLeft,
+        FrontRight,
+        BackLeft,
+        BackRight,
+    }
+
+    //What this limb is currently doing
     public enum LimbStates
     {
         Stepping,
@@ -34,6 +40,8 @@ public class LimbEnd : MonoBehaviour
     //A combination of where this limb is on the body and how it should move
     [field: SerializeField]
     public LimbTag Type { get; private set; }
+    //where on the body the limb is located
+    public LimbLocationTag LocationTag { get; private set; }
     //The state the limb is currently in
     public LimbStates LimbState { get; private set; }
     //how long the limb is when fully extended
@@ -65,17 +73,23 @@ public class LimbEnd : MonoBehaviour
     //---Private Feilds---//
 
     private Coroutine currentRoutine;
-    float chestHeight;
+    private Vector3 stepTargetPos;
 
-    public void TempLimbInit(float chestHeight)
+    public void SetStepTarget(Vector3 mTarget)
     {
-        LimbState = LimbStates.Standing;
-        this.chestHeight = chestHeight;
+        stepTargetPos = mTarget;
     }
 
-    public void LimbInit(LimbTag type, float length, GameObject target, GameObject limbStart)
+    public void TempLimbInit()
+    {
+        LimbState = LimbStates.Standing;
+    }
+
+    public void LimbInit(LimbTag type, LimbLocationTag limbLocation, float length, GameObject target, GameObject limbStart)
     {
         Type = type;
+        LocationTag = limbLocation;
+
         Length = length;
         Target = target;
         LimbStart = limbStart;
@@ -95,16 +109,16 @@ public class LimbEnd : MonoBehaviour
     }
 
     //moves a limb to a target
-    public void StartStep(Vector3 target)
+    public void StartStep()
     {
         if (LimbState == LimbStates.Pushing)
         {
             EndPush();
         }
 
-        LimbState = LimbStates.Stepping;
         StepStartEvent?.Invoke(this);
-        currentRoutine = StartCoroutine(StepRoutine(target));
+        LimbState = LimbStates.Stepping;
+        currentRoutine = StartCoroutine(StepRoutine());
     }
 
     public void Destableized()
@@ -145,25 +159,23 @@ public class LimbEnd : MonoBehaviour
         StepEndEvent?.Invoke(this, collisonPoint);
     }
 
-    private IEnumerator StepRoutine(Vector3 endPosition)
+    private IEnumerator StepRoutine()
     {
         //final position of foot relitive to the origin
         Vector3 inital = Target.transform.position;
 
         float elapsedTime = 0;
         float percentFinished = 0;
-        float stepTime = (endPosition - inital).magnitude / StepSpeed;
-        while (true)
-        //while (percentFinished < 1.2f)
+        float stepTime = (stepTargetPos - inital).magnitude / StepSpeed;
+        while (percentFinished < 1)
         {
             elapsedTime += Time.deltaTime;
             percentFinished = elapsedTime / stepTime;
-            Target.transform.position = Vector3.Lerp(inital, endPosition, percentFinished)
+            Target.transform.position = Vector3.Lerp(inital, stepTargetPos, percentFinished)
                 + new Vector3(0, Mathf.Sin(percentFinished * Mathf.PI) * StepHeight, 0);
             yield return null;
         }
-
-        Debug.Log(percentFinished);
+        Target.transform.position = stepTargetPos;
         StepEnd(null);
         yield break;
     }
@@ -177,14 +189,10 @@ public class LimbEnd : MonoBehaviour
         {
             if (contracting)
                 contracting = !(Extension < .7);
-            Vector3 newPosition = targetTransfrom.position;
-            newPosition.x = groundedTargetPosition.x;
-            newPosition.z = groundedTargetPosition.z;
-            newPosition.y = LimbStart.transform.position.y - chestHeight;
-            targetTransfrom.position = newPosition;
+
+            targetTransfrom.position = groundedTargetPosition;
             yield return null;
         }
         LimbState = LimbStates.Standing;
     }
-
 }
