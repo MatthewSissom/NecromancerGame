@@ -41,20 +41,24 @@ public class LimbEnd : MonoBehaviour
     [field: SerializeField]
     public LimbTag Type { get; private set; }
     //where on the body the limb is located
+    [field: SerializeField]
     public LimbLocationTag LocationTag { get; private set; }
     //The state the limb is currently in
     public LimbStates LimbState { get; private set; }
+    [field: SerializeField]
     //how long the limb is when fully extended
+    public float LimbLength { get; private set; }
     [field: SerializeField]
-    public float Length { get; private set; }
+    //the diamater of the circle that the limb can trace on the ground
+    public float StrideLength { get; private set; }
+    [field: SerializeField]
     //The gameobject that this limb will orient to
-    [field: SerializeField]
     public GameObject Target { get; private set; }
     //the gameobject that marks the start of the limb
     [field: SerializeField]
     public GameObject LimbStart { get; private set; }
     //a percentage from 0 to 1 of how extended the limb is
-    public float Extension { get { return (Target.transform.position - LimbStart.transform.position).magnitude / Length; } }
+    public float Extension { get { return (Target.transform.position - LimbStart.transform.position).magnitude / LimbLength; } }
 
     //---Public Events---//
 
@@ -80,17 +84,20 @@ public class LimbEnd : MonoBehaviour
         stepTargetPos = mTarget;
     }
 
-    public void TempLimbInit()
+    public void TempLimbInit(float groundHeight)
     {
         LimbState = LimbStates.Standing;
+        StrideLength = Mathf.Sqrt(LimbLength * LimbLength + Mathf.Pow(LimbStart.transform.position.y - groundHeight, 2));
+        StartPush();
     }
 
-    public void LimbInit(LimbTag type, LimbLocationTag limbLocation, float length, GameObject target, GameObject limbStart)
+    public void LimbInit(LimbTag type, LimbLocationTag limbLocation, float length, float strideLength, GameObject target, GameObject limbStart)
     {
         Type = type;
         LocationTag = limbLocation;
 
-        Length = length;
+        LimbLength = length;
+        StrideLength = strideLength;
         Target = target;
         LimbStart = limbStart;
     }
@@ -163,7 +170,7 @@ public class LimbEnd : MonoBehaviour
     {
         //final position of foot relitive to the origin
         Vector3 inital = Target.transform.position;
-
+        Debug.Log("new step");
         float elapsedTime = 0;
         float percentFinished = 0;
         float stepTime = (stepTargetPos - inital).magnitude / StepSpeed;
@@ -185,14 +192,15 @@ public class LimbEnd : MonoBehaviour
         Transform targetTransfrom = Target.transform;
         Vector3 groundedTargetPosition = Target.transform.position;
         bool contracting = true;
-        while (contracting || Extension < .8)
+        while (contracting || Extension < .7 )
         {
             if (contracting)
-                contracting = !(Extension < .7);
+                contracting = !((Extension < .6) || Extension > 1);
 
             targetTransfrom.position = groundedTargetPosition;
             yield return null;
         }
         LimbState = LimbStates.Standing;
+        StartStep();
     }
 }

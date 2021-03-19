@@ -16,17 +16,17 @@ public class MainCameraCustomEditor : Editor
 
     public override void OnInspectorGUI()
     {
-        if (GUILayout.Button("New Transition at Main Camera"))
+        if (GUILayout.Button("New Transition at Camera Pos"))
         {
             changeOldNames();
 
             setTransitionPos(myScript.transform);
         }
-        if (GUILayout.Button("New Transition at SceneView"))
+        if (GUILayout.Button("Move Camera to Scene View"))
         {
-            changeOldNames();
-
-            setTransitionPos(SceneView.lastActiveSceneView.camera.transform);
+            var sceneCameraTransform = SceneView.lastActiveSceneView.camera.transform;
+            myScript.transform.position = sceneCameraTransform.position;
+            myScript.transform.rotation = sceneCameraTransform.rotation;
         }
         DrawDefaultInspector();
         if (GUILayout.Button("Set To Start"))
