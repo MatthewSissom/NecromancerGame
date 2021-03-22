@@ -41,15 +41,12 @@ public class GameManager : StateManagerBase
             yield return new WaitForSeconds(GhostManager.Instance.timeBetweenShipments);
         }
 
-        // Testing assignment checker
-        //gameObject.GetComponent<AssignmentChecker>().AssignmentCheck(GameObject.FindGameObjectWithTag("Root").transform
-
-        yield return SetState("AssignmentChecker");
 
         //yield return SetState("BoneAssembler");
 
-        //yield return SetState("CatWalkStart");
-        //yield return SetState("CatWalkEnd");
+        yield return SetState("CatWalkStart");
+        yield return SetState("CatWalkEnd");
+        yield return SetState("AssignmentChecker");
 
         yield return SetState("GameCleanUp");
 

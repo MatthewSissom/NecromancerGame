@@ -5,14 +5,14 @@ using UnityEngine;
 public class CatPath
 {
     //---Path component classes---//
-    private abstract class PathComponent
+    protected abstract class PathComponent
     {
         public float Duration { get; protected set; }
         public abstract Vector3 GetPointNearPath(float time, float distanceFromPath, bool rightOfPath);
         public abstract Vector3 GetPointOnPath(float time);
         public abstract Vector3 GetPointOnPath(float time, out Vector3 forward);
     }
-    private class LinePath : PathComponent
+    protected class LinePath : PathComponent
     {
         Vector3 start;
         Vector3 end;
@@ -50,7 +50,7 @@ public class CatPath
             return inital + offset;
         }
     }
-    private class SemicirclePath : PathComponent
+    protected class SemicirclePath : PathComponent
     {
         Vector3 center;
         float rad;
@@ -116,10 +116,10 @@ public class CatPath
         Speed = .1f;
     }
 
-    public void PathToPoint(Vector3 destination, Vector3 currentPos, Vector3 currentHipPos, Vector3 currentForward)
+    public virtual void PathToPoint(Vector3 destination, Vector3 currentPos, Vector3 currentHipPos, Vector3 currentForward)
     {
         ResetPath(currentPos,currentHipPos);
-        OrientAndMoveTo(destination, currentPos, currentForward);
+        OrientAndPathTo(destination, currentPos, currentForward);
         FinalizePath();
     }
 
@@ -131,7 +131,7 @@ public class CatPath
         {
             //change the current forward to the forward the cat will have at the
             //end of the previous section
-            currentForward = OrientAndMoveTo(destination, startingPos, currentForward);
+            currentForward = OrientAndPathTo(destination, startingPos, currentForward);
             //similarlly set the starting position to the destination of the last section
             startingPos = destination;
         }
@@ -155,6 +155,30 @@ public class CatPath
         return node.Value.GetPointNearPath(timeFromShoulders, distanceFromPath, rightOfPath);
     }
 
+    public bool GetPointOnPath(float timeFromShoulders, out Vector3 point)
+    {
+        timeFromShoulders += elapsedTime;
+        LinkedListNode<PathComponent> node;
+        if (path == null
+            || (node = path.First) == null)
+        {
+            point = new Vector3();
+            return false;
+        }
+        while (timeFromShoulders > node.Value.Duration)
+        {
+            timeFromShoulders -= node.Value.Duration;
+            if (node.Next == null)
+            {
+                timeFromShoulders = node.Value.Duration;
+                break;
+            }
+            node = node.Next;
+        }
+        point = node.Value.GetPointOnPath(timeFromShoulders);
+        return true;
+    }
+
     //updates the main position on the path, returns false when the path end has been reached
     public bool Move(float deltaTime, out Vector3 shoulderPosition, out Vector3 hipPosition, out Vector3 forward)
     {
@@ -168,7 +192,7 @@ public class CatPath
         while (elapsedTime > node.Value.Duration + currentDiff)
         {
             //hips haved moved past the first section, it isn't needed
-            if (elapsedTime - HipDelay > node.Value.Duration)
+            if (hipNode == null && elapsedTime - HipDelay > node.Value.Duration)
             {
                 elapsedTime -= node.Value.Duration;
                 totalDuration -= node.Value.Duration;
@@ -224,7 +248,7 @@ public class CatPath
             Debug.LogError("No path components added to path");
     }
 
-    private Vector3 OrientAndMoveTo(Vector3 destination, Vector3 currentPos, Vector3 currentForward)
+    private Vector3 OrientAndPathTo(Vector3 destination, Vector3 currentPos, Vector3 currentForward)
     {
         //add a curve that ends with the cat pointing at the destination
         OrientTwardsPoint(destination, currentPos, currentForward, out Vector3? lineStart);

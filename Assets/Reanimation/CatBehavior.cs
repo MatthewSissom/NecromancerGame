@@ -40,9 +40,10 @@ public class CatBehavior : MonoBehaviour
 
     private void Awake()
     {
-        mPath = new CatPath();
-        mPath.HipDelay = (transform.position - hipTransform.position).magnitude / speed + hipDelay;
+        //mPath = new CatPath();
         LimbInit();
+        mPath = new CatPathWithNav(groundYVal,transform.position.y);
+        mPath.HipDelay = (transform.position - hipTransform.position).magnitude / speed + hipDelay;
         movement = new CatMovement(limbEnds,gameObject, groundYVal, speed,mPath);
 
 

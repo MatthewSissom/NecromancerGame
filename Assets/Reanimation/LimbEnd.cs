@@ -170,7 +170,6 @@ public class LimbEnd : MonoBehaviour
     {
         //final position of foot relitive to the origin
         Vector3 inital = Target.transform.position;
-        Debug.Log("new step");
         float elapsedTime = 0;
         float percentFinished = 0;
         float stepTime = (stepTargetPos - inital).magnitude / StepSpeed;

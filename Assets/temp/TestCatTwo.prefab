@@ -1911,7 +1911,7 @@ MonoBehaviour:
   StepHeight: 0.05
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 1
-  <LimbLength>k__BackingField: 0
+  <LimbLength>k__BackingField: 0.25
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 3157923432646105934}
   <LimbStart>k__BackingField: {fileID: 6516851309281206284}
@@ -2415,7 +2415,8 @@ MonoBehaviour:
   - {fileID: 8877774101091694432}
   stepHeight: 0
   chestHeight: 0
-  hipTransform: {fileID: 0}
+  hipDelay: 1
+  hipTransform: {fileID: 5750491859503318300}
 --- !u!1 &2625304745404510694
 GameObject:
   m_ObjectHideFlags: 0
@@ -2640,7 +2641,7 @@ MonoBehaviour:
   StepHeight: 0.05
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 3
-  <LimbLength>k__BackingField: 0
+  <LimbLength>k__BackingField: 0.25
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 2371745979177330229}
   <LimbStart>k__BackingField: {fileID: 2373223986540089728}
@@ -3666,7 +3667,7 @@ MonoBehaviour:
   StepHeight: 0.05
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 2
-  <LimbLength>k__BackingField: 0
+  <LimbLength>k__BackingField: 0.25
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 9156600238342720493}
   <LimbStart>k__BackingField: {fileID: 692731385933252297}
@@ -6221,7 +6222,7 @@ MonoBehaviour:
   StepHeight: 0.05
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 0
-  <LimbLength>k__BackingField: 0
+  <LimbLength>k__BackingField: 0.25
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 6663863804772729921}
   <LimbStart>k__BackingField: {fileID: 9088379016934014465}
