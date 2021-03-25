@@ -1,37 +1,65 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 //Cat movement is in charge of the lowest level goals like moving a specific limb to a specific location
 //Recives instrucitons from cat behavior
 public class CatMovement
 {
-    GameObject mCat;
-
-    float groundLevelY;
+    float groundYVal;
+    float stepHeight;
     float speed;
 
     CatPath path;
+    bool pathing;
 
     //speed and ground height are temp, should be moved here eventually
-    public CatMovement(List<LimbEnd> limbEnds, GameObject mCat, float groundHeight, float speed, CatPath path)
+    public CatMovement(List<LimbEnd> limbEnds, float stepHeight, float speed, CatPath path)
     {
-        this.mCat = mCat;
+        this.stepHeight = stepHeight;
         this.path = path;
+        path.PathStarted += () => { pathing = true; };
+        path.PathFinished += () => { pathing = false; };
+
         this.speed = speed;
-        this.groundLevelY = groundHeight;
+
+        LimbInit(limbEnds);
+        (path as CatPathWithNav).GroundHeight = groundYVal;
+    }
+
+    //temp move to movement
+    private void LimbInit(List<LimbEnd> limbEnds)
+    {
+        groundYVal = 0;
+        foreach (var limb in limbEnds)
+        {
+            groundYVal += limb.transform.position.y;
+        }
+        groundYVal /= limbEnds.Count;
 
         foreach (var limb in limbEnds)
         {
+            limb.StepSpeed = speed * 4;
+            limb.StepHeight = stepHeight;
             limb.StepStartEvent += LimbStartedStep;
             limb.StepEndEvent += LimbEndedStep;
+            limb.TempLimbInit(groundYVal);
+
+            //void RecursiveColliderSearch(Transform toCheck)
+            //{
+            //    if (toCheck.TryGetComponent(out Collider c))
+
+            //        for (int i = 0; i < toCheck.childCount; i++)
+            //            RecursiveColliderSearch(toCheck.GetChild(i));
+            //}
+            //RecursiveColliderSearch(limb.transform);
         }
     }
 
     void LimbStartedStep(LimbEnd limb)
-    {
-        float time = (limb.StrideLength / 2 / speed) +  (limb.StrideLength / limb.StepSpeed);
+    { 
+        float time = (limb.LimbLength*3 / 2 / speed) +  (limb.LimbLength*3 / limb.StepSpeed);
+        time *= pathing ? 1 : 0;
         float dist = 0.05f;
         Vector3 target;
 
@@ -55,22 +83,12 @@ public class CatMovement
                 break;
         }
 
-        target.y = groundLevelY;
+        target.y = groundYVal;
         limb.SetStepTarget(target);
     }
 
     void LimbEndedStep(LimbEnd calling, Vector3? collisionPoint)
     {
-        //if (collisionPoint != null)
-        //{
-        //    stablizerCount += 1;
-        //    if (stablizerCount == maxStablizerCount)
-        //    {
-        //        StepWithNextLimb();
-        //    }
-
-        //    calling.StartPush();
-        //}
         calling.StartPush();
     }
 }

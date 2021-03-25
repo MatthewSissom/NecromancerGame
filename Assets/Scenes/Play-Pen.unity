@@ -20098,6 +20098,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1449528777897906738, guid: fd940a9c4f3ca06439a64bdaa4a24ace,
+        type: 3}
+      propertyPath: <LimbLength>k__BackingField
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 2133478938875215102, guid: fd940a9c4f3ca06439a64bdaa4a24ace,
         type: 3}
       propertyPath: followTarget
@@ -20108,6 +20113,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TestCatTwo
       objectReference: {fileID: 0}
+    - target: {fileID: 6499594792462967228, guid: fd940a9c4f3ca06439a64bdaa4a24ace,
+        type: 3}
+      propertyPath: <LimbLength>k__BackingField
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 7263244047530817204, guid: fd940a9c4f3ca06439a64bdaa4a24ace,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20116,7 +20126,7 @@ PrefabInstance:
     - target: {fileID: 7263244047530817204, guid: fd940a9c4f3ca06439a64bdaa4a24ace,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.523
+      value: -0.499
       objectReference: {fileID: 0}
     - target: {fileID: 7263244047530817204, guid: fd940a9c4f3ca06439a64bdaa4a24ace,
         type: 3}
@@ -20162,6 +20172,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8344809999884225324, guid: fd940a9c4f3ca06439a64bdaa4a24ace,
+        type: 3}
+      propertyPath: <LimbLength>k__BackingField
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8877774101091694432, guid: fd940a9c4f3ca06439a64bdaa4a24ace,
+        type: 3}
+      propertyPath: <LimbLength>k__BackingField
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fd940a9c4f3ca06439a64bdaa4a24ace, type: 3}

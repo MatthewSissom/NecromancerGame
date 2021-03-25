@@ -194,7 +194,8 @@ public class LimbEnd : MonoBehaviour
         while (contracting || Extension < .7 )
         {
             if (contracting)
-                contracting = !((Extension < .6) || Extension > 1);
+                //contracting = !((Extension < .6) || Extension > 1);
+                contracting = !((Extension < .6) || Extension > 1.5);
 
             targetTransfrom.position = groundedTargetPosition;
             yield return null;

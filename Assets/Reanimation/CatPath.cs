@@ -2,93 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CatPath
+public partial class CatPath
 {
-    //---Path component classes---//
-    protected abstract class PathComponent
-    {
-        public float Duration { get; protected set; }
-        public abstract Vector3 GetPointNearPath(float time, float distanceFromPath, bool rightOfPath);
-        public abstract Vector3 GetPointOnPath(float time);
-        public abstract Vector3 GetPointOnPath(float time, out Vector3 forward);
-    }
-    protected class LinePath : PathComponent
-    {
-        Vector3 start;
-        Vector3 end;
-        Vector3 forward;
-
-        public LinePath(float duration, Vector3 start, Vector3 end)
-        {
-            Duration = duration;
-            this.start = start;
-            this.end = end;
-            forward = (end - start);
-            forward.y = 0;
-            forward.Normalize();
-        }
-
-        public override Vector3 GetPointOnPath(float time, out Vector3 forward)
-        {
-            forward = this.forward;
-            return Vector3.Lerp(start, end, time / Duration);
-        }
-
-        public override Vector3 GetPointOnPath(float time)
-        {
-            return Vector3.Lerp(start, end, time / Duration);
-        }
-
-        public override Vector3 GetPointNearPath(float time, float distanceFromPath, bool rightOfPath)
-        {
-            Vector3 inital = Vector3.Lerp(start, end, time / Duration);
-            //get a perpendicular normal vector and scale it by distance from path
-            Vector3 offset = new Vector3(-forward.z,0,forward.x) 
-                * distanceFromPath
-                * (rightOfPath? -1 : 1);
-
-            return inital + offset;
-        }
-    }
-    protected class SemicirclePath : PathComponent
-    {
-        Vector3 center;
-        float rad;
-        float startTheta;
-        float deltaTheta;
-
-        public SemicirclePath(float duration, Vector3 center, float rad, float startTheta, float endTheta)
-        {
-            Duration = duration;
-            this.center = center;
-            this.rad = rad;
-            this.startTheta = startTheta;
-            deltaTheta = endTheta - startTheta;
-        }
-
-        public override Vector3 GetPointOnPath(float time)
-        {
-            float theta = startTheta + deltaTheta * (time / Duration);
-            return center + new Vector3(Mathf.Cos(theta) * rad, 0, Mathf.Sin(theta) * rad);
-        }
-        public override Vector3 GetPointOnPath(float time, out Vector3 forward)
-        {
-            float theta = startTheta + deltaTheta * (time / Duration);
-            Vector3 fromCenterToPath = new Vector3(Mathf.Cos(theta) * rad, 0, Mathf.Sin(theta) * rad);
-            forward = new Vector3(-fromCenterToPath.z, 0, fromCenterToPath.x) * Mathf.Sign(deltaTheta);
-            return center + fromCenterToPath;
-        }
-
-        public override Vector3 GetPointNearPath(float time, float distanceFromPath, bool rightOfPath)
-        {
-            float theta = startTheta + deltaTheta * (time / Duration);
-            //either grow or shrink the rad depending on the orientation of the path (clockwise or not)
-            //and if the point should be on the left or right side of it. XOR is used because it is the 
-            //only logical opperator that the output flips if an input flips
-            float newRad = rad + distanceFromPath * ((rightOfPath ^ deltaTheta < 0) ? 1 : -1);
-            return center + new Vector3(Mathf.Cos(theta) * newRad, 0, Mathf.Sin(theta) * newRad);
-        }
-    }
 
     //---pathfinding settings---//
 
@@ -96,7 +11,20 @@ public class CatPath
     public float MinTurningRad { get; set; }
     //how fast the cat should move
     public float Speed { get; set; }
-    public float HipDelay { get; set; }
+    //public float HipDelay { get; set; }
+
+    //---transform arrays---//
+    //arrays that hold information about key points along the cat's main line. data is ordered
+    //starting at the BACK of the cat moving forward
+
+    //the different time differences from the shoulder of each transform along the cat's main line
+    //a delay of 1 would mean one second after the shoulders pass a point, the delayed transform
+    //would pass the same point on the path
+    float[] delays;
+    //the delay of the hips relitive to the shoulders
+    float hipDelay;
+    protected Transform[] transforms;
+    protected Transform shoulderTransform;
 
     //---path data---//
     //information about the path the cat is currently taking
@@ -109,38 +37,48 @@ public class CatPath
     float elapsedTime;
     //how far behind the hips are on the path compared to the sholders
 
-    public CatPath()
+    //---events---//
+    public event System.Action PathFinished;
+    public event System.Action PathStarted;
+
+    public CatPath(float [] delays, Transform[] transforms, int hipIndex)
     {
         //default values for pathfinding settings
         MinTurningRad = .1f;
         Speed = .1f;
+        this.delays = delays;
+        hipDelay = delays[hipIndex];
+
+        this.transforms = transforms;
+        shoulderTransform = transforms[hipIndex + 1];
     }
 
-    public virtual void PathToPoint(Vector3 destination, Vector3 currentPos, Vector3 currentHipPos, Vector3 currentForward)
+    public virtual void PathToPoint(Vector3 destination)
     {
-        ResetPath(currentPos,currentHipPos);
-        OrientAndPathTo(destination, currentPos, currentForward);
+        ResetPath();
+        OrientAndPathTo(destination, shoulderTransform.position, shoulderTransform.forward);
         FinalizePath();
     }
 
-    public void PathToPoints(List<Vector3> destinations, Vector3 currentPos, Vector3 currentHipPos, Vector3 currentForward)
+    public void PathToPoints(List<Vector3> destinations)
     {
-        ResetPath(currentPos,currentHipPos);
-        Vector3 startingPos = currentPos;
-        foreach(var destination in destinations)
+        ResetPath();
+        Vector3 pos = shoulderTransform.position;
+        Vector3 forward = shoulderTransform.forward;
+        foreach (var destination in destinations)
         {
             //change the current forward to the forward the cat will have at the
             //end of the previous section
-            currentForward = OrientAndPathTo(destination, startingPos, currentForward);
+            forward = OrientAndPathTo(destination, pos, forward);
             //similarlly set the starting position to the destination of the last section
-            startingPos = destination;
+            pos = destination;
         }
         FinalizePath();
     }
 
     public Vector3 PointNearPath(float timeFromShoulders, float distanceFromPath, bool rightOfPath, bool includeHipOffset = false)
     {
-        timeFromShoulders += elapsedTime - (includeHipOffset ? HipDelay : 0);
+        timeFromShoulders += elapsedTime - (includeHipOffset ? hipDelay : 0);
         var node = path.First;
         while (timeFromShoulders > node.Value.Duration)
         {
@@ -180,61 +118,89 @@ public class CatPath
     }
 
     //updates the main position on the path, returns false when the path end has been reached
-    public bool Move(float deltaTime, out Vector3 shoulderPosition, out Vector3 hipPosition, out Vector3 forward)
+    public void Move(float deltaTime, out Vector3 forward, Vector3[] newPositions)
     {
+        forward = default;     //assignment so forward can't be empty
         elapsedTime += deltaTime;
         if (elapsedTime > totalDuration)
-            elapsedTime = totalDuration;
-
-        LinkedListNode<PathComponent> node = path.First;
-        LinkedListNode<PathComponent> hipNode = null;
-        float currentDiff = 0;
-        while (elapsedTime > node.Value.Duration + currentDiff)
         {
-            //hips haved moved past the first section, it isn't needed
-            if (hipNode == null && elapsedTime - HipDelay > node.Value.Duration)
+            elapsedTime = totalDuration;
+            PathFinished?.Invoke();
+            forward = shoulderTransform.forward;
+        }
+
+        var node = path.First; //node in the path
+        float totalDiff = 0;   //total duration of already processed nodes
+        int index = 0;         //index for accessing transform arrays
+
+        bool finished = false;
+        while (!finished)
+        {
+            float timeSpentInPathComponent = elapsedTime - delays[index] - totalDiff;
+            //move to the next node if the time is outside the length of 
+            if (timeSpentInPathComponent > node.Value.Duration)
             {
-                elapsedTime -= node.Value.Duration;
-                totalDuration -= node.Value.Duration;
-                path.RemoveFirst();
-                node = path.First;
+                //the last delay has moved past the first section in the path, free memory
+                if (index == 0)
+                {
+                    RemoveFirstComponent();
+                    node = path.First;
+                }
+                else
+                {
+                    totalDiff += node.Value.Duration;
+                    node = node.Next;
+                    finished = node == null;
+                    if (finished)
+                        Debug.Log("wrong");
+                }
             }
             else
             {
-                if (hipNode == null)
-                    hipNode = node;
-                currentDiff += node.Value.Duration;
-                node = node.Next;
-                if (node == null)
+                //get the forward vector if this transform is the shoulder transform
+                if(delays[index] == 0)
                 {
-                    shoulderPosition = new Vector3();
-                    hipPosition = new Vector3();
-                    forward = new Vector3();
-                    return false;
+                    newPositions[index] = node.Value.GetPointOnPath(elapsedTime - totalDiff, out forward);
                 }
+                else
+                {
+                    newPositions[index] = node.Value.GetPointOnPath(timeSpentInPathComponent);
+                }
+                finished = ++index == delays.Length;
             }
         }
-
-        shoulderPosition = node.Value.GetPointOnPath(elapsedTime - currentDiff, out forward);
-        if(hipNode != null)
-            hipPosition = hipNode.Value.GetPointOnPath(elapsedTime - HipDelay);
-        else
-            hipPosition = node.Value.GetPointOnPath(elapsedTime - HipDelay);
-
-        return elapsedTime < totalDuration;
     }
 
     //called before creating a new path
-    private void ResetPath(Vector3 shoulderPos, Vector3 hipPos)
+    private void ResetPath()
     {
-        //start every path with a path from the hips to the shoulders, and 
-        //set elapsedTime to hipdelay
+        //start every path with linar paths for transforms behind the shoulders to follow
         path = new LinkedList<PathComponent>();
-        path.AddFirst(new LinePath(HipDelay,
-            hipPos,
-            shoulderPos
-            ));
-        elapsedTime = HipDelay;
+
+        Vector3 previousPos = default;
+        float totalDelay = 0;
+        //itterate backwards to go from head to tail
+        for(int i = transforms.Length-1; i >= 0; i--)
+        {
+            float delay = delays[i];
+            if (delay > 0)
+            {
+                path.AddFirst(new LinePath(delay,
+                    transforms[i].position,
+                    previousPos
+                    ));
+                totalDelay += delay;
+            }
+            previousPos = transforms[i].position;
+        }
+        elapsedTime = totalDelay;
+    }
+
+    private void RemoveFirstComponent()
+    {
+        elapsedTime -= path.First.Value.Duration;
+        totalDuration -= path.First.Value.Duration;
+        path.RemoveFirst();
     }
 
     //called to finalize a path
@@ -246,6 +212,27 @@ public class CatPath
 
         if (path.Count == 0)
             Debug.LogError("No path components added to path");
+
+        Vector3 forward = new Vector3();
+        Vector3 previousPos = default;
+        for(int i = 0, count = transforms.Length; i < count; i++)
+        {
+            if (delays[i] > 0)
+                continue;
+
+            if (forward == new Vector3())
+            {
+                previousPos = path.Last.Value.GetPointOnPath(path.Last.Value.Duration, out forward);
+            }
+            else
+            {
+                Vector3 pathEnd = forward + previousPos;
+                path.AddLast(new LinePath(1/Speed, previousPos, pathEnd));
+                previousPos = path.First.Value.GetPointOnPath(path.Last.Value.Duration);
+            }
+        }
+
+        PathStarted?.Invoke();
     }
 
     private Vector3 OrientAndPathTo(Vector3 destination, Vector3 currentPos, Vector3 currentForward)
@@ -255,7 +242,9 @@ public class CatPath
 
         //change current pos to lineStart if orientation added a path
         if (lineStart != null)
+        {
             currentPos = lineStart.Value;
+        }
 
         //move to the destination
         Vector3 toDest = destination - currentPos;
@@ -292,7 +281,9 @@ public class CatPath
         Vector3 deltaPerp = new Vector3(-delta.z, 0, delta.x);
         float deltaMagnitude = delta.magnitude;
         if (deltaMagnitude < MinTurningRad) //algorithm doesn't work for points inside the circle
+        {
             return;
+        }
 
         //calculate points of tangency on the circle passing through the destination point by constructing
         //a similar triangle with r being similar to the tangent line passing through p

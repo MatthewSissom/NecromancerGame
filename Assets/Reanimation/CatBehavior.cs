@@ -24,15 +24,20 @@ public class CatBehavior : MonoBehaviour
     float chestHeight;
     [SerializeField]
     float hipDelay;
-    Dictionary<Collider, LimbEnd> colliderToLimb;
 
     [SerializeField]
     private Transform hipTransform;
+    [SerializeField]
+    private Transform headTransform;
+    [SerializeField]
+    private Transform tailTransform;
+
+    //holds transforms along the main line of the cat 
+    Transform[] orderedTransforms;
 
     CatMovement movement;
     CatPath mPath;
 
-    float groundYVal;
 
 
     CatStablizer stablizer;
@@ -41,78 +46,65 @@ public class CatBehavior : MonoBehaviour
     private void Awake()
     {
         //mPath = new CatPath();
-        LimbInit();
-        mPath = new CatPathWithNav(groundYVal,transform.position.y);
-        mPath.HipDelay = (transform.position - hipTransform.position).magnitude / speed + hipDelay;
-        movement = new CatMovement(limbEnds,gameObject, groundYVal, speed,mPath);
+        orderedTransforms = new Transform[4];
+        orderedTransforms[0] = tailTransform;
+        orderedTransforms[1] = hipTransform;
+        orderedTransforms[2] = transform;
+        orderedTransforms[3] = headTransform;
+        float[] delays= new float[4];
+        delays[0] = (tailTransform.position - hipTransform.position).magnitude / speed;
+        delays[1] = (transform.position - hipTransform.position).magnitude / speed + hipDelay;
+        delays[2] = 0;
+        delays[3] = -(transform.position - headTransform.position).magnitude / speed;
+        mPath = new CatPathWithNav(transform.position.y, delays, orderedTransforms);
+        mPath.PathFinished += () => { pathing = false; };
 
+        movement = new CatMovement(limbEnds,stepHeight, speed,mPath);
 
-        stablizer = new CatStablizer(null, 1000, groundYVal);
-        stablizer.DestablizedEvent += () => { stablizing = false; Debug.Log("Fallen Cat!"); };
-
-        foreach(var limb in limbEnds)
-        {
-            stablizer.DestablizedEvent += limb.Destableized;
-        }
+        //stablizer = new CatStablizer(null, 1000, groundYVal);
+        //stablizer.DestablizedEvent += () => { stablizing = false; Debug.Log("Fallen Cat!"); };
+        //foreach(var limb in limbEnds)
+        //{
+        //    stablizer.DestablizedEvent += limb.Destableized;
+        //}
     }
 
-    //temp move to movement
-    private void LimbInit()
+    void PathToPoint(Vector3 destination)
     {
-        groundYVal = 0;
-        foreach (var limb in limbEnds)
-        {
-            groundYVal += limb.transform.position.y;
-        }
-        groundYVal /= limbEnds.Count;
-
-        colliderToLimb = new Dictionary<Collider, LimbEnd>();
-        foreach (var limb in limbEnds)
-        {
-            limb.StepSpeed = speed * 4;
-            limb.StepHeight = stepHeight;
-            limb.TempLimbInit(groundYVal);
-
-            void RecursiveColliderSearch(Transform toCheck)
-            {
-                if (toCheck.TryGetComponent(out Collider c))
-                    colliderToLimb.Add(c, limb);
-
-                for (int i = 0; i < toCheck.childCount; i++)
-                    RecursiveColliderSearch(toCheck.GetChild(i));
-            }
-            RecursiveColliderSearch(limb.transform);
-        }
+        destination.y = transform.position.y;
+        mPath.PathToPoint(destination);
+        targetPreviousPos = followTarget.transform.position;
+        pathing = true;
     }
 
     private void Update()
     {
         if(followTarget.transform.position != targetPreviousPos)
-        {
-            Vector3 temp = followTarget.transform.position;
-            temp.y = transform.position.y;
-            mPath.PathToPoint(temp,transform.position, hipTransform.position, transform.forward);
-            targetPreviousPos = followTarget.transform.position;
-            pathing = true;
-        }
+            PathToPoint(followTarget.transform.position);
         if(stablizing)
             stablizer.Update(Time.deltaTime);
-        if (pathing && (pathing = mPath.Move(Time.deltaTime, out Vector3 shoulderPos, out Vector3 hipPos, out Vector3 forward)))
+
+        Vector3[] vectors = new Vector3[4];
+        if (pathing)
         {
+            mPath.Move(Time.deltaTime, out Vector3 forward, vectors);
             transform.forward = forward;
-            transform.position = shoulderPos;
-            hipTransform.position = hipPos;  //move hips after rotation so they aren't rotated
+            for(int i = 0, count = orderedTransforms.Length; i < count;  i++)
+            {
+                orderedTransforms[i].position = vectors[i];
+            }
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        //pass on collisions to limbs
-        for (int i = 0; i < collision.contactCount; i++)
-        {
-            var contact = collision.GetContact(i);
-            if(colliderToLimb.TryGetValue(contact.thisCollider,out LimbEnd collidedLimb))
-                collidedLimb.Collided(contact.point);
-        }
-    }
+
+    //private void OnCollisionEnter(Collision collision)
+    //{
+    //    //pass on collisions to limbs
+    //    for (int i = 0; i < collision.contactCount; i++)
+    //    {
+    //        var contact = collision.GetContact(i);
+    //        if(colliderToLimb.TryGetValue(contact.thisCollider,out LimbEnd collidedLimb))
+    //            collidedLimb.Collided(contact.point);
+    //    }
+    //}
 }
