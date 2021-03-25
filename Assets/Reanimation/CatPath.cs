@@ -29,6 +29,7 @@ public partial class CatPath
     //---path data---//
     //information about the path the cat is currently taking
 
+    public bool IsValid { get { return path != null && path.Count != 0; } }
     //holds all the components in the current path
     LinkedList<PathComponent> path;
     //the total time required to finish the path
@@ -40,6 +41,7 @@ public partial class CatPath
     //---events---//
     public event System.Action PathFinished;
     public event System.Action PathStarted;
+    public event System.Action PathReset;
 
     public CatPath(float [] delays, Transform[] transforms, int hipIndex)
     {
@@ -174,26 +176,50 @@ public partial class CatPath
     //called before creating a new path
     private void ResetPath()
     {
-        //start every path with linar paths for transforms behind the shoulders to follow
-        path = new LinkedList<PathComponent>();
-
+        //add paths for transfroms behind the shoulders to lerp to shoulders
         Vector3 previousPos = default;
-        float totalDelay = 0;
-        //itterate backwards to go from head to tail
-        for(int i = transforms.Length-1; i >= 0; i--)
+        var newPath = new LinkedList<PathComponent>();
+
+        if (path == null)
         {
-            float delay = delays[i];
-            if (delay > 0)
+            //itterate backwards to go from head to tail
+            for (int i = transforms.Length - 1; i >= 0; i--)
             {
-                path.AddFirst(new LinePath(delay,
-                    transforms[i].position,
-                    previousPos
-                    ));
-                totalDelay += delay;
+                float delay = delays[i];
+                if (delay > 0)
+                {
+                    newPath.AddFirst(new LinePath(delay - delays[i + 1],
+                        transforms[i].position,
+                        previousPos
+                        ));
+                }
+                previousPos = transforms[i].position;
             }
-            previousPos = transforms[i].position;
+            elapsedTime = delays[0];
         }
-        elapsedTime = totalDelay;
+        else
+        {
+            //itterate backwards to go from head to tail
+            for (int i = transforms.Length - 1; i >= 0; i--)
+            {
+                float delay = delays[i];
+                if (delay > 0)
+                {
+                    GetPointOnPath(-delay, out Vector3 mPos);
+                    newPath.AddFirst(new LinePath(delay - delays[i + 1],
+                        mPos,
+                        previousPos
+                        ));
+                }
+                GetPointOnPath(-delay, out previousPos);
+            }
+            elapsedTime = delays[0];
+        }
+
+        //start every path with linar paths for transforms behind the shoulders to follow
+        path = newPath;
+
+        PathReset?.Invoke();
     }
 
     private void RemoveFirstComponent()
@@ -203,7 +229,6 @@ public partial class CatPath
         path.RemoveFirst();
     }
 
-    //called to finalize a path
     private void FinalizePath()
     {
         totalDuration = 0;
@@ -215,7 +240,7 @@ public partial class CatPath
 
         Vector3 forward = new Vector3();
         Vector3 previousPos = default;
-        for(int i = 0, count = transforms.Length; i < count; i++)
+        for (int i = 0, count = transforms.Length; i < count; i++)
         {
             if (delays[i] > 0)
                 continue;
@@ -227,7 +252,7 @@ public partial class CatPath
             else
             {
                 Vector3 pathEnd = forward + previousPos;
-                path.AddLast(new LinePath(1/Speed, previousPos, pathEnd));
+                path.AddLast(new LinePath(1 / Speed, previousPos, pathEnd));
                 previousPos = path.First.Value.GetPointOnPath(path.Last.Value.Duration);
             }
         }

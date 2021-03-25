@@ -8,7 +8,7 @@ public class CatPathWithNav : CatPath
     public float GroundHeight { get; set; }
     float catChestHeight;
 
-    public CatPathWithNav(float catChestHeight, float[] delays, Transform[] transforms) : base(delays,transforms,0)
+    public CatPathWithNav(float catChestHeight, float[] delays, Transform[] transforms) : base(delays,transforms,1)
     {
         //default values for pathfinding settings
         MinTurningRad = .1f;

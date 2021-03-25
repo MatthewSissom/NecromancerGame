@@ -35,7 +35,9 @@ public class LimbEnd : MonoBehaviour
 
     //---Public Felids---//
     public float StepSpeed;
-    public float StepHeight;
+    public float StepHeight { get; set; }
+    public float HeightOffset { get; private set; }
+    public float OriginMovementMult = 2;
 
     //A combination of where this limb is on the body and how it should move
     [field: SerializeField]
@@ -78,17 +80,25 @@ public class LimbEnd : MonoBehaviour
 
     private Coroutine currentRoutine;
     private Vector3 stepTargetPos;
+    private float expectedPushTime;
 
-    public void SetStepTarget(Vector3 mTarget)
+    public void SetStepTarget(Vector3 mTarget, float expectedPushTime)
     {
         stepTargetPos = mTarget;
+        this.expectedPushTime = expectedPushTime;
+    }
+
+    public void DefaultStepTarget()
+    {
+        stepTargetPos = transform.position;
+        expectedPushTime = 0.25f;
     }
 
     public void TempLimbInit(float groundHeight)
     {
         LimbState = LimbStates.Standing;
         StrideLength = Mathf.Sqrt(LimbLength * LimbLength + Mathf.Pow(LimbStart.transform.position.y - groundHeight, 2));
-        StartPush();
+        StartStep();
     }
 
     public void LimbInit(LimbTag type, LimbLocationTag limbLocation, float length, float strideLength, GameObject target, GameObject limbStart)
@@ -112,6 +122,9 @@ public class LimbEnd : MonoBehaviour
         }
 
         LimbState = LimbStates.Pushing;
+
+        if (expectedPushTime == 0)
+            expectedPushTime = 0.25f;
         currentRoutine =  StartCoroutine(PushRoutine());
     }
 
@@ -161,7 +174,8 @@ public class LimbEnd : MonoBehaviour
         if (LimbState == LimbStates.Stepping)
         {
             LimbState = LimbStates.Standing;
-            StopCoroutine(currentRoutine);
+            if(currentRoutine != null)
+                StopCoroutine(currentRoutine);
         }
         StepEndEvent?.Invoke(this, collisonPoint);
     }
@@ -173,10 +187,14 @@ public class LimbEnd : MonoBehaviour
         float elapsedTime = 0;
         float percentFinished = 0;
         float stepTime = (stepTargetPos - inital).magnitude / StepSpeed;
+        float initalHOffset = HeightOffset;
         while (percentFinished < 1)
         {
             elapsedTime += Time.deltaTime;
             percentFinished = elapsedTime / stepTime;
+
+            HeightOffset = initalHOffset * (1 - percentFinished);
+
             Target.transform.position = Vector3.Lerp(inital, stepTargetPos, percentFinished)
                 + new Vector3(0, Mathf.Sin(percentFinished * Mathf.PI) * StepHeight, 0);
             yield return null;
@@ -190,12 +208,12 @@ public class LimbEnd : MonoBehaviour
     {
         Transform targetTransfrom = Target.transform;
         Vector3 groundedTargetPosition = Target.transform.position;
-        bool contracting = true;
-        while (contracting || Extension < .7 )
+        float timer = 0;
+        while (timer < expectedPushTime / 2 || Extension < 1 )
         {
-            if (contracting)
-                //contracting = !((Extension < .6) || Extension > 1);
-                contracting = !((Extension < .6) || Extension > 1.5);
+            timer += Time.deltaTime;
+
+            HeightOffset = Mathf.Sin(timer / expectedPushTime * Mathf.PI) * OriginMovementMult * StepHeight;
 
             targetTransfrom.position = groundedTargetPosition;
             yield return null;

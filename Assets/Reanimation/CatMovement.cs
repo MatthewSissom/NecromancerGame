@@ -58,10 +58,17 @@ public class CatMovement
 
     void LimbStartedStep(LimbEnd limb)
     { 
-        float time = (limb.LimbLength*3 / 2 / speed) +  (limb.LimbLength*3 / limb.StepSpeed);
+        float time = (limb.StrideLength / speed) +  (limb.StrideLength / limb.StepSpeed);
+        //move directly under the cat if it's standing still
         time *= pathing ? 1 : 0;
         float dist = 0.05f;
         Vector3 target;
+
+        if(!path.IsValid)
+        {
+            limb.DefaultStepTarget();
+            return;
+        }
 
         //Calculate the new position for the limb
         switch (limb.LocationTag)
@@ -84,7 +91,7 @@ public class CatMovement
         }
 
         target.y = groundYVal;
-        limb.SetStepTarget(target);
+        limb.SetStepTarget(target, (limb.StrideLength / speed));
     }
 
     void LimbEndedStep(LimbEnd calling, Vector3? collisionPoint)
