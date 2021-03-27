@@ -1,7 +1,10 @@
-﻿using System.Collections;
+﻿#define USING_IK
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using RootMotion.FinalIK;
+using RootMotion.FinalIK;
+
 
 public class BoneAssembler : State
 {
@@ -18,8 +21,11 @@ public class BoneAssembler : State
     //dictionary of joints in the armature that correspond to connecction areas on the table
     Dictionary<TableConnectionArea,Transform> joints;
 
-    //FABRIKRoot mFABRIKRoot;
-    //List<FABRIK> chains;
+    //WILL DON'T COMMENT THESE OUT instead comment out the "#define USING_IK" at the top of this file
+#if USING_IK
+    FABRIKRoot mFABRIKRoot;
+    List<FABRIK> chains;
+#endif
 
     //total number of joints, conneciton areas, and targets
     int count;
@@ -39,8 +45,11 @@ public class BoneAssembler : State
     {
         emptyArmature = FindObjectOfType<TableManager>().EmptyArmature.transform;
         joints = new Dictionary<TableConnectionArea, Transform>();
-        //mFABRIKRoot = emptyArmature.GetComponentInChildren<FABRIKRoot>();
-        //chains = new List<FABRIK>();
+
+#if USING_IK
+        mFABRIKRoot = emptyArmature.GetComponentInChildren<FABRIKRoot>();
+        chains = new List<FABRIK>();
+#endif
 
         ConnectionAreasInit();
     }
@@ -89,9 +98,11 @@ public class BoneAssembler : State
             connectionAreas.Add(area);
             joints.Add(area, armatureNode);
 
-            //FABRIK chain = armatureNode.GetComponent<FABRIK>();
-            //if (chain)
-            //    chains.Add(chain);
+#if USING_IK
+            FABRIK chain = armatureNode.GetComponent<FABRIK>();
+            if (chain)
+                chains.Add(chain);
+#endif
         }
 
         //check root values and search the entire tree
@@ -338,6 +349,7 @@ public class BoneAssembler : State
         return GetRoughJointMidpoint(joint) - boneAvg;
     }
 
+    //returns a score for how closely the bone is aligned with it's connectionArea
     private float BoneScore(Bone bone, TableConnectionArea connectionArea, out int axisIndex)
     {
         //half the distance of a spinechunk
@@ -444,19 +456,21 @@ public class BoneAssembler : State
 
     void RebuildIKChains()
     {
-        //foreach (var chain in mFABRIKRoot.solver.chains)
-        //{
-        //    var bones = chain.ik.solver.bones;
-        //    Transform[] transforms = new Transform[bones.Length];
-        //    for (int i = 0; i < bones.Length; i++)
-        //    {
-        //        transforms[i] = bones[i].transform;
-        //    }
-        //    chain.ik.solver.SetChain(transforms, chain.ik.solver.GetRoot());
-        //}
+#if USING_IK
+        foreach (var chain in mFABRIKRoot.solver.chains)
+        {
+            var bones = chain.ik.solver.bones;
+            Transform[] transforms = new Transform[bones.Length];
+            for (int i = 0; i < bones.Length; i++)
+            {
+                transforms[i] = bones[i].transform;
+            }
+            chain.ik.solver.SetChain(transforms, chain.ik.solver.GetRoot());
+        }
 
-        //mFABRIKRoot.enabled = true;
-        //foreach (var chain in chains)
-        //    chain.enabled = true;
+        mFABRIKRoot.enabled = true;
+        foreach (var chain in chains)
+            chain.enabled = true;
+#endif
     }
 }

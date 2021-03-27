@@ -145,13 +145,9 @@ public class AssignmentChecker : State
     {
         Begin();
 
-        //AssignmentInit();
-        //SearchForBone(GameObject.FindGameObjectWithTag("Root").transform);
         CheckConditions();
-        //PrintResults();
 
         End();
-
-        yield return new WaitForSeconds(1.5f);
+        yield return null;
     }
 }

@@ -5,8 +5,6 @@ using UnityEngine;
 public class destroyRoot : MonoBehaviour
 {
     [SerializeField]
-    string activateOnState = default;
-    [SerializeField]
     int skips = default;
 
     public void RemoveChildren()
@@ -38,7 +36,7 @@ public class destroyRoot : MonoBehaviour
 
     private void Start()
     {
-        //GameManager.Instance.AddEventMethod(activateOnState, "End", RemoveChildren);
+        GameManager.Instance.AddEventMethod(typeof(GhostManager), "End", RemoveChildren);
         gameObject.SetActive(false);
     }
 }
