@@ -38,7 +38,7 @@ public class destroyRoot : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.AddEventMethod(activateOnState, "End", RemoveChildren);
+        //GameManager.Instance.AddEventMethod(activateOnState, "End", RemoveChildren);
         gameObject.SetActive(false);
     }
 }

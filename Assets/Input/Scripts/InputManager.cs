@@ -179,11 +179,11 @@ public partial class InputManager : MonoBehaviour
         else
             Instance = this;
 
-        MenuManager.Instance.AddEventMethod("MenuMain", "Begin", () =>
+        MenuManager.Instance.AddEventMethod(typeof(MenuMain), "Begin", () =>
         {
             enabled = false;
         });
-        GameManager.Instance.AddEventMethod("GameInit", "End", () =>
+        GameManager.Instance.AddEventMethod(typeof(GameInit), "End", () =>
         {
             enabled = true;
         });

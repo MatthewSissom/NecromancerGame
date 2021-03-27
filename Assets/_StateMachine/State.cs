@@ -4,32 +4,58 @@ using UnityEngine;
 
 public abstract class State : MonoBehaviour
 {
-    public string Name { get; protected set; }
+    //the name of this state
+    public string Name 
+    { 
+        get 
+        {
+            if(stateName == null)
+                SetName();
+            return stateName;
+        }
+        protected set { stateName = value; }
+    }
+    private string stateName;
+
+    //the routine that runs during this state
     public abstract IEnumerator Routine();
 
     //events for beginning and ending a state, Begin and End must be called 
     //at the begining and end of any implementation of Routine
-    public delegate void StateMethod();
-    protected event StateMethod BeginEvent;
-    protected event StateMethod EndEvent;
+    protected class EventWraper
+    { 
+        protected event System.Action mEvent;
+        public void Subscribe(System.Action listener)
+        {
+            mEvent += listener;
+        }
+        public void Remove(System.Action listener)
+        {
+            mEvent -= listener;
+        }
+        public void Invoke()
+        {
+            mEvent?.Invoke();
+        }
+    }
+
+    protected Dictionary<string, EventWraper> allEvents;
 
     //tries to add a method to an event, returns true if the state was found, false if it was not
     //to add new states to a child of this class use if(!base.AddToEvent(eventName,method,true)) and 
     //add a new switch statement with all new events
-    public virtual bool AddToEvent(string eventName, StateMethod method, bool overriden = false)
+    public bool AddToEvent(string eventName, System.Action method)
     {
         eventName = eventName.ToLower().Trim();
-        switch(eventName)
+        if (allEvents.TryGetValue(eventName, out var mEvent))
         {
-            case "begin":
-                BeginEvent += method;
-                return true;
-            case "end":
-                EndEvent += method;
-                return true;
-            default:
-                if(!overriden) Debug.LogError(GetType() + " does not contain event \"" + eventName + "\"");
-                return false;
+            mEvent.Subscribe(method);
+            return true;
+        }
+        else
+        {
+            Debug.LogError(GetType() + " does not contain event \"" + eventName + "\"");
+            return false;
         }
     }
 
@@ -40,17 +66,20 @@ public abstract class State : MonoBehaviour
 
     protected void Begin()
     {
-        BeginEvent?.Invoke();
+        allEvents["begin"]?.Invoke();
     }
 
     protected void End()
     {
-        EndEvent?.Invoke();
+        allEvents["end"]?.Invoke();
     }
 
     protected virtual void Awake()
     {
         SetName();
+        allEvents = new Dictionary<string, EventWraper>();
+        allEvents.Add("begin", new EventWraper());
+        allEvents.Add("end", new EventWraper());
     }
 
 }

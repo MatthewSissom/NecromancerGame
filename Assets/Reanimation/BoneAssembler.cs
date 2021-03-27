@@ -48,7 +48,7 @@ public class BoneAssembler : State
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.Instance.AddEventMethod("GameInit", "End", ResetAssembler);
+        GameManager.Instance.AddEventMethod(typeof(GameInit), "End", ResetAssembler);
     }
 
     void ConnectionAreasInit()

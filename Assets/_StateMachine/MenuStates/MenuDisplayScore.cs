@@ -57,10 +57,10 @@ public class MenuDisplayScore : State
 
     private void Start()
     {
-        MenuManager.Instance.AddEventMethod("MenuMain", "begin", () => {
+        MenuManager.Instance.AddEventMethod(typeof(MenuMain), "begin", () => {
             textBox.text = "";
             canvas.SetActive(false); 
         });
-        GameManager.Instance.AddEventMethod("GameCleanUp", "end", () => { canvas.SetActive(true); });
+        GameManager.Instance.AddEventMethod(typeof(GameCleanUp), "end", () => { canvas.SetActive(true); });
     }
 }

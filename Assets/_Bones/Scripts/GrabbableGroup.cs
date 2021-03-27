@@ -13,6 +13,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     private Rigidbody rb;
     private Dictionary<Collider, Bone> colliderToBone;
     BoneCollisionHandler collisionHandler;
+    private CustomGravity mCustomGravity;
 
     Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return rb; } }
@@ -21,24 +22,38 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         base.Awake();
         rb = GetComponent<Rigidbody>();
         colliderToBone = new Dictionary<Collider, Bone>();
+        mCustomGravity = GetComponent<CustomGravity>();
 
-        void RecursiveColliderSearch(Transform toCheck, Bone bone = null)
+        //finds all bones in the higharcy and adds their colliders to the dictionary
+        //returns if a bone was found lower in the higharchy
+        bool RecursiveColliderSearch(Transform toCheck, Bone bone = null)
         {
+            bool boneFound = false;
             if (!bone)
             {
-                if(TryGetComponent(out bone))
+                //search for bone if none has been found 
+                boneFound = toCheck.TryGetComponent(out bone);
+                if (boneFound)
                     bone.AttachedEvent += BoneWasConnected;
             }
             else
             {
-                if(TryGetComponent(out Collider c))
+                //if bones have been found search for colliders which belong to 
+                //the found bone
+                if(toCheck.TryGetComponent(out Collider c))
                     colliderToBone.Add(c,bone);
             }
 
+            //recurse
             for (int i = 0; i < toCheck.childCount; i++)
-                RecursiveColliderSearch(toCheck.GetChild(i), bone);
+                boneFound |= RecursiveColliderSearch(toCheck.GetChild(i), bone);
+
+            return boneFound;
         }
-        RecursiveColliderSearch(transform);
+
+        bool isValid = RecursiveColliderSearch(transform);
+        if (!isValid)
+            Debug.LogError("Compound bone has no children!");
     }
 
     protected override void Start()
@@ -73,10 +88,8 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (!this)
             return;
         const float maxReleaseYVelocity = 1.0f;
-        //TEMP cash custom gravity
-        var gravity = GetComponent<CustomGravity>();
-        if(gravity)
-            gravity.enabled = true;
+        if(mCustomGravity)
+            mCustomGravity.enabled = true;
         rb.freezeRotation = false;
         Vector3 velocity = rb.velocity;
         if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
@@ -107,8 +120,8 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (collision.gameObject.CompareTag("Horizontal"))
         {
             Rb.velocity = new Vector3(0, Rb.velocity.y, 0);
-            //TEMP cash custom gravity 
-            Rb.gameObject.GetComponent<CustomGravity>().enabled = false;
+            if (mCustomGravity)
+                mCustomGravity.enabled = false;
             Rb.useGravity = true;
         }
     }

@@ -84,6 +84,6 @@ public class TableConnectionArea : BoneGroup
         myID = BoneManager.Collision.Regester(this);
         groupID = myID;
 
-        GameManager.Instance.AddEventMethod("BoneAssembler", "Begin", () => { gameObject.SetActive(false); });
+        GameManager.Instance.AddEventMethod(typeof(BoneAssembler), "Begin", () => { gameObject.SetActive(false); });
     }
 }

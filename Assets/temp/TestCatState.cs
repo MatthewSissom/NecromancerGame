@@ -13,6 +13,6 @@ public class TestCatState : MonoBehaviour
     }
     public void Start()
     {
-        GameManager.Instance.AddEventMethod("CatWalkStart", "Begin", SetVars);
+        GameManager.Instance.AddEventMethod(typeof(BoneAssembler), "End", SetVars);
     }
 }

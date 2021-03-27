@@ -22,14 +22,11 @@ public class MenuShowAssignments : State
 
     private void Start()
     {
-        // AddEventMethods to set states
-        MenuManager.Instance.AddEventMethod("MenuMain", "begin", () => { canvas.SetActive(false); });
-        MenuManager.Instance.AddEventMethod("MenuShowAssignments", "begin", () => { canvas.SetActive(true); });
+        //Toggle canvas when switching between states
+        MenuManager.Instance.AddEventMethod(typeof(MenuMain), "begin", () => { canvas.SetActive(false); });
+        MenuManager.Instance.AddEventMethod(typeof(MenuShowAssignments), "begin", () => { canvas.SetActive(true); });
 
-        GameManager.Instance.AddEventMethod("GameCleanUp", "end", () => { canvas.SetActive(false); });
-
-        //MenuManager.Instance.AddEventMethod("MenuShowAssignments", "begin", () => { canvas.SetActive(true); });
-        //GameManager.Instance.AddEventMethod("MenuShowAssignments", "end", () => { canvas.SetActive(false); });
+        GameManager.Instance.AddEventMethod(typeof(GameCleanUp), "end", () => { canvas.SetActive(false); });
     }
 
     public override IEnumerator Routine()

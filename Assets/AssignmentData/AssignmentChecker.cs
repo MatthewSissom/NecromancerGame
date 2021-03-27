@@ -34,8 +34,8 @@ public class AssignmentChecker : State
 
     private void Start()
     {
-        GameManager.Instance.AddEventMethod("AssignmentChecker", "Begin", AssignmentInit);
-        GameManager.Instance.AddEventMethod("AssignmentChecker", "End", PrintResults);
+        GameManager.Instance.AddEventMethod(typeof(AssignmentChecker), "Begin", AssignmentInit);
+        GameManager.Instance.AddEventMethod(typeof(AssignmentChecker), "End", PrintResults);
     }
 
     // Depth First search of a parent node for bones

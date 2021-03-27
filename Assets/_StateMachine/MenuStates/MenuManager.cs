@@ -15,28 +15,28 @@ public class MenuManager : StateManagerBase
             {
                 case "Main":
                     state = null;
-                    yield return SetState("TransMain");
-                    yield return SetState("BoardMain");
-                    yield return SetState("Main");
+                    yield return CameraTransition("MenuTransMain");
+                    yield return CameraTransition("MenuBoardMain");
+                    yield return SetState(typeof(MenuMain));
                     break;
                 case "Play":
                     yield break;
                 case "Instructions":
                     state = null;
-                    yield return SetState("BoardFlipped");
-                    yield return SetState("Instructions");
+                    yield return CameraTransition("MenuBoardFlipped");
+                    yield return SetState(typeof(MenuInstructions));
                     break;
                 case "Score":
                     state = null;
-                    yield return SetState("TransMain");
-                    yield return SetState("BoardFlipped");
-                    yield return SetState("DisplayScore");
+                    yield return CameraTransition("MenuTransMain");
+                    yield return CameraTransition("MenuBoardFlipped");
+                    yield return SetState(typeof(MenuDisplayScore));
                     break;
                 // Will - used for displaying assignments
                 case "Assignment":
                     state = null;
-                    yield return SetState("BoardFlipped");
-                    yield return SetState("ShowAssignments");
+                    yield return CameraTransition("MenuBoardFlipped");
+                    yield return SetState(typeof(MenuShowAssignments));
                     break;
                 case null:
                     yield return null;
@@ -52,25 +52,18 @@ public class MenuManager : StateManagerBase
 
     protected override void Awake()
     {
-        base.Awake();
-
         if (Instance)
             Destroy(gameObject);
         else
             Instance = this;
 
-        foreach (State s in allStates)
-        {
-            string name = s.Name;
-            if (name.Substring(0, 4) == "Menu")
-            {
-                states.Add(s.Name.ToLower().Trim(), s);
-            }
-        }
+        base.Awake();
     }
 
-    protected override Coroutine SetState(string stateName)
+    protected override bool IsMyState(State state)
     {
-        return base.SetState("Menu" + stateName);
+        string name = state.Name;
+        return base.IsMyState(state)
+            && name.Substring(0, 4) == "Menu";
     }
 }
