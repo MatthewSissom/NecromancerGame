@@ -14,7 +14,11 @@ public class AssignmentChecker : State
     private void AssignmentInit()
     {
         GameObject root = GameObject.FindGameObjectWithTag("Root");
-
+        if(root == null)
+        {
+            Debug.LogError("No gameobject tagged with root! Please add root tag");
+            return;
+        }
         root.SetActive(true);
 
         void ReEnableInit(GameObject current)

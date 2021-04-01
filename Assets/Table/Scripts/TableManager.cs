@@ -42,8 +42,6 @@ public class TableManager : MonoBehaviour
             outlines.Add(go.GetComponent<SpriteRenderer>());
         }
 
-        ResetTable();
-
         TableConnectionArea temp;
         void FindAreasRecursive(Transform toCheck,int shipmentNumber)
         {
@@ -115,6 +113,11 @@ public class TableManager : MonoBehaviour
     {
         shipmentNumber = -1;
         EmptyArmature = Instantiate(emptyArmaturePrefab, new Vector3(-.093f,.183f,.053f), Quaternion.Euler(0,-90,-90), transform);
+
+        //temp
+        var placer = FindObjectOfType<tempCatPlacer>();
+        placer.EmptyArmature = EmptyArmature;
+
         foreach (TableConnectionArea ta in allAreas)
             ta.ResetArea();
         foreach (var outline in outlines)

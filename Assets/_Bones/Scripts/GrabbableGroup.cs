@@ -98,6 +98,13 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         }
     }
 
+    protected override void RemoveChild(BoneGroup toRemove)
+    {
+        base.RemoveChild(toRemove);
+        if (children.Count == 0)
+            Destroy(gameObject);
+    }
+
     public void BoneWasConnected(Bone bone)
     {
         bone.transform.parent = null;

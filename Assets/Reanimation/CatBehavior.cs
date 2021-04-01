@@ -9,7 +9,7 @@ public class CatBehavior : MonoBehaviour
 
     [Header("LimbEnds")]
     [SerializeField]
-    GameObject followTarget;
+    public GameObject followTarget;
     Vector3 targetPreviousPos = new Vector3(-1000,-1000,-1000);
     bool pathing = false;
 
@@ -35,33 +35,80 @@ public class CatBehavior : MonoBehaviour
     //holds transforms along the main line of the cat 
     Transform[] orderedTransforms;
 
+    bool initialized = false;
     CatMovement movement;
     CatPath mPath;
 
     //temp
     float timer;
 
+    public float GroundHeight
+    {
+        get { return movement.GroundYValue; }
+        set { movement.SetGroundYValue(value); }
+    }
+
+    public float ChestHeight
+    {
+        get { return movement.ChestHeight; }
+    }
 
     CatStablizer stablizer;
     bool stablizing = false;
 
-    private void Awake()
+    public void BehaviorInit(List<LimbEnd> limbEnds, Transform[] orderedTransforms, float[] transformDistances)
     {
-        //mPath = new CatPath();
+        if (initialized)
+            return;
+        initialized = true;
+
+        this.orderedTransforms = orderedTransforms;
+        this.limbEnds = limbEnds;
+
+        speed = 0.2f;
+        stepHeight = 0.05f;
+
+        for (int i = 0; i < transformDistances.Length; i++)
+        {
+            transformDistances[i] /= speed;
+        }
+
+        var catPathWithNav = new CatPathWithNav(transform.position.y, transformDistances, orderedTransforms);
+        mPath = catPathWithNav;
+        mPath.PathFinished += () => { pathing = false; };
+        mPath.PathStarted += () => { pathing = true; };
+
+        movement = new CatMovement(limbEnds,speed, mPath);
+        catPathWithNav.GroundHeight = movement.GroundYValue;
+    }
+
+
+
+    private void Start()
+    {
+        if (initialized)
+            return;
+        initialized = true;
+
+        Debug.LogError("Start init used on catbehavior");
+
         orderedTransforms = new Transform[4];
         orderedTransforms[0] = tailTransform;
         orderedTransforms[1] = hipTransform;
         orderedTransforms[2] = transform;
         orderedTransforms[3] = headTransform;
+
         float[] delays= new float[4];
         delays[0] = (tailTransform.position - hipTransform.position).magnitude / speed * 2 + (transform.position - hipTransform.position).magnitude / speed + hipDelay;
         delays[1] = (transform.position - hipTransform.position).magnitude / speed + hipDelay;
         delays[2] = 0;
         delays[3] = -(transform.position - headTransform.position).magnitude / speed * 2;
+
         mPath = new CatPathWithNav(transform.position.y, delays, orderedTransforms);
         mPath.PathFinished += () => { pathing = false; };
+        mPath.PathStarted += () => { pathing = true; };
 
-        movement = new CatMovement(limbEnds,stepHeight, speed,mPath);
+        movement = new CatMovement(limbEnds,speed,mPath);
 
         //stablizer = new CatStablizer(null, 1000, groundYVal);
         //stablizer.DestablizedEvent += () => { stablizing = false; Debug.Log("Fallen Cat!"); };
@@ -73,10 +120,9 @@ public class CatBehavior : MonoBehaviour
 
     void PathToPoint(Vector3 destination)
     {
-        destination.y = transform.position.y;
+        destination.y = movement.ChestHeight;
         mPath.PathToPoint(destination);
         targetPreviousPos = followTarget.transform.position;
-        pathing = true;
     }
 
     private void Update()
@@ -92,31 +138,31 @@ public class CatBehavior : MonoBehaviour
             //get base positions from path
             mPath.Move(Time.deltaTime, out Vector3 forward, vectors);
 
-            //modify positions based on offsets
-            foreach(var limb in limbEnds)
-            {
-                switch (limb.LocationTag)
-                {
-                    case LimbEnd.LimbLocationTag.FrontLeft:
-                        vectors[2] += new Vector3(0, limb.HeightOffset, 0);
-                        vectors[3] += new Vector3(0, limb.HeightOffset * 5, 0);
-                        break;
-                    case LimbEnd.LimbLocationTag.FrontRight:
-                        vectors[2] += new Vector3(0, limb.HeightOffset, 0);
-                        vectors[3] += new Vector3(0, limb.HeightOffset * 5, 0);
-                        break;
-                    case LimbEnd.LimbLocationTag.BackLeft:
-                        vectors[1] += new Vector3(0, limb.HeightOffset, 0);
-                        break;
-                    case LimbEnd.LimbLocationTag.BackRight:
-                        vectors[1] += new Vector3(0, limb.HeightOffset, 0);
-                        break;
-                    default:
-                        break;
-                }
-            }
-            timer += Time.deltaTime;
-            vectors[0] += new Vector3(0, 0.07f +  Mathf.Sin(timer * 1.5f * Mathf.PI) * stepHeight / 4, 0);
+            ////modify positions based on offsets
+            //foreach(var limb in limbEnds)
+            //{
+            //    switch (limb.LocationTag)
+            //    {
+            //        case LimbEnd.LimbLocationTag.FrontLeft:
+            //            vectors[2] += new Vector3(0, limb.HeightOffset, 0);
+            //            vectors[3] += new Vector3(0, limb.HeightOffset * 5, 0);
+            //            break;
+            //        case LimbEnd.LimbLocationTag.FrontRight:
+            //            vectors[2] += new Vector3(0, limb.HeightOffset, 0);
+            //            vectors[3] += new Vector3(0, limb.HeightOffset * 5, 0);
+            //            break;
+            //        case LimbEnd.LimbLocationTag.BackLeft:
+            //            vectors[1] += new Vector3(0, limb.HeightOffset, 0);
+            //            break;
+            //        case LimbEnd.LimbLocationTag.BackRight:
+            //            vectors[1] += new Vector3(0, limb.HeightOffset, 0);
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            //timer += Time.deltaTime;
+            //vectors[0] += new Vector3(0, 0.07f +  Mathf.Sin(timer * 1.5f * Mathf.PI) * stepHeight / 4, 0);
 
 
             //apply new positions

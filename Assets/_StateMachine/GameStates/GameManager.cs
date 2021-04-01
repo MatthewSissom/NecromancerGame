@@ -43,8 +43,10 @@ public class GameManager : StateManagerBase
         yield return SetState(typeof(BoneAssembler));
         yield return SetState(typeof(AssignmentChecker));
 
-        yield return CameraTransition("CatWalkStart");
-        yield return CameraTransition("CatWalkEnd");
+        while(true)
+        {
+            yield return null;
+        }
 
         yield return SetState(typeof(GameCleanUp));
 

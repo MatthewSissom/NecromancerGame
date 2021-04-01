@@ -11,8 +11,8 @@ public class LimbEnd : MonoBehaviour
     {
         Pair,   //There two legs on this half of the body (two front or two back)
         Single, //There is only one leg on this half of the body
-        Spine,  //There are are no legs on the back part of the body
-        Worm,   //There are no legs anywhere on the body
+        Stump,
+        StumpSingle
     }
 
     //Where this limb starts on the body
@@ -61,6 +61,7 @@ public class LimbEnd : MonoBehaviour
     public GameObject LimbStart { get; private set; }
     //a percentage from 0 to 1 of how extended the limb is
     public float Extension { get { return (Target.transform.position - LimbStart.transform.position).magnitude / LimbLength; } }
+    public int DelayIndex { get; private set; }
 
     //---Public Events---//
 
@@ -94,22 +95,27 @@ public class LimbEnd : MonoBehaviour
         expectedPushTime = 0.25f;
     }
 
-    public void TempLimbInit(float groundHeight)
+    public void LimbInit(float length, GameObject target, GameObject limbStart)
     {
+        LimbLength = length;
+        Target = target;
+        LimbStart = limbStart;
         LimbState = LimbStates.Standing;
-        StrideLength = Mathf.Sqrt(LimbLength * LimbLength + Mathf.Pow(LimbStart.transform.position.y - groundHeight, 2));
-        StartStep();
     }
 
-    public void LimbInit(LimbTag type, LimbLocationTag limbLocation, float length, float strideLength, GameObject target, GameObject limbStart)
+    public void SetTags(LimbTag type, LimbLocationTag limbLocation, int delayIndex)
     {
         Type = type;
         LocationTag = limbLocation;
+        DelayIndex = delayIndex;
+    }
 
-        LimbLength = length;
-        StrideLength = strideLength;
-        Target = target;
-        LimbStart = limbStart;
+    public void SetStride(float chestDistFromGround)
+    {
+        if (LimbLength < chestDistFromGround)
+            StrideLength = LimbLength;
+        //get lenght of distance the limb will spend on ground based on length (hypotenuse) and distance from ground
+        StrideLength = Mathf.Sqrt(LimbLength * LimbLength - chestDistFromGround  * chestDistFromGround);
     }
 
     //can be called on a grounded limb to start pushing the body forward
@@ -168,6 +174,34 @@ public class LimbEnd : MonoBehaviour
         }
     }
 
+    public void PathStarted()
+    {
+        //if already moving, no change
+        if (LimbState != LimbStates.Standing)
+            return;
+
+        //when a path first starts only half of limbs will step,
+        //hopefully giving cats a more natural gait
+        switch (LocationTag)
+        {
+            case LimbLocationTag.FrontLeft:
+                StartPush();
+                break;
+            case LimbLocationTag.FrontRight:
+                StartStep();
+                break;
+            case LimbLocationTag.BackLeft:
+                StartStep();
+                break;
+            case LimbLocationTag.BackRight:
+                StartPush();
+                break;
+            default:
+                break;
+        }
+    }
+    
+
     //called when a foot is placed on the ground after a step
     private void StepEnd(Vector3? collisonPoint)
     {
@@ -187,6 +221,11 @@ public class LimbEnd : MonoBehaviour
         float elapsedTime = 0;
         float percentFinished = 0;
         float stepTime = (stepTargetPos - inital).magnitude / StepSpeed;
+        if(stepTime == 0)
+        {
+            StepEnd(null);
+            yield break;
+        }
         float initalHOffset = HeightOffset;
         while (percentFinished < 1)
         {
@@ -209,7 +248,7 @@ public class LimbEnd : MonoBehaviour
         Transform targetTransfrom = Target.transform;
         Vector3 groundedTargetPosition = Target.transform.position;
         float timer = 0;
-        while (timer < expectedPushTime / 2 || Extension < 1 )
+        while (timer < expectedPushTime || Extension < 1 )
         {
             timer += Time.deltaTime;
 
