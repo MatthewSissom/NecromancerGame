@@ -1,7 +1,12 @@
-﻿using System.Collections;
+﻿//#define USING_IK
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using RootMotion.FinalIK;
+#if USING_IK
+using RootMotion.FinalIK;
+#endif
+
 
 public class BoneAssembler : State
 {
@@ -16,18 +21,19 @@ public class BoneAssembler : State
     //holds all areas that belong to a limb starting from sections closest to the body
     List<List<TableConnectionArea>> limbs;
     //dictionary of joints in the armature that correspond to connecction areas on the table
-    Dictionary<TableConnectionArea,Transform> joints;
+    Dictionary<TableConnectionArea,Transform> areaToJoint;
+    Dictionary<Transform, TableConnectionArea> jointToArea;
 
-    //FABRIKRoot mFABRIKRoot;
-    //List<FABRIK> chains;
+    //!!!!!!!!!!! WILL DON'T COMMENT THESE OUT !!!!!!!!!!!!//
+    //instead comment out the "#define USING_IK" at the top of this file
+#if USING_IK
+    FABRIKRoot mFABRIKRoot;
+    List<FABRIK> fabrikChains;
+    List<TransformChain> transformChains;
+#endif
 
     //total number of joints, conneciton areas, and targets
     int count;
-
-    //void temp()
-    //{
-    //    gameObject.GetComponent<RootMotion.FinalIK.FABRIK>().solver.SetChain();
-    //}
 
     //axis data
     [SerializeField]
@@ -38,17 +44,39 @@ public class BoneAssembler : State
     private void ResetAssembler()
     {
         emptyArmature = FindObjectOfType<TableManager>().EmptyArmature.transform;
-        joints = new Dictionary<TableConnectionArea, Transform>();
-        //mFABRIKRoot = emptyArmature.GetComponentInChildren<FABRIKRoot>();
-        //chains = new List<FABRIK>();
+        areaToJoint = new Dictionary<TableConnectionArea, Transform>();
+        jointToArea = new Dictionary<Transform, TableConnectionArea>();
+
+#if USING_IK
+        mFABRIKRoot = emptyArmature.GetComponentInChildren<FABRIKRoot>();
+        fabrikChains = new List<FABRIK>();
+#endif
 
         ConnectionAreasInit();
+
+#if USING_IK
+        transformChains = new List<TransformChain>();
+        foreach (var fChain in fabrikChains)
+        {
+            var bones = fChain.solver.bones;
+            Transform[] transforms = new Transform[bones.Length];
+            for (int i = 0; i < bones.Length; i++)
+            {
+                transforms[i] = bones[i].transform;
+            }
+            transformChains.Add(
+                new TransformChain(transforms,
+                    fChain.solver.target.gameObject,
+                    IsOffset(transforms[0].gameObject)
+                ));
+        }
+#endif
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        GameManager.Instance.AddEventMethod("GameInit", "End", ResetAssembler);
+        GameManager.Instance.AddEventMethod(typeof(GameInit), "End", ResetAssembler);
     }
 
     void ConnectionAreasInit()
@@ -82,16 +110,20 @@ public class BoneAssembler : State
                 checkNext.Enqueue(connectionNode.GetChild(i));
             }
 
+#if USING_IK
+            FABRIK chain = armatureNode.GetComponent<FABRIK>();
+            if (chain)
+                fabrikChains.Add(chain);
+#endif
+
             //empty nodes shouldn't be added to data structures
             if (!area)
                 return;
 
             connectionAreas.Add(area);
-            joints.Add(area, armatureNode);
+            areaToJoint.Add(area, armatureNode);
+            jointToArea.Add(armatureNode, area);
 
-            //FABRIK chain = armatureNode.GetComponent<FABRIK>();
-            //if (chain)
-            //    chains.Add(chain);
         }
 
         //check root values and search the entire tree
@@ -111,16 +143,32 @@ public class BoneAssembler : State
         Begin();
 
         //early return if connection areas weren't initalized
-        if (connectionAreas == null || joints == null)
+        if (connectionAreas == null || areaToJoint == null)
         {
             End();
             yield break;
         }
 
-        //how long a bone has been moving for
-        float timer;
-        //how long a bone should move for to reach it's destination
-        const float timePerBone = 0.2f;
+        yield return StartCoroutine(MoveBonesToArmature());
+
+        //init cat cat components
+        RebuildIKChains();
+        AddMovementComponents();
+
+        End();
+        yield break;
+    }
+
+    private void BoneCleanUp(Bone b)
+    {
+        Destroy(b);
+        Destroy(b.GetComponent<CustomGravity>());
+        Destroy(b.GetComponent<Rigidbody>());
+        Destroy(b.GetComponent<BoneGroup>());
+    }
+
+    private IEnumerator MoveBonesToArmature()
+    {
         //the current connection area
         TableConnectionArea connectionArea;
         //the current joint
@@ -131,17 +179,13 @@ public class BoneAssembler : State
         //used to make sure that bones are only a part of one connection area group
         HashSet<Bone> seenBones = new HashSet<Bone>();
 
-
+        //loop though all connection areas in the table and move their bones into the armature
         for (int i = 0; i < count; i++)
         {
             connectionArea = connectionAreas[i];
-            armatureNode = joints[connectionArea];
-
-            //init vars for the group of bones moving in to the skeleton
-            timer = 0;
             bones = connectionArea.GetAllBones();
 
-            //temp, check to see if bones are a part of another group
+            //check to see if bones are already a part of another group, if so remove them from this group
             List<Bone> toRemove = new List<Bone>();
             foreach (Bone b in bones)
             {
@@ -157,50 +201,47 @@ public class BoneAssembler : State
             {
                 bones.Remove(b);
             }
-
-            //if there are no bones, don't modify this joint
+            //if there are no bones, continue and don't update this bone's chain
+            //so that this space in the higharchy can be filled by lower bones
             if (bones.Count == 0)
             {
                 continue;
             }
 
-            //how much the bone will need to move from it's starting position to reach it's final destination 
-            Vector3 totalOffset;
-            //values calculated by GetOffsetWithTableAxis
-            Bone bestBone = null;
-            int bestAxisIndex = default;
-
-            if(tableAxisDict[connectionArea.gameObject.name] != null)
+            armatureNode = areaToJoint[connectionArea];
+#if USING_IK
+            //check to see if there are empty nodes higher in the node's chain
+            foreach (var tChain in transformChains)
             {
-                totalOffset = GetOffsetWithTableAxis(out bestBone, out bestAxisIndex, bones, connectionArea);
+                if (tChain.Contains(armatureNode))
+                {
+                    armatureNode = tChain.MoveToFirstEmpty(armatureNode);
+                    break;
+                }
+            }
+#endif
+
+            //move bones to their final position in the skeleton
+            Vector3 totalOffset;         //how much the bone will need to move
+            Bone bestBone = null;        //the bone that best aligns with the connection area
+            int bestAxisIndex = default; //the axis of the bone that best alignes with the connection area
+            if (tableAxisDict[connectionArea.gameObject.name] != null)
+            {
+                totalOffset = GetOffsetWithTableAxis(out bestBone, out bestAxisIndex, bones, connectionArea, jointToArea[armatureNode]);
+                if (float.IsNaN(totalOffset.x) || float.IsNaN(totalOffset.y) || float.IsNaN(totalOffset.z))
+                    Debug.Log("Invalid offset from offset with table axis");
             }
             else
             {
                 totalOffset = GetOffsetWithJoint(bones, armatureNode);
+                if (float.IsNaN(totalOffset.x) || float.IsNaN(totalOffset.y) || float.IsNaN(totalOffset.z))
+                    Debug.Log("Invalid offset from offset with table joints");
             }
+            yield return StartCoroutine(OffsetBonesOverTime(bones, totalOffset));
 
-            //move bones in to position over time
-            Vector3 distMoved = new Vector3();
-            while (timer < timePerBone)
-            {
-                timer += Time.deltaTime;
-                Vector3 offset = totalOffset * Time.deltaTime / timePerBone;
-                distMoved += offset;
-                foreach (Bone b in bones)
-                {
-                    b.transform.position += offset;
-                }
-                yield return null;
-            }
-            //ensure all bones end at propper location
-            foreach (Bone b in bones)
-            {
-                b.transform.position += totalOffset - distMoved;
-            }
-
-            //if the bone is part of a chain move it's joint position to one end of the bone axis
+            //update armature to match the newly added bones
             if (bestBone != null)
-            { 
+            {
                 SetJointPosition(armatureNode, bestBone, connectionArea, bestAxisIndex);
             }
 
@@ -208,44 +249,49 @@ public class BoneAssembler : State
             foreach (Bone b in bones)
             {
                 b.transform.parent = armatureNode;
+                BoneCleanUp(b);
             }
 
-            //bone clean up
-            foreach (Bone b in bones)
-            {
-                Destroy(b);
-                Destroy(b.GetComponent<CustomGravity>());
-                Destroy(b.GetComponent<Rigidbody>());
-                Destroy(b.GetComponent<BoneGroup>());
-
-            }
-            // Plays a sound when the bones have reached their final position
-            // This is not cursed.
-            // When themes are implemented, can use theme field as parameter for PlaySound
-            // Ex. AudioManager.Instance.PlaySound(b.theme);
             AudioManager.Instance.PlaySound("normal");
-
-
-        yield return new WaitForSeconds(0.2f);
-
+            yield return new WaitForSeconds(0.2f);
         }
-
-        yield return new WaitForSeconds(1.5f);
-
-        RebuildIKChains();
-        End();
-        yield break;
     }
 
-    private Vector3 GetOffsetWithTableAxis(out Bone bestBone, out int bestAxisIndex, List<Bone> bones, TableConnectionArea connectionArea)
+    private IEnumerator OffsetBonesOverTime(List<Bone> bones, Vector3 offset)
     {
-        //search for the bone axis which has the best score
+        const float timePerBone = 0.2f; //how to reach the destination
+        float timer = 0;
+        Vector3 distMoved = new Vector3();
+        while (timer < timePerBone)
+        {
+            timer += Time.deltaTime;
+            Vector3 currentOffset = offset * Time.deltaTime / timePerBone;
+            distMoved += currentOffset;
+            foreach (Bone b in bones)
+            {
+                b.transform.position += currentOffset;
+            }
+            yield return null;
+        }
+        //ensure all bones end at propper location
+        foreach (Bone b in bones)
+        {
+            b.transform.position += offset - distMoved;
+        }
+    }
+
+    //returns the amount the bones need to move, which bone has the main axis, and the index of that axis
+    //originalCA is the connection area that the bones were originally placed in, chainCA is the connection
+    //area which corresponds to the bone's position in the chain
+    private Vector3 GetOffsetWithTableAxis(out Bone bestBone, out int bestAxisIndex, List<Bone> bones, TableConnectionArea originalCA, TableConnectionArea chainCA)
+    {
+        //search for the bone axis which aligns best with the area it was placed in
         bestBone = null;
         float bestScore = float.NegativeInfinity;
         bestAxisIndex = 0;
         foreach (Bone b in bones)
         {
-            float score = BoneScore(b, connectionArea, out int tempIndex);
+            float score = BoneScore(b, originalCA, out int tempIndex);
             if (score > bestScore)
             {
                 bestBone = b;
@@ -262,14 +308,14 @@ public class BoneAssembler : State
             return new Vector3();
         }
 
-        //check neighbors for newAxis to attach to
-        int toAttachToIndex= connectionArea.chainNeighbors.FindIndex(ca => (ca && ca.newAxis != null && ca.newAxis.Count > 0));
-        //if there are no chain neighbors then place the bone roughly in the middle of their spot in the armature
+        //check neighbors of the for newAxis to attach to
+        int toAttachToIndex= chainCA.chainNeighbors.FindIndex(ca => (ca && ca.newAxis != null && ca.newAxis.Count > 0));
+        //if there are no chain neighbors then place the bone roughly in the middle of the corresponding joint in the armature
         if (toAttachToIndex == -1)
         {
             //move the midpoint of the bone to the midpoint of the armature
             Vector3 bestAxMidpoint = (bestAxis[0] + bestAxis[1]) / 2;
-            Vector3 target = GetRoughJointMidpoint(joints[connectionArea]);
+            Vector3 target = GetRoughJointMidpoint(areaToJoint[chainCA]);
 
             return target - bestAxMidpoint;
         }
@@ -278,7 +324,7 @@ public class BoneAssembler : State
         bool isDownChain = toAttachToIndex == 0;
         //if the object is down chain then connect to the point that's not at the origin (index 1) otherwise 
         //the bone is upchain and should connect to the other point (index 0)
-        Vector3 toAttachTo = connectionArea.chainNeighbors[toAttachToIndex].newAxis[isDownChain? 1 : 0];
+        Vector3 toAttachTo = chainCA.chainNeighbors[toAttachToIndex].newAxis[isDownChain? 1 : 0];
 
         //indexes for closest points
         int p1 = 0;
@@ -338,6 +384,7 @@ public class BoneAssembler : State
         return GetRoughJointMidpoint(joint) - boneAvg;
     }
 
+    //returns a score for how closely the bone is aligned with it's connectionArea
     private float BoneScore(Bone bone, TableConnectionArea connectionArea, out int axisIndex)
     {
         //half the distance of a spinechunk
@@ -437,26 +484,203 @@ public class BoneAssembler : State
         joint.position = newAxis[selectedAxisIndex];
         for (int c = 0; c < joint.childCount; c++)
         {
-            //small offset is added to avoid bone lengths being equal to zero
-            joint.GetChild(c).position = connectionArea.newAxis[1] + new Vector3(0,0.005f,0);
+            joint.GetChild(c).position = connectionArea.newAxis[1];
         }
     }
 
     void RebuildIKChains()
     {
-        //foreach (var chain in mFABRIKRoot.solver.chains)
-        //{
-        //    var bones = chain.ik.solver.bones;
-        //    Transform[] transforms = new Transform[bones.Length];
-        //    for (int i = 0; i < bones.Length; i++)
-        //    {
-        //        transforms[i] = bones[i].transform;
-        //    }
-        //    chain.ik.solver.SetChain(transforms, chain.ik.solver.GetRoot());
-        //}
+#if USING_IK
+        List<TransformChain> emptyChains = new List<TransformChain>();
+        //update the ik chains to match the modified
+        for(int i = 0; i < fabrikChains.Count; i++)
+        {
+            var fChain = fabrikChains[i];
+            var bones = fChain.solver.bones;
 
-        //mFABRIKRoot.enabled = true;
-        //foreach (var chain in chains)
-        //    chain.enabled = true;
+            var tChain = transformChains[i];
+            tChain.DestroyAdditionalEmpties();
+
+            if (tChain.Count() > 1)
+            {
+                fChain.solver.SetChain(tChain.GetList().ToArray(), fChain.solver.GetRoot());
+                string message = string.Empty;
+                if (!fChain.solver.IsValid(ref message))
+                    emptyChains.Add(tChain);
+            }
+            else
+            {
+                emptyChains.Add(tChain);
+            }
+        }
+
+        mFABRIKRoot.enabled = true; 
+        for (int fIndex = 0, tIndex = 0; fIndex < fabrikChains.Count; fIndex++)
+        {
+            bool isInvalid = emptyChains.Contains(transformChains[tIndex]);
+            fabrikChains[fIndex].enabled = !isInvalid;
+            if (isInvalid)
+                transformChains.Remove(transformChains[tIndex]);
+            else
+                tIndex++;
+        }
+#endif
     }
+
+    bool IsOffset(GameObject limbTransform)
+    {
+        return limbTransform.name.EndsWith("Offset");
+    }
+
+    void AddMovementComponents()
+    {
+#if USING_IK
+        //limb data
+        List<LimbEnd> limbEnds = new List<LimbEnd>();
+        List<LimbEnd.LimbLocationTag> locations = new List<LimbEnd.LimbLocationTag>();
+        List<LimbEnd.LimbTag> types = new List<LimbEnd.LimbTag>();
+
+        //movement data
+        List<Transform> spineAlignedTargets = new List<Transform>();
+        //always add the root as a key target
+        spineAlignedTargets.Add(emptyArmature);
+
+        int frontIndex = -1; //holds the index of a front leg in the array
+        int backIndex = -1;  //holds the index of a back leg in the array
+        Transform chainTargets = emptyArmature.GetChild(1);
+        foreach (var tChain in transformChains)
+        {
+            var transforms = tChain.GetList();
+            var start = transforms[0].gameObject;
+
+            //check if the chain is spine aligned
+            if (!IsOffset(start))
+            {
+                var tKey = tChain.Target.name.Substring(0, 2);
+                switch (tKey)
+                {
+                    case "Ta":
+                        spineAlignedTargets.Add(tChain.Target.transform);
+                        continue;
+                    case "Pe":
+                        spineAlignedTargets.Add(tChain.Target.transform);
+                        continue;
+                    case "He":
+                        spineAlignedTargets.Add(tChain.Target.transform);
+                        continue;
+                }
+                continue;
+            }
+
+            void UpdateTags(ref int index)
+            {
+                if (index == -1) //first front leg added, add it as a single limb
+                {
+                    index = types.Count;
+                    if(tChain.Count() > 2)
+                        types.Add(LimbEnd.LimbTag.Single);
+                    else
+                        types.Add(LimbEnd.LimbTag.StumpSingle);
+
+                }
+                else
+                {
+                    //update old tags
+                    if (types[index] == LimbEnd.LimbTag.Single)
+                        types[index] = LimbEnd.LimbTag.Pair; 
+                    if (types[index] == LimbEnd.LimbTag.StumpSingle)
+                        types[index] = LimbEnd.LimbTag.Stump;
+
+                    //add new tag
+                    if (tChain.Count() > 2)
+                        types.Add(LimbEnd.LimbTag.Pair);
+                    else
+                        types.Add(LimbEnd.LimbTag.Stump);
+                }
+            }
+
+            //use the first two letters to find the matching target
+            string key = start.gameObject.name.Substring(0, 2);
+            switch (key)
+            {
+                //update tags for limb ends
+                case "FR":
+                    locations.Add(LimbEnd.LimbLocationTag.FrontRight);
+                    UpdateTags(ref frontIndex);
+                    break;
+                case "FL":
+                    locations.Add(LimbEnd.LimbLocationTag.FrontLeft);
+                    UpdateTags(ref frontIndex);
+                    break;
+                case "BR":
+                    locations.Add(LimbEnd.LimbLocationTag.BackRight);
+                    UpdateTags(ref backIndex);
+                    break;
+                case "BL":
+                    locations.Add(LimbEnd.LimbLocationTag.BackLeft);
+                    UpdateTags(ref backIndex);
+                    break;
+                default:
+                    Debug.LogError("Limb key: " + key + " for object " + start.gameObject.name + " not recognized");
+                    break;
+            }
+
+            GameObject target = tChain.Target;
+            if (!target)
+                continue; 
+            var endGO = transforms[transforms.Count - 1].gameObject;
+            target.transform.position = endGO.transform.position;
+            var newLimbMarker = endGO.AddComponent<LimbEnd>();
+            newLimbMarker.LimbInit(
+                tChain.WorldLength(),
+                target,
+                start
+                );
+            limbEnds.Add(newLimbMarker);
+        }
+
+        Vector3 forward = emptyArmature.forward;
+        int IsCloserToTail(Transform t1, Transform t2)
+        {
+            return System.Math.Sign(
+                Vector3.Dot(forward, t1.position) - Vector3.Dot(forward, t2.position)
+                );
+        }
+        spineAlignedTargets.Sort(IsCloserToTail);
+
+        //tags can only be set once all limbs have been processed, because other limbs can change types
+        for (int i = 0; i < limbEnds.Count; i++)
+        {
+            //find the nearest target on the spine
+            float minDistance = float.MaxValue;
+            int minIndex = -1;
+            for(int j = 0; j < spineAlignedTargets.Count; j++)
+            {
+                var target = spineAlignedTargets[j];
+                var distFromTarget = (target.position - limbEnds[i].LimbStart.transform.position).magnitude;
+                if (distFromTarget < minDistance)
+                {
+                    minIndex = j;
+                    minDistance = distFromTarget;
+                }
+            }
+            limbEnds[i].SetTags(types[i],locations[i],minIndex);
+        }
+
+
+        float[] distances = new float[spineAlignedTargets.Count];
+        for(int i = 0; i < distances.Length; i++)
+        {
+            distances[i] = (spineAlignedTargets[i].transform.position - emptyArmature.transform.position).magnitude;
+        }
+
+        var behavior = emptyArmature.gameObject.AddComponent<CatBehavior>();
+        behavior.BehaviorInit(
+            limbEnds,
+            spineAlignedTargets.ToArray(),
+            distances
+            );
+#endif
+    }
+
 }

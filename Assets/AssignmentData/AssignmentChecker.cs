@@ -14,7 +14,11 @@ public class AssignmentChecker : State
     private void AssignmentInit()
     {
         GameObject root = GameObject.FindGameObjectWithTag("Root");
-
+        if(root == null)
+        {
+            Debug.LogError("No gameobject tagged with root! Please add root tag");
+            return;
+        }
         root.SetActive(true);
 
         void ReEnableInit(GameObject current)
@@ -34,8 +38,8 @@ public class AssignmentChecker : State
 
     private void Start()
     {
-        GameManager.Instance.AddEventMethod("AssignmentChecker", "Begin", AssignmentInit);
-        GameManager.Instance.AddEventMethod("AssignmentChecker", "End", PrintResults);
+        GameManager.Instance.AddEventMethod(typeof(AssignmentChecker), "Begin", AssignmentInit);
+        GameManager.Instance.AddEventMethod(typeof(AssignmentChecker), "End", PrintResults);
     }
 
     // Depth First search of a parent node for bones
@@ -145,13 +149,9 @@ public class AssignmentChecker : State
     {
         Begin();
 
-        //AssignmentInit();
-        //SearchForBone(GameObject.FindGameObjectWithTag("Root").transform);
         CheckConditions();
-        //PrintResults();
 
         End();
-
-        yield return new WaitForSeconds(1.5f);
+        yield return null;
     }
 }

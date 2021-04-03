@@ -128,7 +128,7 @@ public class BoneGroup : MonoBehaviour
         return allBones;
     }
 
-    protected void RemoveChild(BoneGroup toRemove)
+    protected virtual void RemoveChild(BoneGroup toRemove)
     {
         removeChild(toRemove);
         toRemove.ResetID();

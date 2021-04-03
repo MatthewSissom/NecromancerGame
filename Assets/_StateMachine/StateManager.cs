@@ -22,21 +22,21 @@ public class StateManager : StateManagerBase
 
     override protected void Awake()
     {
-        base.Awake();
         if (Instance)
             Destroy(this);
         else
             Instance = this;
 
-        foreach (State s in allStates)
-        {
-            string name = s.Name;
-            if (name.Substring(0, 4) == "StMn")
-            {
-                states.Add(s.Name.ToLower().Trim(), s);
-            }
-        }
+        base.Awake();
     }
+
+    protected override bool IsMyState(State state)
+    {
+        string name = state.Name;
+        return base.IsMyState(state)
+           && name.Substring(0, 4) == "StMn";
+    }
+
     // Start is called before the first frame update
     protected void Start()
     {

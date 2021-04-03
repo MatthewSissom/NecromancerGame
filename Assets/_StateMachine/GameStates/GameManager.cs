@@ -8,8 +8,6 @@ public class GameManager : StateManagerBase
 
     protected override void Awake()
     {
-        base.Awake();
-
         if (Instance)
         {
             Destroy(this);
@@ -17,38 +15,40 @@ public class GameManager : StateManagerBase
         else
             Instance = this;
 
-        foreach (State s in allStates)
-        {
-            string name = s.Name;
-            string managerKey = name.Substring(0, 4);
-            if (managerKey != "StMn" && managerKey != "Menu")
-            {
-                states.Add(s.Name.ToLower().Trim(), s);
-            }
-        }
+        base.Awake();
+    }
+
+    protected override bool IsMyState(State state)
+    {
+        string name = state.Name;
+        string managerKey = name.Substring(0, 4);
+        return base.IsMyState(state)
+            &&(managerKey != "StMn" && managerKey != "Menu");
     }
 
     public IEnumerator Game()
     {
-        yield return SetState("GameInit");
+        yield return SetState(typeof(GameInit));
 
         //bone delivery loop
         while (!GhostManager.Instance.done)
         {
-            yield return SetState("GhostTrans");
-            yield return SetState("GhostManager");
-            yield return SetState("TableTrans");
+            yield return CameraTransition("GhostTrans");
+            yield return SetState(typeof(GhostManager));
+            yield return CameraTransition("TableTrans");
             yield return new WaitForSeconds(GhostManager.Instance.timeBetweenShipments);
         }
 
 
-        //yield return SetState("BoneAssembler");
+        yield return SetState(typeof(BoneAssembler));
+        yield return SetState(typeof(AssignmentChecker));
 
-        yield return SetState("CatWalkStart");
-        yield return SetState("CatWalkEnd");
-        yield return SetState("AssignmentChecker");
+        while(true)
+        {
+            yield return null;
+        }
 
-        yield return SetState("GameCleanUp");
+        yield return SetState(typeof(GameCleanUp));
 
         yield break;
     }

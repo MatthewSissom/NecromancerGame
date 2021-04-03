@@ -467,7 +467,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1370958129164020444}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6fb82f19cc3ce412892b525300de1141, type: 3}
   m_Name: 
@@ -770,7 +770,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2445571960859140093}
   m_Layer: 0
-  m_Name: 'Right Back Paw Target '
+  m_Name: BRPawTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -788,7 +788,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9214333599877977540}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2373223986540089728
 GameObject:
@@ -863,8 +863,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7263244047530817204}
-  - component: {fileID: 6609227355997390136}
-  - component: {fileID: 2009171087798651872}
   m_Layer: 0
   m_Name: EmptyArmature
   m_TagString: Untagged
@@ -888,41 +886,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6609227355997390136
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2490182504392057553}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 391e635666993b64b96be31effc8714e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  stepTime: 0.5
-  footToOriginLimit: 0.15
-  walkSpeed: 1
-  stepHeight: 0.1
-  sholderMovementMult: 0
-  feetTransforms:
-  - {fileID: 2445571960859140093}
-  - {fileID: 7378481392430804427}
-  - {fileID: 5827459413320459236}
-  - {fileID: 6712904332773770665}
-  hipTarget: {fileID: 5750491859503318300}
---- !u!114 &2009171087798651872
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2490182504392057553}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 91743906813790d48b13d911ac8fc95a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2735649782837722840
 GameObject:
   m_ObjectHideFlags: 0
@@ -963,7 +926,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5827459413320459236}
   m_Layer: 0
-  m_Name: Right Front Paw Target
+  m_Name: FRPawTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -981,7 +944,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9214333599877977540}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3280299901477063183
 GameObject:
@@ -1220,11 +1183,11 @@ Transform:
   m_Children:
   - {fileID: 3215259925699428739}
   - {fileID: 5750491859503318300}
+  - {fileID: 9114611288765783643}
   - {fileID: 6712904332773770665}
   - {fileID: 5827459413320459236}
   - {fileID: 7378481392430804427}
   - {fileID: 2445571960859140093}
-  - {fileID: 9114611288765783643}
   m_Father: {fileID: 7263244047530817204}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1347,7 +1310,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9214333599877977540}
-  m_RootOrder: 6
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4775608378433226412
 GameObject:
@@ -1735,7 +1698,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6712904332773770665}
   m_Layer: 0
-  m_Name: Left Front Paw Target
+  m_Name: FLPawTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1753,7 +1716,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9214333599877977540}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6895037821361386914
 GameObject:
@@ -2291,7 +2254,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7378481392430804427}
   m_Layer: 0
-  m_Name: Left Back Paw Target
+  m_Name: BLPawTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2309,5 +2272,5 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 9214333599877977540}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

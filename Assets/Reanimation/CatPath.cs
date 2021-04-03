@@ -29,6 +29,7 @@ public partial class CatPath
     //---path data---//
     //information about the path the cat is currently taking
 
+    public bool IsValid { get { return path != null && path.Count != 0; } }
     //holds all the components in the current path
     LinkedList<PathComponent> path;
     //the total time required to finish the path
@@ -40,6 +41,7 @@ public partial class CatPath
     //---events---//
     public event System.Action PathFinished;
     public event System.Action PathStarted;
+    public event System.Action PathReset;
 
     public CatPath(float [] delays, Transform[] transforms, int hipIndex)
     {
@@ -53,14 +55,19 @@ public partial class CatPath
         shoulderTransform = transforms[hipIndex + 1];
     }
 
-    public virtual void PathToPoint(Vector3 destination)
+    public virtual bool PathToPoint(Vector3 destination)
     {
         ResetPath();
-        OrientAndPathTo(destination, shoulderTransform.position, shoulderTransform.forward);
-        FinalizePath();
+
+        if (OrientAndPathTo(destination, shoulderTransform.position, shoulderTransform.forward, out Vector3 forward))
+            FinalizePath();
+        else
+            return false;
+
+        return true;
     }
 
-    public void PathToPoints(List<Vector3> destinations)
+    public bool PathToPoints(List<Vector3> destinations)
     {
         ResetPath();
         Vector3 pos = shoulderTransform.position;
@@ -69,11 +76,16 @@ public partial class CatPath
         {
             //change the current forward to the forward the cat will have at the
             //end of the previous section
-            forward = OrientAndPathTo(destination, pos, forward);
+            if (!OrientAndPathTo(destination, pos, forward, out forward))
+            {
+                Debug.Log("bad path aborting");
+                return false;
+            }
             //similarlly set the starting position to the destination of the last section
             pos = destination;
         }
         FinalizePath();
+        return true;
     }
 
     public Vector3 PointNearPath(float timeFromShoulders, float distanceFromPath, bool rightOfPath, bool includeHipOffset = false)
@@ -174,26 +186,51 @@ public partial class CatPath
     //called before creating a new path
     private void ResetPath()
     {
-        //start every path with linar paths for transforms behind the shoulders to follow
-        path = new LinkedList<PathComponent>();
-
+        //add paths for each transfrom behind the shoulders to lerp to the position
+        //of the key transform infront of it so at every point each key will be on the path
         Vector3 previousPos = default;
-        float totalDelay = 0;
-        //itterate backwards to go from head to tail
-        for(int i = transforms.Length-1; i >= 0; i--)
+        var newPath = new LinkedList<PathComponent>();
+
+        if (path == null)
         {
-            float delay = delays[i];
-            if (delay > 0)
+            //itterate backwards to go from head to tail
+            for (int i = transforms.Length - 2; i >= 0; i--)
             {
-                path.AddFirst(new LinePath(delay,
-                    transforms[i].position,
-                    previousPos
-                    ));
-                totalDelay += delay;
+                float delay = delays[i];
+                if (delay > 0)
+                {
+                    newPath.AddFirst(new LinePath(delay - delays[i + 1],
+                        transforms[i].position,
+                        previousPos
+                        ));
+                }
+                previousPos = transforms[i].position;
             }
-            previousPos = transforms[i].position;
+            elapsedTime = delays[0];
         }
-        elapsedTime = totalDelay;
+        else
+        {
+            //itterate backwards to go from head to tail
+            for (int i = transforms.Length - 2; i >= 0; i--)
+            {
+                float delay = delays[i];
+                if (delay > 0)
+                {
+                    GetPointOnPath(-delay, out Vector3 mPos);
+                    newPath.AddFirst(new LinePath(delay - delays[i + 1],
+                        mPos,
+                        previousPos
+                        ));
+                }
+                GetPointOnPath(-delay, out previousPos);
+            }
+            elapsedTime = delays[0];
+        }
+
+        //start every path with linar paths for transforms behind the shoulders to follow
+        path = newPath;
+
+        PathReset?.Invoke();
     }
 
     private void RemoveFirstComponent()
@@ -203,7 +240,6 @@ public partial class CatPath
         path.RemoveFirst();
     }
 
-    //called to finalize a path
     private void FinalizePath()
     {
         totalDuration = 0;
@@ -215,7 +251,7 @@ public partial class CatPath
 
         Vector3 forward = new Vector3();
         Vector3 previousPos = default;
-        for(int i = 0, count = transforms.Length; i < count; i++)
+        for (int i = 0, count = transforms.Length; i < count; i++)
         {
             if (delays[i] > 0)
                 continue;
@@ -227,7 +263,7 @@ public partial class CatPath
             else
             {
                 Vector3 pathEnd = forward + previousPos;
-                path.AddLast(new LinePath(1/Speed, previousPos, pathEnd));
+                path.AddLast(new LinePath(1 / Speed, previousPos, pathEnd));
                 previousPos = path.First.Value.GetPointOnPath(path.Last.Value.Duration);
             }
         }
@@ -235,7 +271,7 @@ public partial class CatPath
         PathStarted?.Invoke();
     }
 
-    private Vector3 OrientAndPathTo(Vector3 destination, Vector3 currentPos, Vector3 currentForward)
+    private bool OrientAndPathTo(Vector3 destination, Vector3 currentPos, Vector3 currentForward, out Vector3 endForward)
     {
         //add a curve that ends with the cat pointing at the destination
         OrientTwardsPoint(destination, currentPos, currentForward, out Vector3? lineStart);
@@ -254,11 +290,13 @@ public partial class CatPath
             destination
             ));
 
-        return toDest.normalized;
+        endForward = toDest.normalized;
+        return true;
     }
 
     //adds a semicircular path section that orients a cat to face twards their final destination
-    private void OrientTwardsPoint(Vector3 destination, Vector3 currentPos, Vector3 currentForward, out Vector3? orientedPoint)
+    //returns true if it was sucessful in orienting
+    private bool OrientTwardsPoint(Vector3 destination, Vector3 currentPos, Vector3 currentForward, out Vector3? orientedPoint)
     {
         orientedPoint = null;
 
@@ -268,7 +306,7 @@ public partial class CatPath
         //check to see if the point is already oriented
         if (Mathf.Abs(currentForward.x / currentToDest.x - currentForward.z / currentToDest.z) < 0.01f
             && Mathf.Sign(currentForward.x) == Mathf.Sign(currentToDest.x))
-            return;
+            return true;
 
         //center of the circle should be the perpendicular to the forwardVector and as close to
         //the destination as possible
@@ -282,7 +320,7 @@ public partial class CatPath
         float deltaMagnitude = delta.magnitude;
         if (deltaMagnitude < MinTurningRad) //algorithm doesn't work for points inside the circle
         {
-            return;
+            return false;
         }
 
         //calculate points of tangency on the circle passing through the destination point by constructing
@@ -333,5 +371,7 @@ public partial class CatPath
                 startTheta,
                 endTheta
                 ));
+
+        return true;
     }
 }
