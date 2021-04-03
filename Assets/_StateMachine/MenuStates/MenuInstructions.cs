@@ -33,6 +33,8 @@ public class MenuInstructions : State
 
         MenuManager.Instance.AddEventMethod(typeof(MenuShowAssignments), "begin", () => { canvas.SetActive(false); });
 
+        MenuManager.Instance.AddEventMethod(typeof(MenuMusicSliders), "begin", () => { canvas.SetActive(false); });
+
         GameManager.Instance.AddEventMethod(typeof(GameCleanUp), "end", () => { canvas.SetActive(false); });
     }
 }

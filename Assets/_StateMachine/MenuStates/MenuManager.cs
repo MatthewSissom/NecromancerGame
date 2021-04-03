@@ -38,6 +38,12 @@ public class MenuManager : StateManagerBase
                     yield return CameraTransition("MenuBoardFlipped");
                     yield return SetState(typeof(MenuShowAssignments));
                     break;
+                // Will - used for displaying assignments
+                case "Options":
+                    state = null;
+                    yield return CameraTransition("MenuBoardFlipped");
+                    yield return SetState(typeof(MenuMusicSliders));
+                    break;
                 case null:
                     yield return null;
                     break;
