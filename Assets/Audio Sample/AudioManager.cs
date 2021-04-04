@@ -31,9 +31,17 @@ public class AudioManager : MonoBehaviour
     void Start()
     {
         //local functions are prefered over lambdas for event methods because of their better readablilty
-        void startMusic()
+        void startAssemblyMusic()
         {
             musicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Music/NecromancerAcademyDemo_Take4");
+            stopMusic();    // stop music before starting new music
+            musicInstance.start();
+        }
+
+        void startPlayPenMusic()
+        {
+            musicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Music/PlayPen_Music");
+            stopMusic();    // stop music before starting new music
             musicInstance.start();
         }
 
@@ -51,7 +59,11 @@ public class AudioManager : MonoBehaviour
         GameManager.Instance.AddEventMethod("GameCleanUp", "end", stopMusic);
         */
 
-        startMusic();
+        // if (in main menu/assembly state)
+        startAssemblyMusic();
+
+        // else if (in play pen state)
+        //startPlayPenMusic();
     }
 
     // Populates the Dictionary with key value pairs
