@@ -1,4 +1,4 @@
-﻿//#define USING_IK
+﻿#define USING_IK
 
 using System.Collections;
 using System.Collections.Generic;
@@ -14,6 +14,8 @@ public class BoneAssembler : State
     //root gameObject for connection colliders, the higharchy of this gameObject and the
     //empty armature must be identical except for objects with the TableConnectionArea component
     Transform connectionColliders = default;
+    [SerializeField]
+    Transform[] ribTransforms;
     Transform emptyArmature = default;
 
     //list of all connection areas
@@ -64,11 +66,18 @@ public class BoneAssembler : State
             {
                 transforms[i] = bones[i].transform;
             }
-            transformChains.Add(
-                new TransformChain(transforms,
+            if (transforms[0].gameObject.name.ToLower() == "spine")
+                transformChains.Add(new SpineTransformChain(transforms,
+                    ribTransforms,
                     fChain.solver.target.gameObject,
                     IsOffset(transforms[0].gameObject)
-                ));
+                    ));
+            else
+                transformChains.Add(
+                    new TransformChain(transforms,
+                        fChain.solver.target.gameObject,
+                        IsOffset(transforms[0].gameObject)
+                    ));
         }
 #endif
     }
@@ -228,15 +237,17 @@ public class BoneAssembler : State
             if (tableAxisDict[connectionArea.gameObject.name] != null)
             {
                 totalOffset = GetOffsetWithTableAxis(out bestBone, out bestAxisIndex, bones, connectionArea, jointToArea[armatureNode]);
-                if (float.IsNaN(totalOffset.x) || float.IsNaN(totalOffset.y) || float.IsNaN(totalOffset.z))
-                    Debug.Log("Invalid offset from offset with table axis");
+            }
+            else if (tableAxisDict[jointToArea[armatureNode].gameObject.name] != null)
+            {
+                totalOffset = GetOffsetWithTableAxis(out bestBone, out bestAxisIndex, bones, jointToArea[armatureNode], jointToArea[armatureNode]);
             }
             else
             {
                 totalOffset = GetOffsetWithJoint(bones, armatureNode);
-                if (float.IsNaN(totalOffset.x) || float.IsNaN(totalOffset.y) || float.IsNaN(totalOffset.z))
-                    Debug.Log("Invalid offset from offset with table joints");
             }
+            if (float.IsNaN(totalOffset.x) || float.IsNaN(totalOffset.y) || float.IsNaN(totalOffset.z))
+                Debug.Log("Invalid offset from offset with table joints");
             yield return StartCoroutine(OffsetBonesOverTime(bones, totalOffset));
 
             //update armature to match the newly added bones

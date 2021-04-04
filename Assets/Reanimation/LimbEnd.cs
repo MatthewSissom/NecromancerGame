@@ -110,12 +110,17 @@ public class LimbEnd : MonoBehaviour
         DelayIndex = delayIndex;
     }
 
+    //get lenght of distance the limb will spend on ground based on length (hypotenuse) and distance from ground
     public void SetStride(float chestDistFromGround)
     {
-        if (LimbLength < chestDistFromGround)
+        //avoid irrational and 0 solutions
+        if (LimbLength <= chestDistFromGround)
             StrideLength = LimbLength;
-        //get lenght of distance the limb will spend on ground based on length (hypotenuse) and distance from ground
-        StrideLength = Mathf.Sqrt(LimbLength * LimbLength - chestDistFromGround  * chestDistFromGround);
+        else
+            StrideLength = Mathf.Sqrt(LimbLength * LimbLength - chestDistFromGround  * chestDistFromGround);
+
+        if (float.IsNaN(StrideLength))
+            Debug.Log("NAN length!");
     }
 
     //can be called on a grounded limb to start pushing the body forward

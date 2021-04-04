@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class TransformChain
 {
-    List<Transform> orderedTransforms;
+    protected List<Transform> orderedTransforms;
     HashSet<Transform> transformSet;
     public GameObject Target { get; private set; }
 
-    int firstEmpty;
+    protected int firstEmpty;
     bool hasOffset;
 
     public TransformChain(Transform[] transforms, GameObject target, bool hasOffset)
@@ -20,7 +20,7 @@ public class TransformChain
         transformSet = new HashSet<Transform>(orderedTransforms);
     }
 
-    public bool Contains(Transform toCheck)
+    public virtual bool Contains(Transform toCheck)
     {
         return transformSet.Contains(toCheck);
     }
@@ -51,7 +51,7 @@ public class TransformChain
     }
 
     //returns an empty transform and 
-    public Transform MoveToFirstEmpty(Transform originalDestination)
+    public virtual Transform MoveToFirstEmpty(Transform originalDestination)
     {
         //check to see if a swap was made
         if (originalDestination != orderedTransforms[firstEmpty])

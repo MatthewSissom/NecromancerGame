@@ -40,16 +40,24 @@ public class BoneGroup : MonoBehaviour
     protected virtual void Awake()
     {
         children = new List<BoneGroup>();
+        if (BoneManager.Instance)
+        {
+            myID = BoneManager.Instance.GetNewGroupID();
+            groupID = myID;
+        }
+        else
+            myID = -1;
+        mBone = gameObject.GetComponent<Bone>();
     }
 
     // Start is called before the first frame update
     virtual protected void Start()
     {
-        myID = BoneManager.Instance.GetNewGroupID();
-
-        groupID = myID;
-
-        mBone = gameObject.GetComponent<Bone>();
+        if(myID == -1)
+        {
+            myID = BoneManager.Instance.GetNewGroupID();
+            groupID = myID;
+        }
     }
 
     //Combines two groups in to a single group
@@ -69,6 +77,7 @@ public class BoneGroup : MonoBehaviour
         //make other the parent if possible to avoid rearanging trees
         else if (!preferedParent.parent && !preferedMustBeParent)
         {
+            Debug.Log("Non ideal parenting");
             other.addChild(preferedParent);
             preferedParent.ResetID();
         }

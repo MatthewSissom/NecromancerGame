@@ -9,6 +9,8 @@ public class destroyRoot : MonoBehaviour
 
     public void RemoveChildren()
     {
+        if (!this)
+            return;
         if (skips > 0)
         {
             skips--;

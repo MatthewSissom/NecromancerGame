@@ -62,7 +62,7 @@ public class CatMovement
                     length *= .7f;
                 if (length < minHeight)
                 {
-                    minHeight = limb.LimbLength;
+                    minHeight = length;
                     minLimb = limb;
                 }
                 avgHeight += length;
