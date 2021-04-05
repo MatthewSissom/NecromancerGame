@@ -45,7 +45,7 @@ public class GameManager : StateManagerBase
 
         yield return CameraTransition("PlayPen");
 
-
+        yield return SetState(typeof(PlayPenState));
         while(true)
         {
             yield return null;
