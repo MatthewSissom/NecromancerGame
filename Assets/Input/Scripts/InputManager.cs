@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#define USING_TOUCH
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,7 +55,58 @@ public partial class InputManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        #region mouseInput
+#if USING_TOUCH
+#region touchInput
+        foreach (Touch t in Input.touches)
+        {
+            //pos represents the point in world space at the specified height
+            Vector3 pos = t.position;
+            pos.z = Camera.main.transform.position.y - height;
+            Vector3 radVec = pos + new Vector3(t.radius, 0, 0);
+
+            pos = Camera.main.ScreenToWorldPoint(pos);
+            float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
+
+            int id = t.fingerId;
+            TouchProxy mProxy = activeTouches.Find(a => a.id == id);
+            if (!mProxy)
+            {
+                BoneMovingTouch parent = isRotationTouch(pos);
+                if (parent)
+                {
+                    mProxy = NewRotationTouch(pos, id, parent);
+                }
+                else
+                {
+                    mProxy = NewMoveTouch(pos, id);
+                }
+            }
+            mProxy.Move(pos, rad);
+        }
+
+        foreach (TouchProxy tp in activeTouches)
+        {
+            if (!tp.moved)
+            {
+                if (toDeactivate == null)
+                    toDeactivate = new List<TouchProxy>();
+                toDeactivate.Add(tp);
+            }
+            tp.moved = false;
+        }
+        if (toDeactivate != null)
+        {
+            foreach (TouchProxy tp in toDeactivate)
+            {
+                DisableTouch(tp);
+            }
+            toDeactivate = null;
+        }
+#endregion
+
+#else
+#region mouseInput
+
 
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
@@ -115,56 +168,10 @@ public partial class InputManager : MonoBehaviour
             }
         }
 
-        #endregion
+#endregion
+#endif
 
 
-        #region touchInput
-        //foreach (Touch t in Input.touches)
-        //{
-        //    //pos represents the point in world space at the specified height
-        //    Vector3 pos = t.position;
-        //    pos.z = Camera.main.transform.position.y - height;
-        //    Vector3 radVec = pos + new Vector3(t.radius, 0, 0);
-
-        //    pos = Camera.main.ScreenToWorldPoint(pos);
-        //    float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
-
-        //    int id = t.fingerId;
-        //    TouchProxy mProxy = activeTouches.Find(a => a.id == id);
-        //    if (!mProxy)
-        //    {
-        //        BoneMovingTouch parent = isRotationTouch(pos);
-        //        if (parent)
-        //        {
-        //            mProxy = NewRotationTouch(pos, id, parent);
-        //        }
-        //        else
-        //        {
-        //            mProxy = NewMoveTouch(pos, id);
-        //        }
-        //    }
-        //    mProxy.Move(pos, rad);
-        //}
-
-        //foreach (TouchProxy tp in activeTouches)
-        //{
-        //    if (!tp.moved)
-        //    {
-        //        if (toDeactivate == null)
-        //            toDeactivate = new List<TouchProxy>();
-        //        toDeactivate.Add(tp);
-        //    }
-        //    tp.moved = false;
-        //}
-        //if (toDeactivate != null)
-        //{
-        //    foreach (TouchProxy tp in toDeactivate)
-        //    {
-        //        DisableTouch(tp);
-        //    }
-        //    toDeactivate = null;
-        //}
-        #endregion
     }
 
     private void Awake()
