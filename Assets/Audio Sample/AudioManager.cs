@@ -67,8 +67,8 @@ public class AudioManager : MonoBehaviour
         if (currentlyPlaying == MusicTracks.Assembly)
             return;
 
-        musicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Music/NecromancerAcademyDemo_Take4");
         stopMusic();    // stop music before starting new music
+        musicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Music/NecromancerAcademyDemo_Take4");
         musicInstance.start();
         currentlyPlaying = MusicTracks.Assembly;
     }
@@ -78,8 +78,8 @@ public class AudioManager : MonoBehaviour
         if (currentlyPlaying == MusicTracks.PlayPen)
             return;
 
-        musicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Music/PlayPen_Music");
         stopMusic();    // stop music before starting new music
+        musicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Music/PlayPen_Music");
         musicInstance.start();
         currentlyPlaying = MusicTracks.PlayPen;
     }
