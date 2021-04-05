@@ -106,7 +106,7 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637532226754683841
+  lastModified: 637532491658341341
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -285,7 +285,7 @@ MonoBehaviour:
   - {fileID: -5803213250001359351}
   StringsBanks:
   - {fileID: 6788599698923747006}
-  stringsBankWriteTime: 637532226754763507
+  stringsBankWriteTime: 637532491658436348
   cacheVersion: 6
 --- !u!114 &1574873947274647902
 MonoBehaviour:
@@ -415,12 +415,12 @@ MonoBehaviour:
   m_Name: event:/Music/PlayPen_Music
   m_EditorClassIdentifier: 
   Path: event:/Music/PlayPen_Music
-  guid: b681fd435228864783ff3f002c37bda8
+  guid: 9b5a9cf1725b1f4881d1cc0cd10e8471
   Banks:
   - {fileID: -5803213250001359351}
   IsStream: 1
   Is3D: 0
-  IsOneShot: 1
+  IsOneShot: 0
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
@@ -440,11 +440,11 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637532226754763507
+  lastModified: 637532491658436348
   LoadResult: 0
   FileSizes:
   - Name: 
-    Value: 1642
+    Value: 1728
   Exists: 1
 --- !u!114 &7676173434054490502
 MonoBehaviour:

@@ -12,6 +12,8 @@ public class MenuMusicSliders : State
 	public Slider musicSlider;
 	public Slider sfxSlider;
 
+	private FMOD.Studio.EventInstance testSound;
+
 	public GameObject canvas;
 	private bool exit;
 
@@ -88,5 +90,10 @@ public class MenuMusicSliders : State
 
 		sfxBus = FMODUnity.RuntimeManager.GetBus("bus:/SFX");
 		sfxBus.setVolume(sfxSlider.value);
+	}
+
+	public void PlayTestSFXSound()
+	{
+		FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Vocals/General/Meows");
 	}
 }
