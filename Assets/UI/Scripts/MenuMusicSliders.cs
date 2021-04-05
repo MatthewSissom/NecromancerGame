@@ -12,7 +12,7 @@ public class MenuMusicSliders : State
 	public Slider musicSlider;
 	public Slider sfxSlider;
 
-	private FMOD.Studio.EventInstance testSound;
+	private FMOD.Studio.EventInstance testSound ;
 
 	public GameObject canvas;
 	private bool exit;
