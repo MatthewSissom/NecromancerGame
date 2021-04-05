@@ -19,7 +19,7 @@ public class MenuMusicSliders : State
 	public void Start()
 	{
 		//Toggle canvas when switching between states
-
+		canvas.SetActive(false);
 		MenuManager.Instance.AddEventMethod(typeof(MenuMusicSliders), "begin", () => { canvas.SetActive(true); });
 
 		MenuManager.Instance.AddEventMethod(typeof(MenuInstructions), "begin", () => { canvas.SetActive(false); });

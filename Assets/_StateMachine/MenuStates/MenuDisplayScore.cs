@@ -57,6 +57,7 @@ public class MenuDisplayScore : State
 
     private void Start()
     {
+        canvas.SetActive(false);
         MenuManager.Instance.AddEventMethod(typeof(MenuMain), "begin", () => {
             textBox.text = "";
             canvas.SetActive(false); 

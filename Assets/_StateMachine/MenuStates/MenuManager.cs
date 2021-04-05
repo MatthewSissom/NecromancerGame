@@ -9,6 +9,9 @@ public class MenuManager : StateManagerBase
 
     public IEnumerator InMenus()
     {
+        CameraTransition("MenuBoardFlipped");
+        yield return CameraTransition("MenuTransMain");
+        yield return SetState(typeof(MenuIntroScreen));
         while (true)
         {
             switch (state)

@@ -22,6 +22,7 @@ public class MenuShowAssignments : State
 
     private void Start()
     {
+        canvas.SetActive(false);
         //Toggle canvas when switching between states
         MenuManager.Instance.AddEventMethod(typeof(MenuMain), "begin", () => { canvas.SetActive(false); });
         MenuManager.Instance.AddEventMethod(typeof(MenuShowAssignments), "begin", () => { canvas.SetActive(true); });
