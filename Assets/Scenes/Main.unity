@@ -730,7 +730,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &66122280
 Transform:
   m_ObjectHideFlags: 0
@@ -6066,7 +6066,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &897217545
 Transform:
   m_ObjectHideFlags: 0
@@ -6753,8 +6753,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
-  m_LocalRotation: {x: 0.6484365, y: -0, z: -0, w: 0.76126873}
-  m_LocalPosition: {x: 0.033, y: 0.779, z: -0.018}
+  m_LocalRotation: {x: 0.009263942, y: 0.27848923, z: -0.0026854363, w: 0.9603909}
+  m_LocalPosition: {x: -1.05, y: 0.705, z: -3.038}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -10384,6 +10384,7 @@ GameObject:
   - component: {fileID: 1416826187}
   - component: {fileID: 1416826190}
   - component: {fileID: 1416826189}
+  - component: {fileID: 1416826185}
   m_Layer: 0
   m_Name: States
   m_TagString: Untagged
@@ -10448,6 +10449,18 @@ MonoBehaviour:
   - {fileID: 1781630937}
   boneAxisDict: {fileID: 11400000, guid: 352b3446ccf791a478df0920c872c49a, type: 2}
   tableAxisDict: {fileID: 11400000, guid: 2d6c16acf46ab424c977c3552147785e, type: 2}
+--- !u!114 &1416826185
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416826180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a10da5630175aab48a956ad0eb9b5e50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1416826186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15199,7 +15212,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2033091664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24817,7 +24830,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!54 &6488520295525970809
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -25854,7 +25867,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!136 &7312452200692173063
 CapsuleCollider:
   m_ObjectHideFlags: 0
