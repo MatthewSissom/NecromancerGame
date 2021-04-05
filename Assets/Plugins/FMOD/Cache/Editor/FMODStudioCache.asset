@@ -14,8 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/SFX/Cats/Vocals/General/GeneralMeows
   guid: 2dcd906d171e5c408017d601d296b682
-  Banks:
-  - {fileID: -5803213250001359351}
+  Banks: []
   IsStream: 0
   Is3D: 0
   IsOneShot: 1
@@ -46,6 +45,52 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 2800
+--- !u!114 &-6296361209142445692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Cats/Footsteps/SkeletonFootsteps
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Cats/Footsteps/SkeletonFootsteps
+  guid: 97b71bef81d3914783ba036dcb041b27
+  Banks:
+  - {fileID: -5803213250001359351}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 1100
+--- !u!114 &-5972620042241289243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Cats/Vocals/General/Meows
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Cats/Vocals/General/Meows
+  guid: 0c65a265ea944645b69cb503ca80e12f
+  Banks:
+  - {fileID: -5803213250001359351}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 1664
 --- !u!114 &-5803213250001359351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,7 +106,7 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637531393180465046
+  lastModified: 637531831758105196
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -148,8 +193,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Path: event:/Music/Demo1 Mix New Cello
   guid: b681fd435228864783ff3f002c37bda8
-  Banks:
-  - {fileID: -5803213250001359351}
+  Banks: []
   IsStream: 1
   Is3D: 0
   IsOneShot: 1
@@ -232,15 +276,16 @@ MonoBehaviour:
   - {fileID: 5743745720412690687}
   - {fileID: 8626222673033499472}
   - {fileID: -145927767483215669}
-  - {fileID: -9119537986751113912}
   - {fileID: 5929723838152766952}
-  - {fileID: -1774783984141571519}
+  - {fileID: -5972620042241289243}
+  - {fileID: -6296361209142445692}
+  - {fileID: 6586734689329183075}
   EditorParameters: []
   MasterBanks:
   - {fileID: -5803213250001359351}
   StringsBanks:
   - {fileID: 6788599698923747006}
-  stringsBankWriteTime: 637531393180534923
+  stringsBankWriteTime: 637531831770607864
   cacheVersion: 6
 --- !u!114 &1574873947274647902
 MonoBehaviour:
@@ -357,6 +402,29 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 3000
+--- !u!114 &6586734689329183075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/Music/PlayPen_Music
+  m_EditorClassIdentifier: 
+  Path: event:/Music/PlayPen_Music
+  guid: b681fd435228864783ff3f002c37bda8
+  Banks:
+  - {fileID: -5803213250001359351}
+  IsStream: 1
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 119235
 --- !u!114 &6788599698923747006
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -372,11 +440,11 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637531393180534923
+  lastModified: 637531831770607864
   LoadResult: 0
   FileSizes:
   - Name: 
-    Value: 1596
+    Value: 1642
   Exists: 1
 --- !u!114 &7676173434054490502
 MonoBehaviour:
