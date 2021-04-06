@@ -31,7 +31,7 @@ public class MenuInstructions : State
     {
         canvas.SetActive(false);
 
-        MenuManager.Instance.AddEventMethod(typeof(MenuMusicSliders), "begin", () => { canvas.SetActive(true); });
+        MenuManager.Instance.AddEventMethod(typeof(MenuInstructions), "begin", () => { canvas.SetActive(true); });
 
         MenuManager.Instance.AddEventMethod(typeof(MenuMain), "begin", () => { canvas.SetActive(false); });
 

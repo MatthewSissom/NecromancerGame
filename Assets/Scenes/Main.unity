@@ -10582,6 +10582,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4338659136368671574, guid: 27ae997082756b74493de513e96da763,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4347774137761066457, guid: 27ae997082756b74493de513e96da763,
         type: 3}
       propertyPath: m_LocalPosition.x
