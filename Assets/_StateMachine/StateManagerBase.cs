@@ -46,20 +46,16 @@ public abstract class StateManagerBase : MonoBehaviour
     protected Coroutine CameraTransition(string transitionName)
     {
         transitionName = transitionName.ToLower().Trim();
-        #if UNITY_EDITOR
         if (cameraTransitions.TryGetValue(transitionName,out State state))
-        #endif
         {
             currentRoutine = StartCoroutine(state.Routine());
             return currentRoutine;
         }
-        #if UNITY_EDITOR
         else
         {
             Debug.LogError("No camera transition with name \"" + transitionName + "\" found");
             return null;
         }
-        #endif
 
     }
 

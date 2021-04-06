@@ -83,6 +83,7 @@ public class BoneMovingTouch : TouchProxy
         {
             (b as IGrabbable).PickedUp();
             SetActive(b);
+            StopRotation(1000 * Mathf.Deg2Rad);
             //touchLights.Play();
         }
     }

@@ -16,14 +16,17 @@ public class tempCatPlacer : MonoBehaviour
             return;
         EmptyArmature.transform.rotation = Quaternion.Euler(0, 45, 0);
         var behavior = EmptyArmature.GetComponent<CatBehavior>();
-        behavior.transform.parent = null;
+        if(behavior.transform.parent)
+            behavior.transform.parent = null;
         behavior.followTarget = followTarget;
         behavior.GroundHeight = floor.transform.position.y;
-        behavior.transform.position += new Vector3(0, behavior.ChestHeight - behavior.transform.position.y, 0);
+        Vector3 cameraXZ = Camera.main.transform.position;
+        cameraXZ.y = 0;
+        behavior.transform.position += new Vector3(0, behavior.ChestHeight - behavior.transform.position.y, 0) + cameraXZ;
     }
 
     private void Start()
     {
-        GameManager.Instance.AddEventMethod(typeof(BoneAssembler), "End", TempRotateCat);
+        GameManager.Instance.AddEventMethod(typeof(PlayPenState), "Begin", TempRotateCat);
     }
 }

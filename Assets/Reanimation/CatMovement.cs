@@ -16,16 +16,22 @@ public class CatMovement
     bool pathing;
 
     //speed and ground height are temp, should be moved here eventually
-    public CatMovement(List<LimbEnd> limbEnds, float speed, CatPath path)
+    public CatMovement(List<LimbEnd> limbEnds, float speed)
+    {
+        this.speed = speed;
+
+        LimbInit(limbEnds);
+    }
+
+    public void SetPath(CatPath path, List<LimbEnd> limbEnds)
     {
         this.path = path;
         path.PathStarted += () => { pathing = true; };
         path.PathFinished += () => { pathing = false; };
-
-        this.speed = speed;
-
-        LimbInit(limbEnds);
         (path as CatPathWithNav).GroundHeight = GroundYValue;
+
+        foreach(var limb in limbEnds)
+            path.PathStarted += limb.PathStarted;
     }
 
     public void SetGroundYValue(float val)
@@ -83,7 +89,6 @@ public class CatMovement
             limb.SetStride(minHeight);
             limb.StepStartEvent += LimbStartedStep;
             limb.StepEndEvent += LimbEndedStep;
-            path.PathStarted += limb.PathStarted;
         }
     }
 

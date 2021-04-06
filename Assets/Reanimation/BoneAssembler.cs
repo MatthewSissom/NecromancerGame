@@ -1,4 +1,4 @@
-﻿//#define USING_IK
+﻿#define USING_IK
 
 using System.Collections;
 using System.Collections.Generic;
@@ -558,6 +558,7 @@ public class BoneAssembler : State
 
         int frontIndex = -1; //holds the index of a front leg in the array
         int backIndex = -1;  //holds the index of a back leg in the array
+
         Transform chainTargets = emptyArmature.GetChild(1);
         foreach (var tChain in transformChains)
         {
@@ -658,6 +659,7 @@ public class BoneAssembler : State
                 );
         }
         spineAlignedTargets.Sort(IsCloserToTail);
+        int shoulderIndex = spineAlignedTargets.IndexOf(emptyArmature);
 
         //tags can only be set once all limbs have been processed, because other limbs can change types
         for (int i = 0; i < limbEnds.Count; i++)
@@ -689,7 +691,8 @@ public class BoneAssembler : State
         behavior.BehaviorInit(
             limbEnds,
             spineAlignedTargets.ToArray(),
-            distances
+            distances,
+            shoulderIndex
             );
 #endif
     }

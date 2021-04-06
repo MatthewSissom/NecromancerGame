@@ -43,16 +43,18 @@ public partial class CatPath
     public event System.Action PathStarted;
     public event System.Action PathReset;
 
-    public CatPath(float [] delays, Transform[] transforms, int hipIndex)
+    public CatPath(float[] delays, Transform[] transforms, int shoulderIndex)
     {
         //default values for pathfinding settings
         MinTurningRad = .1f;
         Speed = .1f;
         this.delays = delays;
+
+        int hipIndex = System.Math.Max(shoulderIndex - 1, 0); 
         hipDelay = delays[hipIndex];
 
         this.transforms = transforms;
-        shoulderTransform = transforms[hipIndex + 1];
+        shoulderTransform = transforms[shoulderIndex];
     }
 
     public virtual bool PathToPoint(Vector3 destination)

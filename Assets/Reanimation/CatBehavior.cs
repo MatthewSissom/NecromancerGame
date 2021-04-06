@@ -56,7 +56,7 @@ public class CatBehavior : MonoBehaviour
     CatStablizer stablizer;
     bool stablizing = false;
 
-    public void BehaviorInit(List<LimbEnd> limbEnds, Transform[] orderedTransforms, float[] transformDistances)
+    public void BehaviorInit(List<LimbEnd> limbEnds, Transform[] orderedTransforms, float[] transformDistances, int shoulderIndex)
     {
         if (initialized)
             return;
@@ -71,15 +71,18 @@ public class CatBehavior : MonoBehaviour
         for (int i = 0; i < transformDistances.Length; i++)
         {
             transformDistances[i] /= speed;
+            if (i > shoulderIndex)
+                transformDistances[i] *= -1;
         }
 
-        var catPathWithNav = new CatPathWithNav(transform.position.y, transformDistances, orderedTransforms);
+        movement = new CatMovement(limbEnds,speed);
+        var catPathWithNav = new CatPathWithNav(transform.position.y, transformDistances, orderedTransforms,shoulderIndex);
+        catPathWithNav.GroundHeight = movement.GroundYValue;
         mPath = catPathWithNav;
         mPath.PathFinished += () => { pathing = false; };
         mPath.PathStarted += () => { pathing = true; };
+        movement.SetPath(catPathWithNav, limbEnds);
 
-        movement = new CatMovement(limbEnds,speed, mPath);
-        catPathWithNav.GroundHeight = movement.GroundYValue;
     }
 
 
@@ -104,11 +107,11 @@ public class CatBehavior : MonoBehaviour
         delays[2] = 0;
         delays[3] = -(transform.position - headTransform.position).magnitude / speed * 2;
 
-        mPath = new CatPathWithNav(transform.position.y, delays, orderedTransforms);
+        mPath = new CatPathWithNav(transform.position.y, delays, orderedTransforms,2);
         mPath.PathFinished += () => { pathing = false; };
         mPath.PathStarted += () => { pathing = true; };
 
-        movement = new CatMovement(limbEnds,speed,mPath);
+        movement = new CatMovement(limbEnds,speed);
 
         //stablizer = new CatStablizer(null, 1000, groundYVal);
         //stablizer.DestablizedEvent += () => { stablizing = false; Debug.Log("Fallen Cat!"); };
@@ -127,7 +130,7 @@ public class CatBehavior : MonoBehaviour
 
     private void Update()
     {
-        if(followTarget.transform.position != targetPreviousPos)
+        if(followTarget && followTarget.transform.position != targetPreviousPos)
             PathToPoint(followTarget.transform.position);
         if(stablizing)
             stablizer.Update(Time.deltaTime);
