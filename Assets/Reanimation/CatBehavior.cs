@@ -142,30 +142,12 @@ public class CatBehavior : MonoBehaviour
             mPath.Move(Time.deltaTime, out Vector3 forward, vectors);
 
             ////modify positions based on offsets
-            //foreach(var limb in limbEnds)
-            //{
-            //    switch (limb.LocationTag)
-            //    {
-            //        case LimbEnd.LimbLocationTag.FrontLeft:
-            //            vectors[2] += new Vector3(0, limb.HeightOffset, 0);
-            //            vectors[3] += new Vector3(0, limb.HeightOffset * 5, 0);
-            //            break;
-            //        case LimbEnd.LimbLocationTag.FrontRight:
-            //            vectors[2] += new Vector3(0, limb.HeightOffset, 0);
-            //            vectors[3] += new Vector3(0, limb.HeightOffset * 5, 0);
-            //            break;
-            //        case LimbEnd.LimbLocationTag.BackLeft:
-            //            vectors[1] += new Vector3(0, limb.HeightOffset, 0);
-            //            break;
-            //        case LimbEnd.LimbLocationTag.BackRight:
-            //            vectors[1] += new Vector3(0, limb.HeightOffset, 0);
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
-            //timer += Time.deltaTime;
-            //vectors[0] += new Vector3(0, 0.07f +  Mathf.Sin(timer * 1.5f * Mathf.PI) * stepHeight / 4, 0);
+            foreach (var limb in limbEnds)
+            {
+                vectors[limb.DelayIndex] += new Vector3(0, limb.HeightOffset, 0);
+            }
+            timer += Time.deltaTime;
+            vectors[0] += new Vector3(0, 0.07f + Mathf.Sin(timer * 1.5f * Mathf.PI) * stepHeight / 4, 0);
 
 
             //apply new positions

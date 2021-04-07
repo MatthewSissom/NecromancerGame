@@ -37,7 +37,7 @@ public class LimbEnd : MonoBehaviour
     public float StepSpeed;
     public float StepHeight { get; set; }
     public float HeightOffset { get; private set; }
-    public float OriginMovementMult = 2;
+    public float BodyMovementMult = .025f;
 
     //A combination of where this limb is on the body and how it should move
     [field: SerializeField]
@@ -257,7 +257,7 @@ public class LimbEnd : MonoBehaviour
         {
             timer += Time.deltaTime;
 
-            HeightOffset = Mathf.Sin(timer / expectedPushTime * Mathf.PI) * OriginMovementMult * StepHeight;
+            HeightOffset = Mathf.Sin(timer / expectedPushTime * Mathf.PI) * BodyMovementMult * LimbLength;
 
             targetTransfrom.position = groundedTargetPosition;
             yield return null;

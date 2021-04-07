@@ -565,6 +565,12 @@ public class BoneAssembler : State
             var transforms = tChain.GetList();
             var start = transforms[0].gameObject;
 
+            GameObject target = tChain.Target;
+            if (!target)
+                continue;
+            var endGO = transforms[transforms.Count - 1].gameObject;
+            target.transform.position = endGO.transform.position;
+
             //check if the chain is spine aligned
             if (!IsOffset(start))
             {
@@ -636,12 +642,6 @@ public class BoneAssembler : State
                     Debug.LogError("Limb key: " + key + " for object " + start.gameObject.name + " not recognized");
                     break;
             }
-
-            GameObject target = tChain.Target;
-            if (!target)
-                continue; 
-            var endGO = transforms[transforms.Count - 1].gameObject;
-            target.transform.position = endGO.transform.position;
             var newLimbMarker = endGO.AddComponent<LimbEnd>();
             newLimbMarker.LimbInit(
                 tChain.WorldLength(),
