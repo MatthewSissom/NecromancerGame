@@ -14,6 +14,16 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Wood.001
     second: {fileID: 2100000, guid: f8f2bf9d6ab9be6499d38b9d43dcd4a3, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: dark-grey-header
+    second: {fileID: 2800000, guid: 9a89d09b6a2f69c4db80bbaea8d55818, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: woodfloor (1)
+    second: {fileID: 2800000, guid: aaa953a6228884b42bad47f459436f75, type: 3}
   materials:
     materialImportMode: 1
     materialName: 0

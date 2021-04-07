@@ -1,29 +1,9 @@
 fileFormatVersion: 2
-guid: 79dcf29bd2e03db45ba08c5a25edd1a3
+guid: ea02c2ac6b88c0841847a291a6c11087
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Wood.001
-    second: {fileID: 2100000, guid: f8f2bf9d6ab9be6499d38b9d43dcd4a3, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Wood.006
-    second: {fileID: 2100000, guid: f8f2bf9d6ab9be6499d38b9d43dcd4a3, type: 2}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: dark-grey-header
-    second: {fileID: 2800000, guid: ec5bf360d3defab479b38345d433582d, type: 3}
-  - first:
-      type: UnityEngine:Texture2D
-      assembly: UnityEngine.CoreModule
-      name: woodfloor (1)
-    second: {fileID: 2800000, guid: 49da215a1dd981141a11d762f34b9642, type: 3}
+  externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -65,7 +45,7 @@ ModelImporter:
     importLights: 1
     fileIdsGeneration: 2
     swapUVChannels: 0
-    generateSecondaryUV: 1
+    generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
