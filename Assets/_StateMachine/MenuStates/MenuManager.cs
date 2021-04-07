@@ -23,6 +23,7 @@ public class MenuManager : StateManagerBase
                     yield return SetState(typeof(MenuMain));
                     break;
                 case "Play":
+                    state = null;
                     yield break;
                 case "Instructions":
                     state = null;

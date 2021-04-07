@@ -62,6 +62,6 @@ public class MenuDisplayScore : State
             textBox.text = "";
             canvas.SetActive(false); 
         });
-        GameManager.Instance.AddEventMethod(typeof(GameCleanUp), "end", () => { canvas.SetActive(true); });
+        //GameManager.Instance.AddEventMethod(typeof(GameCleanUp), "end", () => { canvas.SetActive(true); });
     }
 }

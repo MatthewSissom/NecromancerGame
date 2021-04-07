@@ -15,7 +15,7 @@ public class StateManager : StateManagerBase
         while (true)
         {
             yield return SetState(GameManager.Instance.Game());
-            MenuManager.Instance.GoToMenu("Score");
+            MenuManager.Instance.GoToMenu("Main");
             yield return SetState(MenuManager.Instance.InMenus());
         }
     }

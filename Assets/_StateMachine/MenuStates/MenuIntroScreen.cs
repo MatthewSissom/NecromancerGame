@@ -9,6 +9,7 @@ public class MenuIntroScreen : State
     public override IEnumerator Routine()
     {
         Begin();
+        canvas.SetActive(true);
 
         while (true)
         {
