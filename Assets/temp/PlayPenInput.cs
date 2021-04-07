@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿//#define USING_TOUCH
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,6 +21,7 @@ public class PlayPenInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+#if USING_TOUCH
         var touches = Input.touches;
         if (touches.Length == 0)
             return;
@@ -29,6 +32,11 @@ public class PlayPenInput : MonoBehaviour
         pos.z = camera.transform.position.y - 1;
         pos = camera.ScreenToWorldPoint(pos);
 
+#else
+        Vector3 pos = Input.mousePosition;
+        pos.z = camera.transform.position.y - 1;
+        pos = camera.ScreenToWorldPoint(pos);
+#endif
         Vector3 rayDirection = (camera.transform.position - pos).normalized;
         Ray ray = new Ray(camera.transform.position, rayDirection);
 

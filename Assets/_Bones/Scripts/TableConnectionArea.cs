@@ -75,6 +75,10 @@ public class TableConnectionArea : BoneGroup
                 RemoveChild(child);
                 Destroy(child.transform.root);
             }
+            else
+            { 
+                children.RemoveAt(children.Count - 1); 
+            }
         }
         collisionCounts = new Dictionary<Bone, int>();
     }

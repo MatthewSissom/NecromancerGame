@@ -94,4 +94,14 @@ public abstract class StateManagerBase : MonoBehaviour
         }
         states[stateType].AddToEvent(eventName, method);
     }
+
+    public void RemoveEventMethod(System.Type stateType, string eventName, System.Action method)
+    {
+        if (!states.ContainsKey(stateType))
+        {
+            Debug.LogError(GetType() + " does not contain state \"" + stateType.Name + "\"");
+            return;
+        }
+        states[stateType].RemoveFromEvent(eventName, method);
+    }
 }

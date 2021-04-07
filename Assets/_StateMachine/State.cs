@@ -59,6 +59,21 @@ public abstract class State : MonoBehaviour
         }
     }
 
+    public bool RemoveFromEvent(string eventName, System.Action method)
+    {
+        eventName = eventName.ToLower().Trim();
+        if (allEvents.TryGetValue(eventName, out var mEvent))
+        {
+            mEvent.Remove(method);
+            return true;
+        }
+        else
+        {
+            Debug.LogError(GetType() + " does not contain event \"" + eventName + "\"");
+            return false;
+        }
+    }
+
     public virtual void SetName()
     {
         Name = this.GetType().ToString();

@@ -89,6 +89,13 @@ public class CatBehavior : MonoBehaviour
 
     private void Start()
     {
+        void CleanUp()
+        {
+            GameManager.Instance.RemoveEventMethod(typeof(GameInit), "Begin", CleanUp);
+            Destroy(gameObject.transform.root.gameObject);
+        }
+        GameManager.Instance.AddEventMethod(typeof(GameInit), "Begin", CleanUp);
+
         if (initialized)
             return;
         initialized = true;
@@ -130,7 +137,7 @@ public class CatBehavior : MonoBehaviour
 
     private void Update()
     {
-        if(followTarget && followTarget.transform.position != targetPreviousPos)
+        if(followTarget && (followTarget.transform.position - targetPreviousPos).magnitude > 0.05f)
             PathToPoint(followTarget.transform.position);
         if(stablizing)
             stablizer.Update(Time.deltaTime);

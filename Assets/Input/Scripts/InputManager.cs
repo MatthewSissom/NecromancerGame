@@ -1,4 +1,4 @@
-﻿#define USING_TOUCH
+﻿//#define USING_TOUCH
 
 using System.Collections;
 using System.Collections.Generic;
@@ -17,8 +17,11 @@ public partial class InputManager : MonoBehaviour
 
     static public InputManager Instance;
 
+#if (USING_TOUCH == false)
     //temp mouse input var
     bool holdingMouseDown = false;
+    bool rotating = false;
+#endif
 
     //disables all proxies
     public void Clear()
@@ -107,42 +110,53 @@ public partial class InputManager : MonoBehaviour
 #else
 #region mouseInput
 
+        Vector3 pos = Input.mousePosition;
+        pos.z = Camera.main.transform.position.y - height;
+        Vector3 radVec = pos + new Vector3(5, 0, 0);
+
+        pos = Camera.main.ScreenToWorldPoint(pos);
+        float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
+        int id = 0;
 
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
-        if (Input.GetMouseButton(0))
+        if(Input.GetKey(KeyCode.Space))
         {
-            Vector3 pos = Input.mousePosition;
+            if(!rotating && holdingMouseDown)
+            {
+                rotating = true;
+                NewRotationTouch(pos, 1, activeTouches[0] as BoneMovingTouch);
+            }
+            id = 1;
+            Vector3 center = Camera.main.ScreenToWorldPoint(new Vector3(5, 0, 0));
+            Vector3 cameraSpaceVec = pos - center;
+            Vector3 projection = Vector3.Project(cameraSpaceVec, Camera.main.transform.forward);
+            pos = center + (cameraSpaceVec - projection).normalized;
+        }
+        else if(rotating)
+        {
+            rotating = false;
+            pos = Input.mousePosition;
             pos.z = Camera.main.transform.position.y - height;
-            Vector3 radVec = pos + new Vector3(5, 0, 0);
-
             pos = Camera.main.ScreenToWorldPoint(pos);
-            float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
-
-            int id = 0;
-
-
+            DisableTouch(pos);
+        }
+        else if (Input.GetMouseButton(0))
+        {
             if (!holdingMouseDown)
             {
                 holdingMouseDown = true;
                 NewMoveTouch(pos, id);
             }
-            else
-            {
-                activeTouches[id].Move(pos, rad);
-            }
         }
         else if (holdingMouseDown)
         {
             holdingMouseDown = false;
-            Vector3 pos = Input.mousePosition;
-            pos.z = Camera.main.transform.position.y - height;
-            Vector3 radVec = pos + new Vector3(5, 0, 0);
-
-            pos = Camera.main.ScreenToWorldPoint(pos);
             DisableTouch(pos);
         }
 
+        if(rotating || holdingMouseDown)
+            activeTouches[id].Move(pos, rad);
 
         const float rotationSpeed = -5f;
         float rotation = 0;
