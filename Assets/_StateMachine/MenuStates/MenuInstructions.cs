@@ -10,7 +10,6 @@ public class MenuInstructions : State
     public List<GameObject> instructionImages;
     public List<GameObject> hands;
 
-
     Vector3 initalHandOnePos;
     public float handOneEnd;
     public float handOneDuration;

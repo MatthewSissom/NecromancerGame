@@ -43,6 +43,8 @@ public class GameManager : StateManagerBase
         yield return SetState(typeof(BoneAssembler));
         yield return SetState(typeof(AssignmentChecker));
 
+        yield return CameraTransition("ToPlayPenMid");
+        yield return new WaitForSeconds(0.2f);
         yield return CameraTransition("PlayPen");
 
         yield return SetState(typeof(PlayPenState));
