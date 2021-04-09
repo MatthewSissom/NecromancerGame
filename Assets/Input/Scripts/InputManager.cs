@@ -1,4 +1,4 @@
-﻿//#define USING_TOUCH
+﻿#define USING_TOUCH
 
 using System.Collections;
 using System.Collections.Generic;
@@ -120,9 +120,9 @@ public partial class InputManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
             Application.Quit();
-        if(Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
-            if(!rotating && holdingMouseDown)
+            if (!rotating && holdingMouseDown)
             {
                 rotating = true;
                 NewRotationTouch(pos, 1, activeTouches[0] as BoneMovingTouch);
@@ -132,8 +132,11 @@ public partial class InputManager : MonoBehaviour
             Vector3 cameraSpaceVec = pos - center;
             Vector3 projection = Vector3.Project(cameraSpaceVec, Camera.main.transform.forward);
             pos = center + (cameraSpaceVec - projection).normalized;
+
+            Vector3 angularVelocity = (activeTouches[0] as BoneMovingTouch).activeObj.Rb.angularVelocity;
+            (activeTouches[0] as BoneMovingTouch).activeObj.Rb.angularVelocity = Vector3.Project(angularVelocity, Camera.main.transform.forward);
         }
-        else if(rotating)
+        else if (rotating)
         {
             rotating = false;
             pos = Input.mousePosition;

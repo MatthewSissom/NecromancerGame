@@ -5,11 +5,10 @@ using TMPro;
 
 public class CountDown : State
 {
-    static CountDown instance;
+    public static CountDown instance;
     public TextMeshProUGUI text;
     string eventName = ""; 
-    string eventText = "";
-    int time = 0;
+    float time = 0;
 
 
     protected override void Awake()
@@ -26,26 +25,25 @@ public class CountDown : State
         Begin();
 
         text.gameObject.SetActive(true);
-        text.text = "Next Event: " + name;
-        yield return new WaitForSeconds(time - 3);
+        text.text = "Next Event: " + eventName;
+        yield return new WaitForSeconds(2);
 
-        for (int i = 3; i > 0; i--)
+        for (int i = (int)System.Math.Ceiling(time - 2); i > 0; i--)
         {
-            text.text = name + "in " + i.ToString();
+            text.text = eventName + " for " + i.ToString() + "s";
             yield return new WaitForSeconds(1);
         }
-        text.text = "Go!";
-        yield return new WaitForSeconds(.5f);
+        text.text = "Finished!";
+        yield return new WaitForSeconds(1);
         text.gameObject.SetActive(false);
 
         End();
         yield return null;
     }
 
-    public static void SetParams(string eventName, string eventText, int time)
+    public static void SetParams(string eventName, float time)
     {
         instance.eventName = eventName;
-        instance.eventText = eventText;
         instance.time = time;
     }
 }

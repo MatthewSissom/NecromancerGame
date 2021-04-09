@@ -134,7 +134,8 @@ public class CatMovement
 
     void LimbEndedStep(LimbEnd calling, Vector3? collisionPoint)
     {
-        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Footsteps/SkeletonFootsteps");
+        if(pathing)
+            FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Footsteps/SkeletonFootsteps");
         calling.StartPush();
     }
 }
