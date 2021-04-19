@@ -10,7 +10,9 @@ public class GhostPhysics : MonoBehaviour
     Vector3 target = new Vector3(0,0,1);
     float targetRad;
     public delegate void ArrivalCallbackType();
+    public delegate void ShockCallBackType(bool isMinor);
     public  ArrivalCallbackType ArrivalCallback = null; 
+    public  ShockCallBackType ShockCallback = null; 
 
     //speed values
     [Header("Speed")]
@@ -80,6 +82,14 @@ public class GhostPhysics : MonoBehaviour
         targetForward = forward;
     }
 
+    //moves the ghost in it's up direction
+    public void Jump(float mult, Rigidbody rb = null)
+    {
+        if (!rb)
+            rb = this.rb;
+        rb.AddForce(transform.up * maxAcceleration * mult,ForceMode.VelocityChange);
+    }
+
     #endregion
 
     #region InternalUpdate
@@ -107,7 +117,11 @@ public class GhostPhysics : MonoBehaviour
             StartCoroutine(Reorient());
             if (angleFromTargetUp > ballanceRotationThreshold)
             {
-                balanced = false;
+                if (balanced)
+                {
+                    balanced = false;
+                    ShockCallback(false);
+                }
             }
         }
         //if (!stoppingRotation && !rotating && angleFromTargetForward > wobbleTollerance)
@@ -123,7 +137,11 @@ public class GhostPhysics : MonoBehaviour
             MoveToPosition(target,targetRad);
             if (Mathf.Abs(transform.position.y - target.y) > ballanceHeightThreshold)
             {
-                balanced = false;
+                if (balanced)
+                {
+                    balanced = false;
+                    ShockCallback(false);
+                }
             }
         }
 

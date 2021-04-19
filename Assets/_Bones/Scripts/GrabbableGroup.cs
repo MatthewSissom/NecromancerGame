@@ -10,7 +10,11 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     //physics
     //the layer bones should be placed on after being taken from a ghost
     const int physicsLayer = 10;
+    //density of bone in kg/m^3
+    const float density = 1850;
+
     private Rigidbody rb;
+    //maps colliders to the bones they belong to
     private Dictionary<Collider, Bone> colliderToBone;
     BoneCollisionHandler collisionHandler;
     private CustomGravity mCustomGravity;
@@ -20,7 +24,10 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     protected override void Awake()
     {
         base.Awake();
+
+        //physics init
         rb = GetComponent<Rigidbody>();
+        ResetMass();
         colliderToBone = new Dictionary<Collider, Bone>();
         mCustomGravity = GetComponent<CustomGravity>();
 
@@ -50,7 +57,6 @@ public class GrabbableGroup : BoneGroup, IGrabbable
 
             return boneFound;
         }
-
         bool isValid = RecursiveColliderSearch(transform);
         if (!isValid)
             Debug.LogError("Compound bone has no children!");
@@ -109,6 +115,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     {
         bone.transform.parent = null;
         RemoveChild(bone.Group);
+        ResetMass();
     }
 
     public Bone BoneFromCollider(Collider collider)
@@ -116,6 +123,13 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (colliderToBone.TryGetValue(collider, out Bone toReturn))
             return toReturn;
         return null;
+    }
+
+    private void ResetMass()
+    {
+        Rb.SetDensity(density);
+        //mass is considered temporary and will be written over unless directly set
+        Rb.mass = Rb.mass;
     }
 
     private void OnCollisionEnter(Collision collision)

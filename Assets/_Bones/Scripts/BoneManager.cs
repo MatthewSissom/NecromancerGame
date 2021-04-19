@@ -68,7 +68,7 @@ public partial class BoneManager : MonoBehaviour
 
     public GrabbableGroup NewBoneGroup(GameObject pref, GhostBehavior heldBy)
     {
-        var go = Instantiate(pref, heldBy.boneLocation.position, pref.transform.rotation);
+        var go = Instantiate(pref, heldBy.BoneLocation, pref.transform.rotation);
         GrabbableGroup heldGroup = go.GetComponent<GrabbableGroup>();
 
 

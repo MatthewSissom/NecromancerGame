@@ -9,17 +9,30 @@ public class GhostBehavior : MonoBehaviour
     private List<Vector3> path;
     private int pathIndex;
     private Vector3 endForward;
+    [SerializeField]
+    private Animator animator;
 
     //bone values
     public GrabbableGroup mBone;
-    public Transform boneLocation { get; private set; }
+    [SerializeField]
+    private Transform leftHand;
+    [SerializeField]
+    private Transform rightHand;
+    public Vector3 BoneLocation
+    {
+        get
+        {
+            return (leftHand.position + rightHand.position) / 2;
+        }
+    }
 
     public GhostPhysics body { get; private set; }
 
     private void Awake()
     {
         body = gameObject.GetComponent<GhostPhysics>();
-        boneLocation = transform.Find("BoneLocation");
+        body.ShockCallback = Shock;
+        animator.Play("Idle", 0, Random.value);
     }
 
     // Update is called once per frame
@@ -27,7 +40,7 @@ public class GhostBehavior : MonoBehaviour
     {
         if (mBone)
         {
-            mBone.transform.position = boneLocation.position;
+            mBone.transform.position = BoneLocation;
         }
     }
 
@@ -35,7 +48,7 @@ public class GhostBehavior : MonoBehaviour
     {
         pathIndex++;
         //end of path reached
-        if(pathIndex >= path.Count)
+        if (pathIndex >= path.Count)
         {
             body.RotateTo(endForward);
             // Plays sound when cats reach destination
@@ -43,12 +56,12 @@ public class GhostBehavior : MonoBehaviour
         }
         else
         {
-            float radious = pathIndex == path.Count - 1? 0.05f:0.2f;
+            float radious = pathIndex == path.Count - 1 ? 0.05f : 0.2f;
             body.LookAt(path[pathIndex]);
             body.MoveToPosition(
                 path[pathIndex],
                 radious,
-                pathIndex == path.Count-1 //arrival forces for last path point
+                pathIndex == path.Count - 1 //arrival forces for last path point
             );
         }
     }
@@ -75,6 +88,33 @@ public class GhostBehavior : MonoBehaviour
     {
         mBone.mGhost = null;
         mBone = null;
+    }
+
+    public void Shock(bool isMinor)
+    {
+        if (isMinor)
+            MinorShock();
+        else
+            MajorShock();
+    }
+
+    public void MinorShock()
+    {
+        animator.SetTrigger("minorShockTrigger");
+    }
+
+    public void MajorShock()
+    {
+        //animate
+        animator.SetTrigger("majorShockTrigger");
+        body.Jump(1);
+
+        //throw bone 
+        if (!mBone)
+            return;
+        var boneRb = mBone.Rb;
+        mBone.PickedUp();
+        body.Jump(2, boneRb);
     }
 
     public void Recall(float lifeSpan = 3)
