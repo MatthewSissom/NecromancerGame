@@ -1,17 +1,12 @@
 fileFormatVersion: 2
-guid: e4c57369a5a715c48996889f9a5b3f51
+guid: f15350e0912ca3a42ade8a4076c8e73b
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable:
   - first:
-      74: -3100369314251171874
-    second: Idle
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: CatGhostMat
-    second: {fileID: 2100000, guid: 469cdd347a1a2e6428f0bd6c542a4abc, type: 2}
+      74: 1827226128182048838
+    second: Take 001
+  externalObjects: {}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -40,11 +35,11 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Idle
-      takeName: Idle
+      name: Take 001
+      takeName: Take 001
       internalID: 0
       firstFrame: 0
-      lastFrame: 200
+      lastFrame: 320
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -99,7 +94,7 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 1
+    normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
@@ -119,7 +114,7 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     globalScale: 1
-    rootMotionBoneName: 
+    rootMotionBoneName: catGhostRig_V008_AV:Jnts
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1

@@ -3,6 +3,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 #if USING_IK
 using RootMotion.FinalIK;
 #endif
@@ -234,20 +235,29 @@ public class BoneAssembler : State
             Vector3 totalOffset;         //how much the bone will need to move
             Bone bestBone = null;        //the bone that best aligns with the connection area
             int bestAxisIndex = default; //the axis of the bone that best alignes with the connection area
+            float angleToRotate = 0;
+            Vector3 localPointOfRotation = default;
+            //if table area has an axis, use it to find the best bone and get it's offset
             if (tableAxisDict[connectionArea.gameObject.name] != null)
             {
-                totalOffset = GetOffsetWithTableAxis(out bestBone, out bestAxisIndex, bones, connectionArea, jointToArea[armatureNode]);
+                totalOffset = GetOffsetWithTableAxis(out bestBone, out bestAxisIndex, out angleToRotate, out localPointOfRotation, bones, connectionArea, jointToArea[armatureNode]);
             }
+            //if table area has no axis, check the table area which corresponds to it's new spot in the transform chain in case it was moved
             else if (tableAxisDict[jointToArea[armatureNode].gameObject.name] != null)
             {
-                totalOffset = GetOffsetWithTableAxis(out bestBone, out bestAxisIndex, bones, jointToArea[armatureNode], jointToArea[armatureNode]);
+                totalOffset = GetOffsetWithTableAxis(out bestBone, out bestAxisIndex, out angleToRotate, out localPointOfRotation, bones, jointToArea[armatureNode], jointToArea[armatureNode]);
             }
+            //fallback for no axies on table
             else
             {
                 totalOffset = GetOffsetWithJoint(bones, armatureNode);
             }
             if (float.IsNaN(totalOffset.x) || float.IsNaN(totalOffset.y) || float.IsNaN(totalOffset.z))
                 Debug.Log("Invalid offset from offset with table joints");
+
+            //move bones
+            if(angleToRotate != 0 && bestBone != null)
+                StartCoroutine(RotateBonesOverTime(bones, angleToRotate, localPointOfRotation, bestBone.transform));
             yield return StartCoroutine(OffsetBonesOverTime(bones, totalOffset));
 
             //update armature to match the newly added bones
@@ -268,9 +278,11 @@ public class BoneAssembler : State
         }
     }
 
+    #region bone moving routines
+
+    const float timePerBone = 0.2f; //how to reach the destination
     private IEnumerator OffsetBonesOverTime(List<Bone> bones, Vector3 offset)
     {
-        const float timePerBone = 0.2f; //how to reach the destination
         float timer = 0;
         Vector3 distMoved = new Vector3();
         while (timer < timePerBone)
@@ -291,23 +303,57 @@ public class BoneAssembler : State
         }
     }
 
+    private IEnumerator RotateBonesOverTime(List<Bone> bones, float theta, Vector3 localRotationPoint, Transform mainTransform)
+    {
+        List<Transform> transforms = new List<Transform>();
+        foreach (var bone in bones)
+            transforms.Add(bone.transform);
+
+        float timer = 0;
+        while(timer < timePerBone)
+        {
+            float time = Time.deltaTime;
+            Vector3 point = mainTransform.localToWorldMatrix.MultiplyPoint(localRotationPoint);
+
+            timer += time;
+            float toRotate = theta * time / timePerBone;
+            foreach (var trans in transforms)
+                trans.RotateAround(point, Vector3.up, toRotate);
+
+            yield return null;
+        }
+
+        Vector3 finalPoint = mainTransform.localToWorldMatrix.MultiplyPoint(localRotationPoint);
+        float finalToRotate = theta * timePerBone - timer;
+        foreach (var trans in transforms)
+            trans.RotateAround(finalPoint, new Vector3(0,1,0), finalToRotate);
+
+        yield break;
+    }
+
+    #endregion
+
     //returns the amount the bones need to move, which bone has the main axis, and the index of that axis
     //originalCA is the connection area that the bones were originally placed in, chainCA is the connection
     //area which corresponds to the bone's position in the chain
-    private Vector3 GetOffsetWithTableAxis(out Bone bestBone, out int bestAxisIndex, List<Bone> bones, TableConnectionArea originalCA, TableConnectionArea chainCA)
+    private Vector3 GetOffsetWithTableAxis(out Bone bestBone, out int bestAxisIndex, out float angle, out Vector3 locatPointOfRotation, List<Bone> bones, TableConnectionArea originalCA, TableConnectionArea chainCA)
     {
+        angle = 0;
+        locatPointOfRotation = default;
+        bestAxisIndex = 0;
+
         //search for the bone axis which aligns best with the area it was placed in
         bestBone = null;
         float bestScore = float.NegativeInfinity;
-        bestAxisIndex = 0;
         foreach (Bone b in bones)
         {
-            float score = BoneScore(b, originalCA, out int tempIndex);
+            float score = BoneScore(b, originalCA, out int tempIndex,out float tempAngle);
             if (score > bestScore)
             {
                 bestBone = b;
                 bestAxisIndex = tempIndex;
                 bestScore = score;
+                angle = tempAngle;
             }
         }
 
@@ -318,6 +364,7 @@ public class BoneAssembler : State
             Debug.LogError("Invalid bone axis for " + bestBone.name);
             return new Vector3();
         }
+        locatPointOfRotation = boneAxisDict.GetLocalMidPoint(bestBone.AxisKey, bestAxisIndex);
 
         //check neighbors of the for newAxis to attach to
         int toAttachToIndex= chainCA.chainNeighbors.FindIndex(ca => (ca && ca.newAxis != null && ca.newAxis.Count > 0));
@@ -351,7 +398,44 @@ public class BoneAssembler : State
             }
         }
 
-        return toAttachTo - bestAxis[p1];
+        angle = GetRotationWithTableAxis(out Vector3 offsetError, bestBone.transform.localToWorldMatrix.MultiplyPoint(locatPointOfRotation), bestAxis[p1], angle);
+
+        return toAttachTo - bestAxis[p1] - offsetError;
+    }
+
+    //returns the angle to rotate in DEGREES 
+    //
+    //documentation: https://www.desmos.com/calculator/uxmhykr4w9
+    private float GetRotationWithTableAxis(out Vector3 offsetError, Vector3 worldPointOfRotation, Vector3 connectionPoint, float angleFromTable)
+    {
+        const float curveCoefficent = 2f;
+        const float errorMin = 10;
+        const float errorMax = 45;
+
+        float originBoundAlignmentRotation(float x)
+        {
+            return Mathf.Pow(x, curveCoefficent) / Mathf.Pow(errorMax, curveCoefficent - 1);
+        }
+
+        float getAdjustmentAngle(float currentAngle)
+        {
+            return currentAngle;
+
+            float sign = Mathf.Sign(currentAngle);
+            currentAngle = Mathf.Abs(currentAngle);
+            if (currentAngle < errorMin)
+                return -currentAngle;
+            return sign * originBoundAlignmentRotation((currentAngle-errorMin)*errorMax/(errorMax-errorMin));
+        }
+
+        float adjustment = getAdjustmentAngle(angleFromTable);
+        worldPointOfRotation = new Vector3(worldPointOfRotation.x, 0, worldPointOfRotation.z);
+        connectionPoint = new Vector3(connectionPoint.x, 0, connectionPoint.z) - worldPointOfRotation;
+
+        float theta = Mathf.Atan2(connectionPoint.z, connectionPoint.x) + adjustment* Mathf.Deg2Rad;
+        Vector3 newConnectionPointPos = new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta)) * connectionPoint.magnitude;
+        offsetError =  connectionPoint - newConnectionPointPos;
+        return adjustment;
     }
 
     private Vector3 GetRoughJointMidpoint(Transform joint)
@@ -396,7 +480,8 @@ public class BoneAssembler : State
     }
 
     //returns a score for how closely the bone is aligned with it's connectionArea
-    private float BoneScore(Bone bone, TableConnectionArea connectionArea, out int axisIndex)
+    //angle = signed angle from table to bone
+    private float BoneScore(Bone bone, TableConnectionArea connectionArea, out int axisIndex, out float angle)
     {
         //half the distance of a spinechunk
         const float distancePenaltyBaseline = 0.04f;
@@ -418,20 +503,22 @@ public class BoneAssembler : State
 
         if (boneAxies ==null || tableAxies == null)
         {
+            angle = 0;
             return score;
         }
 
         //remove y component to make calculations more precise
         for(int i = 0; i< boneAxies.Count; i++)
         {
-            Vector3.Scale(boneAxies[i],new Vector3(1,0,1));
+            boneAxies[i] = new Vector3(boneAxies[i].x, 0, boneAxies[i].z);
         }
         for(int i = 0; i < tableAxies.Count; i++)
         {
-            Vector3.Scale(tableAxies[i], new Vector3(1, 0, 1));
+            tableAxies[i] = new Vector3(tableAxies[i].x, 0, tableAxies[i].z);
         }
 
-        float tempScore;
+        float tempScore = 0;
+        angle = 0;
         for(int i = 0; i < Mathf.Min(boneAxies.Count, tableAxies.Count);i+=2)
         {
             tempScore = 0;
@@ -444,17 +531,20 @@ public class BoneAssembler : State
             tempScore = distanceWeight * (1 - (1 / distancePenaltyBaseline * tempScore));
 
             //score for alignment with axis
-            float angle = Vector3.Angle(
-                tableAxies[0] - tableAxies[1],
-                boneAxies[i] - boneAxies[i + 1]
-                );
-            angle = angle > 90? 180 - angle : angle;
-            tempScore += angleWeight * (1 - angle / 90);
+            Vector3 tableVec = tableAxies[0] - tableAxies[1];
+            Vector3 boneVec = boneAxies[i] - boneAxies[i + 1];
+            float tempAngle = Vector3.Angle(tableVec,boneVec);
+            bool angleToLarge = tempAngle > 90;
+            tempAngle = angleToLarge? 180 - tempAngle : tempAngle;
+            tempScore += angleWeight * (1 - tempAngle / 90);
 
             if(tempScore > score)
             {
                 axisIndex = i;
                 score = tempScore;
+                //convert angle to signed angle by checking which side of the table vector the bone is on
+                float dotWithPerp = -boneVec.z * tableVec.x + boneVec.x * tableVec.z;
+                angle = tempAngle * ((angleToLarge)? 1 : -1) * Mathf.Sign(dotWithPerp);
             }
         }
 

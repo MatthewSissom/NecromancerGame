@@ -58,6 +58,12 @@ public class BoneAxis : ScriptableObject
         return GetWorldAxisInRange(key, localToWorld, Mathf.Min(complimentIndex,index), Mathf.Max(complimentIndex, index)+1);
     }
 
+    public Vector3 GetLocalMidPoint(string key, int index)
+    {
+        var localAxis = axis[key];
+        return (localAxis[index] + localAxis[GetComplimentIndex(index)] / 2);
+    }
+
     public List<Vector3> GetAllWorldAxis(string key, Matrix4x4 localToWorld)
     {
         return GetWorldAxisInRange(key, localToWorld, 0, int.MaxValue);
