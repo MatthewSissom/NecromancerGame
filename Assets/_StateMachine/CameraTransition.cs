@@ -45,6 +45,9 @@ public class CameraTransition : State
             yield return null;
         }
 
+        // WILL - Plays a chalk sound effect when the board flips and the menu transitions
+        AudioManager.Instance.PlayChalkboardSFX();
+
         transform.localPosition = pos;
         transform.rotation = endQuat;
 
