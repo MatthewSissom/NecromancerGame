@@ -138,12 +138,10 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if(collided)
             collisionHandler.AddBoneCollision(collided, collision);
         //---Bone on horizontal surface---//
-        if (collision.gameObject.CompareTag("Horizontal"))
+        if (collision.gameObject.CompareTag("Horizontal") && mCustomGravity.enabled)
         {
-            Rb.velocity = new Vector3(0, Rb.velocity.y, 0);
             if (mCustomGravity)
-                mCustomGravity.enabled = false;
-            Rb.useGravity = true;
+                mCustomGravity.Disable();
         }
     }
 }

@@ -31,7 +31,6 @@ public class GhostBehavior : MonoBehaviour
     private void Awake()
     {
         body = gameObject.GetComponent<GhostPhysics>();
-        body.ShockCallback = Shock;
         animator.Play("Idle", 0, Random.value);
     }
 

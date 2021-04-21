@@ -9,8 +9,9 @@ public class BoneCollisionHandler
     private Dictionary<Bone, LinkedList<BoneGroup>> collisions;
     //provides an effecient way to find a connectionArea given a group id
     private Dictionary<int, TableConnectionArea> groupIdToConnectionArea;
+    private GhostCollisionHandler ghostCollision;
 
-    //used to track timers
+    //class used to track timers
     private class ConnectionTimers
     {
         Dictionary<Bone, float> timers;
@@ -89,7 +90,6 @@ public class BoneCollisionHandler
             return null;
         }
     }
-
     private ConnectionTimers connectionTimers;
 
     public BoneCollisionHandler()
@@ -119,12 +119,13 @@ public class BoneCollisionHandler
 
     public void AddBoneCollision(Bone bone, Collision collision)
     {
+        var otherGo = collision.gameObject;
+
         //---Bone on bone---//
-        if (collision.gameObject.CompareTag("Bone"))
+        if (otherGo.CompareTag("Bone"))
         {
-            Bone other = collision.gameObject.GetComponent<Bone>();
             //only process collisions from lower id groups to avoid double processing
-            if (!other || bone.Group.GroupID > other.Group.GroupID)
+            if (!otherGo.TryGetComponent<Bone>(out var other) || bone.Group.GroupID > other.Group.GroupID)
                 return;
 
             //audio
@@ -194,6 +195,11 @@ public class BoneCollisionHandler
             }
         }
         SetLayerOfAllChildren(toSet.transform);
+    }
+
+    public void SetGhostCollision(GhostCollisionHandler ghostCollision)
+    {
+        this.ghostCollision = ghostCollision;
     }
 
     #endregion

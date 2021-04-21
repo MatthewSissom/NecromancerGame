@@ -26,8 +26,12 @@ public partial class BoneManager : MonoBehaviour
         }
 
         activeBones = new HashSet<Bone>();
-
         Collision = new BoneCollisionHandler();
+    }
+
+    private void Start()
+    {
+        Collision.SetGhostCollision(GhostManager.Collision);
     }
 
     private void Update()
