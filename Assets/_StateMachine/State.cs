@@ -82,11 +82,13 @@ public abstract class State : MonoBehaviour
     protected void Begin()
     {
         allEvents["begin"]?.Invoke();
+        //AudioManager.Instance.PlayChalkboardSFX();
     }
 
     protected void End()
     {
         allEvents["end"]?.Invoke();
+        //AudioManager.Instance.PlayChalkboardSFX();
     }
 
     protected virtual void Awake()

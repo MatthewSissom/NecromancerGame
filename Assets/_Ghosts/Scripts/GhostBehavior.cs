@@ -100,6 +100,7 @@ public class GhostBehavior : MonoBehaviour
     public void MinorShock()
     {
         animator.SetTrigger("minorShockTrigger");
+        //AudioManager.Instance.PlayMinorShock();
     }
 
     public void MajorShock()
@@ -111,6 +112,9 @@ public class GhostBehavior : MonoBehaviour
         //throw bone 
         if (!mBone)
             return;
+
+        AudioManager.Instance.PlayMajorShock();
+
         var boneRb = mBone.Rb;
         mBone.PickedUp();
         body.Jump(2, boneRb);

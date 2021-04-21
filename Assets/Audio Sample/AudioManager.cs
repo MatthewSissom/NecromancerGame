@@ -55,36 +55,36 @@ public class AudioManager : MonoBehaviour
         //attach methods to events. To see all events in a given manager, go to the manager file and look 
         //at their main enumerator. The same strings used for the "SetState" method are also used for AddEventMethod
         //All states have both a begin and end event, and more events can be added by overriding the state's "AddToEvent" method
-        GameManager.Instance.AddEventMethod(typeof(GameInit), "Begin", startAssemblyMusic);
-        GameManager.Instance.AddEventMethod(typeof(PlayPenState), "Begin", startPlayPenMusic);
+        GameManager.Instance.AddEventMethod(typeof(GameInit), "Begin", StartAssemblyMusic);
+        GameManager.Instance.AddEventMethod(typeof(PlayPenState), "Begin", StartPlaypenMusic);
 
         //start with playpen music
-        startPlayPenMusic();
+        StartPlaypenMusic();
     }
 
-    void startAssemblyMusic()
+    void StartAssemblyMusic()
     {
         if (currentlyPlaying == MusicTracks.Assembly)
             return;
 
-        stopMusic();    // stop music before starting new music
+        StopMusic();    // stop music before starting new music
         musicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Music/NecromancerAcademyDemo_Take4");
         musicInstance.start();
         currentlyPlaying = MusicTracks.Assembly;
     }
 
-    void startPlayPenMusic()
+    void StartPlaypenMusic()
     {
         if (currentlyPlaying == MusicTracks.PlayPen)
             return;
 
-        stopMusic();    // stop music before starting new music
+        StopMusic();    // stop music before starting new music
         musicInstance = FMODUnity.RuntimeManager.CreateInstance("event:/Music/PlayPen_Music");
         musicInstance.start();
         currentlyPlaying = MusicTracks.PlayPen;
     }
 
-    void stopMusic()
+    void StopMusic()
     {
         musicInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         currentlyPlaying = MusicTracks.None;
@@ -101,4 +101,24 @@ public class AudioManager : MonoBehaviour
         themeSoundsDictionary.Add("test", "event:/SFX/TestSound");
     }
 
+    public void PlayMeow()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Vocals/General/Meows");
+    }
+
+    public void PlayMinorShock()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Vocals/General/Shock");
+    }
+
+    // Same as minor shock for testing, subject to change
+    public void PlayMajorShock()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Vocals/General/Shock");
+    }
+
+    public void PlayChalkboardSFX()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/UI/ChalkboardSFX");
+    }
 }

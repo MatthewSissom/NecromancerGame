@@ -22,6 +22,29 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 647
+--- !u!114 &-7234191217319749559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Cats/Vocals/General/Shock
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Cats/Vocals/General/Shock
+  guid: b59102b37b2366478455a3780a6aeae6
+  Banks:
+  - {fileID: -5803213250001359351}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 1681
 --- !u!114 &-6956433051244531824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90,7 +113,7 @@ MonoBehaviour:
   Parameters: []
   MinDistance: 0
   MaxDistance: 0
-  Length: 1664
+  Length: 1681
 --- !u!114 &-5803213250001359351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -106,7 +129,7 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637532496096205510
+  lastModified: 637544698594501665
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -280,12 +303,13 @@ MonoBehaviour:
   - {fileID: -5972620042241289243}
   - {fileID: -6296361209142445692}
   - {fileID: 6586734689329183075}
+  - {fileID: -7234191217319749559}
   EditorParameters: []
   MasterBanks:
   - {fileID: -5803213250001359351}
   StringsBanks:
   - {fileID: 6788599698923747006}
-  stringsBankWriteTime: 637532496096310315
+  stringsBankWriteTime: 637544698594600952
   cacheVersion: 6
 --- !u!114 &1574873947274647902
 MonoBehaviour:
@@ -440,11 +464,11 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637532496096310315
+  lastModified: 637544698594600952
   LoadResult: 0
   FileSizes:
   - Name: 
-    Value: 1728
+    Value: 1776
   Exists: 1
 --- !u!114 &7676173434054490502
 MonoBehaviour:
