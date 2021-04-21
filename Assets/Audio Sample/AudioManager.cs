@@ -121,4 +121,9 @@ public class AudioManager : MonoBehaviour
     {
         FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/UI/ChalkboardSFX");
     }
+
+    public void PlayCatMeow()
+    {
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Vocals/General/Meows");
+    }
 }

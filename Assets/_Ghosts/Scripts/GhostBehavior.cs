@@ -133,7 +133,6 @@ public class GhostBehavior : MonoBehaviour
         StartCoroutine(RecallRoutine());
     }
 
-
     private void OnDestroy()
     {
         if(mBone)
