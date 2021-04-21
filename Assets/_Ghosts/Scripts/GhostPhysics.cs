@@ -10,9 +10,7 @@ public class GhostPhysics : MonoBehaviour
     Vector3 target = new Vector3(0,0,1);
     float targetRad;
     public delegate void ArrivalCallbackType();
-    public delegate void ShockCallBackType(bool isMinor);
     public  ArrivalCallbackType ArrivalCallback = null; 
-    public  ShockCallBackType ShockCallback = null; 
 
     //speed values
     [Header("Speed")]
@@ -58,7 +56,7 @@ public class GhostPhysics : MonoBehaviour
     private bool targetOriented = false;
 
     //component refrences
-    Rigidbody rb;
+    public Rigidbody rb { get; private set; }
 
     #region Interface
 
@@ -120,7 +118,6 @@ public class GhostPhysics : MonoBehaviour
                 if (balanced)
                 {
                     balanced = false;
-                    ShockCallback(false);
                 }
             }
         }
@@ -140,7 +137,6 @@ public class GhostPhysics : MonoBehaviour
                 if (balanced)
                 {
                     balanced = false;
-                    ShockCallback(false);
                 }
             }
         }

@@ -171,10 +171,10 @@ public class BoneAssembler : State
 
     private void BoneCleanUp(Bone b)
     {
-        Destroy(b);
         Destroy(b.GetComponent<CustomGravity>());
         Destroy(b.GetComponent<Rigidbody>());
         Destroy(b.GetComponent<BoneGroup>());
+        Destroy(b);
     }
 
     private IEnumerator MoveBonesToArmature()

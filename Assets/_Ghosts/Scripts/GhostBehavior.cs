@@ -31,7 +31,6 @@ public class GhostBehavior : MonoBehaviour
     private void Awake()
     {
         body = gameObject.GetComponent<GhostPhysics>();
-        body.ShockCallback = Shock;
         animator.Play("Idle", 0, Random.value);
     }
 
@@ -129,6 +128,10 @@ public class GhostBehavior : MonoBehaviour
         StartCoroutine(RecallRoutine());
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        GhostManager.Collision.AddCollision(this, collision);
+    }
 
     private void OnDestroy()
     {

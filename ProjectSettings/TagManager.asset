@@ -15,6 +15,7 @@ TagManager:
   - Head
   - Tail
   - Pelvis
+  - Ghost
   layers:
   - Default
   - TransparentFX

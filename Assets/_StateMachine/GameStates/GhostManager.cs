@@ -7,6 +7,7 @@ public class GhostManager : State
 {
     public bool done { get; private set; }
     static public GhostManager Instance;
+    static public GhostCollisionHandler Collision { get; private set; }
 
     [Header("Bones")]
     public List<GameObject> boneShipments;
@@ -149,6 +150,7 @@ public class GhostManager : State
         else
         {
             Instance = this;
+            Collision = new GhostCollisionHandler();
         }
     }
 }
