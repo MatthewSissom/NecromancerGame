@@ -146,11 +146,6 @@ public class GhostBehavior : MonoBehaviour
         StartCoroutine(RecallRoutine());
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        GhostManager.Collision.AddCollision(this, collision);
-    }
-
     private void OnDestroy()
     {
         if(mBone)
