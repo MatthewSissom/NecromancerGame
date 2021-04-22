@@ -49,6 +49,8 @@ public class GhostPhysics : MonoBehaviour
     [SerializeField]
     private float ballanceHeightThreshold = 0;
     private Vector3 up = new Vector3(0, 1, 0);
+    [SerializeField]
+    List<PID> movementPIDs;
 
     private bool rotating = false;
     private bool moving = false;
@@ -67,6 +69,11 @@ public class GhostPhysics : MonoBehaviour
         target = destination;
         this.targetRad = targetRad;
         useArrivalForces = arivalForces;
+        if(useArrivalForces)
+        {
+            foreach (PID pid in movementPIDs)
+                pid.Reset();
+        }
     }
 
     public void LookAt(Vector3 location)
@@ -85,6 +92,7 @@ public class GhostPhysics : MonoBehaviour
     {
         if (!rb)
             rb = this.rb;
+        rb.velocity -= Vector3.Project(rb.velocity, transform.up);
         rb.AddForce(transform.up * maxAcceleration * mult,ForceMode.VelocityChange);
     }
 
@@ -97,10 +105,13 @@ public class GhostPhysics : MonoBehaviour
     {
         if (Balance() && bobbing)
         {
-            rb.AddForce((Mathf.Sin(Time.time*2)) *new Vector3(0,0.005f,0));
+            //rb.AddForce((Mathf.Sin(Time.time*2)) *new Vector3(0,0.005f,0));
         }
         Balance();
-        UpdateVelocity(target - transform.position);
+        if(useArrivalForces)
+            UpdateVelocityPID(target - transform.position, Time.deltaTime);
+        else
+            UpdateVelocity(target - transform.position);
     }
 
     //adjusts ghosts up and forward vectors
@@ -144,25 +155,39 @@ public class GhostPhysics : MonoBehaviour
         return balanced;
     }
 
+    void UpdateVelocityPID(Vector3 toTarget, float dt)
+    {
+        Vector3 correction = new Vector3(
+            movementPIDs[0].Update(toTarget[0], dt),
+            movementPIDs[1].Update(toTarget[1], dt),
+            movementPIDs[2].Update(toTarget[2], dt)
+            );
+        if (correction.magnitude < 0.0001f && moving)
+        {
+            moving = false;
+            targetOriented = false;
+            rb.velocity = new Vector3();
+            transform.position += toTarget;
+            ArrivalCallback();
+            return;
+        }
+        
+        rb.velocity += Vector3.ClampMagnitude(correction, dt * acceleration);
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
+        if (targetOriented)
+            targetForward = new Vector3(toTarget.x, 0, toTarget.z);
+    }
+
     void UpdateVelocity(Vector3 toTarget)
     {
         float length = toTarget.magnitude;
-        float speed = rb.velocity.magnitude;
-
-        if (length > targetRad ||
-            (useArrivalForces && speed > maxSpeed/2))
+        if (length > targetRad)
         {
             Vector3 toTargetNormal = toTarget / length;
-
-            Vector3 targetVel;
-            if (useArrivalForces && length <= speed * speed / (2 * acceleration) + 0.02f)
-                targetVel = new Vector3();
-            else
-                targetVel = targetSpeed * toTargetNormal;
-            Vector3 correction = targetVel - rb.velocity;
+            Vector3 correction = targetSpeed * toTargetNormal - rb.velocity;
             Vector3 force = correction.normalized * acceleration * Time.deltaTime;
-            rb.velocity += (force);
 
+            rb.velocity += force;
             rb.velocity = Vector3.ClampMagnitude(rb.velocity, maxSpeed);
             if(targetOriented)
                 targetForward = new Vector3(toTarget.x, 0, toTarget.z);
@@ -170,8 +195,6 @@ public class GhostPhysics : MonoBehaviour
         else if (moving)
         {
             targetRad = bobTollerance;
-            if (useArrivalForces)
-                StartCoroutine(StopMovement());
             moving = false;
             targetOriented = false;
             useArrivalForces = true;
@@ -216,20 +239,6 @@ public class GhostPhysics : MonoBehaviour
         yield break;
     }
 
-    IEnumerator StopMovement()
-    {
-        bobbing = false;
-        float speed = 1;
-        while(speed > 0)
-        {
-            speed = rb.velocity.magnitude;
-            rb.velocity *= Math.Max((speed - Time.deltaTime * acceleration) / speed,0);
-            yield return null;
-        }
-        bobbing = true;
-        yield break;
-    }
-
     #endregion
 
     #region Init
@@ -240,6 +249,13 @@ public class GhostPhysics : MonoBehaviour
         acceleration = maxAcceleration;
         targetSpeed = maxSpeed;
         targetForward = transform.forward;
+
+        if (movementPIDs.Count != 3)
+        {
+            movementPIDs = new List<PID>();
+            for (int i = 0; i < 3; i++)
+                movementPIDs.Add(new PID(1, .2f, 2));
+        }
     }
 
     #endregion

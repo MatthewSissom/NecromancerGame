@@ -11,7 +11,8 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     //the layer bones should be placed on after being taken from a ghost
     const int physicsLayer = 10;
     //density of bone in kg/m^3
-    const float density = 1850;
+    const float realBoneDensity = 1850;
+    const float density = realBoneDensity * 5;
 
     private Rigidbody rb;
     //maps colliders to the bones they belong to
@@ -73,12 +74,14 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (mGhost)
             mGhost.LostBone();
 
-        rb.freezeRotation = false;
+        if (mCustomGravity)
+            mCustomGravity.Disable();
         rb.useGravity = false;
 
         IEnumerator DelayedLayerChange()
         {
             yield return new WaitForSeconds(0.2f);
+            rb.freezeRotation = false;
             gameObject.layer = physicsLayer;
             ApplyToAll((Bone b, FunctionArgs args) =>
             {
@@ -94,8 +97,8 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (!this)
             return;
         const float maxReleaseYVelocity = 1.0f;
-        if(mCustomGravity)
-            mCustomGravity.enabled = true;
+        if (mCustomGravity)
+            mCustomGravity.Enable();
         rb.freezeRotation = false;
         Vector3 velocity = rb.velocity;
         if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)

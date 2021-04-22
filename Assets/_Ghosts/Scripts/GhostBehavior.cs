@@ -12,6 +12,12 @@ public class GhostBehavior : MonoBehaviour
     [SerializeField]
     private Animator animator;
 
+    [SerializeField]
+    float minorJumpMult;
+    [SerializeField]
+    float majorJumpMult;
+
+
     //bone values
     public GrabbableGroup mBone;
     [SerializeField]
@@ -99,25 +105,33 @@ public class GhostBehavior : MonoBehaviour
 
     public void MinorShock()
     {
+        Debug.Log("Minor shock");
+
         animator.SetTrigger("minorShockTrigger");
+        body.Jump(minorJumpMult);
         //AudioManager.Instance.PlayMinorShock();
     }
 
     public void MajorShock()
     {
+        Debug.Log("Major shock");
+
         //animate
         animator.SetTrigger("majorShockTrigger");
-        body.Jump(1);
+        body.Jump(majorJumpMult);
+
+        //play audio before potential return from bone throwing
+        AudioManager.Instance.PlayMajorShock();
 
         //throw bone 
         if (!mBone)
             return;
-
-        AudioManager.Instance.PlayMajorShock();
-
         var boneRb = mBone.Rb;
         mBone.PickedUp();
-        body.Jump(2, boneRb);
+        boneRb.useGravity = true;
+        body.Jump(2 * majorJumpMult, boneRb);
+
+        Recall();
     }
 
     public void Recall(float lifeSpan = 3)

@@ -8,12 +8,15 @@ public class GhostCollisionHandler
     {
         var otherGo = collision.gameObject;
 
-        //---Ghost on ghost---//
-        //if (otherGo.CompareTag("Ghost") && otherGo.TryGetComponent(out GhostBehavior ghost))
 
         bool visable = IsVisable(collided, otherGo.transform.position) || IsVisable(collided, collision.contacts[0].point);
         int shockRating = ImpactSeverity(collision);
 
+        //ghost on ghost ignores 
+        if (otherGo.CompareTag("Ghost"))
+        {
+
+        }
         if(shockRating == 2)
         {
             collided.MajorShock();
@@ -36,8 +39,8 @@ public class GhostCollisionHandler
 
     int ImpactSeverity(Collision collision)
     {
-        const float noticableImpactThreshold = .1f;
-        const float majorImpactThreshold = .5f;
+        const float noticableImpactThreshold = .01f;
+        const float majorImpactThreshold = .05f;
         if(collision.impulse.magnitude > majorImpactThreshold)
             return 2;
         if (collision.impulse.magnitude > noticableImpactThreshold)

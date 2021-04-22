@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CustomGravity : MonoBehaviour
 {
-    const float gravitationalConst = 5f;
-
+    private static float gravitationalConst;
     private static Transform origin;
     private Rigidbody rb;
 
     public static void SetOrigin(Transform origin)
     {
         CustomGravity.origin = origin;
+        gravitationalConst = Mathf.Abs(Physics.gravity.y);
     }
 
     public void Enable()
@@ -35,9 +35,8 @@ public class CustomGravity : MonoBehaviour
         enabled = false;
     }
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        rb.AddForce((rb.transform.position - origin.position).normalized * gravitationalConst);
+        rb.AddForce((rb.transform.position - origin.position).normalized * gravitationalConst * Time.fixedDeltaTime,ForceMode.VelocityChange);
     }
 }
