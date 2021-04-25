@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public partial class CatPath : MonoBehaviour
+public partial class CatPath
 {
     //---Path component classes---//
     protected abstract class PathComponent
@@ -89,4 +89,31 @@ public partial class CatPath : MonoBehaviour
             return center + new Vector3(Mathf.Cos(theta) * newRad, 0, Mathf.Sin(theta) * newRad);
         }
     }
+
+    protected class JumpArc : PathComponent
+    {
+        Vector3 constVelComponent;
+        float initalUpVel;
+
+        public JumpArc(Vector3 start, Vector3 end, float maxHeight)
+        {
+
+        }
+
+        public override Vector3 GetPointNearPath(float time, float distanceFromPath, bool rightOfPath)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override Vector3 GetPointOnPath(float time)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override Vector3 GetPointOnPath(float time, out Vector3 forward)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+
 }

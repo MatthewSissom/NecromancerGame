@@ -239,7 +239,7 @@ public class BoneCollisionHandler
 
         //visuals
         var gatherer = attaching.gameObject.GetComponent<RendererGatherer>();
-        if (gatherer) gatherer.ChangeMat();
+        if (gatherer) gatherer.ChangeMat(1);
         ParticleManager.CreateEffect("CombineFX", attaching.transform.position);
 
         //audio

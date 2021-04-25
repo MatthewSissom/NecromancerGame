@@ -5,7 +5,7 @@ using UnityEngine;
 public class RendererGatherer : MonoBehaviour
 {
     [SerializeField]
-    Material material = default;
+    List<Material> materials;
     List<Renderer> renderers;
 
 
@@ -13,6 +13,8 @@ public class RendererGatherer : MonoBehaviour
     void Start()
     {
         renderers = new List<Renderer>();
+        if (materials == null)
+            return;
         void FindRenderers(Transform toCheck)
         {
             Renderer renderer = toCheck.GetComponent<Renderer>();
@@ -28,11 +30,13 @@ public class RendererGatherer : MonoBehaviour
         FindRenderers(transform);
     }
 
-    public void ChangeMat()
+    public void ChangeMat(int index)
     {
+        if (index < 0 || index >= materials.Count)
+            return;
         foreach(var renderer in renderers)
         {
-            renderer.material = material;
+            renderer.material = materials[index];
         }
     }
 }

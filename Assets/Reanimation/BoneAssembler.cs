@@ -173,7 +173,7 @@ public class BoneAssembler : State
     {
         Destroy(b.GetComponent<CustomGravity>());
         Destroy(b.GetComponent<Rigidbody>());
-        Destroy(b.GetComponent<BoneGroup>());
+        Destroy(b.Group);
         Destroy(b);
     }
 

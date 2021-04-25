@@ -13,8 +13,7 @@ public class Bone : MonoBehaviour
     protected BoneGroup group;
     public bool connecting = false;
 
-    public delegate void AttachedMethod(Bone bone);
-    public event AttachedMethod AttachedEvent;
+    public event Action<Bone> AttachedEvent;
 
     [SerializeField]
     private string axisKey; 
