@@ -1,14 +1,19 @@
 fileFormatVersion: 2
-guid: 32bd9fb926ec39e4fa02923a2b9cb0b0
+guid: 6ef6475a94f1df745b6b2f604882e40b
 ModelImporter:
   serializedVersion: 19301
   internalIDToNameTable: []
   externalObjects:
   - first:
-      type: UnityEngine:Material
+      type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
-      name: defaultMat
-    second: {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
+      name: BlackboardEmpty
+    second: {fileID: 2800000, guid: d5a1bef308a0a6d409050e8650714acc, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Shelf Texture
+    second: {fileID: 2800000, guid: a2e7dff71d185634b89f8df64876ec16, type: 3}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -67,7 +72,7 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 1
+    normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
