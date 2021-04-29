@@ -28,10 +28,14 @@ public class CatMovement
         this.path = path;
         path.PathStarted += () => { pathing = true; };
         path.PathFinished += () => { pathing = false; };
-        (path as CatPathWithNav).GroundHeight = GroundYValue;
-
-        foreach(var limb in limbEnds)
+        CatPathWithNav nav = path as CatPathWithNav;
+        nav.GroundHeight = GroundYValue;
+        nav.ChestHeightChange += (float val) => { SetGroundYValue(val- distFromGroundToChest); };
+        foreach (var limb in limbEnds)
+        {
             path.PathStarted += limb.PathStarted;
+            path.JumpStarted += limb.StartJump;
+        }
     }
 
     public void SetGroundYValue(float val)

@@ -76,7 +76,7 @@ public class CatBehavior : MonoBehaviour
         }
 
         movement = new CatMovement(limbEnds,speed);
-        var catPathWithNav = new CatPathWithNav(transform.position.y, transformDistances, orderedTransforms,shoulderIndex);
+        var catPathWithNav = new CatPathWithNav(transform.position.y-movement.GroundYValue, transformDistances, orderedTransforms,shoulderIndex);
         catPathWithNav.GroundHeight = movement.GroundYValue;
         mPath = catPathWithNav;
         mPath.PathFinished += () => { pathing = false; };
@@ -94,7 +94,8 @@ public class CatBehavior : MonoBehaviour
             GameManager.Instance.RemoveEventMethod(typeof(GameInit), "Begin", CleanUp);
             Destroy(gameObject.transform.root.gameObject);
         }
-        GameManager.Instance.AddEventMethod(typeof(GameInit), "Begin", CleanUp);
+        if(GameManager.Instance)
+            GameManager.Instance.AddEventMethod(typeof(GameInit), "Begin", CleanUp);
 
         if (initialized)
             return;
@@ -114,11 +115,13 @@ public class CatBehavior : MonoBehaviour
         delays[2] = 0;
         delays[3] = -(transform.position - headTransform.position).magnitude / speed * 2;
 
-        mPath = new CatPathWithNav(transform.position.y, delays, orderedTransforms,2);
+        movement = new CatMovement(limbEnds,speed);
+        var temp = new CatPathWithNav(transform.position.y, delays, orderedTransforms,2);
+        temp.GroundHeight = movement.GroundYValue;
+        mPath = temp;
         mPath.PathFinished += () => { pathing = false; };
         mPath.PathStarted += () => { pathing = true; };
-
-        movement = new CatMovement(limbEnds,speed);
+        movement.SetPath(temp, limbEnds);
 
         //stablizer = new CatStablizer(null, 1000, groundYVal);
         //stablizer.DestablizedEvent += () => { stablizing = false; Debug.Log("Fallen Cat!"); };
@@ -130,7 +133,7 @@ public class CatBehavior : MonoBehaviour
 
     void PathToPoint(Vector3 destination)
     {
-        destination.y = movement.ChestHeight;
+        //destination.y = movement.ChestHeight;
         mPath.PathToPoint(destination);
         targetPreviousPos = followTarget.transform.position;
     }

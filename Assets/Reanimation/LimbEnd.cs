@@ -29,7 +29,8 @@ public class LimbEnd : MonoBehaviour
     {
         Stepping,
         Pushing,
-        Standing
+        Standing,
+        Jumping
     }
 
 
@@ -45,6 +46,7 @@ public class LimbEnd : MonoBehaviour
     //where on the body the limb is located
     [field: SerializeField]
     public LimbLocationTag LocationTag { get; private set; }
+    [field: SerializeField]
     //The state the limb is currently in
     public LimbStates LimbState { get; private set; }
     [field: SerializeField]
@@ -61,6 +63,7 @@ public class LimbEnd : MonoBehaviour
     public GameObject LimbStart { get; private set; }
     //a percentage from 0 to 1 of how extended the limb is
     public float Extension { get { return (Target.transform.position - LimbStart.transform.position).magnitude / LimbLength; } }
+    [field: SerializeField]
     public int DelayIndex { get; private set; }
 
     //---Public Events---//
@@ -128,7 +131,7 @@ public class LimbEnd : MonoBehaviour
     {
         if(LimbState != LimbStates.Standing)
         {
-            Debug.LogError("Limb is stepping or alread pushing, cannot push");
+            StartStep();
             return;
         }
 
@@ -146,43 +149,39 @@ public class LimbEnd : MonoBehaviour
         {
             EndPush();
         }
+        if(LimbState == LimbStates.Jumping)
+        {
+            Debug.LogError("Trying to step during jump");
+        }
 
         StepStartEvent?.Invoke(this);
         LimbState = LimbStates.Stepping;
         currentRoutine = StartCoroutine(StepRoutine());
     }
 
-    public void Destableized()
+    public void StartJump(Jump jumpArc)
     {
-        if (LimbState == LimbStates.Pushing)
-        {
-            EndPush();
-        }
+        StopCoroutine(currentRoutine);
+        LimbState = LimbStates.Jumping;
+
+        StartCoroutine(JumpRoutine(jumpArc));
     }
 
-    public void Collided(Vector3 collisionPoint)
+    public void EndJump()
     {
-        if (LimbState == LimbStates.Stepping)
-        {
-            StepEnd(collisionPoint);
-        }
-    }
-
-    //called when a limb reaches it's maximum extent
-    private void EndPush()
-    {
-        //check to see if end push was not called from the push coroutine
-        if (LimbState == LimbStates.Pushing)
+        if(LimbState == LimbStates.Jumping)
         {
             StopCoroutine(currentRoutine);
-            LimbState = LimbStates.Standing;
         }
+        LimbState = LimbStates.Standing;
     }
 
     public void PathStarted()
     {
+        if (LimbState == LimbStates.Jumping)
+            EndJump();
         //if already moving, no change
-        if (LimbState != LimbStates.Standing)
+        else if (LimbState != LimbStates.Standing)
             return;
 
         //when a path first starts only half of limbs will step,
@@ -205,7 +204,17 @@ public class LimbEnd : MonoBehaviour
                 break;
         }
     }
-    
+
+    //called when a limb reaches it's maximum extent
+    private void EndPush()
+    {
+        //check to see if end push was not called from the push coroutine
+        if (LimbState == LimbStates.Pushing)
+        {
+            StopCoroutine(currentRoutine);
+            LimbState = LimbStates.Standing;
+        }
+    }
 
     //called when a foot is placed on the ground after a step
     private void StepEnd(Vector3? collisonPoint)
@@ -248,6 +257,7 @@ public class LimbEnd : MonoBehaviour
         yield break;
     }
 
+
     private IEnumerator PushRoutine()
     {
         Transform targetTransfrom = Target.transform;
@@ -264,5 +274,19 @@ public class LimbEnd : MonoBehaviour
         }
         LimbState = LimbStates.Standing;
         StartStep();
+    }
+    private IEnumerator JumpRoutine(Jump jumpPath)
+    {
+        Transform targetTransfrom = Target.transform;
+        bool isRight = LocationTag == LimbLocationTag.BackRight || LocationTag == LimbLocationTag.FrontRight;
+        float timer = 0;
+        while (timer < jumpPath.SplitDuration)
+        {
+            timer += Time.deltaTime;
+            jumpPath.SetIndex(DelayIndex);
+            targetTransfrom.position = jumpPath.GetPointNearPath(timer,0.05f,isRight);
+            yield return null;
+        }
+        LimbState = LimbStates.Standing;
     }
 }

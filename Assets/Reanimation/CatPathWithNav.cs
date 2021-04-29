@@ -14,12 +14,24 @@ public class CatPathWithNav : CatPath
         MinTurningRad = .1f;
         Speed = .1f;
         this.catChestHeight = catChestHeight;
+        ChestHeightChange += (float val) => { GroundHeight = val-catChestHeight; };
     }
 
-    public bool PathToPoint(Vector3 destination)
+    public override bool PathToPoint(Vector3 destination)
     {
+        if (FollowingSplit)
+        {
+            void QueueNewPath()
+            {
+                PathToPoint(destination);
+                PathReset -= QueueNewPath;
+            }
+            PathReset += QueueNewPath;
+            return true;
+        }
+
         Vector3 pathStart = shoulderTransform.position;
-        pathStart.y = destination.y = GroundHeight;
+        float currentGround = pathStart.y =  /*destination.y =*/  GroundHeight;
 
         //get a series of points from unity's navmesh
         NavMeshPath mPath = new NavMeshPath();
@@ -37,6 +49,18 @@ public class CatPathWithNav : CatPath
             Vector3 toPrevious = previous - vector;
             float distance = toPrevious.magnitude;
 
+            float jumpHeight = -toPrevious.y;
+            if (Mathf.Abs(jumpHeight) > .05f)
+            {
+                currentGround += jumpHeight + catChestHeight;
+                vector.y = currentGround + catChestHeight;
+                previous = vector;
+                points.Add(vector);
+                continue;
+            }
+
+            vector.y = currentGround + catChestHeight;
+
             //slightly shorten targets to make curving around corners feel more natural
             float radMult = -Mathf.Tan(
                 Mathf.Deg2Rad * Vector3.Angle(
@@ -49,14 +73,14 @@ public class CatPathWithNav : CatPath
             //skip points that would cause orientandpathto to fail
             if ((previous - vector).magnitude < MinTurningRad)
                 continue;
-            
+
             previous = vector;
-            vector.y = catChestHeight;
+
             points.Add(vector);
         }
 
-        Vector3 lastVector = mPath.corners[mPath.corners.Length];
-        lastVector.y = catChestHeight;
+        Vector3 lastVector = mPath.corners[mPath.corners.Length-1];
+        lastVector.y = currentGround + catChestHeight;
         points.Add(lastVector);
 
         return PathToPoints(points);
