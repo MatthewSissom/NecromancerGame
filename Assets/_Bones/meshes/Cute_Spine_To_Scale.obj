@@ -1,6 +1,6 @@
 # Blender v2.83.5 OBJ File: 'Cute_Spine.blend'
 # www.blender.org
-mtllib Cute_Spine.mtl
+mtllib Cute_Spine_To_Scale.mtl
 o Cube.003_Cube.002
 v -0.007501 -0.005714 0.002871
 v -0.006604 -0.004837 0.004593
