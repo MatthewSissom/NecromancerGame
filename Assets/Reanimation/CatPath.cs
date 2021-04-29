@@ -336,6 +336,7 @@ public partial class CatPath
                 }
                 previousPos = pos;
             }
+            elapsedTime = delays[0];
         }
 
         //start every path with linar paths for transforms behind the shoulders to follow
