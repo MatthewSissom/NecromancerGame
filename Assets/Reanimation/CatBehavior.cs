@@ -82,7 +82,6 @@ public class CatBehavior : MonoBehaviour
         mPath.PathFinished += () => { pathing = false; };
         mPath.PathStarted += () => { pathing = true; };
         movement.SetPath(catPathWithNav, limbEnds);
-
     }
 
 
