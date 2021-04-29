@@ -65,7 +65,7 @@ public class CatBehavior : MonoBehaviour
         this.orderedTransforms = orderedTransforms;
         this.limbEnds = limbEnds;
 
-        speed = 0.2f;
+        speed = 0.3f;
         stepHeight = 0.05f;
 
         for (int i = 0; i < transformDistances.Length; i++)

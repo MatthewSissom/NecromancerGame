@@ -36,9 +36,10 @@ public class LimbEnd : MonoBehaviour
 
     //---Public Felids---//
     public float StepSpeed;
+    [field: SerializeField]
     public float StepHeight { get; set; }
     public float HeightOffset { get; private set; }
-    public float BodyMovementMult = .025f;
+    public float BodyMovementMult = .015f;
 
     //A combination of where this limb is on the body and how it should move
     [field: SerializeField]
