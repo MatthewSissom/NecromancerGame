@@ -111,10 +111,9 @@ public class AudioManager : MonoBehaviour
         FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Vocals/General/Shock");
     }
 
-    // Same as minor shock for testing, subject to change
     public void PlayMajorShock()
     {
-        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Vocals/General/Shock");
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Vocals/General/MajorShock");
     }
 
     public void PlayChalkboardSFX()
@@ -125,5 +124,19 @@ public class AudioManager : MonoBehaviour
     public void PlayCatMeow()
     {
         FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Vocals/General/Meows");
+    }
+
+    public void PlayTickTock(bool warningTone)
+    {
+        FMOD.Studio.EventInstance ticktockInstance = FMODUnity.RuntimeManager.CreateInstance("event:/SFX/UI/PocketwatchTickTock");
+
+
+        // 0 = normal tone, 1 = warning tone
+        if (warningTone)
+            ticktockInstance.setParameterByName("TimeLeft", 1);
+        else
+            ticktockInstance.setParameterByName("TimeLeft", 0);
+
+        ticktockInstance.start();
     }
 }

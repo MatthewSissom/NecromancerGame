@@ -10,6 +10,8 @@ public class CountDown : State
     string eventName = ""; 
     float time = 0;
 
+    int warningTime = 5;    // The number of seconds reamining that is shown when the tick tock sound intensifies
+
 
     protected override void Awake()
     {
@@ -31,6 +33,12 @@ public class CountDown : State
         for (int i = (int)System.Math.Ceiling(time - 2); i > 0; i--)
         {
             text.text = eventName + " for " + i.ToString() + "s";
+
+            if (i <= 10)
+                AudioManager.Instance.PlayTickTock(true);
+            else
+                AudioManager.Instance.PlayTickTock(false);
+
             yield return new WaitForSeconds(1);
         }
         text.text = "Finished!";

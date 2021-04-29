@@ -22,6 +22,29 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 647
+--- !u!114 &-7797771422217204821
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Cats/Footsteps/SkeletonLanding
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Cats/Footsteps/SkeletonLanding
+  guid: a5e20da2fbeca84bbdf1efa9c96896ec
+  Banks:
+  - {fileID: -5803213250001359351}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 2309
 --- !u!114 &-7234191217319749559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,6 +68,46 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 1681
+--- !u!114 &-6969306716373284387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PocketwatchTickTock/TimeLeft
+  m_EditorClassIdentifier: 
+  Name: TimeLeft
+  Min: 0
+  Max: 15
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 0
+--- !u!114 &-6968771867555953398
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PocketwatchTickTock/TimeLeft
+  m_EditorClassIdentifier: 
+  Name: TimeLeft
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-6956433051244531824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +177,30 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 1681
+--- !u!114 &-5806584141284247315
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/UI/PocketwatchTickTock
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/UI/PocketwatchTickTock
+  guid: 769b316c77300e42ac1931f95c3ce0df
+  Banks:
+  - {fileID: -5803213250001359351}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters:
+  - {fileID: -6968771867555953398}
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 140
 --- !u!114 &-5803213250001359351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -129,10 +216,30 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637547053994689968
+  lastModified: 637552251835217589
   LoadResult: 0
   FileSizes: []
   Exists: 1
+--- !u!114 &-3550611205261300115
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PocketwatchTickTock/TimeLeft
+  m_EditorClassIdentifier: 
+  Name: TimeLeft
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 0
 --- !u!114 &-3140734722490053845
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,6 +354,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 2800
+--- !u!114 &-420403684610163073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PocketwatchTickTock/TimeLeft
+  m_EditorClassIdentifier: 
+  Name: TimeLeft
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 0
 --- !u!114 &-145927767483215669
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -304,12 +431,15 @@ MonoBehaviour:
   - {fileID: -6296361209142445692}
   - {fileID: 6586734689329183075}
   - {fileID: -7234191217319749559}
+  - {fileID: -5806584141284247315}
+  - {fileID: 4164555860777132510}
+  - {fileID: -7797771422217204821}
   EditorParameters: []
   MasterBanks:
   - {fileID: -5803213250001359351}
   StringsBanks:
   - {fileID: 6788599698923747006}
-  stringsBankWriteTime: 637546143706125971
+  stringsBankWriteTime: 637552251835327320
   cacheVersion: 6
 --- !u!114 &1574873947274647902
 MonoBehaviour:
@@ -357,6 +487,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 2800
+--- !u!114 &2378641312002520253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PocketwatchTickTock/TimeLeft
+  m_EditorClassIdentifier: 
+  Name: TimeLeft
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 0
 --- !u!114 &2517666848933347548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,6 +530,49 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 2400
+--- !u!114 &4164555860777132510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceb653cd98e289a4e8697a1af55201f2, type: 3}
+  m_Name: event:/SFX/Cats/Vocals/General/MajorShock
+  m_EditorClassIdentifier: 
+  Path: event:/SFX/Cats/Vocals/General/MajorShock
+  guid: b7f324b707f90b4aa17822d89f36a1f6
+  Banks:
+  - {fileID: -5803213250001359351}
+  IsStream: 0
+  Is3D: 0
+  IsOneShot: 1
+  Parameters: []
+  MinDistance: 0
+  MaxDistance: 0
+  Length: 671
+--- !u!114 &4957854591022255777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PocketwatchTickTock/TimeLeft
+  m_EditorClassIdentifier: 
+  Name: TimeLeft
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 0
 --- !u!114 &5743745720412690687
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,11 +657,11 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637546143706125971
+  lastModified: 637552251835327320
   LoadResult: 0
   FileSizes:
   - Name: 
-    Value: 1776
+    Value: 1990
   Exists: 1
 --- !u!114 &7676173434054490502
 MonoBehaviour:
@@ -516,6 +709,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 2800
+--- !u!114 &8581425961254868413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PocketwatchTickTock/TimeLeft
+  m_EditorClassIdentifier: 
+  Name: TimeLeft
+  Min: 0
+  Max: 15
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 0
 --- !u!114 &8626222673033499472
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,3 +752,23 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 1500
+--- !u!114 &9048513009768525493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PocketwatchTickTock/TimeLeft
+  m_EditorClassIdentifier: 
+  Name: TimeLeft
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 0
