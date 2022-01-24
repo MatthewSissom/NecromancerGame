@@ -243,7 +243,7 @@ public class BoneCollisionHandler
         ParticleManager.CreateEffect("CombineFX", attaching.transform.position);
 
         //audio
-        //FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/BoneConnections");
 
         return true;
     }

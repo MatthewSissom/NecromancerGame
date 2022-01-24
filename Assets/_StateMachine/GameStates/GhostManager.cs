@@ -67,10 +67,12 @@ public class GhostManager : State
 #endif
         Transform pathRoot;
         List<GameObject> path;
+        // create a ghost for each bone in the delivery
         for(int i = 0, size = bones.Count; i< size; i++)
         {
-            pathRoot = boneShipment.transform.GetChild(i);
             path = new List<GameObject>();
+            pathRoot = boneShipment.transform.GetChild(i);
+            // add all path nodes in the delivery to the ghost's path
             for(int p = 0; p < pathRoot.childCount; p++)
             {
                 path.Add(pathRoot.GetChild(p).gameObject);
@@ -117,6 +119,8 @@ public class GhostManager : State
 
     private IEnumerator BoneShipment()
     {
+        // Bone shipment will be called multiple times during construction, use number 
+        // of times called to chose a boneShipment
         InitObjects(boneShipments[currentShipment]);
         done = ++currentShipment == boneShipments.Count;
 

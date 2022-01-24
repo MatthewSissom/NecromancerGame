@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// unfinished, should have the same structure as bone collision handler, ghosts' OnCollision events should call addCollision
 public class GhostCollisionHandler
 {
     public void AddCollision(GhostBehavior collided, Collision collision)
