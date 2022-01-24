@@ -45,7 +45,7 @@ public class GhostBehavior : MonoBehaviour
     {
         if (mBone)
         {
-            mBone.transform.position = BoneLocation;
+            mBone.transform.position = BoneLocation + transform.forward * .05f;
         }
     }
 

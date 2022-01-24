@@ -127,17 +127,17 @@ public class MenuInstructions : State
         hands = new List<GameObject>();
         for (int i = 0; i < instructionImages.Count; i++)
         {
-            hands.Add(instructionImages[i].transform.GetChild(1).gameObject);
+            hands.Add(instructionImages[i].transform.GetChild(0).gameObject);
             instructionImages[i].SetActive(false);
         }
         
-        boneFive = hands[4].transform.GetChild(1).gameObject;
-        boneFiveInitalPos = boneFive.transform.position;
-        boneFour = hands[3].transform.GetChild(1).gameObject;
-        boneFourInitalPos = boneFour.transform.position;
-
         initalHandOnePos = hands[0].transform.position;
         initalHandFourPos = hands[3].transform.position;
         initalHandFivePos = hands[4].transform.position;
+        boneFour = hands[3].transform.GetChild(1).gameObject;
+        boneFourInitalPos = boneFour.transform.position;
+        boneFive = hands[4].transform.GetChild(1).gameObject;
+        boneFiveInitalPos = boneFive.transform.position;
+
     }
 }

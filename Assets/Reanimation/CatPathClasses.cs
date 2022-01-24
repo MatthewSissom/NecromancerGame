@@ -187,7 +187,7 @@ public class Jump : SplitPath
 {
     private class JumpArc : PathComponent
     {
-        const float gravConst = -6;
+        const float gravConst = -4;
 
         Vector3 initPos;
         Vector3 constVelComponent;

@@ -45,7 +45,9 @@ public class CatBehavior : MonoBehaviour
     public float GroundHeight
     {
         get { return movement.GroundYValue; }
-        set { movement.SetGroundYValue(value); }
+        set { movement.SetGroundYValue(value);
+            (mPath as CatPathWithNav).GroundHeight = value;
+        }
     }
 
     public float ChestHeight

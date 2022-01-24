@@ -79,9 +79,11 @@ public class BoneMovingTouch : TouchProxy
         if (activeObj != null)
             return;
         IGrabbable b = other.GetComponentInParent<GrabbableGroup>();
+        if(b == null)
+            b = other.GetComponentInParent<StopwatchLid>();
         if (b != null)
         {
-            (b as IGrabbable).PickedUp();
+            b.PickedUp();
             SetActive(b);
             StopRotation(1000 * Mathf.Deg2Rad);
             //touchLights.Play();

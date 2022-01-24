@@ -5,9 +5,17 @@ using UnityEngine;
 public class Stopwatch : MonoBehaviour
 {
     public GameObject hand;
+    public float angle = 0;
+
+    private void Awake()
+    {
+        angle = 0;
+    }
 
     public void SetHandPercentage(float percent)
     {
-        hand.transform.rotation = Quaternion.Euler(-90, 0, percent * 360);
+        var newAngle = percent * 360;
+        hand.transform.RotateAround(hand.transform.position, Vector3.up, newAngle - angle);
+        angle = newAngle;
     }
 }
