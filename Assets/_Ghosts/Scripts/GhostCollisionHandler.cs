@@ -38,6 +38,11 @@ public class GhostCollisionHandler
         return Vector3.Angle(toCollision,ghost.transform.forward) < 45;
     }
 
+    /// <summary>
+    /// Calculates if a Collision would be noticable, value of 1, or major, value of 2. Otherwise returns 0
+    /// </summary>
+    /// <param name="collision">Collision object to check the severity of</param>
+    /// <returns></returns>
     int ImpactSeverity(Collision collision)
     {
         const float noticableImpactThreshold = .01f;

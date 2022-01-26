@@ -21,6 +21,7 @@ public class GhostManager : State
     public GameObject ghostPref;
     private List<GhostBehavior> ghosts;
 
+    //Starting the ghost manager, 
     public void ManagerInit()
     {
         currentShipment = 0;
@@ -28,6 +29,7 @@ public class GhostManager : State
         ghosts = new List<GhostBehavior>();
     }
 
+    //Destroys all ghosts in the ghosts list
     public void DestroyAll()
     {
         if (ghosts != null)
@@ -43,6 +45,11 @@ public class GhostManager : State
         ghosts = new List<GhostBehavior>();
     }
 
+    /// <summary>
+    /// Creates a new ghost and puts it on a predefined path
+    /// </summary>
+    /// <param name="path">Path for the ghost to travel upon</param>
+    /// <returns></returns>
     public GhostBehavior CreateGhost(List<GameObject> path)
     {
         GhostBehavior newGhost = Instantiate(ghostPref, path[0].transform.position, path[0].transform.rotation).GetComponent<GhostBehavior>();
@@ -55,6 +62,11 @@ public class GhostManager : State
         return newGhost;
     }
 
+
+    /// <summary>
+    /// Creates all the ghosts required for a given round
+    /// </summary>
+    /// <param name="boneShipment">an object which holds all the paths for ghosts to travel allong in a given round.</param>
     private void InitObjects(GameObject boneShipment)
     {
         List<GameObject> bones = boneShipment.GetComponent<BoneShipment>().bones;
@@ -81,7 +93,10 @@ public class GhostManager : State
             BoneManager.Instance.NewBoneGroup(bones[i], ghost);
         }
     }
-
+    /// <summary>
+    /// Destroys any given ghost
+    /// </summary>
+    /// <param name="toRemove">Ghost to destroy</param>
     public void DestroyGhost(GhostBehavior toRemove)
     {
         ghosts.Remove(toRemove);
@@ -95,6 +110,10 @@ public class GhostManager : State
         Destroy(toRemove.transform.root.gameObject);
     }
 
+    /// <summary>
+    /// Recalls all ghosts back to their original start point
+    /// </summary>
+    /// <param name="lifeSpan">How long the ghosts have until they're destroyed</param>
     public void RecallGhosts(float lifeSpan)
     {
         foreach(GhostBehavior b in ghosts)
@@ -103,6 +122,7 @@ public class GhostManager : State
         }
     }
 
+    //Seems to be similiar to above method but using the default lifespan? Method name is confusing
     public void FocusGhostsOnTable()
     {
         foreach (GhostBehavior b in ghosts)
@@ -117,6 +137,10 @@ public class GhostManager : State
         return bone.GetComponent<Renderer>().bounds.size.x;
     }
 
+    /// <summary>
+    /// Coroutine for turning Boneshipment objects into paths?
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator BoneShipment()
     {
         // Bone shipment will be called multiple times during construction, use number 

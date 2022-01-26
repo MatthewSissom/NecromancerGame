@@ -9,11 +9,13 @@ using UnityEngine;
 public abstract class StateManagerBase : MonoBehaviour
 {
     protected Dictionary<System.Type, State> states;
+    //current running coroutine/state
     protected Coroutine currentRoutine;
+    //Aray of States
     protected static State[] allStates;
     protected static Dictionary<string, State> cameraTransitions;
 
-    // Start is called before the first frame update
+    // Populating states and camera Transition dictionaries
     protected virtual void Awake()
     {
         states = new Dictionary<System.Type, State>();
@@ -38,6 +40,11 @@ public abstract class StateManagerBase : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks to see if given Parameter is a state 
+    /// </summary>
+    /// <param name="state">Object to check if it is a state</param>
+    /// <returns></returns>
     protected virtual bool IsMyState(State state)
     {
         return !cameraTransitions.ContainsKey(state.Name.ToLower().Trim());
@@ -59,6 +66,11 @@ public abstract class StateManagerBase : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Sets the Game State
+    /// </summary>
+    /// <param name="stateType">State of game to change to</param>
+    /// <returns></returns>
     protected virtual Coroutine SetState(System.Type stateType)
     {
         #if UNITY_EDITOR

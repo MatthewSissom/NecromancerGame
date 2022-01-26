@@ -8,6 +8,10 @@ public class StateManager : StateManagerBase
 {
     public static StateManager Instance;
 
+    /// <summary>
+    /// Main Game Loop Coroutine
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator MainLoop()
     {
         MenuManager.Instance.GoToMenu("Main");

@@ -49,6 +49,9 @@ public class GhostBehavior : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Check called when Ghosts reaches the next point on their path.
+    /// </summary>
     private void BodyArrived()
     {
         pathIndex++;
@@ -71,6 +74,11 @@ public class GhostBehavior : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Adds a point to a given Ghosts path
+    /// </summary>
+    /// <param name="pathPoint">Point to add to the path</param>
+    /// <param name="isFinal">Is the point added going to be the last point on the path?</param>
     public void AddToPath(GameObject pathPoint, bool isFinal)
     {
         if (path == null)
@@ -82,6 +90,9 @@ public class GhostBehavior : MonoBehaviour
             endForward = pathPoint.transform.forward;
     }
 
+    /// <summary>
+    /// Starts the ghost on following their path.
+    /// </summary>
     public void FollowPath()
     {
         pathIndex = -1;
@@ -95,6 +106,10 @@ public class GhostBehavior : MonoBehaviour
         mBone = null;
     }
 
+    /// <summary>
+    /// Plays one of the two shock animations
+    /// </summary>
+    /// <param name="isMinor">Should we play the minor shock animation</param>
     public void Shock(bool isMinor)
     {
         if (isMinor)
@@ -103,6 +118,9 @@ public class GhostBehavior : MonoBehaviour
             MajorShock();
     }
 
+    /// <summary>
+    /// Plays the minor Shock animation
+    /// </summary>
     public void MinorShock()
     {
         Debug.Log("Minor shock");
@@ -112,6 +130,10 @@ public class GhostBehavior : MonoBehaviour
         //AudioManager.Instance.PlayMinorShock();
     }
 
+
+    /// <summary>
+    /// Plays the major shock animation
+    /// </summary>
     public void MajorShock()
     {
         Debug.Log("Major shock");
@@ -134,6 +156,10 @@ public class GhostBehavior : MonoBehaviour
         Recall();
     }
 
+    /// <summary>
+    /// Moves the ghost back to it's start point before destroying it.
+    /// </summary>
+    /// <param name="lifeSpan">How long the ghost has before it will be destroyed</param>
     public void Recall(float lifeSpan = 3)
     {
         IEnumerator RecallRoutine()
@@ -146,6 +172,7 @@ public class GhostBehavior : MonoBehaviour
         StartCoroutine(RecallRoutine());
     }
 
+    //if a ghost is still holding a bone when destroyed, also destroy that bone
     private void OnDestroy()
     {
         if(mBone)
