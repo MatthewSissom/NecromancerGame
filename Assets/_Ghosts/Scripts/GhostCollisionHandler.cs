@@ -13,11 +13,11 @@ public class GhostCollisionHandler
         bool visable = IsVisable(collided, otherGo.transform.position) || IsVisable(collided, collision.contacts[0].point);
         int shockRating = ImpactSeverity(collision);
 
-        //ghost on ghost ignores 
         if (otherGo.CompareTag("Ghost"))
         {
-
+            //???
         }
+
         if(shockRating == 2)
         {
             collided.MajorShock();
@@ -40,6 +40,7 @@ public class GhostCollisionHandler
 
     /// <summary>
     /// Calculates if a Collision would be noticable, value of 1, or major, value of 2. Otherwise returns 0
+    /// Should be moved to ghost behavior
     /// </summary>
     /// <param name="collision">Collision object to check the severity of</param>
     /// <returns></returns>
