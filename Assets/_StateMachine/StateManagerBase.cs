@@ -41,7 +41,8 @@ public abstract class StateManagerBase : MonoBehaviour
     }
 
     /// <summary>
-    /// Checks to see if given Parameter is a state 
+    /// Checks to see if given state belongs to this state manager.
+    /// i.e. Bone Delivery belongs to GameManager because it's part of the main game
     /// </summary>
     /// <param name="state">Object to check if it is a state</param>
     /// <returns></returns>

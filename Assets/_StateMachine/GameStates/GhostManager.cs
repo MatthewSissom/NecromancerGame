@@ -122,12 +122,18 @@ public class GhostManager : State
         }
     }
 
-    //Seems to be similiar to above method but using the default lifespan? Method name is confusing
+    /// <summary>
+    /// All ghosts not already at the table will go directly to it.
+    /// Note for B: This is unfinished code, sorry for the confusion.
+    ///             The intent is for this loop to have each ghost go 
+    ///             directly to the table, likely speeding up and skipping
+    ///             unneeded path points.
+    /// </summary>
     public void FocusGhostsOnTable()
     {
         foreach (GhostBehavior b in ghosts)
         {
-            b.Recall();
+            //TODO
         }
     }
 
@@ -138,7 +144,8 @@ public class GhostManager : State
     }
 
     /// <summary>
-    /// Coroutine for turning Boneshipment objects into paths?
+    /// Routine to send a group of ghosts carrying bones to the table.
+    /// Will be called repeatedly by GameManager until there are no more shipments in the list of bone shipments
     /// </summary>
     /// <returns></returns>
     private IEnumerator BoneShipment()
@@ -146,6 +153,7 @@ public class GhostManager : State
         // Bone shipment will be called multiple times during construction, use number 
         // of times called to chose a boneShipment
         InitObjects(boneShipments[currentShipment]);
+        // update 'done' so GameManager will know when to move past the assembly stage
         done = ++currentShipment == boneShipments.Count;
 
         // Plays sound when cats fist spawn for bone shipment
