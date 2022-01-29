@@ -67,7 +67,7 @@ public class GhostManager : State
     /// Creates all the ghosts required for a given round
     /// </summary>
     /// <param name="boneShipment">an object which holds all the paths for ghosts to travel allong in a given round.</param>
-    private void InitObjects(GameObject boneShipment)
+    private void InitBoneShipmentObjects(GameObject boneShipment)
     {
         List<GameObject> bones = boneShipment.GetComponent<BoneShipment>().bones;
 #if UNITY_EDITOR
@@ -93,6 +93,7 @@ public class GhostManager : State
             BoneManager.Instance.NewBoneGroup(bones[i], ghost);
         }
     }
+
     /// <summary>
     /// Destroys any given ghost
     /// </summary>
@@ -152,9 +153,10 @@ public class GhostManager : State
     {
         // Bone shipment will be called multiple times during construction, use number 
         // of times called to chose a boneShipment
-        InitObjects(boneShipments[currentShipment]);
+        InitBoneShipmentObjects(boneShipments[currentShipment]);
         // update 'done' so GameManager will know when to move past the assembly stage
-        done = ++currentShipment == boneShipments.Count;
+        currentShipment++;
+        done = currentShipment == boneShipments.Count;
 
         // Plays sound when cats fist spawn for bone shipment
         AudioManager.Instance.PlaySound("catTest");
