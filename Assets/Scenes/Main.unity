@@ -287,6 +287,7 @@ MonoBehaviour:
   masterSlider: {fileID: 545417696}
   musicSlider: {fileID: 1804384240}
   sfxSlider: {fileID: 1428258155}
+  handedness: {fileID: 1863221543}
   canvas: {fileID: 9102265}
 --- !u!1 &12654432
 GameObject:
@@ -11528,7 +11529,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 9102270}
-        m_MethodName: ButtonPressed
+        m_MethodName: ReturnToMainMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21580,6 +21581,18 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1863221543 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5406990075731234101, guid: 272fe0c5c7a7c66479176599225942a7,
+    type: 3}
+  m_PrefabInstance: {fileID: 1893315630}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1867488942
 GameObject:
   m_ObjectHideFlags: 0
