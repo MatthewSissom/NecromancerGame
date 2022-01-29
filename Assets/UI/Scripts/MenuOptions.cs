@@ -121,12 +121,18 @@ public class MenuOptions : State
 		volumeMusic = PlayerPrefs.GetFloat("volumeMusic", volumeMusic);
 		volumeSFX = PlayerPrefs.GetFloat("volumeSFX", volumeSFX);
 
+		// Set volumes
+		FMODUnity.RuntimeManager.GetBus("bus:/").setVolume(volumeMaster);
+		FMODUnity.RuntimeManager.GetBus("bus:/Music").setVolume(volumeMusic);
+		FMODUnity.RuntimeManager.GetBus("bus:/SFX").setVolume(volumeSFX);
+
 		// Set sliders to actual values
 		masterSlider.value = volumeMaster;
 		musicSlider.value = volumeMusic;
 		sfxSlider.value = volumeSFX;
 
 		//Adds a listener to the main slider and invokes a method when the value changes.
+		// Do this last so changed events aren't fired during init
 		masterSlider.onValueChanged.AddListener(MasterSliderChanged);
 		musicSlider.onValueChanged.AddListener(MusicSliderChanged);
 		sfxSlider.onValueChanged.AddListener(SFXSliderChanged);
