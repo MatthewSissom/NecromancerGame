@@ -38,7 +38,8 @@ public class MenuOptions : State
 
 		// Init handedness slider, default to right hand
 		handedness.value = PlayerPrefs.GetInt("handedness", 1);
-		handedness.onValueChanged.AddListener((float val) => PlayerPrefs.SetInt("handedness", (int)val) );
+		handedness.onValueChanged.AddListener(HandednessSliderChanged);
+		HandednessSliderChanged(handedness.value);
 	}
 
 	public override IEnumerator Routine()
@@ -91,6 +92,12 @@ public class MenuOptions : State
 		PlayerPrefs.SetFloat("volumeSFX", newValue);
 
 		PlayTestSFXSound();
+	}
+
+	private void HandednessSliderChanged(float newValue)
+	{
+		int val = (int)newValue;
+		PlayerPrefs.SetInt("handedness", val);
 	}
 
 	private void PlayTestSFXSound()

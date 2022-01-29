@@ -103,8 +103,19 @@ public partial class InputManager : MonoBehaviour
         {
             movingTouches[i] = Instantiate(moveTouchPref).GetComponent<BoneMovingTouch>();
             movingTouches[i].gameObject.SetActive(false);
+
             rotationTouches[i] = Instantiate(rotationTouchPref).GetComponent<RotationTouch>();
             rotationTouches[i].gameObject.SetActive(false);
+        }
+    }
+
+    private void ChangeHandedness(bool isRightHanded)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            // TEMP - make better offset options
+            if (isRightHanded)
+                movingTouches[i].offset.x *= -1;
         }
     }
 }

@@ -214,6 +214,9 @@ public partial class InputManager : MonoBehaviour
         GameManager.Instance.AddEventMethod(typeof(GameInit), "End", () =>
         {
             enabled = true;
+
+            // Set handedness, 1 for right 0 for left. Default to 1
+            ChangeHandedness(PlayerPrefs.GetInt("handedness", 1) == 1);
         });
     }
 }
