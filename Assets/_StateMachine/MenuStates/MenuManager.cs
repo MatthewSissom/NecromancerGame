@@ -46,7 +46,7 @@ public class MenuManager : StateManagerBase
                 case "Options":
                     state = null;
                     yield return CameraTransition("MenuBoardFlipped");
-                    yield return SetState(typeof(MenuMusicSliders));
+                    yield return SetState(typeof(MenuOptions));
                     break;
                 case null:
                     yield return null;

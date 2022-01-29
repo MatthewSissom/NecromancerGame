@@ -49,7 +49,7 @@ public class MenuShowAssignments : State
     // Method for button presses
     public void ButtonPressed(string name)
     {
-        // If we want to play the game, set the current assignmetn first
+        // If we want to play the game, set the current assignment first
         if (name == "Play")
         {
             assignmentChecker.currentAssignment = selectedAssignment;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MenuMusicSliders : State
+public class MenuOptions : State
 {
 	// Note: Code repurposed from Escape From Demonreach GDD2 project
 	// Original creator - Will Bertiz
@@ -24,13 +24,11 @@ public class MenuMusicSliders : State
 	{
 		//Toggle canvas when switching between states
 		canvas.SetActive(false);
-		MenuManager.Instance.AddEventMethod(typeof(MenuMusicSliders), "begin", () => { canvas.SetActive(true); });
+		MenuManager.Instance.AddEventMethod(typeof(MenuOptions), "begin", () => { canvas.SetActive(true); });
 
 		MenuManager.Instance.AddEventMethod(typeof(MenuInstructions), "begin", () => { canvas.SetActive(false); });
 
 		MenuManager.Instance.AddEventMethod(typeof(MenuMain), "begin", () => { canvas.SetActive(false); });
-
-		MenuManager.Instance.AddEventMethod(typeof(MenuShowAssignments), "begin", () => { canvas.SetActive(false); });
 
 		GameManager.Instance.AddEventMethod(typeof(GameCleanUp), "end", () => { canvas.SetActive(false); });
 
