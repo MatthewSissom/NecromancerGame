@@ -16182,6 +16182,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 651859133588524599, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 786248814509638723, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
       propertyPath: m_LocalPosition.z
@@ -16261,6 +16266,11 @@ PrefabInstance:
         type: 3}
       propertyPath: enabledColor.b
       value: 0.86649925
+      objectReference: {fileID: 0}
+    - target: {fileID: 5086646509718749624, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: m_Name
+      value: LidProxy
       objectReference: {fileID: 0}
     - target: {fileID: 5222559980565371961, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
@@ -18875,7 +18885,7 @@ MonoBehaviour:
     type: 3}
   rotationTouchPref: {fileID: 7669088987514535589, guid: f613fcf2816568445a64caf996a4097e,
     type: 3}
-  height: 0.25
+  height: 0.23
   rotationRadSquared: 1
   rotationVelocityThreshold: 10
 --- !u!114 &1632805931

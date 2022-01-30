@@ -10,12 +10,18 @@ public partial class InputManager : MonoBehaviour
     public GameObject moveTouchPref;
     public GameObject rotationTouchPref;
 
-    [Header ("Game Feel Values")]
-    public float height;
-    public float rotationRadSquared;
-    public float rotationVelocityThreshold;
+    [Header("Game Feel Values")]
+    [SerializeField]
+    private float height;
+    [SerializeField]
+    private float rotationRadSquared;
+    [SerializeField]
+    private float rotationVelocityThreshold;
 
     static public InputManager Instance;
+
+
+    public float Height { get { return height; } }
 
 #if (USING_TOUCH == false)
     //temp mouse input var

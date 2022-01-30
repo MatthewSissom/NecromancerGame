@@ -7,10 +7,14 @@ public class StopwatchLid : MonoBehaviour, IGrabbable
     Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return proxyRb; } }
 
-    public float rbReturnSpeed;
+    [SerializeField]
+    private float rbReturnSpeed;
 
-    public Transform hinge;
-    public GameObject lidProxy;
+    [SerializeField]
+    private Transform hinge;
+    [SerializeField]
+    private GameObject lidProxy;
+    private Vector3 initalProxyPos;
     private Rigidbody proxyRb;
     public GameObject rbMarker;
 
@@ -24,25 +28,25 @@ public class StopwatchLid : MonoBehaviour, IGrabbable
     {
         checkForEnd = true;
         returnRb = true;
-        Rb.useGravity = false;
+        ResetProxy();
     }
 
     public void PickedUp()
     {
         checkForEnd = false;
         returnRb = false;
-        Rb.useGravity = false;
     }
 
     float RotationFromRbPos()
     {
-        float tableComponent = Vector3.Dot(Rb.position, hinge.right);
-        float upComponent = Vector3.Dot(Rb.position, hinge.up);
-        //subtract from height to allow rotation at extreem distances
-        upComponent/=3;
-        upComponent -= 2 * tableComponent;
+        float tangentToAxisComponent = Vector3.Dot(Rb.position, hinge.right);
+        //if(tangentToAxisComponent)
 
-        float angle = Mathf.Atan2(upComponent, tableComponent);
+        // construct an imaginary cylinder around the stopwatch lid's axis (r = input height)
+        // change the y component of the vector until the vector is on the cylinder, use the angle from
+        // horizontal as the stopwatch angle
+
+        float angle = 10;// Mathf.Atan2(upComponent, tableComponent);
         return Mathf.Min(Mathf.PI, Mathf.Max(angle, 0))*Mathf.Rad2Deg;
     }
 
@@ -81,8 +85,30 @@ public class StopwatchLid : MonoBehaviour, IGrabbable
         }
     }
 
+    void ResetProxy()
+    {
+        lidProxy.transform.position = initalProxyPos;
+        Rb.constraints = Rb.constraints | RigidbodyConstraints.FreezePositionY;
+        Rb.velocity = new Vector3();
+        Rb.useGravity = false;
+    }
+
+    void Init()
+    {
+        enabled = true;
+        proxyRb = lidProxy.GetComponent<Rigidbody>();
+
+        // set proxy to only move in the plane the input manager uses
+        Vector3 unadjustedPos = lidProxy.transform.position;
+        initalProxyPos = new Vector3(unadjustedPos.x, InputManager.Instance.Height, unadjustedPos.y);
+        ResetProxy();
+    }
+
     void Start()
     {
-        proxyRb = lidProxy.GetComponent<Rigidbody>();
+        // add enabling + disabling events 
+        GameManager.Instance.AddEventMethod(typeof(GameInit), "end", Init);
+        GameManager.Instance.AddEventMethod(typeof(BoneAssembler), "begin", () => { enabled = false; });
+        enabled = false;
     }
 }
