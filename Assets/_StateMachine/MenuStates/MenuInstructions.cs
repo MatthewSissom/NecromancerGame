@@ -4,35 +4,46 @@ using UnityEngine;
 
 public class MenuInstructions : State
 {
+    [System.Serializable]
+    class MenuItemTranslationData
+    {
+        public bool enabled = false;
+        public Vector2 targetPos = default;
+        public float duration = default;
+        [HideInInspector]
+        public Vector2 initalPos;
+    } 
+    
+    [System.Serializable]
+    class MenuItemRotationData
+    {
+        public bool enabled;
+        public float finalRotation;
+        public float duration;
+        [HideInInspector]
+        public float initalRotation;
+    }
+
+    [System.Serializable]
+    class HandData
+    {
+        public RectTransform transform;
+        public MenuItemTranslationData movement;
+        public MenuItemRotationData rotation;
+
+        public void Init()
+        {
+            rotation.initalRotation = transform.rotation.z;
+            movement.initalPos = transform.anchoredPosition;
+        }
+    }
+
     private bool exit;
     public GameObject canvas;
-
-    public List<GameObject> instructionImages;
-    public List<GameObject> hands;
-
-    Vector3 initalHandOnePos;
-    public float handOneEnd;
-    public float handOneDuration;
-    
-    public float handTwoEnd;
-    public float handTwoDuration;
-
-    public float handThreeStart;
-    public float handThreeEnd;
-    public float handThreeDuration;
-
-    Vector3 initalHandFourPos;
-    Vector3 boneFourInitalPos;
-    GameObject boneFour;
-    public float handFourEnd;
-    public float handFourDuration;
-
-    Vector3 initalHandFivePos;
-    GameObject boneFive;
-    Vector3 boneFiveInitalPos;
-    public float handFiveEnd;
-    public float handFiveDuration;
-
+    [SerializeField]
+    private List<GameObject> insturctionObjects;
+    [SerializeField]
+    private List<HandData> handMovementData;
 
     int instructionIndex;
     float handTime;
@@ -63,52 +74,53 @@ public class MenuInstructions : State
 
     public void NextInstruction()
     {
-        if(instructionIndex < instructionImages.Count-1)
+        if(instructionIndex < insturctionObjects.Count-1)
         {
-            instructionImages[instructionIndex].SetActive(false);
+            insturctionObjects[instructionIndex].SetActive(false);
             instructionIndex++;
-            instructionImages[instructionIndex].SetActive(true);
+            insturctionObjects[instructionIndex].SetActive(true);
         }
-
-
     }
 
     public void PreviousInstruction()
     {
         if (instructionIndex > 0)
         {
-            instructionImages[instructionIndex].SetActive(false);
+            insturctionObjects[instructionIndex].SetActive(false);
             instructionIndex--;
-            instructionImages[instructionIndex].SetActive(true);
+            insturctionObjects[instructionIndex].SetActive(true);
         }
     }
 
     private void AnimateHands()
     {
-        switch (instructionIndex)
+        foreach (HandData data in handMovementData)
         {
-            case 0:
-                hands[0].transform.position = initalHandOnePos + new Vector3(Mathf.PingPong(handTime / handOneDuration * handOneEnd, handOneEnd),0,0);
-                break;
-            case 1:
-                hands[1].transform.rotation = Quaternion.Euler(new Vector3(0, 0, Mathf.PingPong(handTime / handTwoDuration * Mathf.Abs(handTwoEnd), Mathf.Abs(handTwoEnd)) * Mathf.Sign(handTwoEnd)));
-                break;
-            case 2:
-                break;
-            case 3:
-                hands[3].transform.position = initalHandFourPos - new Vector3(0, Mathf.PingPong(handTime / handFourDuration * handFourEnd, handFourEnd), 0);
-                break;
-            case 4:
-                hands[4].transform.position = initalHandFivePos + new Vector3(Mathf.PingPong(handTime / handFiveDuration * handFiveEnd, handFiveEnd), 0, 0);
-                break;
+            // translate hand based on time if needed
+            if (data.movement.enabled)
+            {
+                data.transform.anchoredPosition = Vector2.Lerp(
+                    data.movement.initalPos,
+                    data.movement.targetPos,
+                    Mathf.PingPong(handTime / data.movement.duration, 1));
+            }
+            // rotate hand if needed
+            if (data.rotation.enabled)
+            { 
+                data.transform.rotation = Quaternion.Euler(
+                    new Vector3(
+                        0,
+                        0,
+                        Mathf.PingPong(handTime / data.rotation.duration * Mathf.Abs(data.rotation.finalRotation), Mathf.Abs(data.rotation.finalRotation)) * Mathf.Sign(data.rotation.finalRotation)));
+            }
         }
     }
 
     private void ResetVars()
     {
-        instructionImages[instructionIndex].SetActive(false);
+        insturctionObjects[instructionIndex].SetActive(false);
         instructionIndex = 0;
-        instructionImages[instructionIndex].SetActive(true);
+        insturctionObjects[instructionIndex].SetActive(true);
         handTime = 0;
     }
 
@@ -121,21 +133,14 @@ public class MenuInstructions : State
         MenuManager.Instance.AddEventMethod(typeof(MenuMain), "begin", () => { canvas.SetActive(false); });
         GameManager.Instance.AddEventMethod(typeof(GameCleanUp), "end", () => { canvas.SetActive(false); });
 
-        //array init
-        hands = new List<GameObject>();
-        for (int i = 0; i < instructionImages.Count; i++)
+        // array init
+        for (int i = 0; i < insturctionObjects.Count; i++)
         {
-            hands.Add(instructionImages[i].transform.GetChild(0).gameObject);
-            instructionImages[i].SetActive(false);
+            insturctionObjects[i].SetActive(false);
         }
-        
-        initalHandOnePos = hands[0].transform.position;
-        initalHandFourPos = hands[3].transform.position;
-        initalHandFivePos = hands[4].transform.position;
-        boneFour = hands[3].transform.GetChild(1).gameObject;
-        boneFourInitalPos = boneFour.transform.position;
-        boneFive = hands[4].transform.GetChild(1).gameObject;
-        boneFiveInitalPos = boneFive.transform.position;
-
+        for(int i = 0; i < handMovementData.Count; i++)
+        {
+            handMovementData[i].Init();
+        }
     }
 }
