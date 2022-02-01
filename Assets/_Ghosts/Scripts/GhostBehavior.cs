@@ -32,6 +32,11 @@ public class GhostBehavior : MonoBehaviour
         }
     }
 
+    //path action values
+    private List<PathData.GhostAction> pathActions;
+    float startDistanceToTarget;
+    float currentDistanceToTarget;
+
     public GhostPhysics body { get; private set; }
 
     private void Awake()
@@ -46,7 +51,7 @@ public class GhostBehavior : MonoBehaviour
         if (mBone)
         {
             mBone.transform.position = BoneLocation + transform.forward * .05f;
-        }
+        } 
     }
 
     /// <summary>
@@ -71,6 +76,16 @@ public class GhostBehavior : MonoBehaviour
                 radious,
                 pathIndex == path.Count - 1 //arrival forces for last path point
             );
+            startDistanceToTarget = Vector3.Distance(path[pathIndex], gameObject.transform.position);
+            switch (pathActions[pathIndex])
+            {
+                case PathData.GhostAction.Skip:
+                    
+                    StartCoroutine(Skip());
+                    break;
+                default: //Intentionally blank
+                    break;
+            }
         }
     }
 
@@ -84,8 +99,12 @@ public class GhostBehavior : MonoBehaviour
         if (path == null)
         {
             path = new List<Vector3>();
+            pathActions = new List<PathData.GhostAction>();
         }
         path.Add(pathPoint.transform.position);
+        pathActions.Add(pathPoint.GetComponent<PathData>().Action);
+        Debug.Log(pathActions[pathActions.Count - 1]);
+
         if (isFinal)
             endForward = pathPoint.transform.forward;
     }
@@ -162,6 +181,7 @@ public class GhostBehavior : MonoBehaviour
     /// <param name="lifeSpan">How long the ghost has before it will be destroyed</param>
     public void Recall(float lifeSpan = 3)
     {
+        
         IEnumerator RecallRoutine()
         {
             body.MoveToPosition(path[0],0);
@@ -179,6 +199,35 @@ public class GhostBehavior : MonoBehaviour
         {
             mBone.mGhost = null;
         }
+    }
+
+    //Get the ghosts to look like they are dancing
+    IEnumerator Skip()
+    {
+        StartCoroutine(DistanceCheck(0.1f));
+        Debug.Log("Start of skip Coroutine");
+        yield return currentDistanceToTarget <= startDistanceToTarget * 0.75f;
+        body.Jump(1000 * majorJumpMult);
+        yield return currentDistanceToTarget <= startDistanceToTarget * 0.50f;
+        body.Jump(1000 * majorJumpMult);
+        yield return currentDistanceToTarget <= startDistanceToTarget * 0.25f;
+        body.Jump(1000 * majorJumpMult);
+        Debug.Log("End of Skip Coroutine");
+        StopCoroutine(DistanceCheck(0.1f));
+        yield break;
+    }
+
+   
+    IEnumerator DistanceCheck(float timer)
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(timer);
+            currentDistanceToTarget = Vector3.Distance(path[pathIndex], gameObject.transform.position);
+            Debug.Log("Start Distance: " + startDistanceToTarget + " Current Distance" + currentDistanceToTarget);
+
+        }
+   
     }
 
 }
