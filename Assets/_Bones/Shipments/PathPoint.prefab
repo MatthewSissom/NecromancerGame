@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4451232754025730320}
   - component: {fileID: 5204688398245732713}
   - component: {fileID: 6556104021673389697}
-  - component: {fileID: 4808164853502441306}
   m_Layer: 0
   m_Name: PathPoint
   m_TagString: Untagged
@@ -80,16 +79,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &4808164853502441306
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 643345537575384629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1f913aa5996565248beea5b45987fb2b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  action: 0
