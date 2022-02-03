@@ -8,9 +8,17 @@ public class PlayPenState : State
     [SerializeField]
     GameObject arrow;
 
+    public void SetSkeleton(GameObject playSkeleton)
+    { 
+
+    }
+
     public override IEnumerator Routine()
     {
         Begin();
+
+
+
         arrow.SetActive(true);
         exit = false;
 

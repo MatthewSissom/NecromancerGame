@@ -5,7 +5,7 @@ using UnityEngine;
 public class MenuManager : StateManagerBase
 {
     public static MenuManager Instance;
-    public string state;
+    private string state;
 
     public IEnumerator InMenus()
     {

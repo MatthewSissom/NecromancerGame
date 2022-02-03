@@ -6,6 +6,16 @@ using System;
 //Highest level state manager, controls the game flow 
 public class StateManager : StateManagerBase
 {
+#if UNITY_EDITOR
+    public enum EDebugMode { 
+        None,
+        SkipMenus,
+        PlaypenOnly
+    }
+    [SerializeField]
+    EDebugMode debugMode;
+    public EDebugMode DebugMode { get { return debugMode; }}
+#endif
     public static StateManager Instance;
 
     /// <summary>
@@ -14,14 +24,32 @@ public class StateManager : StateManagerBase
     /// <returns></returns>
     private IEnumerator MainLoop()
     {
-        MenuManager.Instance.GoToMenu("Main");
-        yield return SetState(MenuManager.Instance.InMenus());
-        while (true)
+#if UNITY_EDITOR
+        switch (DebugMode)
         {
-            yield return SetState(GameManager.Instance.Game());
-            MenuManager.Instance.GoToMenu("Main");
-            yield return SetState(MenuManager.Instance.InMenus());
+            default:
+#endif
+                MenuManager.Instance.GoToMenu("Main");
+                yield return SetState(MenuManager.Instance.InMenus());
+                while (true)
+                {
+                    yield return SetState(GameManager.Instance.Game());
+                    MenuManager.Instance.GoToMenu("Main");
+                    yield return SetState(MenuManager.Instance.InMenus());
+                }
+
+#if UNITY_EDITOR
+                break;
+            case EDebugMode.SkipMenus:
+                while (true)
+                {
+                    yield return SetState(GameManager.Instance.Game());
+                }
+                break;
+            case EDebugMode.PlaypenOnly:
+                break;
         }
+#endif
     }
 
     override protected void Awake()
