@@ -50,8 +50,12 @@ public partial class BoneManager : MonoBehaviour
         if (activeBones.Contains(newBone))
             return;
 
-        if(!newBone.TryGetComponent<BoneGroup>(out BoneGroup group))
+        if (!newBone.TryGetComponent<BoneGroup>(out BoneGroup group))
+        {
             group = newBone.gameObject.AddComponent(typeof(BoneGroup)) as BoneGroup;
+            Rigidbody boneRB = newBone.GetComponent<Rigidbody>();
+            boneRB.angularVelocity = new Vector3(0, 0, 0);
+        }
 
         GrabbableGroup grabbableGroup = newBone.transform.root.gameObject.GetComponent<GrabbableGroup>();
         if(!grabbableGroup)
