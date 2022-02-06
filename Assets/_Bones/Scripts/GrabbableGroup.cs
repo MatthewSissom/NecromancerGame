@@ -80,7 +80,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
 
         IEnumerator DelayedLayerChange()
         {
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.4f);
             rb.freezeRotation = false;
             gameObject.layer = physicsLayer;
             ApplyToAll((Bone b, FunctionArgs args) =>
