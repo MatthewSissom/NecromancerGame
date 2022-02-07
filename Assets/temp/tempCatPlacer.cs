@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Unused code
+
 public class tempCatPlacer : MonoBehaviour
 {
     public GameObject EmptyArmature;
@@ -39,6 +41,6 @@ public class tempCatPlacer : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.AddEventMethod(typeof(PlayPenState), "Begin", TempRotateCat);
+        //GameManager.Instance.AddEventMethod(typeof(PlayPenState), "Begin", TempRotateCat);
     }
 }

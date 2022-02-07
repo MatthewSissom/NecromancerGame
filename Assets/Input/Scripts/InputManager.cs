@@ -1,24 +1,22 @@
-﻿#define USING_TOUCH
-
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public partial class InputManager : MonoBehaviour
 {
-    [Header ("GameObjects")]
+    [Header("GameObjects")]
     public GameObject moveTouchPref;
     public GameObject rotationTouchPref;
 
-    [Header ("Game Feel Values")]
+    [Header("Game Feel Values")]
     public float height;
     public float rotationRadSquared;
     public float rotationVelocityThreshold;
 
     static public InputManager Instance;
 
-#if (USING_TOUCH == false)
-    //temp mouse input var
+#if UNITY_EDITOR
+    // mouse input vars
     bool holdingMouseDown = false;
     bool rotating = false;
 #endif
@@ -58,8 +56,7 @@ public partial class InputManager : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-#if USING_TOUCH
-#region touchInput
+    #region touchInput
         foreach (Touch t in Input.touches)
         {
             //pos represents the point in world space at the specified height
@@ -105,90 +102,89 @@ public partial class InputManager : MonoBehaviour
             }
             toDeactivate = null;
         }
-#endregion
+        #endregion
 
-#else
-#region mouseInput
-
-        Vector3 pos = Input.mousePosition;
-        pos.z = Camera.main.transform.position.y - height;
-        Vector3 radVec = pos + new Vector3(5, 0, 0);
-
-        pos = Camera.main.ScreenToWorldPoint(pos);
-        float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
-        int id = 0;
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-            Application.Quit();
-        if (Input.GetKey(KeyCode.Space))
+    #region mouseInput
+#if UNITY_EDITOR
+        if (DebugModes.UseMouseInput)
         {
-            if (!rotating && holdingMouseDown)
-            {
-                rotating = true;
-                NewRotationTouch(pos, 1, activeTouches[0] as BoneMovingTouch);
-            }
-            id = 1;
-            Vector3 center = Camera.main.ScreenToWorldPoint(new Vector3(5, 0, 0));
-            Vector3 cameraSpaceVec = pos - center;
-            Vector3 projection = Vector3.Project(cameraSpaceVec, Camera.main.transform.forward);
-            pos = center + (cameraSpaceVec - projection).normalized;
-
-            Vector3 angularVelocity = (activeTouches[0] as BoneMovingTouch).activeObj.Rb.angularVelocity;
-            (activeTouches[0] as BoneMovingTouch).activeObj.Rb.angularVelocity = Vector3.Project(angularVelocity, Camera.main.transform.forward);
-        }
-        else if (rotating)
-        {
-            rotating = false;
-            pos = Input.mousePosition;
+            Vector3 pos = Input.mousePosition;
             pos.z = Camera.main.transform.position.y - height;
+            Vector3 radVec = pos + new Vector3(5, 0, 0);
+
             pos = Camera.main.ScreenToWorldPoint(pos);
-            DisableTouch(pos);
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            if (!holdingMouseDown)
+            float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
+            int id = 0;
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+                Application.Quit();
+            if (Input.GetKey(KeyCode.Space))
             {
-                holdingMouseDown = true;
-                NewMoveTouch(pos, id);
+                if (!rotating && holdingMouseDown)
+                {
+                    rotating = true;
+                    NewRotationTouch(pos, 1, activeTouches[0] as BoneMovingTouch);
+                }
+                id = 1;
+                Vector3 center = Camera.main.ScreenToWorldPoint(new Vector3(5, 0, 0));
+                Vector3 cameraSpaceVec = pos - center;
+                Vector3 projection = Vector3.Project(cameraSpaceVec, Camera.main.transform.forward);
+                pos = center + (cameraSpaceVec - projection).normalized;
+
+                Vector3 angularVelocity = (activeTouches[0] as BoneMovingTouch).activeObj.Rb.angularVelocity;
+                (activeTouches[0] as BoneMovingTouch).activeObj.Rb.angularVelocity = Vector3.Project(angularVelocity, Camera.main.transform.forward);
+            }
+            else if (rotating)
+            {
+                rotating = false;
+                pos = Input.mousePosition;
+                pos.z = Camera.main.transform.position.y - height;
+                pos = Camera.main.ScreenToWorldPoint(pos);
+                DisableTouch(pos);
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                if (!holdingMouseDown)
+                {
+                    holdingMouseDown = true;
+                    NewMoveTouch(pos, id);
+                }
+            }
+            else if (holdingMouseDown)
+            {
+                holdingMouseDown = false;
+                DisableTouch(pos);
+            }
+
+            if (rotating || holdingMouseDown)
+                activeTouches[id].Move(pos, rad);
+
+            const float rotationSpeed = -5f;
+            float rotation = 0;
+            if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
+            {
+                rotation += rotationSpeed;
+            }
+            if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
+            {
+                rotation -= rotationSpeed;
+            }
+            if (rotation != 0)
+            {
+                BoneMovingTouch active = activeTouches[0] as BoneMovingTouch;
+                if (active != null)
+                {
+                    Vector3 axis = Vector3.up;
+                    //Vector3 pos = active.activeBone.transform.root.position;
+                    //active.applyToAll((Bone toApply, FunctionArgs e) =>
+                    //{
+                    //    toApply.transform.RotateAround(pos, axis ,rotation);
+                    //});
+                }
             }
         }
-        else if (holdingMouseDown)
-        {
-            holdingMouseDown = false;
-            DisableTouch(pos);
-        }
-
-        if(rotating || holdingMouseDown)
-            activeTouches[id].Move(pos, rad);
-
-        const float rotationSpeed = -5f;
-        float rotation = 0;
-        if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))
-        {
-            rotation += rotationSpeed;
-        }
-        if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow))
-        {
-            rotation -= rotationSpeed;
-        }
-        if (rotation != 0)
-        {
-            BoneMovingTouch active = activeTouches[0] as BoneMovingTouch;
-            if (active != null)
-            {
-                Vector3 axis = Vector3.up;
-                //Vector3 pos = active.activeBone.transform.root.position;
-                //active.applyToAll((Bone toApply, FunctionArgs e) =>
-                //{
-                //    toApply.transform.RotateAround(pos, axis ,rotation);
-                //});
-            }
-        }
-
-#endregion
 #endif
-
-
+#endregion
     }
 
     private void Awake()

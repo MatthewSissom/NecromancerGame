@@ -6,16 +6,7 @@ using System;
 //Highest level state manager, controls the game flow 
 public class StateManager : StateManagerBase
 {
-#if UNITY_EDITOR
-    public enum EDebugMode { 
-        None,
-        SkipMenus,
-        PlaypenOnly
-    }
-    [SerializeField]
-    EDebugMode debugMode;
-    public EDebugMode DebugMode { get { return debugMode; }}
-#endif
+
     public static StateManager Instance;
 
     /// <summary>
@@ -24,32 +15,14 @@ public class StateManager : StateManagerBase
     /// <returns></returns>
     private IEnumerator MainLoop()
     {
-#if UNITY_EDITOR
-        switch (DebugMode)
+        MenuManager.Instance.GoToMenu("Main");
+        yield return SetState(MenuManager.Instance.InMenus());
+        while (true)
         {
-            default:
-#endif
-                MenuManager.Instance.GoToMenu("Main");
-                yield return SetState(MenuManager.Instance.InMenus());
-                while (true)
-                {
-                    yield return SetState(GameManager.Instance.Game());
-                    MenuManager.Instance.GoToMenu("Main");
-                    yield return SetState(MenuManager.Instance.InMenus());
-                }
-
-#if UNITY_EDITOR
-                break;
-            case EDebugMode.SkipMenus:
-                while (true)
-                {
-                    yield return SetState(GameManager.Instance.Game());
-                }
-                break;
-            case EDebugMode.PlaypenOnly:
-                break;
+            yield return SetState(GameManager.Instance.Game());
+            MenuManager.Instance.GoToMenu("Main");
+            yield return SetState(MenuManager.Instance.InMenus());
         }
-#endif
     }
 
     override protected void Awake()
@@ -72,6 +45,38 @@ public class StateManager : StateManagerBase
     // Start is called before the first frame update
     protected void Start()
     {
+#if (UNITY_EDITOR == false)
         StartCoroutine(MainLoop());
+#else
+        StartCoroutine(DebugLoops());
+#endif
     }
+
+#if UNITY_EDITOR
+    private IEnumerator DebugLoops()
+    {
+        switch (DebugModes.StateMode)
+        {
+            default:
+                yield return StartCoroutine(MainLoop());
+                break;
+            case DebugModes.EStateDebugMode.SkipMenus:
+                while (true)
+                {
+                    yield return SetState(GameManager.Instance.Game());
+                }
+                break;
+            case DebugModes.EStateDebugMode.PlaypenOnly:
+                while (true)
+                {
+                    GameObject testSkeleton = Instantiate(DebugModes.IKTestPrefab);
+                    // give time for cat to init
+                    yield return new WaitForSeconds(.1f);
+                    PlayPenState.Instance.SetSkeleton(testSkeleton);
+                    yield return SetState(GameManager.Instance.Game());
+                }
+                break;
+        }
+    }
+#endif
 }

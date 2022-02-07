@@ -1,4 +1,4 @@
-﻿#define USING_IK
+﻿//#define USING_IK
 
 using System.Collections;
 using System.Collections.Generic;
@@ -164,6 +164,8 @@ public class BoneAssembler : State
         //init cat cat components
         RebuildIKChains();
         AddMovementComponents();
+
+        PlayPenState.Instance.SetSkeleton(emptyArmature.gameObject);
 
         End();
         yield break;

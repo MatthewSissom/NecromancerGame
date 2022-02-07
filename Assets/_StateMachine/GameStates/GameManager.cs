@@ -28,6 +28,15 @@ public class GameManager : StateManagerBase
 
     public IEnumerator Game()
     {
+#if (UNITY_EDITOR == false)
+        yield return StartCoroutine(MainGameLoop());
+#else
+        yield return StartCoroutine(DebugLoops());
+#endif
+    }
+
+    public IEnumerator MainGameLoop()
+    {
         yield return SetState(typeof(GameInit));
 
         //bone delivery loop
@@ -35,9 +44,9 @@ public class GameManager : StateManagerBase
         {
             yield return CameraTransition("GhostTrans");
             yield return SetState(typeof(GhostManager));
-            yield return CameraTransition("TableTrans"); 
+            yield return CameraTransition("TableTrans");
             CountDown.SetParams("Assemble Cat", GhostManager.Instance.timeBetweenShipments);
-            yield return SetState(typeof(CountDown)); 
+            yield return SetState(typeof(CountDown));
         }
 
 
@@ -53,4 +62,26 @@ public class GameManager : StateManagerBase
 
         yield break;
     }
+
+#if UNITY_EDITOR
+    public IEnumerator DebugLoops()
+    {
+        switch (DebugModes.StateMode)
+        {
+            default:
+                yield return StartCoroutine(MainGameLoop());
+                break;
+            case DebugModes.EStateDebugMode.PlaypenOnly:
+                yield return SetState(typeof(GameInit));
+
+                yield return CameraTransition("ToPlayPenMid");
+                yield return new WaitForSeconds(0.2f);
+                yield return CameraTransition("PlayPen");
+
+                yield return SetState(typeof(PlayPenState));
+                yield return SetState(typeof(GameCleanUp));
+                break;
+        }
+    }
+#endif
 }

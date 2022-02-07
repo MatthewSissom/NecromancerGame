@@ -32,10 +32,11 @@ public class CatBehavior : MonoBehaviour
     [SerializeField]
     private Transform tailTransform;
 
+    public bool Initalized { get; private set; } = false;
+    
     //holds transforms along the main line of the cat 
     Transform[] orderedTransforms;
 
-    bool initialized = false;
     CatMovement movement;
     CatPath mPath;
 
@@ -60,9 +61,9 @@ public class CatBehavior : MonoBehaviour
 
     public void BehaviorInit(List<LimbEnd> limbEnds, Transform[] orderedTransforms, float[] transformDistances, int shoulderIndex)
     {
-        if (initialized)
+        if (Initalized)
             return;
-        initialized = true;
+        Initalized = true;
 
         this.orderedTransforms = orderedTransforms;
         this.limbEnds = limbEnds;
@@ -92,15 +93,15 @@ public class CatBehavior : MonoBehaviour
     {
         void CleanUp()
         {
-            GameManager.Instance.RemoveEventMethod(typeof(GameInit), "Begin", CleanUp);
+            GameManager.Instance.RemoveEventMethod(typeof(GameCleanUp), "Begin", CleanUp);
             Destroy(gameObject.transform.root.gameObject);
         }
         if(GameManager.Instance)
-            GameManager.Instance.AddEventMethod(typeof(GameInit), "Begin", CleanUp);
+            GameManager.Instance.AddEventMethod(typeof(GameCleanUp), "Begin", CleanUp);
 
-        if (initialized)
+        if (Initalized)
             return;
-        initialized = true;
+        Initalized = true;
 
         Debug.LogError("Start init used on catbehavior");
 
