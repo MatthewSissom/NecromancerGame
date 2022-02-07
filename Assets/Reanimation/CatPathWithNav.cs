@@ -41,6 +41,10 @@ public class CatPathWithNav : CatPath
             return false;
         }
 
+#if UNITY_EDITOR
+        DebugRendering.UpdatePath(DebugModes.SkeletonPathFlags.NavMeshPath, mPath.corners);
+#endif
+
         var points = new List<Vector3>();
         Vector3 previous = shoulderTransform.position;
         for (int i = 1, length = mPath.corners.Length-1; i < length; i++)
@@ -82,6 +86,10 @@ public class CatPathWithNav : CatPath
         Vector3 lastVector = mPath.corners[mPath.corners.Length-1];
         lastVector.y = currentGround + catChestHeight;
         points.Add(lastVector);
+
+#if UNITY_EDITOR
+        DebugRendering.UpdatePath(DebugModes.SkeletonPathFlags.ModifiedNavMeshPath, mPath.corners);
+#endif
 
         return PathToPoints(points);
     }

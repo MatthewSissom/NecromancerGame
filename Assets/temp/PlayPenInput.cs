@@ -31,30 +31,38 @@ public class PlayPenInput : MonoBehaviour
     void Update()
     {
         var touches = Input.touches;
+        Vector3 pos = new Vector3();
         if (touches.Length == 0)
-            return;
-
-        var t = touches[0];
-        //pos represents the point in world space at the specified height
-        Vector3 pos = t.position;
-        pos.z = camera.transform.position.y - 1;
-        pos = camera.ScreenToWorldPoint(pos);
-
 #if UNITY_EDITOR
-        if (DebugModes.UseMouseInput)
         {
-            pos = Input.mousePosition;
+            if (DebugModes.UseMouseInput)
+            {
+                pos = Input.mousePosition;
+                pos.z = camera.transform.position.y - 1;
+                pos = camera.ScreenToWorldPoint(pos);
+            }
+        }
+#else
+        {
+            return;
+        }
+#endif
+        else
+        {
+            //pos represents the point in world space at the specified height
+            pos = touches[0].position;
             pos.z = camera.transform.position.y - 1;
             pos = camera.ScreenToWorldPoint(pos);
         }
-#endif
+
         Vector3 rayDirection = (camera.transform.position - pos).normalized;
         Ray ray = new Ray(camera.transform.position, rayDirection);
 
         if(Physics.Raycast(ray,out RaycastHit info))
         {
+            float dot = Vector3.Dot(info.normal, Vector3.up);
             // check that the surface is horizontal - get angle between normal and up
-            if(Mathf.Acos(Vector3.Dot(info.normal,Vector3.up)) < .1)
+            if (dot > .95)
                 followTarget.transform.position = info.point;
         }
     }

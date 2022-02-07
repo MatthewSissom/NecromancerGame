@@ -201,7 +201,7 @@ public partial class CatPath
             //otherwise switch back to following standard paths
             else
             {
-                ToggleFollowingSplit();
+                 ToggleFollowingSplit();
             }
             return;
         }
@@ -438,6 +438,30 @@ public partial class CatPath
                 previousPos = path.First.Value.GetPointOnPath(path.Last.Value.Duration);
             }
         }
+
+#if UNITY_EDITOR
+        // sample points on path for debugging
+        var node = path.First;
+        PathComponent currentPathComponent = node.Value;
+        List<Vector3> points = new List<Vector3>();
+        float simulatedTime = 0;
+        const float simulatedTimeStep = .3f;
+        while (node != null)
+        {
+            if (currentPathComponent.Duration > simulatedTime)
+            {
+                points.Add(currentPathComponent.GetPointOnPath(simulatedTime));
+                simulatedTime += simulatedTimeStep;
+            }
+            else
+            {
+                node = node.Next;
+                simulatedTime -= currentPathComponent.Duration;
+                currentPathComponent = node?.Value;
+            }
+        }
+        DebugRendering.UpdatePath(DebugModes.SkeletonPathFlags.TruePath, points);
+#endif
 
         PathStarted?.Invoke();
     }
