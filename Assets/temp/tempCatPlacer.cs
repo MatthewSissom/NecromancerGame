@@ -24,7 +24,7 @@ public class tempCatPlacer : MonoBehaviour
         cameraXZ.y = 0;
         behavior.transform.position += new Vector3(0, behavior.ChestHeight - behavior.transform.position.y, 0) + cameraXZ;
 
-        void ChangeMatRecursive(Transform t)
+        /*void ChangeMatRecursive(Transform t)
         {
             for(int i = 0; i < t.childCount; i++)
             {
@@ -34,7 +34,7 @@ public class tempCatPlacer : MonoBehaviour
                     ChangeMatRecursive(t.GetChild(i));
             }
         }
-        ChangeMatRecursive(EmptyArmature.transform);
+        ChangeMatRecursive(EmptyArmature.transform);*/
     }
 
     private void Start()

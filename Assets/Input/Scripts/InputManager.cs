@@ -1,4 +1,4 @@
-﻿#define USING_TOUCH
+﻿//#define USING_TOUCH
 
 using System.Collections;
 using System.Collections.Generic;

@@ -1,194 +1,79 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FunctionArgs { }
-public delegate void GroupFunction(Bone applyTo, FunctionArgs e);
-
+public enum BoneGroupType { Neck, Head, Ribcage, Spine, Pelvis, Tail, FrontLeftLeg, FrontLeftFoot, FrontRightLeg, FrontRightFoot, BackLeftLeg, BackLeftFoot, BackRightLeg, BackRightFoot}
+public enum BoneVertexType { FrontPrimary, BackPrimary, LeftAux, RightAux}
 public class BoneGroup : MonoBehaviour
 {
+
+    [SerializeField]
+    protected GameObject frontPrimaryVertex;
+
+    [SerializeField]
+    protected GameObject backPrimaryVertex;
+
+    [SerializeField]
+    protected GameObject leftAuxVertex;
+
+    [SerializeField]
+    protected GameObject rightAuxVertex;
+
+
     protected BoneGroup parent;
-    protected List<BoneGroup> children;
-    protected Bone mBone;
-    protected int groupID;
-    protected int myID;
+    protected Dictionary<BoneVertexType, BoneGroup> children;
+    protected Dictionary<BoneVertexType, Vector3> vertexPositions;
 
-    public BoneGroup Parent
-    {
-        set 
-        {
-            if (parent)
-            {
-                parent.removeChild(this);
-            }
-            parent = value;
-        }
-    }
-
-    public int GroupID { 
-        get { return groupID; } 
-        set
-        {
-            groupID = value;
-            foreach(BoneGroup b in children)
-            {
-                b.GroupID = value;
-            }
-        }
-    }
+    protected Vector3 primaryAxis;
+    protected Vector3 auxiliaryAxis;
+    protected Vector3 startingUpDir;
 
     protected virtual void Awake()
     {
-        children = new List<BoneGroup>();
-        if (BoneManager.Instance)
-        {
-            myID = BoneManager.Instance.GetNewGroupID();
-            groupID = myID;
-        }
-        else
-            myID = -1;
-        mBone = gameObject.GetComponent<Bone>();
+        InitVertexData();
+        InitGeometryValues();
     }
 
-    // Start is called before the first frame update
-    virtual protected void Start()
+    protected virtual void Start()
     {
-        if(myID == -1)
-        {
-            myID = BoneManager.Instance.GetNewGroupID();
-            groupID = myID;
-        }
+        
     }
 
-    //Combines two groups in to a single group
-    //prefered parent is usually made the parent of the tree, unless it would be expensive to do so.
-    //if making the prefered group node the parent is important set preferedMustBeParent to true
-    public static void CombineGroups(BoneGroup preferedParent, BoneGroup other, bool preferedMustBeParent = false)
+    protected virtual void FixedUpdate()
     {
-        //check to see if groups are already the same
-        if (preferedParent.groupID == other.groupID)
-            return;
-        //if other has no parent make prefered the parent
-        if (!other.parent)
-        {
-            preferedParent.addChild(other);
-            other.ResetID();
-        }
-        //make other the parent if possible to avoid rearanging trees
-        else if (!preferedParent.parent && !preferedMustBeParent)
-        {
-            Debug.Log("Non ideal parenting");
-            other.addChild(preferedParent);
-            preferedParent.ResetID();
-        }
-        //if needed rearange the tree of other so that prefered can be it's parent
-        else
-        {
-            other.makeRoot();
-            preferedParent.addChild(other);
-            other.ResetID();
-        }
+        Debug.DrawLine(vertexPositions[BoneVertexType.FrontPrimary], vertexPositions[BoneVertexType.FrontPrimary] + startingUpDir * 10, Color.blue);
+        Debug.DrawLine(vertexPositions[BoneVertexType.BackPrimary], vertexPositions[BoneVertexType.BackPrimary] + startingUpDir * 10, Color.blue);
+        Debug.DrawLine(vertexPositions[BoneVertexType.LeftAux], vertexPositions[BoneVertexType.LeftAux] + startingUpDir * 10, Color.blue);
+        Debug.DrawLine(vertexPositions[BoneVertexType.RightAux], vertexPositions[BoneVertexType.RightAux] + startingUpDir * 10, Color.blue);
     }
-
-
-    public delegate void applyToAllType(GroupFunction func, FunctionArgs e = null);
-    //calls the passeed function on each member of the bone group, passing in the bone and the given function args as peramiters
-    public virtual void ApplyToAll(GroupFunction func, FunctionArgs e = null)
+    protected void InitVertexData()
     {
-        void ApplyFuncRecursive(BoneGroup toApply)
-        {
-            //TEMP shouldn't need null check, result of tableConArea
-            if (toApply.mBone)
-                func(toApply.mBone, e);
-            foreach (BoneGroup bg in toApply.children)
-            {
-                ApplyFuncRecursive(bg);
-            }
-        }
+        children = new Dictionary<BoneVertexType, BoneGroup>();
+        vertexPositions = new Dictionary<BoneVertexType, Vector3>();
+        vertexPositions.Add(BoneVertexType.FrontPrimary, frontPrimaryVertex.transform.localPosition);
+        vertexPositions.Add(BoneVertexType.BackPrimary, backPrimaryVertex.transform.localPosition);
+        vertexPositions.Add(BoneVertexType.LeftAux, leftAuxVertex.transform.localPosition);
+        vertexPositions.Add(BoneVertexType.RightAux, rightAuxVertex.transform.localPosition);
 
-        //start at group root and filer down to all children
-        ApplyFuncRecursive(GetRoot());
     }
-
-    //returns the root of this tree
-    public BoneGroup GetRoot()
+    protected void InitGeometryValues()
     {
-        if (parent)
-            return parent.GetRoot();
-        return this;
+        primaryAxis = vertexPositions[BoneVertexType.BackPrimary] - vertexPositions[BoneVertexType.FrontPrimary];
+        auxiliaryAxis = vertexPositions[BoneVertexType.LeftAux] - vertexPositions[BoneVertexType.RightAux];
+        startingUpDir = Vector3.Cross(primaryAxis, auxiliaryAxis);
     }
 
-    //gets a list of all bone components in this tree
-    public List<Bone> GetAllBones()
+    public bool isBeingDragged;
+    public bool isLeaf;
+    public bool isAttached;
+
+    public void Attach(BoneGroup parent, TableManager tableManager)
     {
-        List<Bone> allBones = new List<Bone>();
-
-        void GetBoneRecursive(BoneGroup toCheck)
-        {
-            if (toCheck.mBone)
-                allBones.Add(toCheck.mBone);
-            foreach(BoneGroup bg in toCheck.children)
-            {
-                GetBoneRecursive(bg);
-            }
-        }
-
-        GetBoneRecursive(GetRoot());
-        return allBones;
+        this.parent = parent;
+        isLeaf = true;
+        parent.isLeaf = false;
+        isAttached = true;
     }
-
-    protected virtual void RemoveChild(BoneGroup toRemove)
-    {
-        removeChild(toRemove);
-        toRemove.ResetID();
-    }
-
-    #region Helpers
-
-
-    //changes the id of this node to match it's parent
-    private void ResetID()
-    {
-        if (parent) GroupID = parent.groupID;
-        else GroupID = myID;
-    }
-
-    //adds a child to this group
-    private void addChild(BoneGroup child)
-    {
-        children.Add(child);
-        child.Parent = this;
-    }
-
-    //removes a child from this group
-    private void removeChild(BoneGroup child)
-    {
-        children.Remove(child);
-        child.parent = null;
-    }
-
-    //makes this bone the root of the tree
-    public void makeRoot()
-    {
-        BoneGroup temp = this;
-        //find the path from this node to the root
-        List<BoneGroup> path = new List<BoneGroup>();
-        while (temp)
-        {
-            path.Add(temp);
-            temp = temp.parent;
-        }
-
-        //swap nodes along the path until this node is the root
-        BoneGroup child;
-        for (int i = path.Count - 2; i != -1; --i)
-        {
-            child = path[i];
-            child.addChild(child.parent);
-            child.parent.removeChild(child);
-            child.ResetID();
-        }
-    }
-
-    #endregion
+  
 }

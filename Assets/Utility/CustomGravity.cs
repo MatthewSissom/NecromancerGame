@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CustomGravity : MonoBehaviour
 {
-    private static float gravitationalConst;
+    private static float? gravitationalConst;
     private static Transform origin;
     private Rigidbody rb;
 
@@ -29,6 +29,10 @@ public class CustomGravity : MonoBehaviour
 
     private void Start()
     {
+        if(gravitationalConst == null)
+        {
+            SetOrigin(Camera.main.transform);
+        }
         rb = gameObject.GetComponent<Rigidbody>();
         if (!rb)
             Destroy(this);
@@ -37,6 +41,6 @@ public class CustomGravity : MonoBehaviour
 
     void FixedUpdate()
     {
-        rb.AddForce((rb.transform.position - origin.position).normalized * gravitationalConst * Time.fixedDeltaTime,ForceMode.VelocityChange);
+        rb.AddForce((rb.transform.position - origin.position).normalized * gravitationalConst.Value * Time.fixedDeltaTime,ForceMode.VelocityChange);
     }
 }

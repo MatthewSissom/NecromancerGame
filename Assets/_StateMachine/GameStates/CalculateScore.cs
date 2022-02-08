@@ -27,8 +27,6 @@ public class CalculateScore : State
 
     public GameObject tempMarker;
 
-    public AssignmentChecker assignmentChecker;
-
     bool RayAtPixelLocation(Vector2 location)
     {
         return Physics.Raycast(
@@ -92,7 +90,7 @@ public class CalculateScore : State
         //else
         //    ScoreManager.Instance.Add(new PartialScore("Fail..."));
 
-        assignmentChecker.PrintResults();
+        //assignmentChecker.PrintResults();
 
 
         End();

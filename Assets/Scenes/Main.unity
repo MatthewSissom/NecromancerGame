@@ -1211,6 +1211,36 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 62585871}
   m_Mesh: {fileID: -2432090755550338912, guid: d8962739f0bbd7b4fbbccc9a9d18b43b, type: 3}
+--- !u!1 &63637145
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 63637146}
+  m_Layer: 0
+  m_Name: Bones
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &63637146
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 63637145}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 667661029}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &66122279
 GameObject:
   m_ObjectHideFlags: 0
@@ -5036,8 +5066,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Tail
+  <ID>k__BackingField: 0
 --- !u!114 &403111313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5051,6 +5083,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &419415323
 GameObject:
   m_ObjectHideFlags: 0
@@ -5102,6 +5135,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!114 &419415326
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5114,8 +5148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Spine Chunk (1)
+  <ID>k__BackingField: 0
 --- !u!1 &435126815
 GameObject:
   m_ObjectHideFlags: 0
@@ -5401,6 +5437,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01395db50bf5a0a45bf754649188c3ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentID: 0
 --- !u!4 &482957846
 Transform:
   m_ObjectHideFlags: 0
@@ -6197,6 +6234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!114 &567033569
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6209,8 +6247,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Jaw
+  <ID>k__BackingField: 0
 --- !u!23 &567033570
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -7176,6 +7216,12 @@ CapsuleCollider:
   m_Height: 1.0745939
   m_Direction: 1
   m_Center: {x: -0.27619648, y: 0.10613334, z: -8.546852e-11}
+--- !u!4 &667661029 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 559537520518874582, guid: 9db830be7935e314eb62a2e06dc2a82c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1464288846}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &670829818
 GameObject:
   m_ObjectHideFlags: 0
@@ -8271,8 +8317,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Rib Chunk Left (1)
+  <ID>k__BackingField: 0
 --- !u!114 &752798947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8286,6 +8334,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &762072915
 GameObject:
   m_ObjectHideFlags: 0
@@ -9298,6 +9347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!114 &888086485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9310,8 +9360,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Tail (1)
+  <ID>k__BackingField: 0
 --- !u!1 &895335965
 GameObject:
   m_ObjectHideFlags: 0
@@ -12779,6 +12831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!114 &1171615562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12791,8 +12844,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Spine Chunk (1)
+  <ID>k__BackingField: 0
 --- !u!1 &1179798508
 GameObject:
   m_ObjectHideFlags: 0
@@ -13283,6 +13338,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!114 &1235019801
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13295,8 +13351,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Rib Chunk Left (1)
+  <ID>k__BackingField: 0
 --- !u!1 &1235371127
 GameObject:
   m_ObjectHideFlags: 0
@@ -15574,6 +15632,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!114 &1395621841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15586,8 +15645,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Rib Chunk Left (1)
+  <ID>k__BackingField: 0
 --- !u!1 &1408966807 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4893620016654783424, guid: 83c42c9cbe8f3ae45acde355c8f3beba,
@@ -15669,10 +15730,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21c33330d642ce48a73ddc15af9bf1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateName: 
   connectionColliders: {fileID: 1464288847}
   ribTransforms:
   - {fileID: 238176744}
   - {fileID: 1781630937}
+  emptyArmature: {fileID: 0}
+  connectionAreas: []
+  count: 0
   boneAxisDict: {fileID: 11400000, guid: 352b3446ccf791a478df0920c872c49a, type: 2}
   tableAxisDict: {fileID: 11400000, guid: 2d6c16acf46ab424c977c3552147785e, type: 2}
 --- !u!114 &1416826186
@@ -15723,7 +15788,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f280f47454b840646bb806e655d1bd23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateName: 
   currentAssignment: {fileID: 0}
+  success: 0
 --- !u!114 &1416826190
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16091,6 +16158,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!114 &1445846234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16103,8 +16171,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Skull
+  <ID>k__BackingField: 0
 --- !u!23 &1445846235
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -16347,6 +16417,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1633564632721862120, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.33333334
+      objectReference: {fileID: 0}
     - target: {fileID: 3147301549176646308, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
       propertyPath: rbReturnSpeed
@@ -16375,6 +16450,11 @@ PrefabInstance:
     - target: {fileID: 3720247355217688641, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
       propertyPath: m_textInfo.pageCount
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3748125022202716895, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4898323225309291012, guid: 9db830be7935e314eb62a2e06dc2a82c,
@@ -16426,6 +16506,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7085485722991258542, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: m_Color.a
+      value: 0.33333334
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9db830be7935e314eb62a2e06dc2a82c, type: 3}
@@ -17533,8 +17618,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Rib Chunk Left (1)
+  <ID>k__BackingField: 0
 --- !u!114 &1564349323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17548,6 +17635,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1001 &1565873481
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17771,6 +17859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!114 &1570699471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17783,8 +17872,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Pelvis
+  <ID>k__BackingField: 0
 --- !u!23 &1570699472
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -18661,6 +18752,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01395db50bf5a0a45bf754649188c3ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentID: 0
 --- !u!1 &1612408883
 GameObject:
   m_ObjectHideFlags: 0
@@ -23689,6 +23781,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f2c4970294b3842a7cf23c057cfca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frontPrimaryVertex: {fileID: 0}
+  backPrimaryVertex: {fileID: 0}
+  leftAuxVertex: {fileID: 0}
+  rightAuxVertex: {fileID: 0}
+  isBeingDragged: 0
+  isLeaf: 0
+  isAttached: 0
   mGhost: {fileID: 0}
 --- !u!114 &2033091665
 MonoBehaviour:
@@ -25401,8 +25500,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Spine Chunk (1)
+  <ID>k__BackingField: 0
 --- !u!65 &114325691759769528
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25683,6 +25784,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!33 &262740843727638930
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -25827,6 +25929,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &326954988690285060
 Transform:
   m_ObjectHideFlags: 0
@@ -26429,6 +26532,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!1 &508849716129970598
 GameObject:
   m_ObjectHideFlags: 0
@@ -26663,6 +26767,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!23 &603369932024073433
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -27113,6 +27218,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!33 &752172587778719303
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -27611,6 +27717,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &889162176979743425
 GameObject:
   m_ObjectHideFlags: 0
@@ -27724,6 +27831,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &915825244769417460
 Transform:
   m_ObjectHideFlags: 0
@@ -27930,6 +28038,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!4 &924745962169264628
 Transform:
   m_ObjectHideFlags: 0
@@ -28258,6 +28367,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f2c4970294b3842a7cf23c057cfca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frontPrimaryVertex: {fileID: 0}
+  backPrimaryVertex: {fileID: 0}
+  leftAuxVertex: {fileID: 0}
+  rightAuxVertex: {fileID: 0}
+  isBeingDragged: 0
+  isLeaf: 0
+  isAttached: 0
   mGhost: {fileID: 0}
 --- !u!1 &1046052414880875254
 GameObject:
@@ -29148,6 +29264,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!1 &1403774160531056724
 GameObject:
   m_ObjectHideFlags: 0
@@ -29546,8 +29663,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Rib Chunk Left (1)
+  <ID>k__BackingField: 0
 --- !u!4 &1560195897761977459
 Transform:
   m_ObjectHideFlags: 0
@@ -29956,6 +30075,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!23 &1711813854571342823
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -30008,8 +30128,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: L1
+  <ID>k__BackingField: 0
 --- !u!1 &1725223888855072130
 GameObject:
   m_ObjectHideFlags: 0
@@ -30052,10 +30174,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axis: {x: 0, y: 0, z: 1}
-  defaultLocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  limit: 0
-  twistLimit: 180
 --- !u!23 &1739539637073928986
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -30315,6 +30433,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!1 &1832196851055467664
 GameObject:
   m_ObjectHideFlags: 0
@@ -30505,6 +30624,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &1948765048106151310
 Transform:
   m_ObjectHideFlags: 0
@@ -30568,6 +30688,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &1972859909490184090
 GameObject:
   m_ObjectHideFlags: 0
@@ -31014,6 +31135,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!114 &2148546041064011970
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31027,6 +31149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &2169027068337627319
 Transform:
   m_ObjectHideFlags: 0
@@ -31053,8 +31176,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Rib Chunk Left (1)
+  <ID>k__BackingField: 0
 --- !u!1 &2180797623767077472
 GameObject:
   m_ObjectHideFlags: 0
@@ -31183,6 +31308,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!1 &2204075664490420257
 GameObject:
   m_ObjectHideFlags: 0
@@ -31523,8 +31649,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Skull
+  <ID>k__BackingField: 0
 --- !u!136 &2297606629457212532
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -31772,6 +31900,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!23 &2426666233317430702
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -32074,6 +32203,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &2561974035557792305
 GameObject:
   m_ObjectHideFlags: 0
@@ -32132,6 +32262,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &2584774362677679654
 GameObject:
   m_ObjectHideFlags: 0
@@ -32563,6 +32694,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!23 &2770924347552948536
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -32651,6 +32783,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!1 &2805325563594264389
 GameObject:
   m_ObjectHideFlags: 0
@@ -33073,6 +33206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!33 &2908953387762737746
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -33548,6 +33682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &3092135996727920535
 GameObject:
   m_ObjectHideFlags: 0
@@ -33746,6 +33881,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &3152424983515046097
 Transform:
   m_ObjectHideFlags: 0
@@ -33931,8 +34067,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Rib Chunk Left (1)
+  <ID>k__BackingField: 0
 --- !u!4 &3250484819687230514
 Transform:
   m_ObjectHideFlags: 0
@@ -33981,8 +34119,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Tail (1)
+  <ID>k__BackingField: 0
 --- !u!1 &3251777439318105473
 GameObject:
   m_ObjectHideFlags: 0
@@ -34030,6 +34170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!136 &3263593314097890024
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34076,6 +34217,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!114 &3310749184501776249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34223,6 +34365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &3372261258332770243
 Transform:
   m_ObjectHideFlags: 0
@@ -34385,8 +34528,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Spine Chunk (1)
+  <ID>k__BackingField: 0
 --- !u!136 &3425073048152222458
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -35312,8 +35457,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: L1
+  <ID>k__BackingField: 0
 --- !u!4 &3741423766219707376
 Transform:
   m_ObjectHideFlags: 0
@@ -35498,6 +35645,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &3810244529139295706
 GameObject:
   m_ObjectHideFlags: 0
@@ -35852,8 +36000,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Paw
+  <ID>k__BackingField: 0
 --- !u!1 &3871149682592927438
 GameObject:
   m_ObjectHideFlags: 0
@@ -36307,8 +36457,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: L1
+  <ID>k__BackingField: 0
 --- !u!114 &4061537315257566130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36321,8 +36473,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Paw
+  <ID>k__BackingField: 0
 --- !u!4 &4064734340024136592
 Transform:
   m_ObjectHideFlags: 0
@@ -36984,6 +37138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!33 &4301413526398563650
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -37051,6 +37206,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!4 &4313616949524958286
 Transform:
   m_ObjectHideFlags: 0
@@ -37078,6 +37234,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &4328415681263136687
 Transform:
   m_ObjectHideFlags: 0
@@ -37431,6 +37588,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!1 &4474556313928296803
 GameObject:
   m_ObjectHideFlags: 0
@@ -38388,6 +38546,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &4810893025162185855
 GameObject:
   m_ObjectHideFlags: 0
@@ -38483,6 +38642,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &4840431056995737327
 GameObject:
   m_ObjectHideFlags: 0
@@ -38737,6 +38897,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &4890142988256806388
 Transform:
   m_ObjectHideFlags: 0
@@ -38837,10 +38998,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axis: {x: 0, y: 0, z: 1}
-  defaultLocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  limit: 0
-  twistLimit: 180
 --- !u!4 &4937570102027937898
 Transform:
   m_ObjectHideFlags: 0
@@ -38972,6 +39129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!65 &4988884351666651762
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -38998,6 +39156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &4992382250289227497
 Transform:
   m_ObjectHideFlags: 0
@@ -39144,6 +39303,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!1 &5027576267812686732
 GameObject:
   m_ObjectHideFlags: 0
@@ -39287,8 +39447,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Tail
+  <ID>k__BackingField: 0
 --- !u!33 &5086795190387632603
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -40094,8 +40256,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Spine Chunk (1)
+  <ID>k__BackingField: 0
 --- !u!23 &5379905926483561083
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -40431,8 +40595,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Jaw
+  <ID>k__BackingField: 0
 --- !u!1 &5507395662557083010
 GameObject:
   m_ObjectHideFlags: 0
@@ -40610,8 +40776,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Paw
+  <ID>k__BackingField: 0
 --- !u!135 &5592465208362196426
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -41423,8 +41591,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: L1
+  <ID>k__BackingField: 0
 --- !u!135 &5846886778768882059
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -43227,6 +43397,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &6592949093119008968
 GameObject:
   m_ObjectHideFlags: 0
@@ -43393,10 +43564,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axis: {x: 0, y: 0, z: 1}
-  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  limit: 0
-  twistLimit: 180
 --- !u!136 &6671215200911340808
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -43616,8 +43783,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Scapula_Left
+  <ID>k__BackingField: 0
 --- !u!23 &6747788217590923476
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -44026,6 +44195,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!23 &6834497050674649977
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -44370,6 +44540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &6971279784542346218
 Transform:
   m_ObjectHideFlags: 0
@@ -44401,8 +44572,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Scapula_Right
+  <ID>k__BackingField: 0
 --- !u!114 &6978000869455806932
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -44415,8 +44588,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Pelvis
+  <ID>k__BackingField: 0
 --- !u!136 &7009467058458398374
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44732,6 +44907,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!1 &7124680547634354956
 GameObject:
   m_ObjectHideFlags: 0
@@ -45151,6 +45327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!65 &7247774222785068572
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -45383,6 +45560,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!23 &7362567455084277740
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -45492,6 +45670,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!4 &7394977744252756294
 Transform:
   m_ObjectHideFlags: 0
@@ -45870,8 +46049,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Rib Chunk Left (1)
+  <ID>k__BackingField: 0
 --- !u!4 &7507985950393677728
 Transform:
   m_ObjectHideFlags: 0
@@ -45926,6 +46107,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f2c4970294b3842a7cf23c057cfca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frontPrimaryVertex: {fileID: 0}
+  backPrimaryVertex: {fileID: 0}
+  leftAuxVertex: {fileID: 0}
+  rightAuxVertex: {fileID: 0}
+  isBeingDragged: 0
+  isLeaf: 0
+  isAttached: 0
   mGhost: {fileID: 0}
 --- !u!1 &7538210029447251371
 GameObject:
@@ -46038,6 +46226,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!23 &7577385882869509364
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -46490,6 +46679,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!1 &7799302951257662778
 GameObject:
   m_ObjectHideFlags: 0
@@ -46939,6 +47129,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!4 &7991378872868267990
 Transform:
   m_ObjectHideFlags: 0
@@ -47476,6 +47667,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!4 &8170453202392908881
 Transform:
   m_ObjectHideFlags: 0
@@ -47655,6 +47847,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!23 &8260905209206069725
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -47836,8 +48029,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: L1
+  <ID>k__BackingField: 0
 --- !u!23 &8335729887361001132
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -48047,8 +48242,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Paw
+  <ID>k__BackingField: 0
 --- !u!114 &8416402037780366456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -48061,8 +48258,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: Spine Chunk (1)
+  <ID>k__BackingField: 0
 --- !u!136 &8418604365261926413
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -48161,6 +48360,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!4 &8463319281272209046
 Transform:
   m_ObjectHideFlags: 0
@@ -48432,8 +48632,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  group: {fileID: 0}
   connecting: 0
   axisKey: L1
+  <ID>k__BackingField: 0
 --- !u!1 &8585230167377151662
 GameObject:
   m_ObjectHideFlags: 0
@@ -48505,6 +48707,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!135 &8598668672392263305
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -48570,6 +48773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   materials: []
+  renderers: []
 --- !u!1 &8612828682922453564
 GameObject:
   m_ObjectHideFlags: 0
@@ -48943,6 +49147,7 @@ MonoBehaviour:
   materials:
   - {fileID: 2100000, guid: 56c6980087e43a546a18609f46d45a5d, type: 2}
   - {fileID: 2100000, guid: 4f8432308f4c2b9488688839c7612d47, type: 2}
+  renderers: []
 --- !u!23 &8802698131125965648
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -49607,6 +49812,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f2c4970294b3842a7cf23c057cfca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  frontPrimaryVertex: {fileID: 0}
+  backPrimaryVertex: {fileID: 0}
+  leftAuxVertex: {fileID: 0}
+  rightAuxVertex: {fileID: 0}
+  isBeingDragged: 0
+  isLeaf: 0
+  isAttached: 0
   mGhost: {fileID: 0}
 --- !u!4 &9006518712934958450
 Transform:
@@ -49839,10 +50051,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axis: {x: 0, y: 0, z: 1}
-  defaultLocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  limit: 0
-  twistLimit: 180
 --- !u!1 &9072932960964235088
 GameObject:
   m_ObjectHideFlags: 0

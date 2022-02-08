@@ -90,7 +90,10 @@ public class GhostManager : State
                 path.Add(pathRoot.GetChild(p).gameObject);
             }
             GhostBehavior ghost = CreateGhost(path);
-            BoneManager.Instance.NewBoneGroup(bones[i], ghost);
+            //TODO: give the ghost the bones
+            GameObject newBone = Instantiate(bones[i]);
+            ghost.mBone = newBone.GetComponent<GrabbableGroup>();
+            newBone.GetComponent<GrabbableGroup>().mGhost = ghost;
         }
     }
 
@@ -101,13 +104,7 @@ public class GhostManager : State
     public void DestroyGhost(GhostBehavior toRemove)
     {
         ghosts.Remove(toRemove);
-        if(toRemove.mBone)
-        {
-            toRemove.mBone.ApplyToAll((Bone b, FunctionArgs args) =>
-            {
-                BoneManager.Instance.DestroyBone(b);
-            });
-        }
+        //TODO: remove the bone from existence
         Destroy(toRemove.transform.root.gameObject);
     }
 
