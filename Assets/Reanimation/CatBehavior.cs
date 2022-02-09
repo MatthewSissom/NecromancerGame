@@ -56,9 +56,6 @@ public class CatBehavior : MonoBehaviour
         get { return movement.ChestHeight; }
     }
 
-    CatStablizer stablizer;
-    bool stablizing = false;
-
     public void BehaviorInit(List<LimbEnd> limbEnds, Transform[] orderedTransforms, float[] transformDistances, int shoulderIndex)
     {
         if (Initalized)
@@ -144,8 +141,6 @@ public class CatBehavior : MonoBehaviour
     {
         if(followTarget && (followTarget.transform.position - targetPreviousPos).magnitude > 0.05f)
             PathToPoint(followTarget.transform.position);
-        if(stablizing)
-            stablizer.Update(Time.deltaTime);
 
         Vector3[] vectors = new Vector3[4];
         if (pathing)
