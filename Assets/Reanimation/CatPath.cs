@@ -90,7 +90,7 @@ public partial class CatPath
             return false;
         }
 
-         ResetPath();
+        ResetPath();
         Vector3 pos = shoulderTransform.position;
         Vector3 forward = shoulderTransform.forward;
         foreach (var destination in destinations)

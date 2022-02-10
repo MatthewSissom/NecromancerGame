@@ -44,13 +44,12 @@ public class CatMovement
         ChestHeight = val + distFromGroundToChest;
     }
 
-    //temp move to movement
     private void LimbInit(List<LimbEnd> limbEnds)
     {
         GroundYValue = 0;
         //holds limbs that shouldn't be considered for the min limb
         HashSet<LimbEnd> outliers = new HashSet<LimbEnd>();
-        //if an outlier is found then 
+        //if an outlier is found then remove it and check the set of limbs again
         bool recalculate = false;
         float minHeight;
 
