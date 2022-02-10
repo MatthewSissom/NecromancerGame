@@ -22,7 +22,7 @@ public class DebugModes : MonoBehaviour
     [SerializeField]
     GameObject ikTestPrefab;
 
-    public enum SkeletonPathFlags
+    public enum DebugPathFlags
     {
         None = 0,
         NavMeshPath = 1,
@@ -31,16 +31,16 @@ public class DebugModes : MonoBehaviour
         All = 8 - 1
     }
     [SerializeField]
-    SkeletonPathFlags skeletonPathMode;
+    DebugPathFlags skeletonPathMode;
 
     public static EStateDebugMode StateMode { get { return instance.stateMode; } }
     public static bool UseMouseInput { get { return instance.toggleMouseInput; } }
     public static GameObject IKTestPrefab { get { return instance.ikTestPrefab; } }
-    public static SkeletonPathFlags SkeletonPathMode { get { return instance.skeletonPathMode; } }
+    public static DebugPathFlags SkeletonPathMode { get { return instance.skeletonPathMode; } }
 
 
     private static DebugModes instance;
-    private SkeletonPathFlags previousPathFlag;
+    private DebugPathFlags previousPathFlag;
 
     private void Awake()
     {

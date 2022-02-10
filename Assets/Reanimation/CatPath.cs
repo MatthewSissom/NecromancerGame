@@ -460,7 +460,7 @@ public partial class CatPath
                 currentPathComponent = node?.Value;
             }
         }
-        DebugRendering.UpdatePath(DebugModes.SkeletonPathFlags.TruePath, points);
+        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.TruePath, points);
 #endif
 
         PathStarted?.Invoke();

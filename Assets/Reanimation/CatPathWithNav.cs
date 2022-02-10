@@ -42,7 +42,7 @@ public class CatPathWithNav : CatPath
         }
 
 #if UNITY_EDITOR
-        DebugRendering.UpdatePath(DebugModes.SkeletonPathFlags.NavMeshPath, mPath.corners);
+        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.NavMeshPath, mPath.corners);
 #endif
 
         var points = new List<Vector3>();
@@ -88,7 +88,7 @@ public class CatPathWithNav : CatPath
         points.Add(lastVector);
 
 #if UNITY_EDITOR
-        DebugRendering.UpdatePath(DebugModes.SkeletonPathFlags.ModifiedNavMeshPath, mPath.corners);
+        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.ModifiedNavMeshPath, mPath.corners);
 #endif
 
         return PathToPoints(points);

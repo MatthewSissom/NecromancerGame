@@ -7,7 +7,7 @@ public class DebugRendering : MonoBehaviour
     [SerializeField]
     private GameObject rendererTemplate;
 
-    private Dictionary<DebugModes.SkeletonPathFlags, LineRenderer> pathRenderers;
+    private Dictionary<DebugModes.DebugPathFlags, LineRenderer> pathRenderers;
 
 
     private static DebugRendering instance;
@@ -20,12 +20,12 @@ public class DebugRendering : MonoBehaviour
         }
     }
 
-    public static void UpdatePath(DebugModes.SkeletonPathFlags type, List<Vector3> points)
+    public static void UpdatePath(DebugModes.DebugPathFlags type, List<Vector3> points)
     {
         instance.UpdatePathInternal(type,points.ToArray());
     }
 
-    public static void UpdatePath(DebugModes.SkeletonPathFlags type, Vector3[] points)
+    public static void UpdatePath(DebugModes.DebugPathFlags type, Vector3[] points)
     {
         instance.UpdatePathInternal(type,points);
     }
@@ -38,23 +38,23 @@ public class DebugRendering : MonoBehaviour
         else
             instance = this;
 
-        pathRenderers = new Dictionary<DebugModes.SkeletonPathFlags, LineRenderer>();
+        pathRenderers = new Dictionary<DebugModes.DebugPathFlags, LineRenderer>();
         rendererTemplate.GetComponent<LineRenderer>().enabled = false;
     }
 
     private void Start()
     {
-        AddRenderer(DebugModes.SkeletonPathFlags.NavMeshPath, Color.red);
-        AddRenderer(DebugModes.SkeletonPathFlags.ModifiedNavMeshPath, Color.green);
-        AddRenderer(DebugModes.SkeletonPathFlags.TruePath, Color.cyan);
+        AddRenderer(DebugModes.DebugPathFlags.NavMeshPath, Color.red);
+        AddRenderer(DebugModes.DebugPathFlags.ModifiedNavMeshPath, Color.green);
+        AddRenderer(DebugModes.DebugPathFlags.TruePath, Color.cyan);
     }
 
-    private static bool RendererIsVisible(DebugModes.SkeletonPathFlags type)
+    private static bool RendererIsVisible(DebugModes.DebugPathFlags type)
     {
         return (DebugModes.SkeletonPathMode & type) != 0;
     }
 
-    private void AddRenderer(DebugModes.SkeletonPathFlags mode, Color color)
+    private void AddRenderer(DebugModes.DebugPathFlags mode, Color color)
     {
         GameObject newRenderer = Instantiate(rendererTemplate);
         newRenderer.transform.parent = gameObject.transform;
@@ -69,7 +69,7 @@ public class DebugRendering : MonoBehaviour
         UpdatePathInternal(mode,new Vector3[0]);
     }
 
-    private void UpdatePathInternal(DebugModes.SkeletonPathFlags type, Vector3[] points)
+    private void UpdatePathInternal(DebugModes.DebugPathFlags type, Vector3[] points)
     {
         LineRenderer renderer = pathRenderers[type];
         renderer.positionCount = points.Length;
