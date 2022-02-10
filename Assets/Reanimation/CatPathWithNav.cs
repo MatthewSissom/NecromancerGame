@@ -21,12 +21,7 @@ public class CatPathWithNav : CatPath
     {
         if (FollowingSplit)
         {
-            void QueueNewPath()
-            {
-                PathToPoint(destination);
-                PathReset -= QueueNewPath;
-            }
-            PathReset += QueueNewPath;
+            queuedDestination = destination;
             return true;
         }
 
