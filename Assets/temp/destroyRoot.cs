@@ -11,11 +11,14 @@ public class destroyRoot : MonoBehaviour
     {
         if (!this)
             return;
+
         if (skips > 0)
         {
             skips--;
             return;
         }
+
+        transform.parent = null;
         gameObject.SetActive(true);
     }
 

@@ -9,10 +9,14 @@ public class DebugModes : MonoBehaviour
     {
         None,
         SkipMenus,
+        AssemblyAndPlayPen,
         PlaypenOnly
     }
     [SerializeField]
     EStateDebugMode stateMode;
+
+    [SerializeField]
+    bool skipCameraTransitions;
 
     [Header("Input")]
     [SerializeField]
@@ -34,6 +38,7 @@ public class DebugModes : MonoBehaviour
     DebugPathFlags skeletonPathMode;
 
     public static EStateDebugMode StateMode { get { return instance.stateMode; } }
+    public static bool SkipCameraTransitions { get { return instance.skipCameraTransitions; } }
     public static bool UseMouseInput { get { return instance.toggleMouseInput; } }
     public static GameObject IKTestPrefab { get { return instance.ikTestPrefab; } }
     public static DebugPathFlags SkeletonPathMode { get { return instance.skeletonPathMode; } }

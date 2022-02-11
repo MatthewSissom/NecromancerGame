@@ -1908,13 +1908,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StepSpeed: 0
-  OriginMovementMult: 0.05
+  <StepHeight>k__BackingField: 0
+  BodyMovementMult: 0.015
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 1
+  <LimbState>k__BackingField: 0
   <LimbLength>k__BackingField: 0.2
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 3157923432646105934}
   <LimbStart>k__BackingField: {fileID: 6516851309281206284}
+  <DelayIndex>k__BackingField: 0
 --- !u!1 &2210428184487629406
 GameObject:
   m_ObjectHideFlags: 0
@@ -2372,7 +2375,7 @@ GameObject:
   - component: {fileID: 7263244047530817204}
   - component: {fileID: 2133478938875215102}
   m_Layer: 0
-  m_Name: TestCatTwo
+  m_Name: TestCat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2414,7 +2417,7 @@ MonoBehaviour:
   - {fileID: 6499594792462967228}
   - {fileID: 8877774101091694432}
   stepHeight: 0.05
-  chestHeight: 0
+  chestHeight: 0.15
   hipDelay: 0.8
   hipTransform: {fileID: 5750491859503318300}
   headTransform: {fileID: 9114611288765783643}
@@ -2640,13 +2643,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StepSpeed: 0
-  OriginMovementMult: 0.05
+  <StepHeight>k__BackingField: 0
+  BodyMovementMult: 0.015
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 3
+  <LimbState>k__BackingField: 0
   <LimbLength>k__BackingField: 0.2
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 2371745979177330229}
   <LimbStart>k__BackingField: {fileID: 2373223986540089728}
+  <DelayIndex>k__BackingField: 0
 --- !u!1 &3008097790627347491
 GameObject:
   m_ObjectHideFlags: 0
@@ -3666,13 +3672,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StepSpeed: 0
-  OriginMovementMult: 0.05
+  <StepHeight>k__BackingField: 0
+  BodyMovementMult: 0.015
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 2
+  <LimbState>k__BackingField: 0
   <LimbLength>k__BackingField: 0.2
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 9156600238342720493}
   <LimbStart>k__BackingField: {fileID: 692731385933252297}
+  <DelayIndex>k__BackingField: 0
 --- !u!1 &4684184758640098586
 GameObject:
   m_ObjectHideFlags: 0
@@ -6221,13 +6230,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StepSpeed: 0
-  OriginMovementMult: 0.05
+  <StepHeight>k__BackingField: 0
+  BodyMovementMult: 0.015
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 0
+  <LimbState>k__BackingField: 0
   <LimbLength>k__BackingField: 0.2
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 6663863804772729921}
   <LimbStart>k__BackingField: {fileID: 9088379016934014465}
+  <DelayIndex>k__BackingField: 0
 --- !u!1 &9086822433354876611
 GameObject:
   m_ObjectHideFlags: 0

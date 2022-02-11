@@ -34,8 +34,19 @@ public class CameraTransition : State
         initalQuat = transform.rotation;
         Quaternion endQuat = Quaternion.LookRotation(forward, up);
         elapsedTime = 0;
-
         yield return null;
+
+#if UNITY_EDITOR
+        if (DebugModes.SkipCameraTransitions)
+        {
+            transform.localPosition = pos;
+            transform.rotation = endQuat;
+
+            End();
+            yield break;
+        }
+#endif
+
 
         while(elapsedTime < time)
         {

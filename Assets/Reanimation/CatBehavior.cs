@@ -115,7 +115,7 @@ public class CatBehavior : MonoBehaviour
         delays[3] = -(transform.position - headTransform.position).magnitude / speed * 2;
 
         movement = new CatMovement(limbEnds,speed);
-        var temp = new CatPathWithNav(transform.position.y, delays, orderedTransforms,2);
+        var temp = new CatPathWithNav(ChestHeight, delays, orderedTransforms,2);
         temp.GroundHeight = movement.GroundYValue;
         mPath = temp;
         mPath.PathFinished += () => { pathing = false; };

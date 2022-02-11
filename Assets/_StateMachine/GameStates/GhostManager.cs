@@ -14,7 +14,7 @@ public class GhostManager : State
     [SerializeField]
     float timePerShipment = default;
     [SerializeField]
-    public float timeBetweenShipments = default;
+    public float timeBetweenShipments { get; private set; } = default;
     private int currentShipment = 0;
 
     [Header("Ghosts")]
@@ -191,6 +191,15 @@ public class GhostManager : State
             Collision = new GhostCollisionHandler();
         }
     }
+
+#if UNITY_EDITOR
+    public void ShortenDeliveryTimes()
+    {
+        timeBetweenShipments = 1;
+        timePerShipment = .01f;
+    }
+
+#endif
 }
 
 

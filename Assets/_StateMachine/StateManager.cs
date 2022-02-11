@@ -61,10 +61,11 @@ public class StateManager : StateManagerBase
                 yield return StartCoroutine(MainLoop());
                 break;
             case DebugModes.EStateDebugMode.SkipMenus:
-                while (true)
-                {
-                    yield return SetState(GameManager.Instance.Game());
-                }
+                yield return StartCoroutine(NoMenuLoop());
+                break;
+            case DebugModes.EStateDebugMode.AssemblyAndPlayPen:
+                GhostManager.Instance.ShortenDeliveryTimes();
+                yield return StartCoroutine(NoMenuLoop());
                 break;
             case DebugModes.EStateDebugMode.PlaypenOnly:
                 while (true)
@@ -76,6 +77,14 @@ public class StateManager : StateManagerBase
                     yield return SetState(GameManager.Instance.Game());
                 }
                 break;
+        }
+    }
+
+    private IEnumerator NoMenuLoop()
+    {
+        while (true)
+        {
+            yield return SetState(GameManager.Instance.Game());
         }
     }
 #endif

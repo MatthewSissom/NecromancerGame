@@ -15,7 +15,10 @@ public class PlayPenState : State
     public void SetSkeleton(GameObject playSkeleton)
     {
         if (!playSkeleton)
+        {
+            Debug.LogError("Playpen state entered with no skeleton set! Try enabling IK or setting a skeleton prefab in debug options");
             return;
+        }
 
         var behavior = playSkeleton.GetComponent<CatBehavior>();
         if (behavior.transform.parent)

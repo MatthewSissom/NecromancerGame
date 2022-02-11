@@ -83,7 +83,7 @@ public class CatPathWithNav : CatPath
         points.Add(lastVector);
 
 #if UNITY_EDITOR
-        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.ModifiedNavMeshPath, mPath.corners);
+        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.ModifiedNavMeshPath, points);
 #endif
 
         return PathToPoints(points);
