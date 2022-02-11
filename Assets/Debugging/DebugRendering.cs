@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class DebugRendering : MonoBehaviour
 {
+#if UNITY_EDITOR
     [SerializeField]
     private GameObject rendererTemplate;
 
@@ -75,4 +76,5 @@ public class DebugRendering : MonoBehaviour
         renderer.positionCount = points.Length;
         renderer.SetPositions(points);
     }
+#endif
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TableConnectingAssemblyDemo : MonoBehaviour
 {
+#if UNITY_EDITOR
     [SerializeField]
     Transform testBonesRoot;
 
@@ -19,4 +20,5 @@ public class TableConnectingAssemblyDemo : MonoBehaviour
             }
         }
     }
+#endif
 }
