@@ -14,20 +14,4 @@ public class SpineTransformChain : TransformChain
     {
         return base.Contains(toCheck) || ribTransforms.Contains(toCheck);
     }
-
-    public override Transform MoveToFirstEmpty(Transform originalDestination)
-    {
-        if(!ribTransforms.Contains(originalDestination))
-        {
-            return base.MoveToFirstEmpty(originalDestination);
-        }
-        else
-        {
-            if(ribTransforms.IndexOf(originalDestination) == firstEmpty)
-            {
-                return FirstEmpty();
-            }
-        }
-        return originalDestination;
-    }
 }

@@ -13,6 +13,9 @@ public class TransformChain
 
     public TransformChain(Transform[] transforms, GameObject target, bool hasOffset)
     {
+        //TODO: Transform chains no longer track empties now they're no longer used in assembly
+        //      need to add checks to see which transforms are empty
+
         Target = target;
         this.hasOffset = hasOffset;
         firstEmpty = hasOffset? 1 : 0;
@@ -48,15 +51,6 @@ public class TransformChain
     public Transform FirstEmpty()
     {
         return orderedTransforms[firstEmpty];
-    }
-
-    //returns an empty transform and 
-    public virtual Transform MoveToFirstEmpty(Transform originalDestination)
-    {
-        //check to see if a swap was made
-        if (originalDestination != orderedTransforms[firstEmpty])
-            MoveChildren(originalDestination, orderedTransforms[firstEmpty]);
-        return orderedTransforms[firstEmpty++];
     }
 
     //leaves only one empty target at the end of the chain
