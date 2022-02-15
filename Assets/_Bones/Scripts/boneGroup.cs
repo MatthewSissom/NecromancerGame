@@ -23,16 +23,10 @@ public class BoneGroup : MonoBehaviour
 
     protected BoneGroup parent;
     protected Dictionary<BoneVertexType, BoneGroup> children;
-    protected Dictionary<BoneVertexType, Vector3> vertexPositions;
-
-    protected Vector3 primaryAxis;
-    protected Vector3 auxiliaryAxis;
-    protected Vector3 startingUpDir;
 
     protected virtual void Awake()
     {
-        InitVertexData();
-        InitGeometryValues();
+        children = new Dictionary<BoneVertexType, BoneGroup>();
     }
 
     protected virtual void Start()
@@ -42,32 +36,44 @@ public class BoneGroup : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        Debug.DrawLine(vertexPositions[BoneVertexType.FrontPrimary], vertexPositions[BoneVertexType.FrontPrimary] + startingUpDir * 10, Color.blue);
-        Debug.DrawLine(vertexPositions[BoneVertexType.BackPrimary], vertexPositions[BoneVertexType.BackPrimary] + startingUpDir * 10, Color.blue);
-        Debug.DrawLine(vertexPositions[BoneVertexType.LeftAux], vertexPositions[BoneVertexType.LeftAux] + startingUpDir * 10, Color.blue);
-        Debug.DrawLine(vertexPositions[BoneVertexType.RightAux], vertexPositions[BoneVertexType.RightAux] + startingUpDir * 10, Color.blue);
-    }
-    protected void InitVertexData()
-    {
-        children = new Dictionary<BoneVertexType, BoneGroup>();
-        vertexPositions = new Dictionary<BoneVertexType, Vector3>();
-        vertexPositions.Add(BoneVertexType.FrontPrimary, frontPrimaryVertex.transform.localPosition);
-        vertexPositions.Add(BoneVertexType.BackPrimary, backPrimaryVertex.transform.localPosition);
-        vertexPositions.Add(BoneVertexType.LeftAux, leftAuxVertex.transform.localPosition);
-        vertexPositions.Add(BoneVertexType.RightAux, rightAuxVertex.transform.localPosition);
+        Debug.DrawLine(getPrimaryMidpoint(), getPrimaryMidpoint() + getAuxiliaryAxis() * 0.5f, Color.blue);
 
-    }
-    protected void InitGeometryValues()
-    {
-        primaryAxis = vertexPositions[BoneVertexType.BackPrimary] - vertexPositions[BoneVertexType.FrontPrimary];
-        auxiliaryAxis = vertexPositions[BoneVertexType.LeftAux] - vertexPositions[BoneVertexType.RightAux];
-        startingUpDir = Vector3.Cross(primaryAxis, auxiliaryAxis);
+        Debug.DrawLine(getVertexPosition(BoneVertexType.FrontPrimary), getVertexPosition(BoneVertexType.FrontPrimary) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+        Debug.DrawLine(getVertexPosition(BoneVertexType.BackPrimary), getVertexPosition(BoneVertexType.BackPrimary) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+        Debug.DrawLine(getVertexPosition(BoneVertexType.LeftAux), getVertexPosition(BoneVertexType.LeftAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+        Debug.DrawLine(getVertexPosition(BoneVertexType.RightAux), getVertexPosition(BoneVertexType.RightAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
     }
 
     public bool isBeingDragged;
     public bool isLeaf;
     public bool isAttached;
 
+    public Vector3 getVertexPosition(BoneVertexType type)
+    {
+        switch (type)
+        {
+            case BoneVertexType.FrontPrimary:
+                return frontPrimaryVertex.transform.position;
+            case BoneVertexType.BackPrimary:
+                return backPrimaryVertex.transform.position;
+            case BoneVertexType.LeftAux:
+                return leftAuxVertex.transform.position;
+            case BoneVertexType.RightAux:
+                return rightAuxVertex.transform.position;
+        }
+
+        throw new Exception();
+    }
+
+    public Vector3 getPrimaryMidpoint()
+    {
+        return (getVertexPosition(BoneVertexType.FrontPrimary) + getVertexPosition(BoneVertexType.BackPrimary)) / 2;
+    }
+
+    public Vector3 getAuxiliaryAxis()
+    {
+        return (getVertexPosition(BoneVertexType.LeftAux) - getVertexPosition(BoneVertexType.RightAux)).normalized;
+    }
     public void Attach(BoneGroup parent, TableManager tableManager)
     {
         this.parent = parent;
