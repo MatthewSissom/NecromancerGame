@@ -17,7 +17,7 @@ public class RotationTouch : TouchProxy
     [SerializeField]
     float aroundToParentMult = 1000;
     [SerializeField]
-    float acceleration = 1000;
+    float acceleration = 100;
     [SerializeField]
     float switchResistance = 0;
 
@@ -28,6 +28,9 @@ public class RotationTouch : TouchProxy
     int scoreIndex = 0;
     //the sum of everything in scores
     float currentScore;
+
+    //Better up vector
+    Vector3 newUp;
 
     private BoneMovingTouch parent;
     public BoneMovingTouch Parent
@@ -46,7 +49,7 @@ public class RotationTouch : TouchProxy
         base.Move(pos, rad);
         toParent = (parent.transform.position - transform.position).normalized;
 
-        if (parent.activeObj != null)
+        if (parent.activeWatch != null)
         {
             parent.CancleStopRotation();
         }
@@ -63,7 +66,9 @@ public class RotationTouch : TouchProxy
     }
 
     public override void Move(Vector3 pos, float rad)
-    {        
+    {
+        
+        
         //store old values
         Vector3 oldToParent = toParent;
         Vector3 oldPos = transform.position;
@@ -105,18 +110,49 @@ public class RotationTouch : TouchProxy
             angleDistAroundUp += Vector3.SignedAngle(oldToParent, toParent, Vector3.up);
         else
             angleDistAroundParent += twardsParentDistance * aroundToParentMult;
+       
     }
 
     protected void Update()
     {
-        if (parent.activeObj == null)
+
+        if (parent.activeWatch == null&& parent.activeBone == null)
             return;
+
+        //cheating code for the milestone
+        if(parent.activeBone != null){
+            GrabbableGroup bone = parent.activeBone;
+            Vector3 directionality;
+            Vector3 aVelocity = parent.activeBone.Rb.angularVelocity;
+            if (bone.rightFoward)
+            {
+                directionality = new Vector3(-1.0f, 0, 0);
+
+            }
+            else
+            {
+                directionality = new Vector3(0, 0, -1.0f);
+            }
+
+            aVelocity += angleDistAroundUp * directionality;
+
+            bone.Rb.angularVelocity = aVelocity;
+        }
+        
+        //Stopwatch code here
+
+
+        /* Good and proper code that we will bring back maybe?
+        //up will be the cross product to our bone's forward(Main camera's forward *-1) vector and Auxilery axis
+        newUp = Vector3.Cross(parent.auxileryAxis, Camera.main.transform.forward * -1);
+
+        
 
         //calculate angular velocities around axies
         Vector3 aVelocity = parent.activeObj.Rb.angularVelocity;
 
         //magnitude of the projection onto a normal is the dot product
-        float velocityAroundUp = Vector3.Dot(aVelocity, Vector3.up);
+        float velocityAroundUp = Vector3.Dot(aVelocity, newUp);
         float velocityAroundToParent = Vector3.Dot(aVelocity, toParentPerp);
 
         //adjust distances
@@ -137,6 +173,8 @@ public class RotationTouch : TouchProxy
 
         //push calculated value to the rigidbody
         parent.activeObj.Rb.angularVelocity = aVelocity;
+        */
+
     }
 
     protected override void OnDisable()

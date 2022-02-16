@@ -19,6 +19,8 @@ public class GrabbableGroup : BoneGroup, IGrabbable
 
     Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return rb; } }
+    public Vector3 PrimaryMidpoint { get { return getPrimaryMidpoint(); } }
+    public Vector3 AuxilieryAxis { get { return getAuxiliaryAxis(); } }
     protected override void Awake()
     {
         base.Awake();
@@ -42,11 +44,24 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (mCustomGravity)
             mCustomGravity.Disable();
         rb.useGravity = false;
+        //Cheating code for milestone Readiness
+        if (rightFoward)
+        {
+            transform.right = Camera.main.transform.forward * -1;
+            rb.constraints = (RigidbodyConstraints) 96;
+        }
+        else
+        {
+            transform.forward = Camera.main.transform.forward * -1;
+            rb.constraints = (RigidbodyConstraints)48;
+        }
         Debug.Log("picked up");
         IEnumerator DelayedLayerChange()
         {
+            
             yield return new WaitForSeconds(0.4f);
-            rb.freezeRotation = false;
+            //rb.freezeRotation = false;
+            
             gameObject.layer = physicsLayer;
             yield break;
         }

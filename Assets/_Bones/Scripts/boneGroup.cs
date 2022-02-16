@@ -47,6 +47,8 @@ public class BoneGroup : MonoBehaviour
     public bool isBeingDragged;
     public bool isLeaf;
     public bool isAttached;
+    //is right the actual forward vector
+    public bool rightFoward;
 
     public Vector3 getVertexPosition(BoneVertexType type)
     {

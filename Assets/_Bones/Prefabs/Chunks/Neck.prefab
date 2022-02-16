@@ -385,6 +385,7 @@ MonoBehaviour:
   isBeingDragged: 0
   isLeaf: 0
   isAttached: 0
+  rightFoward: 1
   mGhost: {fileID: 0}
 --- !u!65 &971088478610252567
 BoxCollider:
