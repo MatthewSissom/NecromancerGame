@@ -209,7 +209,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -246,6 +246,8 @@ MonoBehaviour:
   isBeingDragged: 0
   isLeaf: 0
   isAttached: 0
+  rightFoward: 0
+  flippedMuliplier: 1
   mGhost: {fileID: 0}
 --- !u!65 &8203778505349969825
 BoxCollider:

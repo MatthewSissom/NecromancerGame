@@ -17,7 +17,7 @@ public class RotationTouch : TouchProxy
     [SerializeField]
     float aroundToParentMult = 1000;
     [SerializeField]
-    float acceleration = 100;
+    float acceleration = 10;
     [SerializeField]
     float switchResistance = 0;
 
@@ -118,62 +118,60 @@ public class RotationTouch : TouchProxy
 
         if (parent.activeWatch == null&& parent.activeBone == null)
             return;
-
+        Vector3 aVelocity;
+        Vector3 directionality;
         //cheating code for the milestone
-        if(parent.activeBone != null){
+        if (parent.activeBone != null){
             GrabbableGroup bone = parent.activeBone;
-            Vector3 directionality;
-            Vector3 aVelocity = parent.activeBone.Rb.angularVelocity;
+            aVelocity = parent.activeBone.Rb.angularVelocity;
             if (bone.rightFoward)
             {
-                directionality = new Vector3(-1.0f, 0, 0);
+                directionality = new Vector3(1.0f, 0, 0);
 
             }
             else
             {
-                directionality = new Vector3(0, 0, -1.0f);
+                directionality = new Vector3(0, 0, 1.0f);
             }
 
-            aVelocity += angleDistAroundUp * directionality;
+            //up will be the cross product to our bone's forward(Main camera's forward *-1) vector and a Horizontal plane?
+            newUp = Vector3.Cross(new Vector3(1.0f, 0, 0), Camera.main.transform.forward * -1);
 
-            bone.Rb.angularVelocity = aVelocity;
+
+            //calculate angular velocities around axies
+
+
+            //magnitude of the projection onto a normal is the dot product
+            float velocityAroundUp = Vector3.Dot(aVelocity, newUp);
+            float velocityAroundToParent = Vector3.Dot(aVelocity, toParentPerp);
+
+            //adjust distances
+            float time = Time.deltaTime;
+            angleDistAroundParent -= time * velocityAroundToParent * Mathf.Rad2Deg;
+            angleDistAroundUp -= time * velocityAroundUp * Mathf.Rad2Deg;
+
+            //calculate velocity corrections
+            velocityAroundUp = Mathf.Sign(angleDistAroundUp) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundUp) * acceleration) * Mathf.Deg2Rad - velocityAroundUp;
+            velocityAroundToParent = Mathf.Sign(angleDistAroundParent) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundParent) * acceleration) * Mathf.Deg2Rad - velocityAroundToParent;
+
+            //apply corrections
+            aVelocity += velocityAroundUp * Vector3.up;
+            aVelocity += velocityAroundToParent * toParentPerp;
+
+            //remove any rotation along toParent, it is unwanted
+            aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
+
+            //push calculated value to the rigidbody
+            parent.activeBone.Rb.angularVelocity = new Vector3(aVelocity.x*directionality.x, aVelocity.y*directionality.y, aVelocity.z*directionality.z);
+
         }
         
         //Stopwatch code here
 
 
-        /* Good and proper code that we will bring back maybe?
-        //up will be the cross product to our bone's forward(Main camera's forward *-1) vector and Auxilery axis
-        newUp = Vector3.Cross(parent.auxileryAxis, Camera.main.transform.forward * -1);
-
         
-
-        //calculate angular velocities around axies
-        Vector3 aVelocity = parent.activeObj.Rb.angularVelocity;
-
-        //magnitude of the projection onto a normal is the dot product
-        float velocityAroundUp = Vector3.Dot(aVelocity, newUp);
-        float velocityAroundToParent = Vector3.Dot(aVelocity, toParentPerp);
-
-        //adjust distances
-        float time = Time.deltaTime;
-        angleDistAroundParent -= time * velocityAroundToParent * Mathf.Rad2Deg;
-        angleDistAroundUp -= time * velocityAroundUp * Mathf.Rad2Deg;
-
-        //calculate velocity corrections
-        velocityAroundUp = Mathf.Sign(angleDistAroundUp) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundUp) * acceleration) * Mathf.Deg2Rad - velocityAroundUp;
-        velocityAroundToParent = Mathf.Sign(angleDistAroundParent) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundParent) * acceleration) * Mathf.Deg2Rad - velocityAroundToParent;
-
-        //apply corrections
-        aVelocity += velocityAroundUp * Vector3.up;
-        aVelocity += velocityAroundToParent * toParentPerp;
-
-        //remove any rotation along toParent, it is unwanted
-        aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
-
-        //push calculated value to the rigidbody
-        parent.activeObj.Rb.angularVelocity = aVelocity;
-        */
+        
+        
 
     }
 

@@ -17,6 +17,8 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     private Rigidbody rb;
     private CustomGravity mCustomGravity;
 
+    private bool firstPickup = false;
+
     Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return rb; } }
     public Vector3 PrimaryMidpoint { get { return getPrimaryMidpoint(); } }
@@ -40,22 +42,25 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     {
         if (mGhost)
             mGhost.LostBone();
-
+      
         if (mCustomGravity)
             mCustomGravity.Disable();
         rb.useGravity = false;
         //Cheating code for milestone Readiness
-        if (rightFoward)
+
+        if (rightFoward&&!firstPickup)
         {
-            transform.right = Camera.main.transform.forward * -1;
+            transform.right = Camera.main.transform.forward * flippedMuliplier;
             rb.constraints = (RigidbodyConstraints) 96;
         }
-        else
+        else if(!firstPickup)
         {
-            transform.forward = Camera.main.transform.forward * -1;
+            transform.forward = Camera.main.transform.forward * flippedMuliplier;
             rb.constraints = (RigidbodyConstraints)48;
         }
+
         Debug.Log("picked up");
+        firstPickup = true;
         IEnumerator DelayedLayerChange()
         {
             
@@ -66,6 +71,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
             yield break;
         }
         StartCoroutine(DelayedLayerChange());
+        
     }
 
     public void Dropped()
