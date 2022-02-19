@@ -284,7 +284,7 @@ public partial class CatPath
 
 
         //no additional information, use linar paths for transforms behind the shoulders
-        if (path == null)
+        if (path == null || path.First == null)
         {
             //itterate backwards to go from head to tail
             for (int i = transforms.Length - 2; i >= 0; i--)

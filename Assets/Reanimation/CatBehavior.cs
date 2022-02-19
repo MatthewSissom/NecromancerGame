@@ -100,7 +100,7 @@ public class CatBehavior : MonoBehaviour
             return;
         Initalized = true;
 
-        Debug.LogError("Start init used on catbehavior");
+        Debug.Log("Warning: Start init used on catbehavior");
 
         orderedTransforms = new Transform[4];
         orderedTransforms[0] = tailTransform;

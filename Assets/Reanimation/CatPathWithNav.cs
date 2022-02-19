@@ -32,7 +32,7 @@ public class CatPathWithNav : CatPath
         NavMeshPath mPath = new NavMeshPath();
         if (!NavMesh.CalculatePath(pathStart, destination, NavMesh.AllAreas, mPath))
         {
-            Debug.LogError("no path");
+            // no path, return
             return false;
         }
 

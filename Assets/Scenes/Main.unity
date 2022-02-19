@@ -2418,7 +2418,6 @@ Transform:
   - {fileID: 1632805929}
   - {fileID: 44981199}
   - {fileID: 1611905529}
-  - {fileID: 999395485}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -10899,52 +10898,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 997891500}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &999395484
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 999395485}
-  - component: {fileID: 999395486}
-  m_Layer: 0
-  m_Name: Temp
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &999395485
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 999395484}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 137129391}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &999395486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 999395484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df692742ac3ee8948ab858180f28dcf4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EmptyArmature: {fileID: 0}
-  followTarget: {fileID: 492531542}
-  floor: {fileID: 1559847639}
 --- !u!1 &1002325443
 GameObject:
   m_ObjectHideFlags: 0
@@ -14555,11 +14508,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateMode: 3
-  skipCameraTransitions: 1
-  toggleMouseInput: 1
+  skipCameraTransitions: 0
+  toggleMouseInput: 0
   ikTestPrefab: {fileID: 2490182504392057553, guid: fd940a9c4f3ca06439a64bdaa4a24ace,
     type: 3}
-  skeletonPathMode: 7
+  skeletonPathMode: 0
 --- !u!4 &1329063383
 Transform:
   m_ObjectHideFlags: 0

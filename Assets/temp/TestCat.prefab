@@ -1912,7 +1912,7 @@ MonoBehaviour:
   BodyMovementMult: 0.015
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 1
-  <LimbState>k__BackingField: 0
+  <LimbState>k__BackingField: 2
   <LimbLength>k__BackingField: 0.2
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 3157923432646105934}
@@ -2647,7 +2647,7 @@ MonoBehaviour:
   BodyMovementMult: 0.015
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 3
-  <LimbState>k__BackingField: 0
+  <LimbState>k__BackingField: 2
   <LimbLength>k__BackingField: 0.2
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 2371745979177330229}
@@ -3676,7 +3676,7 @@ MonoBehaviour:
   BodyMovementMult: 0.015
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 2
-  <LimbState>k__BackingField: 0
+  <LimbState>k__BackingField: 2
   <LimbLength>k__BackingField: 0.2
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 9156600238342720493}
@@ -6234,7 +6234,7 @@ MonoBehaviour:
   BodyMovementMult: 0.015
   <Type>k__BackingField: 0
   <LocationTag>k__BackingField: 0
-  <LimbState>k__BackingField: 0
+  <LimbState>k__BackingField: 2
   <LimbLength>k__BackingField: 0.2
   <StrideLength>k__BackingField: 0
   <Target>k__BackingField: {fileID: 6663863804772729921}
