@@ -17,7 +17,7 @@ public class RotationTouch : TouchProxy
     [SerializeField]
     float aroundToParentMult = 1000;
     [SerializeField]
-    float acceleration = 10;
+    float acceleration = 1;
     [SerializeField]
     float switchResistance = 0;
 
@@ -143,20 +143,20 @@ public class RotationTouch : TouchProxy
 
             //magnitude of the projection onto a normal is the dot product
             float velocityAroundUp = Vector3.Dot(aVelocity, newUp);
-            float velocityAroundToParent = Vector3.Dot(aVelocity, toParentPerp);
+            //float velocityAroundToParent = Vector3.Dot(aVelocity, toParentPerp);
 
             //adjust distances
             float time = Time.deltaTime;
-            angleDistAroundParent -= time * velocityAroundToParent * Mathf.Rad2Deg;
+            //angleDistAroundParent -= time * velocityAroundToParent * Mathf.Rad2Deg;
             angleDistAroundUp -= time * velocityAroundUp * Mathf.Rad2Deg;
 
             //calculate velocity corrections
             velocityAroundUp = Mathf.Sign(angleDistAroundUp) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundUp) * acceleration) * Mathf.Deg2Rad - velocityAroundUp;
-            velocityAroundToParent = Mathf.Sign(angleDistAroundParent) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundParent) * acceleration) * Mathf.Deg2Rad - velocityAroundToParent;
+            //velocityAroundToParent = Mathf.Sign(angleDistAroundParent) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundParent) * acceleration) * Mathf.Deg2Rad - velocityAroundToParent;
 
             //apply corrections
             aVelocity += velocityAroundUp * Vector3.up;
-            aVelocity += velocityAroundToParent * toParentPerp;
+            //aVelocity += velocityAroundToParent * toParentPerp;
 
             //remove any rotation along toParent, it is unwanted
             aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
