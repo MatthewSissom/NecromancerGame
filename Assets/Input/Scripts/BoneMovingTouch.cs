@@ -6,7 +6,8 @@ using UnityEngine;
 //players finger
 public class BoneMovingTouch : TouchProxy
 {
-    public IGrabbable activeObj { private set; get; }
+    public IGrabbable activeWatch { private set; get; }
+    public GrabbableGroup activeBone { private set; get; }
     //public BoneGroup.applyToAllType applyToActiveGroup;
 
     //the offset of the bone from the touch on the screen,
@@ -33,10 +34,20 @@ public class BoneMovingTouch : TouchProxy
 
     //rotation
     Coroutine decelerationRoutine;
+    public Vector3 primaryMidpoint { private set; get; }
+    public Vector3 auxileryAxis { private set; get; }
+    
 
     public void SetActive(IGrabbable bone)
     {
-        activeObj = bone;
+        activeWatch = bone;
+    }
+
+    public void SetActive(GrabbableGroup bone, Vector3 primaryMidpoint, Vector3 auxileryAxis)
+    {
+        activeWatch = bone;
+        this.primaryMidpoint = primaryMidpoint;
+        this.auxileryAxis = auxileryAxis; 
     }
 
     public override void Move(Vector3 pos, float rad)
@@ -59,15 +70,15 @@ public class BoneMovingTouch : TouchProxy
         {
             float time= 0;
             float magnitude = 1;
-            while (isActiveAndEnabled && activeObj != null && magnitude > 0)
+            while (isActiveAndEnabled && activeWatch != null && magnitude > 0)
             {
                 time = Time.deltaTime;
-                magnitude = activeObj.Rb.angularVelocity.magnitude;
+                magnitude = activeWatch.Rb.angularVelocity.magnitude;
                 float scaleFactor = 1 - (deceleration * time / magnitude);
                 if (scaleFactor < 0)
-                    activeObj.Rb.angularVelocity = new Vector3();
+                    activeWatch.Rb.angularVelocity = new Vector3();
                 else
-                    activeObj.Rb.angularVelocity = activeObj.Rb.angularVelocity * scaleFactor;
+                    activeWatch.Rb.angularVelocity = activeWatch.Rb.angularVelocity * scaleFactor;
                 yield return null;
             }
         }
@@ -76,15 +87,19 @@ public class BoneMovingTouch : TouchProxy
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (activeObj != null)
+        if (activeWatch != null)
             return;
-        IGrabbable b = other.GetComponentInParent<GrabbableGroup>();
-        if(b == null)
-            b = other.GetComponentInParent<StopwatchLid>();
-        if (b != null)
+        IGrabbable b = other.GetComponentInParent<StopwatchLid>();
+        if(b != null)
         {
-            b.PickedUp();
             SetActive(b);
+            return;
+        }
+        GrabbableGroup c = other.GetComponentInParent<GrabbableGroup>();
+        if (c != null)
+        {
+            c.PickedUp();
+            SetActive(c, c.PrimaryMidpoint, c.AuxilieryAxis);
             StopRotation(1000 * Mathf.Deg2Rad);
             //touchLights.Play();
         }
@@ -93,16 +108,16 @@ public class BoneMovingTouch : TouchProxy
     // Update is called once per frame
     void Update()
     {
-        if (activeObj != null)
+        if (activeWatch != null)
         {
             //-move the active object to the proxy-//
 
             const float maxVelocity = 7.0f;
             const float baseMult = 20;
             //find movement vector
-            Vector3 toProxy = (transform.position + offset - activeObj.transform.root.position) * baseMult;
+            Vector3 toProxy = (transform.position + offset - activeWatch.transform.root.position) * baseMult;
             Vector3.ClampMagnitude(toProxy, maxVelocity);
-            activeObj.Rb.velocity = toProxy;
+            activeWatch.Rb.velocity = toProxy;
         }
         //the rad of the touch collider quickly increases to the normal size when first being reenabled
         else if (radMult < 1)
@@ -116,7 +131,7 @@ public class BoneMovingTouch : TouchProxy
     // Start is called before the first frame update
     void Awake()
     {
-        activeObj = null;
+        activeWatch = null;
         myVolume = gameObject.GetComponent<BoxCollider>();
         //lightTransform = ParticleManager.CreateEffect("TouchLight", transform.position);
         //touchLights = lightTransform.GetComponent<ParticleSystem>();
@@ -125,7 +140,7 @@ public class BoneMovingTouch : TouchProxy
 
     public void OnEnable()
     {
-        activeObj = null;
+        activeWatch = null;
         radMult = .1f;
     }
 
@@ -133,10 +148,10 @@ public class BoneMovingTouch : TouchProxy
     {
         base.OnDisable();
 
-        if (activeObj != null)
+        if (activeWatch != null)
         {
-            activeObj.Dropped();
+            activeWatch.Dropped();
         }
-        activeObj = null;
+        activeWatch = null;
     }
 }

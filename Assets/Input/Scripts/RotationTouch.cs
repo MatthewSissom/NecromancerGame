@@ -17,7 +17,7 @@ public class RotationTouch : TouchProxy
     [SerializeField]
     float aroundToParentMult = 1000;
     [SerializeField]
-    float acceleration = 1000;
+    float acceleration = 10;
     [SerializeField]
     float switchResistance = 0;
 
@@ -28,6 +28,9 @@ public class RotationTouch : TouchProxy
     int scoreIndex = 0;
     //the sum of everything in scores
     float currentScore;
+
+    //Better up vector
+    Vector3 newUp;
 
     private BoneMovingTouch parent;
     public BoneMovingTouch Parent
@@ -46,7 +49,7 @@ public class RotationTouch : TouchProxy
         base.Move(pos, rad);
         toParent = (parent.transform.position - transform.position).normalized;
 
-        if (parent.activeObj != null)
+        if (parent.activeWatch != null)
         {
             parent.CancleStopRotation();
         }
@@ -63,7 +66,9 @@ public class RotationTouch : TouchProxy
     }
 
     public override void Move(Vector3 pos, float rad)
-    {        
+    {
+        
+        
         //store old values
         Vector3 oldToParent = toParent;
         Vector3 oldPos = transform.position;
@@ -105,38 +110,69 @@ public class RotationTouch : TouchProxy
             angleDistAroundUp += Vector3.SignedAngle(oldToParent, toParent, Vector3.up);
         else
             angleDistAroundParent += twardsParentDistance * aroundToParentMult;
+       
     }
 
     protected void Update()
     {
-        if (parent.activeObj == null)
+
+        if (parent.activeWatch == null&& parent.activeBone == null)
             return;
+        Vector3 aVelocity;
+        Vector3 directionality;
+        //cheating code for the milestone
+        if (parent.activeBone != null){
+            GrabbableGroup bone = parent.activeBone;
+            aVelocity = parent.activeBone.Rb.angularVelocity;
+            if (bone.rightFoward)
+            {
+                directionality = new Vector3(1.0f, 0, 0);
 
-        //calculate angular velocities around axies
-        Vector3 aVelocity = parent.activeObj.Rb.angularVelocity;
+            }
+            else
+            {
+                directionality = new Vector3(0, 0, 1.0f);
+            }
 
-        //magnitude of the projection onto a normal is the dot product
-        float velocityAroundUp = Vector3.Dot(aVelocity, Vector3.up);
-        float velocityAroundToParent = Vector3.Dot(aVelocity, toParentPerp);
+            //up will be the cross product to our bone's forward(Main camera's forward *-1) vector and a Horizontal plane?
+            newUp = Vector3.Cross(new Vector3(1.0f, 0, 0), Camera.main.transform.forward * -1);
 
-        //adjust distances
-        float time = Time.deltaTime;
-        angleDistAroundParent -= time * velocityAroundToParent * Mathf.Rad2Deg;
-        angleDistAroundUp -= time * velocityAroundUp * Mathf.Rad2Deg;
 
-        //calculate velocity corrections
-        velocityAroundUp = Mathf.Sign(angleDistAroundUp) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundUp) * acceleration) * Mathf.Deg2Rad - velocityAroundUp;
-        velocityAroundToParent = Mathf.Sign(angleDistAroundParent) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundParent) * acceleration) * Mathf.Deg2Rad - velocityAroundToParent;
+            //calculate angular velocities around axies
 
-        //apply corrections
-        aVelocity += velocityAroundUp * Vector3.up;
-        aVelocity += velocityAroundToParent * toParentPerp;
 
-        //remove any rotation along toParent, it is unwanted
-        aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
+            //magnitude of the projection onto a normal is the dot product
+            float velocityAroundUp = Vector3.Dot(aVelocity, newUp);
+            float velocityAroundToParent = Vector3.Dot(aVelocity, toParentPerp);
 
-        //push calculated value to the rigidbody
-        parent.activeObj.Rb.angularVelocity = aVelocity;
+            //adjust distances
+            float time = Time.deltaTime;
+            angleDistAroundParent -= time * velocityAroundToParent * Mathf.Rad2Deg;
+            angleDistAroundUp -= time * velocityAroundUp * Mathf.Rad2Deg;
+
+            //calculate velocity corrections
+            velocityAroundUp = Mathf.Sign(angleDistAroundUp) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundUp) * acceleration) * Mathf.Deg2Rad - velocityAroundUp;
+            velocityAroundToParent = Mathf.Sign(angleDistAroundParent) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundParent) * acceleration) * Mathf.Deg2Rad - velocityAroundToParent;
+
+            //apply corrections
+            aVelocity += velocityAroundUp * Vector3.up;
+            aVelocity += velocityAroundToParent * toParentPerp;
+
+            //remove any rotation along toParent, it is unwanted
+            aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
+
+            //push calculated value to the rigidbody
+            parent.activeBone.Rb.angularVelocity = new Vector3(aVelocity.x*directionality.x, aVelocity.y*directionality.y, aVelocity.z*directionality.z);
+
+        }
+        
+        //Stopwatch code here
+
+
+        
+        
+        
+
     }
 
     protected override void OnDisable()
