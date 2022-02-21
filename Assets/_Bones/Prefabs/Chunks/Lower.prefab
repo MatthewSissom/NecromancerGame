@@ -114,6 +114,8 @@ MonoBehaviour:
   backPrimaryVertex: {fileID: 6366049278623757380}
   leftAuxVertex: {fileID: 8708318181819322484}
   rightAuxVertex: {fileID: 8473331685784585648}
+  cylColliderPrefab: {fileID: 417202321175220795, guid: ab4539bf2853d914187018ecf43cdf32,
+    type: 3}
   isBeingDragged: 0
   isLeaf: 0
   isAttached: 0

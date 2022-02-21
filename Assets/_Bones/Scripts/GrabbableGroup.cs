@@ -59,6 +59,8 @@ public class GrabbableGroup : BoneGroup, IGrabbable
             rb.constraints = (RigidbodyConstraints)48;
         }
 
+        OnPickup();
+
         Debug.Log("picked up");
         firstPickup = true;
         IEnumerator DelayedLayerChange()
@@ -87,6 +89,14 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
         {
             rb.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
+        }
+
+        if(currentCylinderHit != null)
+        {
+            OnCollideDrop();
+        } else
+        {
+            OnNoCollideDrop();
         }
     }
 

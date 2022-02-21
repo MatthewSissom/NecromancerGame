@@ -96,7 +96,7 @@ public class BoneMovingTouch : TouchProxy
             return;
         }
         GrabbableGroup c = other.GetComponentInParent<GrabbableGroup>();
-        if (c != null)
+        if (c != null && !c.isRoot && (!c.isAttached || c.isLeaf))
         {
             c.PickedUp();
             SetActive(c, c.PrimaryMidpoint, c.AuxilieryAxis);

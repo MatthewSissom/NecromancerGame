@@ -21,15 +21,11 @@ public class BoneGroup : MonoBehaviour
     protected GameObject rightAuxVertex;
 
     [SerializeField]
+    private GameObject cylColliderPrefab;
+
     protected Collider frontPrimaryCollider;
-
-    [SerializeField]
     protected Collider backPrimaryCollider;
-
-    [SerializeField]
     protected Collider leftAuxCollider;
-
-    [SerializeField]
     protected Collider rightAuxCollider;
 
     private GameObject frontPrimaryCylinder;
@@ -42,15 +38,46 @@ public class BoneGroup : MonoBehaviour
     protected BoneGroup parent;
     protected Dictionary<BoneVertexType, BoneGroup> children;
 
+    [SerializeField] //for debugging
+    public BoneCollisionCylinder currentCylinderHit;
+
     protected virtual void Awake()
     {
         children = new Dictionary<BoneVertexType, BoneGroup>();
-        frontPrimaryCylinder = frontPrimaryCollider.gameObject;
-        backPrimaryCylinder = backPrimaryCollider.gameObject;
-        leftAuxCylinder = leftAuxCollider.gameObject;
-        rightAuxCylinder = rightAuxCollider.gameObject;
+        frontPrimaryCylinder = Instantiate(cylColliderPrefab, transform);
+        frontPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
+        frontPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = frontPrimaryVertex;
+        backPrimaryCylinder = Instantiate(cylColliderPrefab, transform);
+        backPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
+        backPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = backPrimaryVertex;
+        leftAuxCylinder = Instantiate(cylColliderPrefab, transform);
+        leftAuxCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
+        leftAuxCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = leftAuxVertex;
+        rightAuxCylinder = Instantiate(cylColliderPrefab, transform);
+        rightAuxCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
+        rightAuxCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = rightAuxVertex;
+
+        frontPrimaryCollider = frontPrimaryCylinder.GetComponent<Collider>();
+        backPrimaryCollider = backPrimaryCylinder.GetComponent<Collider>();
+        leftAuxCollider = leftAuxCylinder.GetComponent<Collider>();
+        rightAuxCollider = rightAuxCylinder.GetComponent<Collider>();
 
         cylinderSize = frontPrimaryCylinder.transform.lossyScale.y;
+
+        if(isAttached)
+        {
+            //transform.right = Vector3.right;
+            //transform.forward = Vector3.Cross(Vector3.right, Camera.main.transform.forward * -1);
+            //transform.RotateAround(tra)
+        }
+        else 
+        {
+            frontPrimaryCylinder.SetActive(false);
+            backPrimaryCylinder.SetActive(false);
+            leftAuxCylinder.SetActive(false);
+            rightAuxCylinder.SetActive(false);
+        }
+
     }
 
     protected virtual void Start()
@@ -60,6 +87,10 @@ public class BoneGroup : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
+        if(isRoot)
+        {
+            transform.forward = Camera.main.transform.forward;
+        }
         Debug.DrawLine(getPrimaryMidpoint(), getPrimaryMidpoint() + getAuxiliaryAxis() * 0.5f, Color.blue);
 
         Debug.DrawLine(getVertexPosition(BoneVertexType.FrontPrimary), getVertexPosition(BoneVertexType.FrontPrimary) + getAuxiliaryAxis() * 0.5f, Color.yellow);
@@ -76,6 +107,7 @@ public class BoneGroup : MonoBehaviour
     public bool isBeingDragged;
     public bool isLeaf;
     public bool isAttached;
+    public bool isRoot;
     //is right the actual forward vector
     public bool rightFoward;
     //Does this bone need to be flipped by default to fit the canvas of the cat Should be -1 or 1 but kept an int to be easily worked into our code
@@ -111,18 +143,49 @@ public class BoneGroup : MonoBehaviour
     private void PositionCylinder(GameObject cylinder, GameObject vertex)
     {
         cylinder.transform.position = vertex.transform.position + getAuxiliaryAxis() * cylinderSize;
-        cylinder.transform.up = getAuxiliaryAxis();
+        cylinder.transform.up = getAuxiliaryAxis() * flippedMuliplier;
     }
-    public void Attach(BoneGroup parent, TableManager tableManager)
+    public void Attach(BoneGroup parent/*, TableManager tableManager*/)
     {
+        Debug.Log("Attaching to: ");
+        Debug.Log(parent);
         this.parent = parent;
         isLeaf = true;
         parent.isLeaf = false;
         isAttached = true;
     }
 
-    public void OnTriggerEnter(Collider other)
+    protected void OnPickup()
     {
-        
+        isBeingDragged = true;
+
+        frontPrimaryCylinder.SetActive(true);
+        backPrimaryCylinder.SetActive(true);
+        leftAuxCylinder.SetActive(true);
+        rightAuxCylinder.SetActive(true);
+    }
+
+    protected void OnNoCollideDrop()
+    {
+        isBeingDragged = false;
+
+        frontPrimaryCylinder.SetActive(false);
+        backPrimaryCylinder.SetActive(false);
+        leftAuxCylinder.SetActive(false);
+        rightAuxCylinder.SetActive(false);
+    }
+
+    protected void OnCollideDrop()
+    {
+        BoneGroup otherGroup = currentCylinderHit.MyBone;
+
+        isBeingDragged = false;
+
+        frontPrimaryCylinder.SetActive(true);
+        backPrimaryCylinder.SetActive(true);
+        leftAuxCylinder.SetActive(true);
+        rightAuxCylinder.SetActive(true);
+
+        Attach(otherGroup);
     }
 }
