@@ -17,7 +17,7 @@ public class RotationTouch : TouchProxy
     [SerializeField]
     float aroundToParentMult = 1000;
     [SerializeField]
-    float acceleration = 10;
+    float acceleration = 1;
     [SerializeField]
     float switchResistance = 0;
 
