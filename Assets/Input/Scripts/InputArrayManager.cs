@@ -93,8 +93,8 @@ public partial class InputManager : MonoBehaviour
     void ArrayInit()
     {
         activeTouches = new List<TouchProxy>();
-        movingTouches = new BoneMovingTouch[5];
-        rotationTouches = new RotationTouch[5];
+        movingTouches = new BoneMovingTouch[1];
+        rotationTouches = new RotationTouch[1];
         toDeactivate = null;
         moveIndex = 0;
         rotationIndex = 0;
