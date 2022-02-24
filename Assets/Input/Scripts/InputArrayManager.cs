@@ -19,10 +19,10 @@ public partial class InputManager : MonoBehaviour
     TouchProxy FindNearestActive(Vector3 pos)
     {
         float distance, currentDist;
-        distance = (activeTouches[0].transform.position - pos).magnitude;
-        TouchProxy toReturn = activeTouches[0];
+        distance = float.MaxValue;
+        TouchProxy toReturn = null;
 
-        for(int i = 1; i < activeTouches.Count; i++)
+        for(int i = 0; i < activeTouches.Count; i++)
         {
             currentDist = (activeTouches[i].transform.position - pos).magnitude;
             if (currentDist < distance)
@@ -117,6 +117,12 @@ public partial class InputManager : MonoBehaviour
             if (isRightHanded)
                 movingTouches[i].offset.x *= -1;
         }
+#if UNITY_STANDALONE_WIN
+        for (int i = 0; i < 5; i++)
+        {
+            movingTouches[i].offset = new Vector3();
+        }
+#endif
     }
 }
 

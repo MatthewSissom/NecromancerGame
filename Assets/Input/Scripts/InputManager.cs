@@ -15,7 +15,7 @@ public partial class InputManager : MonoBehaviour
 
     static public InputManager Instance;
 
-#if UNITY_EDITOR
+#if (UNITY_EDITOR || PLATFORM_STANDALONE_WIN)
     // mouse input vars
     bool holdingMouseDown = false;
     bool rotating = false;
@@ -53,10 +53,38 @@ public partial class InputManager : MonoBehaviour
         return null;
     }
 
+    private void FindAndDisableUnused()
+    {
+#if UNITY_EDITOR
+        if (DebugModes.UseMouseInput)
+            return;
+#elif UNITY_STANDALONE_WIN
+            return;
+#endif
+        foreach (TouchProxy tp in activeTouches)
+        {
+            if (!tp.moved)
+            {
+                if (toDeactivate == null)
+                    toDeactivate = new List<TouchProxy>();
+                toDeactivate.Add(tp);
+            }
+            tp.moved = false;
+        }
+        if (toDeactivate != null)
+        {
+            foreach (TouchProxy tp in toDeactivate)
+            {
+                DisableTouch(tp);
+            }
+            toDeactivate = null;
+        }
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-    #region touchInput
+#region touchInput
         foreach (Touch t in Input.touches)
         {
             //pos represents the point in world space at the specified height
@@ -84,30 +112,20 @@ public partial class InputManager : MonoBehaviour
             mProxy.Move(pos, rad);
         }
 
-        foreach (TouchProxy tp in activeTouches)
-        {
-            if (!tp.moved)
-            {
-                if (toDeactivate == null)
-                    toDeactivate = new List<TouchProxy>();
-                toDeactivate.Add(tp);
-            }
-            tp.moved = false;
-        }
-        if (toDeactivate != null)
-        {
-            foreach (TouchProxy tp in toDeactivate)
-            {
-                DisableTouch(tp);
-            }
-            toDeactivate = null;
-        }
-        #endregion
+        FindAndDisableUnused();
 
-    #region mouseInput
+#endregion
+
+#region mouseInput
 #if UNITY_EDITOR
         if (DebugModes.UseMouseInput)
+#elif UNITY_STANDALONE_WIN
+        if (true)
+#else
+        if (false)
+#endif
         {
+#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
             Vector3 pos = Input.mousePosition;
             pos.z = Camera.main.transform.position.y - height;
             Vector3 radVec = pos + new Vector3(5, 0, 0);
@@ -137,9 +155,10 @@ public partial class InputManager : MonoBehaviour
             else if (rotating)
             {
                 rotating = false;
-                pos = Input.mousePosition;
-                pos.z = Camera.main.transform.position.y - height;
-                pos = Camera.main.ScreenToWorldPoint(pos);
+                Vector3 center = Camera.main.ScreenToWorldPoint(new Vector3(5, 0, 0));
+                Vector3 cameraSpaceVec = pos - center;
+                Vector3 projection = Vector3.Project(cameraSpaceVec, Camera.main.transform.forward);
+                pos = center + (cameraSpaceVec - projection).normalized;
                 DisableTouch(pos);
             }
             else if (Input.GetMouseButton(0))
