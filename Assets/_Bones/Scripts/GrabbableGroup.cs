@@ -17,7 +17,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     private Rigidbody rb;
     private CustomGravity mCustomGravity;
 
-    private bool firstPickup = false;
+    private bool firstPickup = true;
 
     Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return rb; } }
@@ -48,21 +48,23 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         rb.useGravity = false;
         //Cheating code for milestone Readiness
 
-        if (rightFoward&&!firstPickup)
+        if (rightFoward)
         {
+            if(firstPickup)
             transform.right = Camera.main.transform.forward * flippedMuliplier;
+
             rb.constraints = (RigidbodyConstraints) 96;
         }
-        else if(!firstPickup)
+        else
         {
+            if(firstPickup)
             transform.forward = Camera.main.transform.forward * flippedMuliplier;
+
             rb.constraints = (RigidbodyConstraints)48;
         }
 
         OnPickup();
-
-        Debug.Log("picked up");
-        firstPickup = true;
+        firstPickup = false;
         IEnumerator DelayedLayerChange()
         {
             
@@ -98,6 +100,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         {
             OnNoCollideDrop();
         }
+        rb.freezeRotation = true;
     }
 
     private void ResetMass()
