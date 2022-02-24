@@ -12,7 +12,7 @@ public class CatMovement
     float distFromGroundToChest = 0;
     float speed;
 
-    CatPath path;
+    SkeletonBasePath path;
     bool pathing;
 
     //speed and ground height are temp, should be moved here eventually
@@ -23,12 +23,12 @@ public class CatMovement
         LimbInit(limbEnds);
     }
 
-    public void SetPath(CatPath path, List<LimbEnd> limbEnds)
+    public void SetPath(SkeletonBasePath path, List<LimbEnd> limbEnds)
     {
         this.path = path;
         path.PathStarted += () => { pathing = true; };
         path.PathFinished += () => { pathing = false; };
-        CatPathWithNav nav = path as CatPathWithNav;
+        SkeletonPathfinding nav = path as SkeletonPathfinding;
         nav.GroundHeight = GroundYValue;
         nav.ChestHeightChange += (float val) => { SetGroundYValue(val- distFromGroundToChest); };
         foreach (var limb in limbEnds)

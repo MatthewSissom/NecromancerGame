@@ -38,7 +38,7 @@ public class CatBehavior : MonoBehaviour
     Transform[] orderedTransforms;
 
     CatMovement movement;
-    CatPath mPath;
+    SkeletonBasePath mPath;
 
     //temp
     float timer;
@@ -47,7 +47,7 @@ public class CatBehavior : MonoBehaviour
     {
         get { return movement.GroundYValue; }
         set { movement.SetGroundYValue(value);
-            (mPath as CatPathWithNav).GroundHeight = value;
+            (mPath as SkeletonPathfinding).GroundHeight = value;
         }
     }
 
@@ -76,7 +76,7 @@ public class CatBehavior : MonoBehaviour
         }
 
         movement = new CatMovement(limbEnds,speed);
-        var catPathWithNav = new CatPathWithNav(transform.position.y-movement.GroundYValue, transformDistances, orderedTransforms,shoulderIndex);
+        var catPathWithNav = new SkeletonPathfinding(transform.position.y-movement.GroundYValue, transformDistances, orderedTransforms,shoulderIndex);
         catPathWithNav.GroundHeight = movement.GroundYValue;
         mPath = catPathWithNav;
         mPath.PathFinished += () => { pathing = false; };
@@ -115,7 +115,7 @@ public class CatBehavior : MonoBehaviour
         delays[3] = -(transform.position - headTransform.position).magnitude / speed * 2;
 
         movement = new CatMovement(limbEnds,speed);
-        var temp = new CatPathWithNav(ChestHeight, delays, orderedTransforms,2);
+        var temp = new SkeletonPathfinding(ChestHeight, delays, orderedTransforms,2);
         temp.GroundHeight = movement.GroundYValue;
         mPath = temp;
         mPath.PathFinished += () => { pathing = false; };
