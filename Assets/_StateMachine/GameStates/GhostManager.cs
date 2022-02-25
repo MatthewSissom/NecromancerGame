@@ -14,7 +14,11 @@ public class GhostManager : State
     [SerializeField]
     float timePerShipment = default;
     [SerializeField]
-    public float timeBetweenShipments { get; private set; } = default;
+    private float timeBetweenShipments;
+    public float TimeBetweenShipments { 
+        get { return timeBetweenShipments; } 
+        private set { TimeBetweenShipments = value;  } 
+    }
     private int currentShipment = 0;
 
     [Header("Ghosts")]
@@ -164,7 +168,7 @@ public class GhostManager : State
         CountDown.SetParams("Grab Bones", timePerShipment);
         yield return StartCoroutine(CountDown.instance.Routine());
 
-        RecallGhosts(timeBetweenShipments - 2);
+        RecallGhosts(TimeBetweenShipments - 2);
         yield break;
     }
 
@@ -195,7 +199,7 @@ public class GhostManager : State
 #if UNITY_EDITOR
     public void ShortenDeliveryTimes()
     {
-        timeBetweenShipments = 1;
+        TimeBetweenShipments = 1;
         timePerShipment = .01f;
     }
 

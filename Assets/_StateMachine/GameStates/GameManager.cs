@@ -45,7 +45,7 @@ public class GameManager : StateManagerBase
             yield return CameraTransition("GhostTrans");
             yield return SetState(typeof(GhostManager));
             yield return CameraTransition("TableTrans");
-            CountDown.SetParams("Assemble Cat", GhostManager.Instance.timeBetweenShipments);
+            CountDown.SetParams("Assemble Cat", GhostManager.Instance.TimeBetweenShipments);
             yield return SetState(typeof(CountDown));
         }
 
