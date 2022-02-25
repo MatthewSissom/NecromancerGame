@@ -201,8 +201,8 @@ public partial class InputManager : MonoBehaviour
                     //});
                 }
             }
-        }
 #endif
+        }
 #endregion
     }
 
