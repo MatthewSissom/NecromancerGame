@@ -32,10 +32,20 @@ public class PlayPenInput : MonoBehaviour
     {
         var touches = Input.touches;
         Vector3 pos = new Vector3();
+
+#if PLATFORM_STANDALONE_WIN
+        if(true)
+#else
         if (touches.Length == 0)
-#if UNITY_EDITOR
+#endif
+#if (UNITY_EDITOR || PLATFORM_STANDALONE_WIN)
         {
+#if UNITY_EDITOR
             if (DebugModes.UseMouseInput)
+#else
+            if (true)
+#endif
+
             {
                 pos = Input.mousePosition;
                 pos.z = camera.transform.position.y - 1;
