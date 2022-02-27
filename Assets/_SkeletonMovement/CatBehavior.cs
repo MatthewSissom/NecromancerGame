@@ -37,7 +37,7 @@ public class CatBehavior : MonoBehaviour
     //holds transforms along the main line of the cat 
     Transform[] orderedTransforms;
 
-    CatMovement movement;
+    SkeletonMovement movement;
     SkeletonBasePath mPath;
 
     //temp
@@ -75,7 +75,7 @@ public class CatBehavior : MonoBehaviour
                 transformDistances[i] *= -1;
         }
 
-        movement = new CatMovement(limbEnds,speed);
+        movement = new SkeletonMovement(limbEnds,speed);
         var catPathWithNav = new SkeletonPathfinding(transform.position.y-movement.GroundYValue, transformDistances, orderedTransforms,shoulderIndex);
         catPathWithNav.GroundHeight = movement.GroundYValue;
         mPath = catPathWithNav;
@@ -114,7 +114,7 @@ public class CatBehavior : MonoBehaviour
         delays[2] = 0;
         delays[3] = -(transform.position - headTransform.position).magnitude / speed * 2;
 
-        movement = new CatMovement(limbEnds,speed);
+        movement = new SkeletonMovement(limbEnds,speed);
         var temp = new SkeletonPathfinding(ChestHeight, delays, orderedTransforms,2);
         temp.GroundHeight = movement.GroundYValue;
         mPath = temp;
@@ -135,6 +135,14 @@ public class CatBehavior : MonoBehaviour
         //destination.y = movement.ChestHeight;
         mPath.PathToPoint(destination);
         targetPreviousPos = followTarget.transform.position;
+
+#if UNITY_EDITOR
+        float simulatedTime = 0;
+        const float simulatedTimeStep = .05f;
+        List<Vector3> points = new List<Vector3>();
+        // sample points on path for debugging
+        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.TruePath, points);
+#endif
     }
 
     private void Update()
@@ -166,16 +174,4 @@ public class CatBehavior : MonoBehaviour
         }
 
     }
-
-
-    //private void OnCollisionEnter(Collision collision)
-    //{
-    //    //pass on collisions to limbs
-    //    for (int i = 0; i < collision.contactCount; i++)
-    //    {
-    //        var contact = collision.GetContact(i);
-    //        if(colliderToLimb.TryGetValue(contact.thisCollider,out LimbEnd collidedLimb))
-    //            collidedLimb.Collided(contact.point);
-    //    }
-    //}
 }

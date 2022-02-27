@@ -15,7 +15,7 @@ public class SkeletonPathfinding
     public float GroundHeight { get; set; }
     float catChestHeight;
 
-    public SkeletonPathfinding(float catChestHeight, float[] delays, Transform[] transforms, int shoulderIndex) : base(delays,transforms,shoulderIndex)
+    public SkeletonPathfinding(float catChestHeight, float[] delays, Transform[] transforms, int shoulderIndex)
     {
         //default values for pathfinding settings
         MinTurningRad = .1f;
@@ -116,11 +116,6 @@ public class SkeletonPathfinding
 
     public bool PathToPoints(List<Vector3> destinations)
     {
-        if (FollowingSplit)
-        {
-            return false;
-        }
-
         ResetPath();
         Vector3 pos = shoulderTransform.position;
         Vector3 forward = shoulderTransform.forward;
@@ -147,141 +142,6 @@ public class SkeletonPathfinding
         }
         FinalizePath();
         return true;
-    }
-
-    private void ResetPath()
-    {
-        //add paths for each transfrom behind the shoulders to lerp to the position
-        //of the key transform infront of it so at every point each key will be on the path
-        Vector3 previousPos = default;
-        var newPath = new LinkedList<PathComponent>();
-
-
-        //no additional information, use linar paths for transforms behind the shoulders
-        if (path == null || path.First == null)
-        {
-            //itterate backwards to go from head to tail
-            for (int i = transforms.Length - 2; i >= 0; i--)
-            {
-                float delay = delays[i];
-                if (delay > 0)
-                {
-                    newPath.AddFirst(new LinePath(delay - delays[i + 1],
-                        transforms[i].position,
-                        previousPos
-                        ));
-                }
-                previousPos = transforms[i].position;
-            }
-            elapsedTime = delays[0];
-        }
-        //if the cat's target was changed while following another path use the old
-        //path for higher precision
-        else if (path.First.Value as SplitPath == null)
-        {
-            //itterate backwards to go from head to tail
-            for (int i = transforms.Length - 2; i >= 0; i--)
-            {
-                float delay = delays[i];
-                if (delay > 0)
-                {
-                    GetPointOnPath(-delay, out Vector3 mPos);
-                    newPath.AddFirst(new LinePath(delay - delays[i + 1],
-                        mPos,
-                        previousPos
-                        ));
-                }
-                GetPointOnPath(-delay, out previousPos);
-            }
-            elapsedTime = delays[0];
-        }
-        else
-        {
-            var split = path.First.Value as SplitPath;
-            Vector3 pos;
-            for (int i = transforms.Length - 2; i >= 0; i--)
-            {
-                split.SetIndex(i);
-                pos = split.GetPointOnPath(split.SplitDuration);
-                if (delays[i] > 0)
-                {
-                    newPath.AddFirst(new LinePath(delays[i] - delays[i + 1],
-                        pos,
-                        previousPos
-                        ));
-                }
-                previousPos = pos;
-            }
-            elapsedTime = delays[0];
-        }
-
-        path = newPath;
-
-        PathReset?.Invoke();
-    }
-
-    private void FinalizePath()
-    {
-        totalDuration = 0;
-
-        foreach (var pathComponent in path)
-        {
-            totalDuration += pathComponent.Duration;
-            if (pathComponent.IsSplit)
-                (pathComponent as SplitPath).UseStallingPath();
-        }
-
-        if (path.Count == 0)
-            Debug.LogError("No path components added to path");
-
-        Vector3 forward = new Vector3();
-        Vector3 previousPos = default;
-        for (int i = 0, count = transforms.Length; i < count; i++)
-        {
-            if (delays[i] > 0)
-                continue;
-
-            if (forward == new Vector3())
-            {
-                previousPos = path.Last.Value.GetPointOnPath(path.Last.Value.Duration, out forward);
-            }
-            else
-            {
-                Vector3 pathEnd = forward + previousPos;
-                path.AddLast(new LinePath(1 / Speed, previousPos, pathEnd));
-                previousPos = path.First.Value.GetPointOnPath(path.Last.Value.Duration);
-            }
-        }
-
-#if UNITY_EDITOR
-        // sample points on path for debugging
-        var node = path.First;
-        PathComponent currentPathComponent = node.Value;
-        List<Vector3> points = new List<Vector3>();
-        float simulatedTime = 0;
-        const float simulatedTimeStep = .05f;
-        while (node != null)
-        {
-            if (currentPathComponent.Duration > simulatedTime)
-            {
-                SplitPath sp = node.Value as SplitPath;
-                if (sp != null)
-                    sp.SetIndex(shoulderIndex);
-
-                points.Add(currentPathComponent.GetPointOnPath(simulatedTime));
-                simulatedTime += simulatedTimeStep;
-            }
-            else
-            {
-                node = node.Next;
-                simulatedTime -= currentPathComponent.Duration;
-                currentPathComponent = node?.Value;
-            }
-        }
-        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.TruePath, points);
-#endif
-
-        PathStarted?.Invoke();
     }
 
     private bool OrientAndPathTo(Vector3 destination, Vector3 currentPos, Vector3 currentForward, out Vector3 endForward)

@@ -4,7 +4,7 @@ using UnityEngine;
 
 //Cat movement is in charge of the lowest level goals like moving a specific limb to a specific location
 //Recives instrucitons from cat behavior
-public class CatMovement
+public class SkeletonMovement
 {
     public float GroundYValue { get; private set; }
     public float ChestHeight { get; private set; }
@@ -12,18 +12,23 @@ public class CatMovement
     float distFromGroundToChest = 0;
     float speed;
 
-    SkeletonBasePath path;
+
+    // if cat can't change paths immeditely (jumping) queue it instead
+    public Vector3? queuedDestination = null;
+    public event System.Action PathFinished;
+
+    CompositePath path;
     bool pathing;
 
     //speed and ground height are temp, should be moved here eventually
-    public CatMovement(List<LimbEnd> limbEnds, float speed)
+    public SkeletonMovement(List<LimbEnd> limbEnds, float speed)
     {
         this.speed = speed;
 
         LimbInit(limbEnds);
     }
 
-    public void SetPath(SkeletonBasePath path, List<LimbEnd> limbEnds)
+    public void SetPath(CompositePath basePath)
     {
         this.path = path;
         path.PathStarted += () => { pathing = true; };
@@ -93,6 +98,77 @@ public class CatMovement
             limb.StepStartEvent += LimbStartedStep;
             limb.StepEndEvent += LimbEndedStep;
         }
+    }
+
+    private void ResetPath()
+    {
+        //add paths for each transfrom behind the shoulders to lerp to the position
+        //of the key transform infront of it so at every point each key will be on the path
+        Vector3 previousPos = default;
+        var newPath = new LinkedList<PathComponent>();
+
+
+        //no additional information, use linar paths for transforms behind the shoulders
+        if (path == null || path.First == null)
+        {
+            //itterate backwards to go from head to tail
+            for (int i = transforms.Length - 2; i >= 0; i--)
+            {
+                float delay = delays[i];
+                if (delay > 0)
+                {
+                    newPath.AddFirst(new LinePath(delay - delays[i + 1],
+                        transforms[i].position,
+                        previousPos
+                        ));
+                }
+                previousPos = transforms[i].position;
+            }
+            elapsedTime = delays[0];
+        }
+        //if the cat's target was changed while following another path use the old
+        //path for higher precision
+        else if (path.First.Value as SplitPath == null)
+        {
+            //itterate backwards to go from head to tail
+            for (int i = transforms.Length - 2; i >= 0; i--)
+            {
+                float delay = delays[i];
+                if (delay > 0)
+                {
+                    GetPointOnPath(-delay, out Vector3 mPos);
+                    newPath.AddFirst(new LinePath(delay - delays[i + 1],
+                        mPos,
+                        previousPos
+                        ));
+                }
+                GetPointOnPath(-delay, out previousPos);
+            }
+            elapsedTime = delays[0];
+        }
+        else
+        {
+            var split = path.First.Value as SplitPath;
+            Vector3 pos;
+            for (int i = transforms.Length - 2; i >= 0; i--)
+            {
+                split.SetIndex(i);
+                pos = split.GetPointOnPath(split.SplitDuration);
+                if (delays[i] > 0)
+                {
+                    newPath.AddFirst(new LinePath(delays[i] - delays[i + 1],
+                        pos,
+                        previousPos
+                        ));
+                }
+                previousPos = pos;
+            }
+            elapsedTime = delays[0];
+        }
+
+        path = newPath;
+
+        PathReset?.Invoke();
     }
 
     void LimbStartedStep(LimbEnd limb)

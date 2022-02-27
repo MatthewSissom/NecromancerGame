@@ -3,15 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-//---Path component classes---//
-interface IBasicPathComponent
-{
-    public abstract Vector3 GetPointNearPath(float time, float distanceFromPath, bool rightOfPath);
-}
-
 //moves target at a constant speed from start to end
-public class LinePath : ISkeletonPath, IBasicPathComponent
+public class LinePath : ISkeletonPath, IContinuousSkeletonPath
 {
+    public float Duration { get; private set; }
     Vector3 start;
     Vector3 end;
     Vector3 forward;
@@ -26,32 +21,26 @@ public class LinePath : ISkeletonPath, IBasicPathComponent
         forward.Normalize();
     }
 
-    public override Vector3 GetPointOnPath(float time, out Vector3 forward)
-    {
-        forward = this.forward;
-        return Vector3.Lerp(start, end, time / Duration);
-    }
-
-    public override Vector3 GetPointOnPath(float time)
+    public Vector3 GetPointOnPath(float time)
     {
         return Vector3.Lerp(start, end, time / Duration);
     }
 
-    public Vector3 GetPointNearPath(float time, float distanceFromPath, bool rightOfPath)
+    Vector3 IContinuousPath.GetTangent(float time)
     {
-        Vector3 inital = Vector3.Lerp(start, end, time / Duration);
-        //get a perpendicular normal vector and scale it by distance from path
-        Vector3 offset = new Vector3(-forward.z, 0, forward.x)
-            * distanceFromPath
-            * (rightOfPath ? -1 : 1);
+        return new Vector3(-forward.z, 0, forward.x);
+    }
 
-        return inital + offset;
+    Vector3 IContinuousPath.GetForward(float time)
+    {
+        return forward;
     }
 }
 
 //moves target along a circle on the ground at a constant speed
-public class SemicirclePath : ISkeletonPath, IBasicPathComponent
+public class SemicirclePath : ISkeletonPath, IContinuousSkeletonPath
 {
+    public float Duration { get; private set; }
     Vector3 center;
     float rad;
     float startTheta;
@@ -66,33 +55,29 @@ public class SemicirclePath : ISkeletonPath, IBasicPathComponent
         deltaTheta = endTheta - startTheta;
     }
 
-    public override Vector3 GetPointOnPath(float time)
+    public  Vector3 GetPointOnPath(float time)
     {
         float theta = startTheta + deltaTheta * (time / Duration);
         return center + new Vector3(Mathf.Cos(theta) * rad, 0, Mathf.Sin(theta) * rad);
     }
-    public override Vector3 GetPointOnPath(float time, out Vector3 forward)
+
+    Vector3 IContinuousPath.GetTangent(float time)
     {
         float theta = startTheta + deltaTheta * (time / Duration);
-        Vector3 fromCenterToPath = new Vector3(Mathf.Cos(theta) * rad, 0, Mathf.Sin(theta) * rad);
-        forward = new Vector3(-fromCenterToPath.z, 0, fromCenterToPath.x) * Mathf.Sign(deltaTheta);
-        return center + fromCenterToPath;
+        return new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta)) * Mathf.Sign(deltaTheta);
     }
 
-    public Vector3 GetPointNearPath(float time, float distanceFromPath, bool rightOfPath)
+    Vector3 IContinuousPath.GetForward(float time)
     {
         float theta = startTheta + deltaTheta * (time / Duration);
-        //either grow or shrink the rad depending on the orientation of the path (clockwise or not)
-        //and if the point should be on the left or right side of it. XOR is used because it is the 
-        //only logical opperator that the output flips if an input flips
-        float newRad = rad + distanceFromPath * ((rightOfPath ^ deltaTheta < 0) ? 1 : -1);
-        return center + new Vector3(Mathf.Cos(theta) * newRad, 0, Mathf.Sin(theta) * newRad);
+        return new Vector3(-1 * Mathf.Sin(theta), 0, Mathf.Cos(theta)) * Mathf.Sign(deltaTheta);
     }
 }
 
 //moves a target along an arc following newtons laws
-public class JumpArc : ISkeletonPath, IBasicPathComponent
+public class JumpArc : ISkeletonPath, IContinuousSkeletonPath
 {
+    public float Duration { get; private set; }
     const float gravConst = -4;
 
     Vector3 initPos;
@@ -116,19 +101,18 @@ public class JumpArc : ISkeletonPath, IBasicPathComponent
         constPerp = new Vector3(-constVelComponent.z, 0, constVelComponent.x).normalized;
     }
 
-    public Vector3 GetPointNearPath(float time, float distanceFromPath, bool rightOfPath)
-    {
-        return GetPointOnPath(time) + constPerp * distanceFromPath * (rightOfPath ? -1 : 1);
-    }
-
-    public override Vector3 GetPointOnPath(float time)
+    public Vector3 GetPointOnPath(float time)
     {
         return initPos + (constVelComponent * time) + new Vector3(0, initYVel * time + gravConst * time * time / 2, 0);
     }
 
-    public override Vector3 GetPointOnPath(float time, out Vector3 forward)
+    Vector3 IContinuousPath.GetTangent(float time)
     {
-        forward = (constVelComponent + new Vector3(0, initYVel + time * gravConst, 0)).normalized;
-        return initPos + constVelComponent * (time / Duration) + new Vector3(0, initYVel * time + gravConst * time * time / 2, 0);
+        return constPerp;
+    }
+
+    Vector3 IContinuousPath.GetForward(float time)
+    {
+        return (constVelComponent + new Vector3(0, initYVel + time * gravConst, 0)).normalized;
     }
 }

@@ -2,9 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ISkeletonPath
+public interface ISkeletonPath
 {
-    public float Duration { get; protected set; }
-    public abstract Vector3 GetPointOnPath(float time);
-    public abstract Vector3 GetPointOnPath(float time, out Vector3 forward);
+    float Duration { get; }
+    Vector3 GetPointOnPath(float time);
 }
+
+public interface IContinuousPath
+{
+    // left tangent of path
+    Vector3 GetTangent(float time);
+    Vector3 GetForward(float time);
+}
+
+public interface IContinuousSkeletonPath : ISkeletonPath, IContinuousPath { }
