@@ -102,6 +102,10 @@ public class RotationTouch : TouchProxy
             //cheating code for the milestone
              
             GrabbableGroup bone = parent.activeBone;
+
+
+            Debug.Log(parent.activeBone);
+
             Rigidbody boneRB = bone.Rb;
             aVelocity = boneRB.angularVelocity;
         

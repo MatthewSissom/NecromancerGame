@@ -49,30 +49,29 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         bodyOfRigidness.useGravity = false;
         
 
-        if (rightFoward)
+        /*if (rightFoward)
         {
             if(firstPickup)
-            transform.right = Camera.main.transform.forward * flippedMuliplier;
+                transform.right = Camera.main.transform.forward * flippedMuliplier;
 
             bodyOfRigidness.constraints = (RigidbodyConstraints) 96;
         }
         else
         {
             if(firstPickup)
-            transform.forward = Camera.main.transform.forward * flippedMuliplier;
+                transform.forward = Camera.main.transform.forward * flippedMuliplier;
 
             bodyOfRigidness.constraints = (RigidbodyConstraints)48;
-        }
+        }*/
 
         OnPickup();
-        firstPickup = false;
+        //firstPickup = false;
         IEnumerator DelayedLayerChange()
         {
             
             yield return new WaitForSeconds(0.4f);
-            //rb.freezeRotation = false;
-            
             gameObject.layer = physicsLayer;
+            
             yield break;
         }
         StartCoroutine(DelayedLayerChange());

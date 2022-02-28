@@ -45,7 +45,7 @@ public class BoneMovingTouch : TouchProxy
 
     public void SetActive(GrabbableGroup bone, Vector3 primaryMidpoint, Vector3 auxileryAxis)
     {
-        activeWatch = bone;
+        activeBone = bone;
         this.primaryMidpoint = primaryMidpoint;
         this.auxileryAxis = auxileryAxis; 
     }
@@ -89,7 +89,7 @@ public class BoneMovingTouch : TouchProxy
     {
         if (activeWatch != null)
             return;
-        IGrabbable b = other.GetComponentInParent<StopwatchLid>();
+        IGrabbable b = null; //other.GetComponentInParent<GrabbableGroup>(); This will be to grab the stopwatch.
         if(b != null)
         {
             SetActive(b);
