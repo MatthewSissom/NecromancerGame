@@ -14,28 +14,29 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     const float realBoneDensity = 1850;
     const float density = realBoneDensity * 5;
 
-    private Rigidbody rb;
+    private Rigidbody bodyOfRigidness;
     private CustomGravity mCustomGravity;
 
     private bool firstPickup = true;
 
     Transform IGrabbable.transform { get { return transform; } }
-    public Rigidbody Rb { get { return rb; } }
+    public Rigidbody Rb { get {  return bodyOfRigidness; } }
     public Vector3 PrimaryMidpoint { get { return getPrimaryMidpoint(); } }
     public Vector3 AuxilieryAxis { get { return getAuxiliaryAxis(); } }
     protected override void Awake()
     {
         base.Awake();
 
-        //physics init
-        rb = GetComponent<Rigidbody>();
-        ResetMass();
-        mCustomGravity = GetComponent<CustomGravity>();
+      
     }
 
     protected override void Start()
     {
         base.Start();
+        //physics init
+        bodyOfRigidness = GetComponent<Rigidbody>();
+        ResetMass();
+        mCustomGravity = GetComponent<CustomGravity>();
     }
 
     public void PickedUp()
@@ -45,22 +46,22 @@ public class GrabbableGroup : BoneGroup, IGrabbable
       
         if (mCustomGravity)
             mCustomGravity.Disable();
-        rb.useGravity = false;
-        //Cheating code for milestone Readiness
+        bodyOfRigidness.useGravity = false;
+        
 
         if (rightFoward)
         {
             if(firstPickup)
             transform.right = Camera.main.transform.forward * flippedMuliplier;
 
-            rb.constraints = (RigidbodyConstraints) 96;
+            bodyOfRigidness.constraints = (RigidbodyConstraints) 96;
         }
         else
         {
             if(firstPickup)
             transform.forward = Camera.main.transform.forward * flippedMuliplier;
 
-            rb.constraints = (RigidbodyConstraints)48;
+            bodyOfRigidness.constraints = (RigidbodyConstraints)48;
         }
 
         OnPickup();
@@ -87,10 +88,10 @@ public class GrabbableGroup : BoneGroup, IGrabbable
             mCustomGravity.Enable();
         //rb.freezeRotation = false;
         gameObject.layer = physicsLayer;
-        Vector3 velocity = rb.velocity;
+        Vector3 velocity = bodyOfRigidness.velocity;
         if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
         {
-            rb.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
+            bodyOfRigidness.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
         }
 
         if(currentCylinderHit != null)
@@ -100,13 +101,13 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         {
             OnNoCollideDrop();
         }
-        rb.freezeRotation = true;
+        bodyOfRigidness.freezeRotation = true;
     }
 
     private void ResetMass()
     {
-        Rb.SetDensity(density);
+        bodyOfRigidness.SetDensity(density);
         //mass is considered temporary and will be written over unless directly set
-        Rb.mass = Rb.mass;
+        bodyOfRigidness.mass = bodyOfRigidness.mass;
     }
 }

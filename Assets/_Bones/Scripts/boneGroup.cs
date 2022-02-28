@@ -110,7 +110,7 @@ public class BoneGroup : MonoBehaviour
     public bool isRoot;
     //is right the actual forward vector
     public bool rightFoward;
-    //Does this bone need to be flipped by default to fit the canvas of the cat Should be -1 or 1 but kept an int to be easily worked into our code
+    //Does this bone need to be flipped by default to fit the canvas of the cat? Should be -1 or 1 but kept an int to be easily worked into our code
     public int flippedMuliplier;
 
     public Vector3 getVertexPosition(BoneVertexType type)

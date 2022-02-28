@@ -17,6 +17,10 @@ public partial class InputManager : MonoBehaviour
 
     static public InputManager Instance;
 
+    //touches.count not working?
+    private int realTouchCount = 0;
+
+
 #if (USING_TOUCH == false)
     //temp mouse input var
     bool holdingMouseDown = false;
@@ -35,22 +39,22 @@ public partial class InputManager : MonoBehaviour
     private BoneMovingTouch isRotationTouch(Vector3 pos)
     {
         HashSet<BoneMovingTouch> cantBeParent = new HashSet<BoneMovingTouch>();
-        for (int i = 0; i < activeTouches.Count; i++)
+       
+        if(realTouchCount == 1)
         {
-            RotationTouch rt = activeTouches[i] as RotationTouch;
-            if (rt
-                && rt.Parent != null)
-            {
-                cantBeParent.Add(rt.Parent);
-            }
+            //BoneMovingTouch ft = movingTouch;
+            //ft.transform.position = pos;
+          
+            Debug.Log(realTouchCount);
+            return movingTouch;
         }
-        for (int i = 0; i < activeTouches.Count; i++)
+        else if(realTouchCount == 0)
         {
-            BoneMovingTouch ft = activeTouches[i] as BoneMovingTouch;
-            if (ft
-                && (ft.transform.position - pos).sqrMagnitude < rotationRadSquared
-                && !cantBeParent.Contains(ft))
-                return ft;
+            //RotationTouch rt = rotationTouch;
+            //rt.transform.position = pos;
+            
+            Debug.Log(realTouchCount);
+            cantBeParent.Add(rotationTouch.Parent);
         }
         return null;
     }
@@ -74,17 +78,18 @@ public partial class InputManager : MonoBehaviour
             TouchProxy mProxy = activeTouches.Find(a => a.id == id);
             if (!mProxy)
             {
-                BoneMovingTouch parent = isRotationTouch(pos);
-                if (parent)
-                {
-                    mProxy = NewRotationTouch(pos, id, parent);
-                }
-                else
+                
+                if (!movingTouch.isActiveAndEnabled)
                 {
                     mProxy = NewMoveTouch(pos, id);
                 }
+                else if(!rotationTouch.isActiveAndEnabled)
+                {
+                    mProxy = NewRotationTouch(pos, id, movingTouch);
+                }
             }
-            mProxy.Move(pos, rad);
+            if(mProxy)
+                mProxy.Move(pos, rad);
         }
 
         foreach (TouchProxy tp in activeTouches)
@@ -105,6 +110,7 @@ public partial class InputManager : MonoBehaviour
             }
             toDeactivate = null;
         }
+        
 #endregion
 
 #else

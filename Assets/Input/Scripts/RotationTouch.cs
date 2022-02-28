@@ -11,13 +11,13 @@ public class RotationTouch : TouchProxy
     Vector3 toParent;
     Vector3 toParentPerp;
     //which axis is the player currently rotating around?
-    private bool aroundUp = true;
+    //private bool aroundUp = true;
 
     //game feel values
     [SerializeField]
     float aroundToParentMult = 1000;
     [SerializeField]
-    float acceleration = 0.5f;
+    float acceleration = 1000f;
     [SerializeField]
     float switchResistance = 0;
 
@@ -54,7 +54,7 @@ public class RotationTouch : TouchProxy
             parent.CancleStopRotation();
         }
 
-        aroundUp = true;
+        //aroundUp = true;
         angleDistAroundUp = 0;
         angleDistAroundParent = 0;
 
@@ -76,104 +76,85 @@ public class RotationTouch : TouchProxy
         //update position
         base.Move(pos, rad);
         toParent = (parent.transform.position - transform.position).normalized;
-        toParentPerp = Vector3.Cross(Vector3.up, toParent).normalized;
-        
-        //update scores and check for axis change//
 
-        //score goes from -.5 to .5 based on if the movement is in the 
-        //direction of the parent (.5) or perpendicular to it (-.5)
+
         Vector3 movementVector = pos - oldPos;
-        //split the vector into components
-        float twardsParentDistance = Vector3.Dot(movementVector, toParent);     //signed distance
-        float perpToParentDistance = Vector3.Dot(movementVector, toParentPerp); //signed distance
-        //score is the difference between lengths of component vectors
-        float newScore = Mathf.Abs(twardsParentDistance) - Mathf.Abs(perpToParentDistance);
-
-        //adjust score
-        currentScore -= scores[scoreIndex]; //remove score that will be replaced from total
-        currentScore += newScore;           //add new score to total
-        scores[scoreIndex] = newScore;
-        scoreIndex = (scoreIndex + 1) % scoresLength;
-
-        //check if the player has switched from spinning to pinching
-        if (aroundUp && currentScore > switchResistance)
-        {
-            aroundUp = false;
-        }
-        else if (!aroundUp && currentScore < - switchResistance)
-        {
-            aroundUp = true;
-        }
 
         //adjust distances
-        if(aroundUp)
-            angleDistAroundUp += Vector3.SignedAngle(oldToParent, toParent, Vector3.up);
-        else
-            angleDistAroundParent += twardsParentDistance * aroundToParentMult;
+        angleDistAroundUp += Vector3.SignedAngle(oldToParent, toParent, Vector3.up);
+
+
+        //if (oldToParent != toParent)
+            //Debug.Log(oldToParent + ", " + parent);
+     
        
     }
 
     protected void Update()
     {
+        
 
         if (parent.activeWatch == null&& parent.activeBone == null)
             return;
-        Vector3 aVelocity;
-        Vector3 directionality;
-        //cheating code for the milestone
-        if (parent.activeBone != null){
+        
+            Vector3 aVelocity;
+            Vector3 directionality;
+            //cheating code for the milestone
+             
             GrabbableGroup bone = parent.activeBone;
-            aVelocity = parent.activeBone.Rb.angularVelocity;
+            Rigidbody boneRB = bone.Rb;
+            aVelocity = boneRB.angularVelocity;
+        
             if (bone.rightFoward)
             {
-                directionality = new Vector3(1.0f, 0, 0);
+                directionality = new Vector3(1.0000000f, 0, 0);
 
             }
             else
             {
-                directionality = new Vector3(0, 0, 1.0f);
+                directionality = new Vector3(0, 0, 1.00000f);
             }
-
-            //up will be the cross product to our bone's forward(Main camera's forward *-1) vector and a Horizontal plane?
-            newUp = Vector3.Cross(new Vector3(1.0f, 0, 0), Camera.main.transform.forward * -1);
+         //up will be the cross product to our bone's forward(Main camera's forward *-1) vector and a Horizontal plane?
+            //newUp = Vector3.Cross(new Vector3(1.0f, 0, 0), Camera.main.transform.forward * -1);
 
 
             //calculate angular velocities around axies
 
 
             //magnitude of the projection onto a normal is the dot product
-            float velocityAroundUp = Vector3.Dot(aVelocity, newUp);
-            float velocityAroundToParent = Vector3.Dot(aVelocity, toParentPerp);
+            float velocityAroundUp = Vector3.Dot(aVelocity, Vector3.up);
+           
 
             //adjust distances
             float time = Time.deltaTime;
-            angleDistAroundParent -= time * velocityAroundToParent * Mathf.Rad2Deg;
+            
             angleDistAroundUp -= time * velocityAroundUp * Mathf.Rad2Deg;
 
             //calculate velocity corrections
             velocityAroundUp = Mathf.Sign(angleDistAroundUp) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundUp) * acceleration) * Mathf.Deg2Rad - velocityAroundUp;
-            velocityAroundToParent = Mathf.Sign(angleDistAroundParent) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundParent) * acceleration) * Mathf.Deg2Rad - velocityAroundToParent;
+            
 
             //apply corrections
             aVelocity += velocityAroundUp * Vector3.up;
-            aVelocity += velocityAroundToParent * toParentPerp;
+           
 
             //remove any rotation along toParent, it is unwanted
             aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
 
             //push calculated value to the rigidbody
+            Debug.Log(aVelocity);
             parent.activeBone.Rb.angularVelocity = new Vector3(aVelocity.x*directionality.x, aVelocity.y*directionality.y, aVelocity.z*directionality.z);
 
-        }
-        
+
         //Stopwatch code here
 
-
-        
-        
-        
-
     }
+
+
+
+
+
+
 
     protected override void OnDisable()
     {
@@ -181,4 +162,5 @@ public class RotationTouch : TouchProxy
         if (parent && parent.isActiveAndEnabled)
             parent.StopRotation(acceleration * Mathf.Deg2Rad);
     }
+
 }

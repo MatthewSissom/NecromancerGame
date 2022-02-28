@@ -5,12 +5,10 @@ using UnityEngine;
 public partial class InputManager : MonoBehaviour
 {
 
-    //holds 5 bone moving touches, which will be enabled and disabled as needed
-    private int moveIndex;
-    private BoneMovingTouch[] movingTouches;
-    //holds 5 rotation proxies, which will be enabled and disabled as needed
-    private int rotationIndex;
-    private RotationTouch[] rotationTouches;
+    //holds 1 bone moving touch, which will be enabled and disabled as needed
+    private BoneMovingTouch movingTouch;
+    //holds 1 rotation proxy, which will be enabled and disabled as needed
+    private RotationTouch rotationTouch;
 
     //holds a list of active touches
     private List<TouchProxy> activeTouches;
@@ -39,22 +37,18 @@ public partial class InputManager : MonoBehaviour
     {
         if (!toDisable.isActiveAndEnabled) return;
 
-        if (toDisable is BoneMovingTouch)
-        {
-            moveIndex--;
-        }
-        else
-        {
-            rotationIndex--;
-        }
-        toDisable.gameObject.SetActive(false);
+        if (toDisable == movingTouch&&rotationTouch)
+            DisableTouch(rotationTouch);
 
+        toDisable.gameObject.SetActive(false);
+        realTouchCount--;
         if (activeTouches.Count == 1)
         {
             activeTouches.Clear();
             return;
         }
         activeTouches.Remove(toDisable);
+        
     }
 
     void DisableTouch(Vector3 position)
@@ -64,8 +58,7 @@ public partial class InputManager : MonoBehaviour
 
     TouchProxy NewMoveTouch(Vector3 position, int id)
     {
-        BoneMovingTouch mTouch = movingTouches[moveIndex];
-        moveIndex++;
+        BoneMovingTouch mTouch = movingTouch;
 
         activeTouches.Add(mTouch);
         mTouch.Move(position, 0);
@@ -77,8 +70,7 @@ public partial class InputManager : MonoBehaviour
 
     TouchProxy NewRotationTouch(Vector3 position,int id, BoneMovingTouch parent)
     {
-        RotationTouch mTouch = rotationTouches[rotationIndex];
-        rotationIndex++;
+        RotationTouch mTouch = rotationTouch;
 
         activeTouches.Add(mTouch);
 
@@ -93,20 +85,18 @@ public partial class InputManager : MonoBehaviour
     void ArrayInit()
     {
         activeTouches = new List<TouchProxy>();
-        movingTouches = new BoneMovingTouch[1];
-        rotationTouches = new RotationTouch[1];
+        movingTouch = new BoneMovingTouch();
+        rotationTouch = new RotationTouch();
         toDeactivate = null;
-        moveIndex = 0;
-        rotationIndex = 0;
+        
 
-        for(int i = 0; i < 1; i++)
-        {
-            movingTouches[i] = Instantiate(moveTouchPref).GetComponent<BoneMovingTouch>();
-            movingTouches[i].gameObject.SetActive(false);
+        
+        movingTouch = Instantiate(moveTouchPref).GetComponent<BoneMovingTouch>();
+        movingTouch.gameObject.SetActive(false);
 
-            rotationTouches[i] = Instantiate(rotationTouchPref).GetComponent<RotationTouch>();
-            rotationTouches[i].gameObject.SetActive(false);
-        }
+        rotationTouch = Instantiate(rotationTouchPref).GetComponent<RotationTouch>();
+        rotationTouch.gameObject.SetActive(false);
+        
     }
 
     private void ChangeHandedness(bool isRightHanded)
@@ -115,7 +105,7 @@ public partial class InputManager : MonoBehaviour
         {
             // TEMP - make better offset options
             if (isRightHanded)
-                movingTouches[i].offset.x *= -1;
+                movingTouch.offset.x *= -1;
         }
     }
 }
