@@ -108,17 +108,32 @@ public class BoneMovingTouch : TouchProxy
     // Update is called once per frame
     void Update()
     {
-        if (activeWatch != null)
+        if (activeBone != null)
         {
             //-move the active object to the proxy-//
 
             const float maxVelocity = 7.0f;
             const float baseMult = 20;
             //find movement vector
-            Vector3 toProxy = (transform.position + offset - activeWatch.transform.root.position) * baseMult;
+            Vector3 toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
             Vector3.ClampMagnitude(toProxy, maxVelocity);
-            activeWatch.Rb.velocity = toProxy;
+            activeBone.Rb.velocity = toProxy;
+        }else if(activeWatch != null)
+        {
+            //TODO change active watch movement as needed
+
+
+            //-move the active object to the proxy-//
+
+            const float maxVelocity = 7.0f;
+            const float baseMult = 20;
+            //find movement vector
+            Vector3 toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
+            Vector3.ClampMagnitude(toProxy, maxVelocity);
+            activeBone.Rb.velocity = toProxy;
         }
+        
+
         //the rad of the touch collider quickly increases to the normal size when first being reenabled
         else if (radMult < 1)
         {
@@ -148,10 +163,10 @@ public class BoneMovingTouch : TouchProxy
     {
         base.OnDisable();
 
-        if (activeWatch != null)
+        if (activeBone != null)
         {
-            activeWatch.Dropped();
+            activeBone.Dropped();
         }
-        activeWatch = null;
+        activeBone = null;
     }
 }
