@@ -15,6 +15,10 @@ public partial class InputManager : MonoBehaviour
 
     static public InputManager Instance;
 
+    //touches.count not working?
+    private int realTouchCount = 0;
+
+
 #if (UNITY_EDITOR || PLATFORM_STANDALONE_WIN)
     // mouse input vars
     bool holdingMouseDown = false;
@@ -33,24 +37,17 @@ public partial class InputManager : MonoBehaviour
     private BoneMovingTouch isRotationTouch(Vector3 pos)
     {
         HashSet<BoneMovingTouch> cantBeParent = new HashSet<BoneMovingTouch>();
-        for (int i = 0; i < activeTouches.Count; i++)
-        {
-            RotationTouch rt = activeTouches[i] as RotationTouch;
-            if (rt
-                && rt.Parent != null)
-            {
-                cantBeParent.Add(rt.Parent);
-            }
+
+        switch(realTouchCount)
+        { 
+            case 0:
+                cantBeParent.Add(rotationTouch.Parent);
+                return null;
+            case 1:
+                return movingTouch;
+            default:
+                return null;
         }
-        for (int i = 0; i < activeTouches.Count; i++)
-        {
-            BoneMovingTouch ft = activeTouches[i] as BoneMovingTouch;
-            if (ft
-                && (ft.transform.position - pos).sqrMagnitude < rotationRadSquared
-                && !cantBeParent.Contains(ft))
-                return ft;
-        }
-        return null;
     }
 
     private void FindAndDisableUnused()
@@ -100,18 +97,18 @@ public partial class InputManager : MonoBehaviour
             if (!mProxy)
             {
                 BoneMovingTouch parent = isRotationTouch(pos);
-                if (parent)
+                if (!movingTouch.isActiveAndEnabled)
                 {
                     mProxy = NewRotationTouch(pos, id, parent);
                 }
-                else
+                else if(!rotationTouch.isActiveAndEnabled)
                 {
                     mProxy = NewMoveTouch(pos, id);
                 }
             }
-            mProxy.Move(pos, rad);
+            if(mProxy)
+                mProxy.Move(pos, rad);
         }
-
         FindAndDisableUnused();
 
 #endregion
@@ -149,8 +146,8 @@ public partial class InputManager : MonoBehaviour
                 Vector3 projection = Vector3.Project(cameraSpaceVec, Camera.main.transform.forward);
                 pos = center + (cameraSpaceVec - projection).normalized;
 
-                Vector3 angularVelocity = (activeTouches[0] as BoneMovingTouch).activeObj.Rb.angularVelocity;
-                (activeTouches[0] as BoneMovingTouch).activeObj.Rb.angularVelocity = Vector3.Project(angularVelocity, Camera.main.transform.forward);
+                Vector3 angularVelocity = (activeTouches[0] as BoneMovingTouch).activeWatch.Rb.angularVelocity;
+                (activeTouches[0] as BoneMovingTouch).activeWatch.Rb.angularVelocity = Vector3.Project(angularVelocity, Camera.main.transform.forward);
             }
             else if (rotating)
             {

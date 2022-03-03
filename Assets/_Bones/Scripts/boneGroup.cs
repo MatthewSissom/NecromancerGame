@@ -13,6 +13,7 @@ public class BoneGroup : MonoBehaviour
     protected int groupID;
     protected int myID;
 
+
     public BoneGroup Parent
     {
         set 

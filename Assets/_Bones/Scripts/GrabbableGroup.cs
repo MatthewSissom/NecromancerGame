@@ -22,6 +22,19 @@ public class GrabbableGroup : BoneGroup, IGrabbable
 
     Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return rb; } }
+
+    bool firstPickup = true;
+
+    //is right the actual forward vector
+    [SerializeField]
+    bool rightFoward;
+    public bool RightForward { get { return rightFoward; } }
+    //Does this bone need to be flipped by default to fit the canvas of the cat? Should be -1 or 1 but kept an int to be easily worked into our code
+    [SerializeField]
+    int flippedMultiplier;
+    public int FlippedMultiplier { get { return flippedMultiplier; } }
+
+
     protected override void Awake()
     {
         base.Awake();
@@ -78,6 +91,24 @@ public class GrabbableGroup : BoneGroup, IGrabbable
             mCustomGravity.Disable();
         rb.useGravity = false;
 
+        if (rightFoward)
+        {
+            if (firstPickup)
+                transform.right = Camera.main.transform.forward * flippedMultiplier;
+
+            rb.constraints = (RigidbodyConstraints)96;
+        }
+        else
+        {
+            if (firstPickup)
+                transform.forward = Camera.main.transform.forward * flippedMultiplier;
+
+            rb.constraints = (RigidbodyConstraints)48;
+        }
+        //TODO: uncomment when bonegroup has Jimmie's changes
+        //OnPickup();
+        firstPickup = false;
+
         IEnumerator DelayedLayerChange()
         {
             yield return new WaitForSeconds(0.4f);
@@ -99,12 +130,14 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         const float maxReleaseYVelocity = 1.0f;
         if (mCustomGravity)
             mCustomGravity.Enable();
-        rb.freezeRotation = false;
+        //rb.freezeRotation = false;
         Vector3 velocity = rb.velocity;
         if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
         {
             rb.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
         }
+
+        rb.freezeRotation = true;
     }
 
     protected override void RemoveChild(BoneGroup toRemove)
