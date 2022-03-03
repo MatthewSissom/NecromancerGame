@@ -108,8 +108,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0df41430c9e6847b92f38c4eb10862, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  primaryMat: {fileID: 0}
-  auxiliaryMat: {fileID: 0}
+  primaryMat: {fileID: 2100000, guid: 41b74fa5bef9c914996d4de548b7be51, type: 2}
+  auxiliaryMat: {fileID: 2100000, guid: 7538781c7c3bab1408c69739335cd2d2, type: 2}
 --- !u!120 &8916265598331749511
 LineRenderer:
   m_ObjectHideFlags: 0

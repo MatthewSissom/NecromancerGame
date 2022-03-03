@@ -44,6 +44,7 @@ public class BoneGroup : MonoBehaviour
     private float cylinderSize;
 
     protected BoneGroup parent;
+    protected BoneVertexType parentVertexCollisionType;
     protected Dictionary<BoneVertexType, BoneGroup> children;
 
     [SerializeField] //for debugging
@@ -52,27 +53,23 @@ public class BoneGroup : MonoBehaviour
     protected virtual void Awake()
     {
         children = new Dictionary<BoneVertexType, BoneGroup>();
-        frontPrimaryCylinder = Instantiate(cylColliderPrefab, transform);
-        frontPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
-        frontPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = frontPrimaryVertex;
+        frontPrimaryCylinder = Instantiate(cylColliderPrefab, transform); 
         frontPrimaryIndicator = Instantiate(vertexIndicatorPrefab, frontPrimaryVertex.transform.position, Quaternion.identity, transform);
+        InitCylinder(frontPrimaryCylinder, frontPrimaryIndicator, BoneVertexType.FrontPrimary);
         
-        backPrimaryCylinder = Instantiate(cylColliderPrefab, transform);
-        backPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
-        backPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = backPrimaryVertex;
+        backPrimaryCylinder = Instantiate(cylColliderPrefab, transform); 
         backPrimaryIndicator = Instantiate(vertexIndicatorPrefab, backPrimaryVertex.transform.position, Quaternion.identity, transform);
-
+        InitCylinder(backPrimaryCylinder, backPrimaryIndicator, BoneVertexType.BackPrimary); 
+        
 
         leftAuxCylinder = Instantiate(cylColliderPrefab, transform);
-        leftAuxCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
-        leftAuxCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = leftAuxVertex;
         leftAuxIndicator = Instantiate(vertexIndicatorPrefab, leftAuxVertex.transform.position, Quaternion.identity, transform);
+        InitCylinder(leftAuxCylinder, leftAuxIndicator, BoneVertexType.LeftAux);
 
 
         rightAuxCylinder = Instantiate(cylColliderPrefab, transform);
-        rightAuxCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
-        rightAuxCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = rightAuxVertex;
         rightAuxIndicator = Instantiate(vertexIndicatorPrefab, rightAuxVertex.transform.position, Quaternion.identity, transform);
+        InitCylinder(rightAuxCylinder, rightAuxIndicator, BoneVertexType.RightAux);
 
         frontPrimaryCollider = frontPrimaryCylinder.GetComponent<Collider>();
         backPrimaryCollider = backPrimaryCylinder.GetComponent<Collider>();
@@ -130,21 +127,25 @@ public class BoneGroup : MonoBehaviour
     //Does this bone need to be flipped by default to fit the canvas of the cat? Should be -1 or 1 but kept an int to be easily worked into our code
     public int flippedMuliplier;
 
-    public Vector3 getVertexPosition(BoneVertexType type)
+    private GameObject getVertex(BoneVertexType type)
     {
         switch (type)
         {
             case BoneVertexType.FrontPrimary:
-                return frontPrimaryVertex.transform.position;
+                return frontPrimaryVertex;
             case BoneVertexType.BackPrimary:
-                return backPrimaryVertex.transform.position;
+                return backPrimaryVertex;
             case BoneVertexType.LeftAux:
-                return leftAuxVertex.transform.position;
+                return leftAuxVertex;
             case BoneVertexType.RightAux:
-                return rightAuxVertex.transform.position;
+                return rightAuxVertex;
         }
-
         throw new Exception();
+    }
+
+    public Vector3 getVertexPosition(BoneVertexType type)
+    {
+        return getVertex(type).transform.position;
     }
 
     public Vector3 getPrimaryMidpoint()
@@ -162,6 +163,17 @@ public class BoneGroup : MonoBehaviour
         cylinder.transform.position = vertex.transform.position;// + getAuxiliaryAxis() * cylinderSize;
         cylinder.transform.up = getAuxiliaryAxis() * flippedMuliplier;
     }
+
+    private void InitCylinder(GameObject cylinder, GameObject indicator, BoneVertexType type)
+    {
+        BoneCollisionCylinder colCyl = cylinder.GetComponent<BoneCollisionCylinder>();
+
+        colCyl.MyBone = this;
+        colCyl.MyType = type;
+        colCyl.MyVertex = getVertex(type);
+        colCyl.MyIndicator = indicator;
+    }
+
     public void Attach(BoneGroup parent/*, TableManager tableManager*/)
     {
         Debug.Log("Attaching to: ");

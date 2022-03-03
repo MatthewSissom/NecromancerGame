@@ -9,9 +9,52 @@ public class BoneCollisionCylinder : MonoBehaviour
     [SerializeField]
     private Material auxiliaryMat;
 
+    private MeshRenderer indicatorRenderer;
     private LineRenderer myLineRenderer;
 
     private bool isParentsActiveCollision;
+
+    private bool IsParentsActiveCollision
+    {
+        get
+        {
+            return isParentsActiveCollision;
+        }
+        set
+        {
+            isParentsActiveCollision = value;
+            if(isParentsActiveCollision)
+            {
+                indicatorRenderer.material = auxiliaryMat;
+            } else
+            {
+                indicatorRenderer.material = primaryMat;
+            }
+        }
+    }
+
+
+    private bool isChildsActiveCollision;
+
+    private bool IsChildsActiveCollision
+    {
+        get
+        {
+            return isChildsActiveCollision;
+        }
+        set
+        {
+            isChildsActiveCollision = value;
+            if (isChildsActiveCollision)
+            {
+                indicatorRenderer.material = auxiliaryMat;
+            }
+            else
+            {
+                indicatorRenderer.material = primaryMat;
+            }
+        }
+    }
 
     private BoneGroup myBone;
 
@@ -54,6 +97,22 @@ public class BoneCollisionCylinder : MonoBehaviour
             myType = value;
         }
     }
+
+    private GameObject myIndicator;
+
+    public GameObject MyIndicator
+    {
+        get
+        {
+            return myIndicator;
+        }
+        set
+        {
+            myIndicator = value;
+            indicatorRenderer = MyIndicator.GetComponent<MeshRenderer>();
+            indicatorRenderer.material = primaryMat;
+        }
+    }
     void Awake()
     {
         myLineRenderer = GetComponent<LineRenderer>();
@@ -62,7 +121,7 @@ public class BoneCollisionCylinder : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (isParentsActiveCollision)
+        if (IsParentsActiveCollision)
         {
             myLineRenderer.enabled = true;
             myLineRenderer.SetPositions(new Vector3[2]);
@@ -100,7 +159,8 @@ public class BoneCollisionCylinder : MonoBehaviour
             if(myBone.currentCylinderHit == null)
             {
                 myBone.currentCylinderHit = other.gameObject.GetComponent<BoneCollisionCylinder>();
-                isParentsActiveCollision = true;
+                IsParentsActiveCollision = true;
+                other.gameObject.GetComponent<BoneCollisionCylinder>().IsChildsActiveCollision = true;
             }
         }
     }
@@ -109,10 +169,11 @@ public class BoneCollisionCylinder : MonoBehaviour
     {
         if (!myBone.isAttached && myBone.isBeingDragged && other.gameObject.tag == "ColliderCylinder")
         {
-            if(isParentsActiveCollision)
+            if(IsParentsActiveCollision)
             {
                 myBone.currentCylinderHit = null;
-                isParentsActiveCollision = false;
+                IsParentsActiveCollision = false;
+                other.gameObject.GetComponent<BoneCollisionCylinder>().IsChildsActiveCollision = false;
             }
         }
     }
