@@ -134,7 +134,7 @@ public class RotationTouch : TouchProxy
         }
 
         //push calculated value to the rigidbody
-        parent.activeWatch.Rb.angularVelocity = aVelocity;
+        bone.Rb.angularVelocity = aVelocity;
     }
 
     protected override void OnDisable()

@@ -114,9 +114,9 @@ public class BoneMovingTouch : TouchProxy
             const float maxVelocity = 7.0f;
             const float baseMult = 20;
             //find movement vector
-            Vector3 toProxy = (transform.position + offset - activeWatch.transform.root.position) * baseMult;
+            Vector3 toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
             Vector3.ClampMagnitude(toProxy, maxVelocity);
-            activeWatch.Rb.velocity = toProxy;
+            activeBone.Rb.velocity = toProxy;
         }else if(activeWatch != null)
         {
             //TODO change active watch movement as needed

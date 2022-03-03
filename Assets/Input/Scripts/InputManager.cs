@@ -99,11 +99,12 @@ public partial class InputManager : MonoBehaviour
                 BoneMovingTouch parent = isRotationTouch(pos);
                 if (!movingTouch.isActiveAndEnabled)
                 {
-                    mProxy = NewRotationTouch(pos, id, parent);
+                    mProxy = NewMoveTouch(pos, id);
                 }
                 else if(!rotationTouch.isActiveAndEnabled)
                 {
-                    mProxy = NewMoveTouch(pos, id);
+                    mProxy = NewRotationTouch(pos, id, movingTouch);
+                    
                 }
             }
             if(mProxy)
