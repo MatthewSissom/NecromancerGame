@@ -26,8 +26,6 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     protected override void Awake()
     {
         base.Awake();
-
-      
     }
 
     protected override void Start()
@@ -48,18 +46,17 @@ public class GrabbableGroup : BoneGroup, IGrabbable
             mCustomGravity.Disable();
         bodyOfRigidness.useGravity = false;
         
-
         if (rightFoward)
         {
             if(firstPickup)
-            transform.right = Camera.main.transform.forward * flippedMuliplier;
+                transform.right = Camera.main.transform.forward * flippedMuliplier;
 
             bodyOfRigidness.constraints = (RigidbodyConstraints) 96;
         }
         else
         {
             if(firstPickup)
-            transform.forward = Camera.main.transform.forward * flippedMuliplier;
+                transform.forward = Camera.main.transform.forward * flippedMuliplier;
 
             bodyOfRigidness.constraints = (RigidbodyConstraints)48;
         }
@@ -70,9 +67,8 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         {
             
             yield return new WaitForSeconds(0.4f);
-            //rb.freezeRotation = false;
-            
             gameObject.layer = physicsLayer;
+      
             yield break;
         }
         StartCoroutine(DelayedLayerChange());
@@ -81,11 +77,13 @@ public class GrabbableGroup : BoneGroup, IGrabbable
 
     public void Dropped()
     {
+        
         if (!this)
             return;
         const float maxReleaseYVelocity = 1.0f;
         if (mCustomGravity)
             mCustomGravity.Enable();
+       
         //rb.freezeRotation = false;
         gameObject.layer = physicsLayer;
         Vector3 velocity = bodyOfRigidness.velocity;
