@@ -23871,6 +23871,7 @@ MonoBehaviour:
   leftAuxVertex: {fileID: 0}
   rightAuxVertex: {fileID: 0}
   cylColliderPrefab: {fileID: 0}
+  vertexIndicatorPrefab: {fileID: 0}
   currentCylinderHit: {fileID: 0}
   isBeingDragged: 0
   isLeaf: 0
@@ -28434,6 +28435,7 @@ MonoBehaviour:
   leftAuxVertex: {fileID: 0}
   rightAuxVertex: {fileID: 0}
   cylColliderPrefab: {fileID: 0}
+  vertexIndicatorPrefab: {fileID: 0}
   currentCylinderHit: {fileID: 0}
   isBeingDragged: 0
   isLeaf: 0
@@ -45993,6 +45995,7 @@ MonoBehaviour:
   leftAuxVertex: {fileID: 0}
   rightAuxVertex: {fileID: 0}
   cylColliderPrefab: {fileID: 0}
+  vertexIndicatorPrefab: {fileID: 0}
   currentCylinderHit: {fileID: 0}
   isBeingDragged: 0
   isLeaf: 0
@@ -49657,6 +49660,7 @@ MonoBehaviour:
   leftAuxVertex: {fileID: 0}
   rightAuxVertex: {fileID: 0}
   cylColliderPrefab: {fileID: 0}
+  vertexIndicatorPrefab: {fileID: 0}
   currentCylinderHit: {fileID: 0}
   isBeingDragged: 0
   isLeaf: 0

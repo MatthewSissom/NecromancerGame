@@ -22,6 +22,8 @@ public class BoneGroup : MonoBehaviour
 
     [SerializeField]
     private GameObject cylColliderPrefab;
+    [SerializeField]
+    private GameObject vertexIndicatorPrefab;
 
     protected Collider frontPrimaryCollider;
     protected Collider backPrimaryCollider;
@@ -32,6 +34,12 @@ public class BoneGroup : MonoBehaviour
     private GameObject backPrimaryCylinder;
     private GameObject leftAuxCylinder;
     private GameObject rightAuxCylinder;
+
+    private GameObject frontPrimaryIndicator;
+    private GameObject backPrimaryIndicator;
+    private GameObject leftAuxIndicator;
+    private GameObject rightAuxIndicator;
+
 
     private float cylinderSize;
 
@@ -47,15 +55,24 @@ public class BoneGroup : MonoBehaviour
         frontPrimaryCylinder = Instantiate(cylColliderPrefab, transform);
         frontPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
         frontPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = frontPrimaryVertex;
+        frontPrimaryIndicator = Instantiate(vertexIndicatorPrefab, frontPrimaryVertex.transform.position, Quaternion.identity, transform);
+        
         backPrimaryCylinder = Instantiate(cylColliderPrefab, transform);
         backPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
         backPrimaryCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = backPrimaryVertex;
+        backPrimaryIndicator = Instantiate(vertexIndicatorPrefab, backPrimaryVertex.transform.position, Quaternion.identity, transform);
+
+
         leftAuxCylinder = Instantiate(cylColliderPrefab, transform);
         leftAuxCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
         leftAuxCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = leftAuxVertex;
+        leftAuxIndicator = Instantiate(vertexIndicatorPrefab, leftAuxVertex.transform.position, Quaternion.identity, transform);
+
+
         rightAuxCylinder = Instantiate(cylColliderPrefab, transform);
         rightAuxCylinder.GetComponent<BoneCollisionCylinder>().MyBone = this;
         rightAuxCylinder.GetComponent<BoneCollisionCylinder>().MyVertex = rightAuxVertex;
+        rightAuxIndicator = Instantiate(vertexIndicatorPrefab, rightAuxVertex.transform.position, Quaternion.identity, transform);
 
         frontPrimaryCollider = frontPrimaryCylinder.GetComponent<Collider>();
         backPrimaryCollider = backPrimaryCylinder.GetComponent<Collider>();
@@ -142,7 +159,7 @@ public class BoneGroup : MonoBehaviour
 
     private void PositionCylinder(GameObject cylinder, GameObject vertex)
     {
-        cylinder.transform.position = vertex.transform.position + getAuxiliaryAxis() * cylinderSize;
+        cylinder.transform.position = vertex.transform.position;// + getAuxiliaryAxis() * cylinderSize;
         cylinder.transform.up = getAuxiliaryAxis() * flippedMuliplier;
     }
     public void Attach(BoneGroup parent/*, TableManager tableManager*/)

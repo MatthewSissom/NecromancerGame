@@ -334,6 +334,8 @@ MonoBehaviour:
   rightAuxVertex: {fileID: 8092935938025198024}
   cylColliderPrefab: {fileID: 417202321175220795, guid: ab4539bf2853d914187018ecf43cdf32,
     type: 3}
+  vertexIndicatorPrefab: {fileID: 7828021490013692185, guid: 33ac4ed5ead91984d922aeea8d2763d9,
+    type: 3}
   currentCylinderHit: {fileID: 0}
   isBeingDragged: 0
   isLeaf: 0

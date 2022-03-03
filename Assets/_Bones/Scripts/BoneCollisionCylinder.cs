@@ -41,6 +41,19 @@ public class BoneCollisionCylinder : MonoBehaviour
         }
     }
 
+    private BoneVertexType myType;
+
+    public BoneVertexType MyType
+    {
+        get
+        {
+            return myType;
+        }
+        set
+        {
+            myType = value;
+        }
+    }
     void Awake()
     {
         myLineRenderer = GetComponent<LineRenderer>();
@@ -53,13 +66,22 @@ public class BoneCollisionCylinder : MonoBehaviour
         {
             myLineRenderer.enabled = true;
             myLineRenderer.SetPositions(new Vector3[2]);
-            myLineRenderer.SetPosition(0, myVertex.transform.position);
+            myLineRenderer.SetPosition(0, myVertex.transform.position/*new Vector3(myVertex.transform.position.x,
+                myBone.currentCylinderHit.MyVertex.transform.position.y, 
+                myVertex.transform.position.z)*/);
             myLineRenderer.SetPosition(1, myBone.currentCylinderHit.MyVertex.transform.position);
         } else
         {
             myLineRenderer.enabled = false;
         }
     }
+
+    /*private static Vector3 projToCamera(Vector3 point)
+    {
+        Vector3 v = point - Camera.main.transform.position;
+        float dist = Vector3.Dot(Camera.main.transform.forward, v);
+        return (point - Camera.main.transform.forward * (dist - 0.11f));
+    }*/
 
     public void SetPrimary()
     {
