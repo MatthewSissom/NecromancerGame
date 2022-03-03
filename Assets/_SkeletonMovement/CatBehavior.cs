@@ -38,7 +38,6 @@ public class CatBehavior : MonoBehaviour
     Transform[] orderedTransforms;
 
     SkeletonMovement movement;
-    SkeletonBasePath mPath;
 
     //temp
     float timer;
