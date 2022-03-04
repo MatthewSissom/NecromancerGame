@@ -99,11 +99,12 @@ public class RotationTouch : TouchProxy
 
         if (bone.RightForward)
         {
-            directionality = new Vector3(1.000f, 0, 0);
+            directionality = new Vector3(0, 0, -1.000f);
+            
         }
         else
         {
-            directionality = new Vector3(0, 0, -1.000f);
+            directionality = new Vector3(1.000f, 0, 0);
         }
 
         directionality *= bone.FlippedMultiplier;
@@ -126,7 +127,9 @@ public class RotationTouch : TouchProxy
 
 
         //remove any rotation along toParent, it is unwanted
-        //aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
+        aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
+        Debug.Log(aVelocity);
+
 
         if (aVelocity.magnitude < aVelocityClamp)
         {

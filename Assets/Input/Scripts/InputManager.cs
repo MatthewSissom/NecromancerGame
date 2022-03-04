@@ -15,9 +15,6 @@ public partial class InputManager : MonoBehaviour
 
     static public InputManager Instance;
 
-    //touches.count not working?
-    private int realTouchCount = 0;
-
 
 #if (UNITY_EDITOR || PLATFORM_STANDALONE_WIN)
     // mouse input vars
@@ -34,21 +31,6 @@ public partial class InputManager : MonoBehaviour
         }
     }
 
-    private BoneMovingTouch isRotationTouch(Vector3 pos)
-    {
-        HashSet<BoneMovingTouch> cantBeParent = new HashSet<BoneMovingTouch>();
-
-        switch(realTouchCount)
-        { 
-            case 0:
-                cantBeParent.Add(rotationTouch.Parent);
-                return null;
-            case 1:
-                return movingTouch;
-            default:
-                return null;
-        }
-    }
 
     private void FindAndDisableUnused()
     {
@@ -96,7 +78,6 @@ public partial class InputManager : MonoBehaviour
             TouchProxy mProxy = activeTouches.Find(a => a.id == id);
             if (!mProxy)
             {
-                BoneMovingTouch parent = isRotationTouch(pos);
                 if (!movingTouch.isActiveAndEnabled)
                 {
                     mProxy = NewMoveTouch(pos, id);
@@ -104,7 +85,6 @@ public partial class InputManager : MonoBehaviour
                 else if(!rotationTouch.isActiveAndEnabled)
                 {
                     mProxy = NewRotationTouch(pos, id, movingTouch);
-                    
                 }
             }
             if(mProxy)

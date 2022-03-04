@@ -2446,7 +2446,7 @@ Rigidbody:
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 4
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -2477,6 +2477,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
+  rightFoward: 0
+  flippedMultiplier: 1
 --- !u!114 &-2279397086047176194
 MonoBehaviour:
   m_ObjectHideFlags: 0

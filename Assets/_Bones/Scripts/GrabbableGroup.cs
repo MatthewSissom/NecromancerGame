@@ -112,7 +112,6 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         IEnumerator DelayedLayerChange()
         {
             yield return new WaitForSeconds(0.4f);
-            rb.freezeRotation = false;
             gameObject.layer = physicsLayer;
             ApplyToAll((Bone b, FunctionArgs args) =>
             {
@@ -131,6 +130,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (mCustomGravity)
             mCustomGravity.Enable();
         //rb.freezeRotation = false;
+        gameObject.layer = physicsLayer;
         Vector3 velocity = rb.velocity;
         if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
         {

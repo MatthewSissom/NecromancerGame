@@ -77,7 +77,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mGhost: {fileID: 0}
-  rightFoward: 1
+  rightFoward: 0
   flippedMultiplier: 1
 --- !u!114 &6175298710009342264
 MonoBehaviour:

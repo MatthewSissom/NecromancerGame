@@ -37,9 +37,10 @@ public partial class InputManager : MonoBehaviour
     {
         if (!toDisable.isActiveAndEnabled) return;
 
-       
+        if (toDisable == movingTouch && rotationTouch)
+            DisableTouch(rotationTouch);
+
         toDisable.gameObject.SetActive(false);
-        realTouchCount--;
         if (activeTouches.Count == 1)
         {
             activeTouches.Clear();
@@ -55,24 +56,27 @@ public partial class InputManager : MonoBehaviour
 
     TouchProxy NewMoveTouch(Vector3 position, int id)
     {
-       
-        activeTouches.Add(movingTouch);
-        movingTouch.Move(position, 0);
-        movingTouch.gameObject.SetActive(true);
-        movingTouch.id = id;
+        BoneMovingTouch mTouch = movingTouch;
+
+        activeTouches.Add(mTouch);
+        mTouch.Move(position, 0);
+        mTouch.gameObject.SetActive(true);
+        mTouch.id = id;
 
         return movingTouch;
     }
 
     TouchProxy NewRotationTouch(Vector3 position,int id, BoneMovingTouch parent)
     {
-      
-        activeTouches.Add(rotationTouch);
 
-        rotationTouch.Parent = parent;
-        rotationTouch.ResetTouch(position, 0);
-        rotationTouch.gameObject.SetActive(true);
-        rotationTouch.id = id;
+        RotationTouch mTouch = rotationTouch;
+
+        activeTouches.Add(mTouch);
+
+        mTouch.Parent = parent;
+        mTouch.ResetTouch(position, 0);
+        mTouch.gameObject.SetActive(true);
+        mTouch.id = id;
 
         return rotationTouch;
     }

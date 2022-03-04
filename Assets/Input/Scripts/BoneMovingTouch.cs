@@ -69,15 +69,26 @@ public class BoneMovingTouch : TouchProxy
         {
             float time= 0;
             float magnitude = 1;
-            while (isActiveAndEnabled && activeWatch != null && magnitude > 0)
+            while (isActiveAndEnabled && (activeWatch != null||activeBone != null) && magnitude > 0)
             {
                 time = Time.deltaTime;
-                magnitude = activeWatch.Rb.angularVelocity.magnitude;
-                float scaleFactor = 1 - (deceleration * time / magnitude);
-                if (scaleFactor < 0)
-                    activeWatch.Rb.angularVelocity = new Vector3();
-                else
-                    activeWatch.Rb.angularVelocity = activeWatch.Rb.angularVelocity * scaleFactor;
+                if (activeWatch != null)
+                {
+                    magnitude = activeWatch.Rb.angularVelocity.magnitude;
+                    float scaleFactor = 1 - (deceleration * time / magnitude);
+                    if (scaleFactor < 0)
+                        activeWatch.Rb.angularVelocity = new Vector3();
+                    else
+                        activeWatch.Rb.angularVelocity = activeWatch.Rb.angularVelocity * scaleFactor;
+                }else if(activeBone != null)
+                {
+                    magnitude = activeWatch.Rb.angularVelocity.magnitude;
+                    float scaleFactor = 1 - (deceleration * time / magnitude);
+                    if (scaleFactor < 0)
+                        activeBone.Rb.angularVelocity = new Vector3();
+                    else
+                        activeBone.Rb.angularVelocity = activeWatch.Rb.angularVelocity * scaleFactor;
+                }
                 yield return null;
             }
         }
@@ -119,8 +130,6 @@ public class BoneMovingTouch : TouchProxy
             activeBone.Rb.velocity = toProxy;
         }else if(activeWatch != null)
         {
-            //TODO change active watch movement as needed
-
 
             //-move the active object to the proxy-//
 
