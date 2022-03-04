@@ -168,5 +168,10 @@ public class BoneMovingTouch : TouchProxy
             activeBone.Dropped();
         }
         activeBone = null;
+        if (activeWatch != null)
+        {
+            activeWatch.Dropped();
+        }
+        activeWatch = null;
     }
 }
