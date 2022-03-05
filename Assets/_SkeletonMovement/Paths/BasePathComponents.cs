@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 //moves target at a constant speed from start to end
-public class LinePath : ISkeletonPath, IContinuousSkeletonPath
+public class LinePath : IContinuousSkeletonPath
 {
     public float Duration { get; private set; }
     Vector3 start;
@@ -38,7 +38,7 @@ public class LinePath : ISkeletonPath, IContinuousSkeletonPath
 }
 
 //moves target along a circle on the ground at a constant speed
-public class SemicirclePath : ISkeletonPath, IContinuousSkeletonPath
+public class SemicirclePath : IContinuousSkeletonPath
 {
     public float Duration { get; private set; }
     Vector3 center;
@@ -75,7 +75,7 @@ public class SemicirclePath : ISkeletonPath, IContinuousSkeletonPath
 }
 
 //moves a target along an arc following newtons laws
-public class JumpArc : ISkeletonPath, IContinuousSkeletonPath
+public class JumpArc : IContinuousSkeletonPath
 {
     public float Duration { get; private set; }
     const float gravConst = -4;
