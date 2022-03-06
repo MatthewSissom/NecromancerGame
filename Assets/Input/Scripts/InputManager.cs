@@ -128,9 +128,10 @@ public partial class InputManager : MonoBehaviour
                 Vector3 cameraSpaceVec = pos - center;
                 Vector3 projection = Vector3.Project(cameraSpaceVec, Camera.main.transform.forward);
                 pos = center + (cameraSpaceVec - projection).normalized;
-
-                Vector3 angularVelocity = (activeTouches[0] as BoneMovingTouch).activeWatch.Rb.angularVelocity;
-                (activeTouches[0] as BoneMovingTouch).activeWatch.Rb.angularVelocity = Vector3.Project(angularVelocity, Camera.main.transform.forward);
+               
+               Vector3 angularVelocity = (activeTouches[0] as BoneMovingTouch).activeBone.Rb.angularVelocity;
+               (activeTouches[0] as BoneMovingTouch).activeBone.Rb.angularVelocity = Vector3.Project(angularVelocity, Camera.main.transform.forward);
+         
             }
             else if (rotating)
             {

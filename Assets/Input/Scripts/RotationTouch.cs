@@ -51,7 +51,7 @@ public class RotationTouch : TouchProxy
         base.Move(pos, rad);
         toParent = (parent.transform.position - transform.position).normalized;
 
-        if (parent.activeWatch != null)
+        if (parent.activeBone != null||parent.activeWatch != null)
         {
             parent.CancleStopRotation();
         }
@@ -99,12 +99,12 @@ public class RotationTouch : TouchProxy
 
         if (bone.RightForward)
         {
-            directionality = new Vector3(0, 0, -1.000f);
+            directionality = new Vector3(1.000f, 0, 0);
             
         }
         else
         {
-            directionality = new Vector3(1.000f, 0, 0);
+            directionality = new Vector3(0, 0, 1.000f);
         }
 
         directionality *= bone.FlippedMultiplier;
