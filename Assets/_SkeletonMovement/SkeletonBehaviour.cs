@@ -4,7 +4,7 @@ using UnityEngine;
 
 //Cat behavior is in charge of directing midlevel goals like pathing, pawing at something, looking at something etc.
 //Recives instructions from cat goals which directs high level goals 
-public class CatBehavior : MonoBehaviour
+public class SkeletonBehaviour : MonoBehaviour
 {
 
     [Header("LimbEnds")]
@@ -38,6 +38,11 @@ public class CatBehavior : MonoBehaviour
     Transform[] orderedTransforms;
 
     SkeletonMovement movement;
+    SkeletonPathfinding pathfinding;
+    SkeletonBasePathBuilder pathBuilder;
+
+    // if cat can't change paths immeditely (jumping) queue it instead
+    public Vector3? queuedDestination = null;
 
     //temp
     float timer;

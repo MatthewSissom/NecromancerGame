@@ -17,7 +17,7 @@ public class tempCatPlacer : MonoBehaviour
         if (!EmptyArmature)
             return;
         EmptyArmature.transform.rotation = Quaternion.Euler(0, 45, 0);
-        var behavior = EmptyArmature.GetComponent<CatBehavior>();
+        var behavior = EmptyArmature.GetComponent<SkeletonBehaviour>();
         if(behavior.transform.parent)
             behavior.transform.parent = null;
         behavior.followTarget = followTarget;

@@ -2,19 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-//Cat movement is in charge of the lowest level goals like moving a specific limb to a specific location
-//Recives instrucitons from cat behavior
+//Cat movement is in charge of the low level goals like coordinating limb movment
+//Recives a base path from cat behavior
 public class SkeletonMovement
 {
-    public float GroundYValue { get; private set; }
-    public float ChestHeight { get; private set; }
-
-    float distFromGroundToChest = 0;
-    float speed;
-
-
-    // if cat can't change paths immeditely (jumping) queue it instead
-    public Vector3? queuedDestination = null;
     public event System.Action PathFinished;
 
     CompositePath path;
@@ -41,12 +32,6 @@ public class SkeletonMovement
             path.PathStarted += limb.PathStarted;
             path.JumpStarted += limb.StartJump;
         }
-    }
-
-    public void SetGroundYValue(float val)
-    {
-        GroundYValue = val;
-        ChestHeight = val + distFromGroundToChest;
     }
 
     private void LimbInit(List<LimbEnd> limbEnds)

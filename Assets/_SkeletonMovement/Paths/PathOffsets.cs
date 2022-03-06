@@ -12,18 +12,6 @@ abstract public class SkeletonPathOffset : ISkeletonPath
         return ApplyOffset(time, BasePath.GetPointOnPath(time));
     }
 
-    public static SkeletonPathOffset CombineOffsets(ISkeletonPath basePath, params SkeletonPathOffset[] offsets)
-    {
-        if (offsets.Length == 0)
-            return null;
-
-        offsets[0].BasePath = basePath;
-        for(int i = 1; i < offsets.Length; i++)
-        {
-            offsets[i].BasePath = offsets[i - 1];
-        }
-        return offsets[offsets.Length - 1]; 
-    }
     abstract protected Vector3 ApplyOffset(float time, Vector3 inital);
 }
 
@@ -70,5 +58,39 @@ public class PerpendicularOffset : SkeletonPathOffset
     protected override Vector3 ApplyOffset(float time, Vector3 inital)
     {
         return perpGetter.GetTangent(time) * mult + inital;
+    }
+}
+
+// A wrapper for multiple path offsets applied in series
+// Offsets are applied in the order they are provided.
+public class CompositeOffsite : SkeletonPathOffset
+{
+    public override ISkeletonPath BasePath 
+    { 
+        // when changing base paths, switch out base path of the very first offset
+        get => seriesStart.BasePath; 
+        set => seriesStart.BasePath = value; 
+    }
+
+    SkeletonPathOffset seriesStart = null;
+    SkeletonPathOffset seriesEnd = null;
+    public CompositeOffsite(params SkeletonPathOffset[] components)
+    {
+        if (components.Length < 2)
+            Debug.LogError("Composite offset needs at least two components to function correctly");
+
+        seriesStart = components[0];
+        seriesEnd = components[components.Length - 1];
+
+        // apply offsets in the order they're provided
+        for (int i = 1; i < components.Length; i++)
+        {
+            components[i].BasePath = components[i - 1];
+        }
+    }
+
+    protected override Vector3 ApplyOffset(float time, Vector3 inital)
+    {
+        return seriesEnd.GetPointOnPath(time);
     }
 }

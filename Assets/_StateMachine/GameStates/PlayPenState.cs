@@ -20,7 +20,7 @@ public class PlayPenState : State
             return;
         }
 
-        var behavior = playSkeleton.GetComponent<CatBehavior>();
+        var behavior = playSkeleton.GetComponent<SkeletonBehaviour>();
         if (behavior.transform.parent)
             behavior.transform.parent = null;
 

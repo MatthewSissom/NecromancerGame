@@ -1,4 +1,4 @@
-﻿#define USING_IK
+﻿//#define USING_IK
 
 using System.Collections;
 using System.Collections.Generic;
@@ -779,7 +779,7 @@ public class BoneAssembler : State
             distances[i] = (spineAlignedTargets[i].transform.position - emptyArmature.transform.position).magnitude;
         }
 
-        var behavior = emptyArmature.gameObject.AddComponent<CatBehavior>();
+        var behavior = emptyArmature.gameObject.AddComponent<SkeletonBehaviour>();
         behavior.BehaviorInit(
             limbEnds,
             spineAlignedTargets.ToArray(),
