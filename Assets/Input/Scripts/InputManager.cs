@@ -20,6 +20,7 @@ public partial class InputManager : MonoBehaviour
     // mouse input vars
     bool holdingMouseDown = false;
     bool rotating = false;
+    bool activeTouchesFromFingersExist = false;
 #endif
 
     //disables all proxies
@@ -35,11 +36,12 @@ public partial class InputManager : MonoBehaviour
     private void FindAndDisableUnused()
     {
 #if UNITY_EDITOR
-        if (DebugModes.UseMouseInput)
+        if (!activeTouchesFromFingersExist)
             return;
 #elif UNITY_STANDALONE_WIN
-            return;
+        return;
 #endif
+
         foreach (TouchProxy tp in activeTouches)
         {
             if (!tp.moved)
@@ -58,6 +60,11 @@ public partial class InputManager : MonoBehaviour
             }
             toDeactivate = null;
         }
+
+#if UNITY_EDITOR
+        if (activeTouches.Count == 0)
+            activeTouchesFromFingersExist = false;
+#endif
     }
 
     // Update is called once per frame
@@ -89,9 +96,11 @@ public partial class InputManager : MonoBehaviour
             }
             if(mProxy)
                 mProxy.Move(pos, rad);
+#if UNITY_EDITOR
+            activeTouchesFromFingersExist = true;
+#endif
         }
         FindAndDisableUnused();
-
         #endregion
 
         #region mouseInput
@@ -179,11 +188,11 @@ public partial class InputManager : MonoBehaviour
     private bool UseMouseInputThisFrame()
     {
 #if UNITY_EDITOR
-        return DebugModes.UseMouseInput;
+        return DebugModes.UseMouseInput && !activeTouchesFromFingersExist;
 #elif UNITY_STANDALONE_WIN
-        return true
+        return true;
 #else
-        return false
+        return false;
 #endif
     }
 
