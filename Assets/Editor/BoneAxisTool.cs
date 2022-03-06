@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 [EditorTool("Bone Axis Editor",typeof(Bone))]
 public class BoneAxisTool : EditorTool
-{
+{/*
     //bone data
     Bone script;
     Transform boneTrans;
@@ -342,5 +342,5 @@ public class BoneAxisTool : EditorTool
         AssetDatabase.Refresh();
 
         #endif
-    }
+    }*/
 }

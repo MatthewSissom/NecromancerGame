@@ -32,11 +32,10 @@ public class CatBehavior : MonoBehaviour
     [SerializeField]
     private Transform tailTransform;
 
-    public bool Initalized { get; private set; } = false;
-    
     //holds transforms along the main line of the cat 
     Transform[] orderedTransforms;
 
+    bool initialized = false;
     CatMovement movement;
     CatPath mPath;
 
@@ -56,11 +55,14 @@ public class CatBehavior : MonoBehaviour
         get { return movement.ChestHeight; }
     }
 
+    CatStablizer stablizer;
+    bool stablizing = false;
+
     public void BehaviorInit(List<LimbEnd> limbEnds, Transform[] orderedTransforms, float[] transformDistances, int shoulderIndex)
     {
-        if (Initalized)
+        if (initialized)
             return;
-        Initalized = true;
+        initialized = true;
 
         this.orderedTransforms = orderedTransforms;
         this.limbEnds = limbEnds;
@@ -90,17 +92,17 @@ public class CatBehavior : MonoBehaviour
     {
         void CleanUp()
         {
-            GameManager.Instance.RemoveEventMethod(typeof(GameCleanUp), "Begin", CleanUp);
+            GameManager.Instance.RemoveEventMethod(typeof(GameInit), "Begin", CleanUp);
             Destroy(gameObject.transform.root.gameObject);
         }
         if(GameManager.Instance)
-            GameManager.Instance.AddEventMethod(typeof(GameCleanUp), "Begin", CleanUp);
+            GameManager.Instance.AddEventMethod(typeof(GameInit), "Begin", CleanUp);
 
-        if (Initalized)
+        if (initialized)
             return;
-        Initalized = true;
+        initialized = true;
 
-        Debug.Log("Warning: Start init used on catbehavior");
+        Debug.LogError("Start init used on catbehavior");
 
         orderedTransforms = new Transform[4];
         orderedTransforms[0] = tailTransform;
@@ -115,7 +117,7 @@ public class CatBehavior : MonoBehaviour
         delays[3] = -(transform.position - headTransform.position).magnitude / speed * 2;
 
         movement = new CatMovement(limbEnds,speed);
-        var temp = new CatPathWithNav(ChestHeight, delays, orderedTransforms,2);
+        var temp = new CatPathWithNav(transform.position.y, delays, orderedTransforms,2);
         temp.GroundHeight = movement.GroundYValue;
         mPath = temp;
         mPath.PathFinished += () => { pathing = false; };
@@ -141,6 +143,8 @@ public class CatBehavior : MonoBehaviour
     {
         if(followTarget && (followTarget.transform.position - targetPreviousPos).magnitude > 0.05f)
             PathToPoint(followTarget.transform.position);
+        if(stablizing)
+            stablizer.Update(Time.deltaTime);
 
         Vector3[] vectors = new Vector3[4];
         if (pathing)

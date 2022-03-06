@@ -162,8 +162,7 @@ public class LimbEnd : MonoBehaviour
 
     public void StartJump(Jump jumpArc)
     {
-        if(currentRoutine != null)
-            StopCoroutine(currentRoutine);
+        StopCoroutine(currentRoutine);
         LimbState = LimbStates.Jumping;
 
         StartCoroutine(JumpRoutine(jumpArc));
@@ -171,7 +170,7 @@ public class LimbEnd : MonoBehaviour
 
     public void EndJump()
     {
-        if(LimbState == LimbStates.Jumping && currentRoutine != null)
+        if(LimbState == LimbStates.Jumping)
         {
             StopCoroutine(currentRoutine);
         }
@@ -211,7 +210,7 @@ public class LimbEnd : MonoBehaviour
     private void EndPush()
     {
         //check to see if end push was not called from the push coroutine
-        if (LimbState == LimbStates.Pushing && currentRoutine != null)
+        if (LimbState == LimbStates.Pushing)
         {
             StopCoroutine(currentRoutine);
             LimbState = LimbStates.Standing;

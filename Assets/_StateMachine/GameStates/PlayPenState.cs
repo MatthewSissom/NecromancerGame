@@ -20,19 +20,21 @@ public class PlayPenState : State
             return;
         }
 
-        var behavior = playSkeleton.GetComponent<CatBehavior>();
-        if (behavior.transform.parent)
-            behavior.transform.parent = null;
+        //TODO: fix cat behavior stuff
+
+    //    var behavior = playSkeleton.GetComponent<CatBehavior>();
+    //    if (behavior.transform.parent)
+    //        behavior.transform.parent = null;
 
         // set ai vars
-        behavior.followTarget = PlayPenInput.Instance.FollowTarget;
-        behavior.GroundHeight = skeletonSpawnPoint.transform.position.y;
+    //    behavior.followTarget = PlayPenInput.Instance.FollowTarget;
+    //    behavior.GroundHeight = skeletonSpawnPoint.transform.position.y;
 
         // orient skeleton
         playSkeleton.transform.forward = Vector3.right;
         playSkeleton.transform.up = Vector3.up;
         Vector3 spawnPoint = skeletonSpawnPoint.transform.position;
-        playSkeleton.transform.position = new Vector3(spawnPoint.x, behavior.ChestHeight, spawnPoint.z);
+    //    playSkeleton.transform.position = new Vector3(spawnPoint.x, behavior.ChestHeight, spawnPoint.z);
 
         // set bone colors back to white if needed
         void ChangeMatRecursive(Transform t)

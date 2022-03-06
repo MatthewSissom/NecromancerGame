@@ -38,9 +38,6 @@ public partial class CatPath
     //how much time has elapsed since the path was first started
     float elapsedTime;
 
-    // if cat can't change paths immeditely (jumping) queue it instead
-    public Vector3? queuedDestination = null;
-
     //---events---//
     public event System.Action PathFinished;
     public event System.Action PathStarted;
@@ -61,15 +58,18 @@ public partial class CatPath
         this.transforms = transforms;
         this.shoulderIndex = shoulderIndex;
         shoulderTransform = transforms[shoulderIndex];
-
-        PathFinished += () => { queuedDestination = null; };
     }
 
     public virtual bool PathToPoint(Vector3 destination)
     {
         if(FollowingSplit)
         {
-            queuedDestination = destination;
+            void QueueNewPath()
+            {
+                PathToPoint(destination);
+                PathReset -= QueueNewPath;
+            }
+            PathReset += QueueNewPath;
             return true;
         }
 
@@ -90,7 +90,7 @@ public partial class CatPath
             return false;
         }
 
-        ResetPath();
+         ResetPath();
         Vector3 pos = shoulderTransform.position;
         Vector3 forward = shoulderTransform.forward;
         foreach (var destination in destinations)
@@ -201,7 +201,7 @@ public partial class CatPath
             //otherwise switch back to following standard paths
             else
             {
-                 ToggleFollowingSplit();
+                ToggleFollowingSplit();
             }
             return;
         }
@@ -282,9 +282,7 @@ public partial class CatPath
         Vector3 previousPos = default;
         var newPath = new LinkedList<PathComponent>();
 
-
-        //no additional information, use linar paths for transforms behind the shoulders
-        if (path == null || path.First == null)
+        if (path == null)
         {
             //itterate backwards to go from head to tail
             for (int i = transforms.Length - 2; i >= 0; i--)
@@ -341,6 +339,7 @@ public partial class CatPath
             elapsedTime = delays[0];
         }
 
+        //start every path with linar paths for transforms behind the shoulders to follow
         path = newPath;
 
         PathReset?.Invoke();
@@ -388,17 +387,6 @@ public partial class CatPath
         //reset path needs in tack current path
         var oldPath = path;
         ResetPath();
-
-        // first check to see if a new path should be followed instead
-        if (queuedDestination != null)
-        {
-            bool succeded = PathToPoint((Vector3)queuedDestination);
-            queuedDestination = null;
-
-            // if path wasn't successful, continue with old path
-            if(succeded)
-                return;
-        }
 
         //add old path back to the new path, except for 
         //the traced split component and the padding
@@ -450,34 +438,6 @@ public partial class CatPath
                 previousPos = path.First.Value.GetPointOnPath(path.Last.Value.Duration);
             }
         }
-
-#if UNITY_EDITOR
-        // sample points on path for debugging
-        var node = path.First;
-        PathComponent currentPathComponent = node.Value;
-        List<Vector3> points = new List<Vector3>();
-        float simulatedTime = 0;
-        const float simulatedTimeStep = .05f;
-        while (node != null)
-        {
-            if (currentPathComponent.Duration > simulatedTime)
-            {
-                SplitPath sp = node.Value as SplitPath;
-                if (sp != null)
-                    sp.SetIndex(shoulderIndex);
-
-                points.Add(currentPathComponent.GetPointOnPath(simulatedTime));
-                simulatedTime += simulatedTimeStep;
-            }
-            else
-            {
-                node = node.Next;
-                simulatedTime -= currentPathComponent.Duration;
-                currentPathComponent = node?.Value;
-            }
-        }
-        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.TruePath, points);
-#endif
 
         PathStarted?.Invoke();
     }

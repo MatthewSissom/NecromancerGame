@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BoneCollisionHandler
-{
+{/*
     //holds all the other bones a bone is colliding with
     private Dictionary<Bone, LinkedList<BoneGroup>> collisions;
     //provides an effecient way to find a connectionArea given a group id
@@ -318,5 +318,5 @@ public class BoneCollisionHandler
         return null;
     }
 
-    #endregion
+    #endregion*/
 }

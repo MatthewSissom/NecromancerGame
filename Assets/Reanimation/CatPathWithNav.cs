@@ -21,7 +21,12 @@ public class CatPathWithNav : CatPath
     {
         if (FollowingSplit)
         {
-            queuedDestination = destination;
+            void QueueNewPath()
+            {
+                PathToPoint(destination);
+                PathReset -= QueueNewPath;
+            }
+            PathReset += QueueNewPath;
             return true;
         }
 
@@ -32,13 +37,9 @@ public class CatPathWithNav : CatPath
         NavMeshPath mPath = new NavMeshPath();
         if (!NavMesh.CalculatePath(pathStart, destination, NavMesh.AllAreas, mPath))
         {
-            // no path, return
+            Debug.LogError("no path");
             return false;
         }
-
-#if UNITY_EDITOR
-        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.NavMeshPath, mPath.corners);
-#endif
 
         var points = new List<Vector3>();
         Vector3 previous = shoulderTransform.position;
@@ -81,10 +82,6 @@ public class CatPathWithNav : CatPath
         Vector3 lastVector = mPath.corners[mPath.corners.Length-1];
         lastVector.y = currentGround + catChestHeight;
         points.Add(lastVector);
-
-#if UNITY_EDITOR
-        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.ModifiedNavMeshPath, points);
-#endif
 
         return PathToPoints(points);
     }

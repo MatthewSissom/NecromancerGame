@@ -1,196 +1,220 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FunctionArgs { }
-public delegate void GroupFunction(Bone applyTo, FunctionArgs e);
-
+public enum BoneGroupType { Neck, Head, Ribcage, Spine, Pelvis, Tail, FrontLeftLeg, FrontLeftFoot, FrontRightLeg, FrontRightFoot, BackLeftLeg, BackLeftFoot, BackRightLeg, BackRightFoot}
+public enum BoneVertexType { FrontPrimary, BackPrimary, LeftAux, RightAux}
 public class BoneGroup : MonoBehaviour
 {
+
+    [SerializeField]
+    protected GameObject frontPrimaryVertex;
+
+    [SerializeField]
+    protected GameObject backPrimaryVertex;
+
+    [SerializeField]
+    protected GameObject leftAuxVertex;
+
+    [SerializeField]
+    protected GameObject rightAuxVertex;
+
+    [SerializeField]
+    private GameObject cylColliderPrefab;
+    [SerializeField]
+    private GameObject vertexIndicatorPrefab;
+
+    protected Collider frontPrimaryCollider;
+    protected Collider backPrimaryCollider;
+    protected Collider leftAuxCollider;
+    protected Collider rightAuxCollider;
+
+    private GameObject frontPrimaryCylinder;
+    private GameObject backPrimaryCylinder;
+    private GameObject leftAuxCylinder;
+    private GameObject rightAuxCylinder;
+
+    private GameObject frontPrimaryIndicator;
+    private GameObject backPrimaryIndicator;
+    private GameObject leftAuxIndicator;
+    private GameObject rightAuxIndicator;
+
+
+    private float cylinderSize;
+
     protected BoneGroup parent;
-    protected List<BoneGroup> children;
-    protected Bone mBone;
-    protected int groupID;
-    protected int myID;
+    protected BoneVertexType parentVertexCollisionType;
+    protected Dictionary<BoneVertexType, BoneGroup> children;
 
-
-    public BoneGroup Parent
-    {
-        set 
-        {
-            if (parent)
-            {
-                parent.removeChild(this);
-            }
-            parent = value;
-        }
-    }
-
-    public int GroupID { 
-        get { return groupID; } 
-        set
-        {
-            groupID = value;
-            foreach(BoneGroup b in children)
-            {
-                b.GroupID = value;
-            }
-        }
-    }
+    [SerializeField] //for debugging
+    public BoneCollisionCylinder currentCylinderHit;
 
     protected virtual void Awake()
     {
-        children = new List<BoneGroup>();
-        if (BoneManager.Instance)
-        {
-            myID = BoneManager.Instance.GetNewGroupID();
-            groupID = myID;
-        }
-        else
-            myID = -1;
-        mBone = gameObject.GetComponent<Bone>();
-    }
+        children = new Dictionary<BoneVertexType, BoneGroup>();
+        frontPrimaryCylinder = Instantiate(cylColliderPrefab, transform); 
+        frontPrimaryIndicator = Instantiate(vertexIndicatorPrefab, frontPrimaryVertex.transform.position, Quaternion.identity, transform);
+        InitCylinder(frontPrimaryCylinder, frontPrimaryIndicator, BoneVertexType.FrontPrimary);
+        
+        backPrimaryCylinder = Instantiate(cylColliderPrefab, transform); 
+        backPrimaryIndicator = Instantiate(vertexIndicatorPrefab, backPrimaryVertex.transform.position, Quaternion.identity, transform);
+        InitCylinder(backPrimaryCylinder, backPrimaryIndicator, BoneVertexType.BackPrimary); 
+        
 
-    // Start is called before the first frame update
-    virtual protected void Start()
-    {
-        if(myID == -1)
-        {
-            myID = BoneManager.Instance.GetNewGroupID();
-            groupID = myID;
-        }
-    }
-
-    //Combines two groups in to a single group
-    //prefered parent is usually made the parent of the tree, unless it would be expensive to do so.
-    //if making the prefered group node the parent is important set preferedMustBeParent to true
-    public static void CombineGroups(BoneGroup preferedParent, BoneGroup other, bool preferedMustBeParent = false)
-    {
-        //check to see if groups are already the same
-        if (preferedParent.groupID == other.groupID)
-            return;
-        //if other has no parent make prefered the parent
-        if (!other.parent)
-        {
-            preferedParent.addChild(other);
-            other.ResetID();
-        }
-        //make other the parent if possible to avoid rearanging trees
-        else if (!preferedParent.parent && !preferedMustBeParent)
-        {
-            Debug.Log("Non ideal parenting");
-            other.addChild(preferedParent);
-            preferedParent.ResetID();
-        }
-        //if needed rearange the tree of other so that prefered can be it's parent
-        else
-        {
-            other.makeRoot();
-            preferedParent.addChild(other);
-            other.ResetID();
-        }
-    }
+        leftAuxCylinder = Instantiate(cylColliderPrefab, transform);
+        leftAuxIndicator = Instantiate(vertexIndicatorPrefab, leftAuxVertex.transform.position, Quaternion.identity, transform);
+        InitCylinder(leftAuxCylinder, leftAuxIndicator, BoneVertexType.LeftAux);
 
 
-    public delegate void applyToAllType(GroupFunction func, FunctionArgs e = null);
-    //calls the passeed function on each member of the bone group, passing in the bone and the given function args as peramiters
-    public virtual void ApplyToAll(GroupFunction func, FunctionArgs e = null)
-    {
-        void ApplyFuncRecursive(BoneGroup toApply)
+        rightAuxCylinder = Instantiate(cylColliderPrefab, transform);
+        rightAuxIndicator = Instantiate(vertexIndicatorPrefab, rightAuxVertex.transform.position, Quaternion.identity, transform);
+        InitCylinder(rightAuxCylinder, rightAuxIndicator, BoneVertexType.RightAux);
+
+        frontPrimaryCollider = frontPrimaryCylinder.GetComponent<Collider>();
+        backPrimaryCollider = backPrimaryCylinder.GetComponent<Collider>();
+        leftAuxCollider = leftAuxCylinder.GetComponent<Collider>();
+        rightAuxCollider = rightAuxCylinder.GetComponent<Collider>();
+
+        cylinderSize = frontPrimaryCylinder.transform.lossyScale.y;
+
+        if(isAttached)
         {
-            //TEMP shouldn't need null check, result of tableConArea
-            if (toApply.mBone)
-                func(toApply.mBone, e);
-            foreach (BoneGroup bg in toApply.children)
-            {
-                ApplyFuncRecursive(bg);
-            }
+            //transform.right = Vector3.right;
+            //transform.forward = Vector3.Cross(Vector3.right, Camera.main.transform.forward * -1);
+            //transform.RotateAround(tra)
+        }
+        else 
+        {
+            frontPrimaryCylinder.SetActive(false);
+            backPrimaryCylinder.SetActive(false);
+            leftAuxCylinder.SetActive(false);
+            rightAuxCylinder.SetActive(false);
         }
 
-        //start at group root and filer down to all children
-        ApplyFuncRecursive(GetRoot());
     }
 
-    //returns the root of this tree
-    public BoneGroup GetRoot()
+    protected virtual void Start()
     {
-        if (parent)
-            return parent.GetRoot();
-        return this;
+        
     }
 
-    //gets a list of all bone components in this tree
-    public List<Bone> GetAllBones()
+    protected virtual void FixedUpdate()
     {
-        List<Bone> allBones = new List<Bone>();
-
-        void GetBoneRecursive(BoneGroup toCheck)
+        if(isRoot)
         {
-            if (toCheck.mBone)
-                allBones.Add(toCheck.mBone);
-            foreach(BoneGroup bg in toCheck.children)
-            {
-                GetBoneRecursive(bg);
-            }
+            transform.forward = Camera.main.transform.forward;
         }
+        Debug.DrawLine(getPrimaryMidpoint(), getPrimaryMidpoint() + getAuxiliaryAxis() * 0.5f, Color.blue);
 
-        GetBoneRecursive(GetRoot());
-        return allBones;
+        Debug.DrawLine(getVertexPosition(BoneVertexType.FrontPrimary), getVertexPosition(BoneVertexType.FrontPrimary) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+        Debug.DrawLine(getVertexPosition(BoneVertexType.BackPrimary), getVertexPosition(BoneVertexType.BackPrimary) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+        Debug.DrawLine(getVertexPosition(BoneVertexType.LeftAux), getVertexPosition(BoneVertexType.LeftAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+        Debug.DrawLine(getVertexPosition(BoneVertexType.RightAux), getVertexPosition(BoneVertexType.RightAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+
+        PositionCylinder(frontPrimaryCylinder, frontPrimaryVertex);
+        PositionCylinder(backPrimaryCylinder, backPrimaryVertex);
+        PositionCylinder(leftAuxCylinder, leftAuxVertex);
+        PositionCylinder(rightAuxCylinder, rightAuxVertex);
     }
 
-    protected virtual void RemoveChild(BoneGroup toRemove)
+    public bool isBeingDragged;
+    public bool isLeaf;
+    public bool isAttached;
+    public bool isRoot;
+    //is right the actual forward vector
+    public bool RightForward { get; private set; }
+    //Does this bone need to be flipped by default to fit the canvas of the cat? Should be -1 or 1 but kept an int to be easily worked into our code
+    public int FlippedMultiplier { get; private set; }
+
+    private GameObject getVertex(BoneVertexType type)
     {
-        removeChild(toRemove);
-        toRemove.ResetID();
-    }
-
-
-    #region Helpers
-
-
-    //changes the id of this node to match it's parent
-    private void ResetID()
-    {
-        if (parent) GroupID = parent.groupID;
-        else GroupID = myID;
-    }
-
-    //adds a child to this group
-    private void addChild(BoneGroup child)
-    {
-        children.Add(child);
-        child.Parent = this;
-    }
-
-    //removes a child from this group
-    private void removeChild(BoneGroup child)
-    {
-        children.Remove(child);
-        child.parent = null;
-    }
-
-    //makes this bone the root of the tree
-    public void makeRoot()
-    {
-        BoneGroup temp = this;
-        //find the path from this node to the root
-        List<BoneGroup> path = new List<BoneGroup>();
-        while (temp)
+        switch (type)
         {
-            path.Add(temp);
-            temp = temp.parent;
+            case BoneVertexType.FrontPrimary:
+                return frontPrimaryVertex;
+            case BoneVertexType.BackPrimary:
+                return backPrimaryVertex;
+            case BoneVertexType.LeftAux:
+                return leftAuxVertex;
+            case BoneVertexType.RightAux:
+                return rightAuxVertex;
         }
-
-        //swap nodes along the path until this node is the root
-        BoneGroup child;
-        for (int i = path.Count - 2; i != -1; --i)
-        {
-            child = path[i];
-            child.addChild(child.parent);
-            child.parent.removeChild(child);
-            child.ResetID();
-        }
+        throw new Exception();
     }
 
-    #endregion
+    public Vector3 getVertexPosition(BoneVertexType type)
+    {
+        return getVertex(type).transform.position;
+    }
+
+    public Vector3 getPrimaryMidpoint()
+    {
+        return (getVertexPosition(BoneVertexType.FrontPrimary) + getVertexPosition(BoneVertexType.BackPrimary)) / 2;
+    }
+
+    public Vector3 getAuxiliaryAxis()
+    {
+        return (getVertexPosition(BoneVertexType.LeftAux) - getVertexPosition(BoneVertexType.RightAux)).normalized;
+    }
+
+    private void PositionCylinder(GameObject cylinder, GameObject vertex)
+    {
+        cylinder.transform.position = vertex.transform.position;// + getAuxiliaryAxis() * cylinderSize;
+        cylinder.transform.up = getAuxiliaryAxis() * FlippedMultiplier;
+    }
+
+    private void InitCylinder(GameObject cylinder, GameObject indicator, BoneVertexType type)
+    {
+        BoneCollisionCylinder colCyl = cylinder.GetComponent<BoneCollisionCylinder>();
+
+        colCyl.MyBone = this;
+        colCyl.MyType = type;
+        colCyl.MyVertex = getVertex(type);
+        colCyl.MyIndicator = indicator;
+    }
+
+    public void Attach(BoneGroup parent/*, TableManager tableManager*/)
+    {
+        Debug.Log("Attaching to: ");
+        Debug.Log(parent);
+        this.parent = parent;
+        isLeaf = true;
+        parent.isLeaf = false;
+        isAttached = true;
+    }
+
+    protected void OnPickup()
+    {
+        isBeingDragged = true;
+
+        frontPrimaryCylinder.SetActive(true);
+        backPrimaryCylinder.SetActive(true);
+        leftAuxCylinder.SetActive(true);
+        rightAuxCylinder.SetActive(true);
+    }
+
+    protected void OnNoCollideDrop()
+    {
+        isBeingDragged = false;
+
+        frontPrimaryCylinder.SetActive(false);
+        backPrimaryCylinder.SetActive(false);
+        leftAuxCylinder.SetActive(false);
+        rightAuxCylinder.SetActive(false);
+    }
+
+    protected void OnCollideDrop()
+    {
+        BoneGroup otherGroup = currentCylinderHit.MyBone;
+
+        isBeingDragged = false;
+
+        frontPrimaryCylinder.SetActive(true);
+        backPrimaryCylinder.SetActive(true);
+        leftAuxCylinder.SetActive(true);
+        rightAuxCylinder.SetActive(true);
+
+        Attach(otherGroup);
+    }
 }
