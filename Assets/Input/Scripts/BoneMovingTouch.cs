@@ -106,10 +106,10 @@ public class BoneMovingTouch : TouchProxy
             return;
         }
         GrabbableGroup c = other.GetComponentInParent<GrabbableGroup>(); 
-        if (c != null)  //TODO: add && !c.isRoot && (!c.isAttached || c.isLeaf) to if statement on assembly merge
+        if (c != null && !c.isRoot && (!c.isAttached || c.isLeaf))
         {
             c.PickedUp();
-            SetActive(c, Vector3.zero, Vector3.zero); //TODO: replace 0 vectors with c.PrimaryMidpoint and c.AuxileryAxis
+            SetActive(c, c.PrimaryMidpoint, c.AuxilieryAxis); //TODO: replace 0 vectors with c.PrimaryMidpoint and c.AuxileryAxis
             StopRotation(1000 * Mathf.Deg2Rad);
             //touchLights.Play();
         }

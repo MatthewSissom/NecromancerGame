@@ -123,13 +123,11 @@ public class RotationTouch : TouchProxy
         velocityAroundUp = Mathf.Sign(angleDistAroundUp) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundUp) * acceleration) * Mathf.Deg2Rad - velocityAroundUp;
         
         //apply corrections
-        aVelocity += velocityAroundUp * directionality;
-
+        aVelocity -= velocityAroundUp * directionality;
 
         //remove any rotation along toParent, it is unwanted
-        aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
+        aVelocity += Vector3.Dot(aVelocity, toParent) * toParentPerp;
         Debug.Log(aVelocity);
-
 
         if (aVelocity.magnitude < aVelocityClamp)
         {

@@ -14,15 +14,16 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     const float realBoneDensity = 1850;
     const float density = realBoneDensity * 5;
 
-    private Rigidbody bodyOfRigidness;
+    private Rigidbody rB;
     private CustomGravity mCustomGravity;
 
     private bool firstPickup = true;
 
     Transform IGrabbable.transform { get { return transform; } }
-    public Rigidbody Rb { get {  return bodyOfRigidness; } }
+    public Rigidbody Rb { get {  return rB; } }
     public Vector3 PrimaryMidpoint { get { return getPrimaryMidpoint(); } }
     public Vector3 AuxilieryAxis { get { return getAuxiliaryAxis(); } }
+
     protected override void Awake()
     {
         base.Awake();
@@ -32,7 +33,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     {
         base.Start();
         //physics init
-        bodyOfRigidness = GetComponent<Rigidbody>();
+        rB = GetComponent<Rigidbody>();
         ResetMass();
         mCustomGravity = GetComponent<CustomGravity>();
     }
@@ -44,21 +45,21 @@ public class GrabbableGroup : BoneGroup, IGrabbable
       
         if (mCustomGravity)
             mCustomGravity.Disable();
-        bodyOfRigidness.useGravity = false;
+        rB.useGravity = false;
         
         if (RightForward)
         {
             if(firstPickup)
                 transform.right = Camera.main.transform.forward * FlippedMultiplier;
 
-            bodyOfRigidness.constraints = (RigidbodyConstraints) 96;
+            rB.constraints = (RigidbodyConstraints) 96;
         }
         else
         {
             if(firstPickup)
                 transform.forward = Camera.main.transform.forward * FlippedMultiplier;
 
-            bodyOfRigidness.constraints = (RigidbodyConstraints)48;
+            rB.constraints = (RigidbodyConstraints)48;
         }
 
         OnPickup();
@@ -86,10 +87,10 @@ public class GrabbableGroup : BoneGroup, IGrabbable
        
         //rb.freezeRotation = false;
         gameObject.layer = physicsLayer;
-        Vector3 velocity = bodyOfRigidness.velocity;
+        Vector3 velocity = rB.velocity;
         if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
         {
-            bodyOfRigidness.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
+            rB.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
         }
 
         if(currentCylinderHit != null)
@@ -99,13 +100,13 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         {
             OnNoCollideDrop();
         }
-        bodyOfRigidness.freezeRotation = true;
+        rB.freezeRotation = true;
     }
 
     private void ResetMass()
     {
-        bodyOfRigidness.SetDensity(density);
+        rB.SetDensity(density);
         //mass is considered temporary and will be written over unless directly set
-        bodyOfRigidness.mass = bodyOfRigidness.mass;
+        rB.mass = rB.mass;
     }
 }
