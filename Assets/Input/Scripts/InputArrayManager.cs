@@ -108,7 +108,7 @@ public partial class InputManager : MonoBehaviour
 #if UNITY_STANDALONE_WIN
         for (int i = 0; i < 5; i++)
         {
-            movingTouches[i].offset = new Vector3(.001f,.001f,0);
+            movingTouch.offset = new Vector3(.001f,.001f,0);
         }
 #endif
     }

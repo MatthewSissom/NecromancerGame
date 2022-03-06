@@ -92,18 +92,11 @@ public partial class InputManager : MonoBehaviour
         }
         FindAndDisableUnused();
 
-#endregion
+        #endregion
 
-#region mouseInput
-#if UNITY_EDITOR
-        if (DebugModes.UseMouseInput)
-#elif UNITY_STANDALONE_WIN
-        if (true)
-#else
-        if (false)
-#endif
-        {
-#if (UNITY_EDITOR || UNITY_STANDALONE_WIN)
+        #region mouseInput
+        if(UseMouseInputThisFrame())
+        { 
             Vector3 pos = Input.mousePosition;
             pos.z = Camera.main.transform.position.y - height;
             Vector3 radVec = pos + new Vector3(5, 0, 0);
@@ -179,9 +172,19 @@ public partial class InputManager : MonoBehaviour
                     //});
                 }
             }
-#endif
         }
 #endregion
+    }
+
+    private bool UseMouseInputThisFrame()
+    {
+#if UNITY_EDITOR
+        return DebugModes.UseMouseInput;
+#elif UNITY_STANDALONE_WIN
+        return true
+#else
+        return false
+#endif
     }
 
     private void Awake()
