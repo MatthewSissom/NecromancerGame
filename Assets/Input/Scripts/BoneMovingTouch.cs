@@ -82,7 +82,7 @@ public class BoneMovingTouch : TouchProxy
                         activeWatch.Rb.angularVelocity = activeWatch.Rb.angularVelocity * scaleFactor;
                 }else if(activeBone != null)
                 {
-                    magnitude = activeWatch.Rb.angularVelocity.magnitude;
+                    magnitude = activeBone.Rb.angularVelocity.magnitude;
                     float scaleFactor = 1 - (deceleration * time / magnitude);
                     if (scaleFactor < 0)
                         activeBone.Rb.angularVelocity = new Vector3();
