@@ -4,24 +4,18 @@ using UnityEngine;
 
 public class SkeletonBasePathBuilder
 {
-    //---pathfinding settings---//
+    private PathTunables tunables;
+    private LinkedList<IContinuousSkeletonPath> path;
 
-    //the tightest turn this cat can make
-    public float MinTurningRad { get; set; }
-    //how fast the cat should move
-    public float Speed { get; set; }
-
-    public float GroundHeight { get; set; }
-
-    public SkeletonBasePathBuilder()
+    public SkeletonBasePathBuilder(PathTunables tunables)
     {
-        MinTurningRad = .1f;
-        Speed = .1f;
+        this.tunables = tunables;
     }
 
-    public bool PathToPoints(Vector3 start, Vector3 startForward, List<Vector3> destinations)
+    public IContinuousSkeletonPath PathFromPoints(Vector3 start, Vector3 startForward, List<Vector3> destinations)
     {
-        ResetPath();
+        path = new LinkedList<IContinuousSkeletonPath>();
+
         Vector3 pos = start;
         Vector3 forward = startForward;
         foreach (var destination in destinations)
@@ -29,7 +23,8 @@ public class SkeletonBasePathBuilder
             //height changes require a jump
             if (Mathf.Abs(destination.y - pos.y) > .07f)
             {
-                JumpToPoint(destination, pos, .1f);
+                //TODO: Add jumping back in
+                //JumpToPoint(destination, pos, .1f);
             }
             else
             {
@@ -38,15 +33,17 @@ public class SkeletonBasePathBuilder
                 if (!OrientAndPathTo(destination, pos, forward, out forward))
                 {
                     Debug.Log("bad path aborting");
-                    return false;
+                    return null;
                 }
             }
 
             //update the position for next loop
             pos = destination;
         }
-        FinalizePath();
-        return true;
+
+        IContinuousSkeletonPath finalPath =  new CompositePath(path);
+        path = null;
+        return finalPath;
     }
 
     private bool OrientAndPathTo(Vector3 destination, Vector3 currentPos, Vector3 currentForward, out Vector3 endForward)
@@ -63,7 +60,7 @@ public class SkeletonBasePathBuilder
         //move to the destination
         Vector3 toDest = destination - currentPos;
         path.AddLast(new LinePath(
-            toDest.magnitude / Speed,
+            toDest.magnitude / tunables.speed,
             currentPos,
             destination
             ));
@@ -90,20 +87,20 @@ public class SkeletonBasePathBuilder
         //the destination as possible
         Vector3 currentToCircleCenter = new Vector3(-currentForward.z, 0, currentForward.x);  //get perpendicular of forward
         currentToCircleCenter = Vector3.Project(currentToDest, currentToCircleCenter);        //project the delta on to the perpendicular
-        currentToCircleCenter = currentToCircleCenter.normalized * MinTurningRad;             //adjust length to equal rad
+        currentToCircleCenter = currentToCircleCenter.normalized * tunables.minTurningRad;             //adjust length to equal rad
 
         Vector3 center = currentPos + currentToCircleCenter;
         Vector3 delta = new Vector3(destination.x - center.x, 0, destination.z - center.z);
         Vector3 deltaPerp = new Vector3(-delta.z, 0, delta.x);
         float deltaMagnitude = delta.magnitude;
-        if (deltaMagnitude < MinTurningRad) //algorithm doesn't work for points inside the circle
+        if (deltaMagnitude < tunables.minTurningRad) //algorithm doesn't work for points inside the circle
         {
             return false;
         }
 
         //calculate points of tangency on the circle passing through the destination point by constructing
         //a similar triangle with r being similar to the tangent line passing through p
-        float scaleFactor = MinTurningRad / deltaMagnitude; //divide hypotonuses to get scale factor
+        float scaleFactor = tunables.minTurningRad / deltaMagnitude; //divide hypotonuses to get scale factor
         float aScale = scaleFactor * scaleFactor;
         float bScale = scaleFactor * Mathf.Sqrt(1 - aScale);
 
@@ -143,9 +140,9 @@ public class SkeletonBasePathBuilder
         //add the calculated semicircle to the path
         path.AddLast(
             new SemicirclePath(
-                Mathf.Abs(endTheta - startTheta) * MinTurningRad / Speed,
+                Mathf.Abs(endTheta - startTheta) * tunables.minTurningRad / tunables.speed,
                 center,
-                MinTurningRad,
+                tunables.minTurningRad,
                 startTheta,
                 endTheta
                 ));

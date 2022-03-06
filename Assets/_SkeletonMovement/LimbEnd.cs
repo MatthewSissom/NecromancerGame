@@ -160,13 +160,12 @@ public class LimbEnd : MonoBehaviour
         currentRoutine = StartCoroutine(StepRoutine());
     }
 
-    public void StartJump(Jump jumpArc)
+    public void StartJump(JumpArc jumpArc)
     {
         if(currentRoutine != null)
             StopCoroutine(currentRoutine);
         LimbState = LimbStates.Jumping;
 
-        StartCoroutine(JumpRoutine(jumpArc));
     }
 
     public void EndJump()
@@ -277,18 +276,10 @@ public class LimbEnd : MonoBehaviour
         LimbState = LimbStates.Standing;
         StartStep();
     }
-    private IEnumerator JumpRoutine(Jump jumpPath)
+
+    void LimbEndedStep(LimbEnd calling, Vector3? collisionPoint)
     {
-        Transform targetTransfrom = Target.transform;
-        bool isRight = LocationTag == LimbLocationTag.BackRight || LocationTag == LimbLocationTag.FrontRight;
-        float timer = 0;
-        while (timer < jumpPath.SplitDuration)
-        {
-            timer += Time.deltaTime;
-            jumpPath.SetIndex(DelayIndex);
-            targetTransfrom.position = jumpPath.GetPointNearPath(timer,0.05f,isRight);
-            yield return null;
-        }
-        LimbState = LimbStates.Standing;
+        FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Footsteps/SkeletonFootsteps");
+        calling.StartPush();
     }
 }

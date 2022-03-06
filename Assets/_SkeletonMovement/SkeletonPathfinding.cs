@@ -5,11 +5,11 @@ using UnityEngine.AI;
 
 public class SkeletonPathfinding
 {
-    float minTurningRad;
+    PathTunables tunables;
 
-    public SkeletonPathfinding(float minTurningRad)
+    public SkeletonPathfinding(PathTunables tunables)
     {
-        this.minTurningRad = minTurningRad;
+        this.tunables = tunables;
     }
 
     public List<Vector3> GetPathPoints(Vector3 pathStart, Vector3 destination)
@@ -51,10 +51,10 @@ public class SkeletonPathfinding
                     )
                 );
             radMult = Mathf.Min(1, radMult);
-            vector += toPrevious / distance * radMult * minTurningRad;
+            vector += toPrevious / distance * radMult * tunables.minTurningRad;
 
             //skip points that would cause orientandpathto to fail
-            if ((previous - vector).magnitude < minTurningRad)
+            if ((previous - vector).magnitude < tunables.minTurningRad)
                 continue;
 
             previous = vector;

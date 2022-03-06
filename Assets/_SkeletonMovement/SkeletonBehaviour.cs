@@ -4,6 +4,19 @@ using UnityEngine;
 
 //Cat behavior is in charge of directing midlevel goals like pathing, pawing at something, looking at something etc.
 //Recives instructions from cat goals which directs high level goals 
+
+public struct PathTunables
+{
+    public float minTurningRad;
+    public float speed;
+
+    public PathTunables(float minTurningRad, float speed)
+    {
+        this.minTurningRad = minTurningRad;
+        this.speed = speed;
+    }
+}
+
 public class SkeletonBehaviour : MonoBehaviour
 {
 
@@ -47,14 +60,6 @@ public class SkeletonBehaviour : MonoBehaviour
     //temp
     float timer;
 
-    public float GroundHeight
-    {
-        get { return movement.GroundYValue; }
-        set { movement.SetGroundYValue(value);
-            (mPath as SkeletonPathfinding).GroundHeight = value;
-        }
-    }
-
     public float ChestHeight
     {
         get { return movement.ChestHeight; }
@@ -65,6 +70,13 @@ public class SkeletonBehaviour : MonoBehaviour
         if (Initalized)
             return;
         Initalized = true;
+
+        UpdateTunables(
+            new PathTunables(
+                .1f,
+                speed
+            )
+        );
 
         this.orderedTransforms = orderedTransforms;
         this.limbEnds = limbEnds;
@@ -139,14 +151,6 @@ public class SkeletonBehaviour : MonoBehaviour
         //destination.y = movement.ChestHeight;
         mPath.PathToPoint(destination);
         targetPreviousPos = followTarget.transform.position;
-
-#if UNITY_EDITOR
-        float simulatedTime = 0;
-        const float simulatedTimeStep = .05f;
-        List<Vector3> points = new List<Vector3>();
-        // sample points on path for debugging
-        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.TruePath, points);
-#endif
     }
 
     private void Update()
@@ -177,5 +181,11 @@ public class SkeletonBehaviour : MonoBehaviour
             }
         }
 
+    }
+
+    private void UpdateTunables(PathTunables tunables)
+    {
+        pathBuilder = new SkeletonBasePathBuilder(tunables);
+        pathfinding = new SkeletonPathfinding(tunables);
     }
 }

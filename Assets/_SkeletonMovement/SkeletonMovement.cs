@@ -6,20 +6,20 @@ using UnityEngine;
 //Recives a base path from cat behavior
 public class SkeletonMovement
 {
+    public bool Pathing { get; private set; }
     public event System.Action PathFinished;
-
-    CompositePath path;
-    bool pathing;
+    IContinuousSkeletonPath path;
 
     //speed and ground height are temp, should be moved here eventually
-    public SkeletonMovement(List<LimbEnd> limbEnds, float speed)
+    public SkeletonMovement(List<LimbEnd> limbEnds)
     {
-        this.speed = speed;
 
         LimbInit(limbEnds);
     }
 
-    public void SetPath(CompositePath basePath)
+
+
+    public void SetPath(IContinuousSkeletonPath basePath)
     {
         this.path = path;
         path.PathStarted += () => { pathing = true; };
@@ -156,50 +156,14 @@ public class SkeletonMovement
         PathReset?.Invoke();
     }
 
-    void LimbStartedStep(LimbEnd limb)
-    { 
-        float time = (limb.StrideLength / speed) +  (limb.StrideLength / limb.StepSpeed);
-        //move directly under the cat if it's standing still
-        time *= pathing ? 1 : 0;
-        float dist = 0.05f;
-        Vector3 target;
-
-        if(!path.IsValid)
-        {
-            limb.DefaultStepTarget();
-            return;
-        }
-
-        //Calculate the new position for the limb
-        switch (limb.LocationTag)
-        {
-            case LimbEnd.LimbLocationTag.FrontLeft:
-                target = path.PointNearPath(time, dist, false);
-                break;
-            case LimbEnd.LimbLocationTag.FrontRight:
-                target = path.PointNearPath(time, dist, true);
-                break;
-            case LimbEnd.LimbLocationTag.BackLeft:
-                target = path.PointNearPath(time, dist, false, true);
-                break;
-            case LimbEnd.LimbLocationTag.BackRight:
-                target = path.PointNearPath(time, dist, true,true);
-                break;
-            default:
-                target = new Vector3();
-                break;
-        }
-        if (float.IsNaN(target.x) || float.IsNaN(target.y) || float.IsNaN(target.z))
-            Debug.Log("Invalid position from path");
-
-        target.y = GroundYValue;
-        limb.SetStepTarget(target, (limb.StrideLength / speed));
-    }
-
-    void LimbEndedStep(LimbEnd calling, Vector3? collisionPoint)
+#if UNITY_EDITOR
+    private void RenderDebugPaths()
     {
-        if(pathing)
-            FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Footsteps/SkeletonFootsteps");
-        calling.StartPush();
+        float simulatedTime = 0;
+        const float simulatedTimeStep = .05f;
+        List<Vector3> points = new List<Vector3>();
+        // sample points on path for debugging
+        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.TruePath, points);
     }
+#endif
 }
