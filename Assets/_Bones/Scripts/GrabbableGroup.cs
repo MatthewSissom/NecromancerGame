@@ -47,20 +47,12 @@ public class GrabbableGroup : BoneGroup, IGrabbable
             mCustomGravity.Disable();
         rB.useGravity = false;
         
-        if (RightForward)
-        {
-            if(firstPickup)
-                transform.right = Camera.main.transform.forward * FlippedMultiplier;
+        
+        if(firstPickup)
+          transform.forward = Camera.main.transform.forward * FlippedMultiplier;
 
-            rB.constraints = (RigidbodyConstraints) 96;
-        }
-        else
-        {
-            if(firstPickup)
-                transform.forward = Camera.main.transform.forward * FlippedMultiplier;
-
-            rB.constraints = (RigidbodyConstraints)48;
-        }
+        rB.constraints = (RigidbodyConstraints)48;
+       
 
         OnPickup();
         firstPickup = false;
@@ -85,7 +77,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (mCustomGravity)
             mCustomGravity.Enable();
        
-        //rb.freezeRotation = false;
+        //rB.freezeRotation = false;
         gameObject.layer = physicsLayer;
         Vector3 velocity = rB.velocity;
         if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
@@ -100,7 +92,15 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         {
             OnNoCollideDrop();
         }
-        rB.freezeRotation = true;
+        IEnumerator DelayedRotationLock()
+        {
+
+            yield return new WaitForSeconds(0.2f);
+            rB.freezeRotation = true;
+            yield break;
+        }
+        StartCoroutine(DelayedRotationLock());
+        
     }
 
     private void ResetMass()

@@ -97,18 +97,9 @@ public class RotationTouch : TouchProxy
         Vector3 aVelocity = bone.Rb.angularVelocity;
         Vector3 directionality;
 
-        if (bone.RightForward)
-        {
-            directionality = new Vector3(1.000f, 0, 0);
-            
-        }
-        else
-        {
-            directionality = new Vector3(0, 0, 1.000f);
-        }
-
-        directionality *= bone.FlippedMultiplier;
-           
+        
+        directionality = new Vector3(0, 0, 1.000f)*bone.FlippedMultiplier;
+        
 
         //magnitude of the projection onto a normal is the dot product
         float velocityAroundUp = Vector3.Dot(aVelocity, realUp);
@@ -135,7 +126,7 @@ public class RotationTouch : TouchProxy
         }
 
         //push calculated value to the rigidbody
-        bone.Rb.angularVelocity = aVelocity;
+        bone.Rb.angularVelocity = aVelocity * bone.FlippedMultiplier;
     }
 
     protected override void OnDisable()

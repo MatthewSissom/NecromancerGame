@@ -97,7 +97,7 @@ public class BoneMovingTouch : TouchProxy
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        if (activeWatch != null)
+        if (activeWatch != null||activeBone!=null)
             return;
         IGrabbable b = null; //other.GetComponentInParent<GrabbableGroup>(); This will be to grab the stopwatch.
         if (b != null)
@@ -109,7 +109,7 @@ public class BoneMovingTouch : TouchProxy
         if (c != null && !c.isRoot && (!c.isAttached || c.isLeaf))
         {
             c.PickedUp();
-            SetActive(c, c.PrimaryMidpoint, c.AuxilieryAxis); //TODO: replace 0 vectors with c.PrimaryMidpoint and c.AuxileryAxis
+            SetActive(c, c.PrimaryMidpoint, c.AuxilieryAxis); 
             StopRotation(1000 * Mathf.Deg2Rad);
             //touchLights.Play();
         }
