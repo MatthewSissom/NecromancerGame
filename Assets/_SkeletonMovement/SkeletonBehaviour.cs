@@ -30,7 +30,7 @@ public class SkeletonBehaviour : MonoBehaviour
     float speed;
 
     [SerializeField]
-    List<LimbEnd> limbEnds;
+    List<LimbData> limbEnds;
     [SerializeField]
     float stepHeight;
     [SerializeField]
@@ -60,23 +60,16 @@ public class SkeletonBehaviour : MonoBehaviour
     //temp
     float timer;
 
-    public float ChestHeight
-    {
-        get { return movement.ChestHeight; }
-    }
-
-    public void BehaviorInit(List<LimbEnd> limbEnds, Transform[] orderedTransforms, float[] transformDistances, int shoulderIndex)
+    public void BehaviorInit(List<LimbData> limbEnds, Transform[] orderedTransforms, float[] transformDistances, int shoulderIndex)
     {
         if (Initalized)
             return;
         Initalized = true;
 
-        UpdateTunables(
-            new PathTunables(
-                .1f,
-                speed
-            )
-        );
+        UpdateTunables(new PathTunables(
+            .1f,
+            speed
+        ));
 
         this.orderedTransforms = orderedTransforms;
         this.limbEnds = limbEnds;
@@ -91,13 +84,6 @@ public class SkeletonBehaviour : MonoBehaviour
                 transformDistances[i] *= -1;
         }
 
-        movement = new SkeletonMovement(limbEnds,speed);
-        var catPathWithNav = new SkeletonPathfinding(transform.position.y-movement.GroundYValue, transformDistances, orderedTransforms,shoulderIndex);
-        catPathWithNav.GroundHeight = movement.GroundYValue;
-        mPath = catPathWithNav;
-        mPath.PathFinished += () => { pathing = false; };
-        mPath.PathStarted += () => { pathing = true; };
-        movement.SetPath(catPathWithNav, limbEnds);
     }
 
 
@@ -116,7 +102,7 @@ public class SkeletonBehaviour : MonoBehaviour
             return;
         Initalized = true;
 
-        Debug.Log("Warning: Start init used on catbehavior");
+        Debug.Log("Start init used on catbehavior. This should only happen when ");
 
         orderedTransforms = new Transform[4];
         orderedTransforms[0] = tailTransform;
@@ -129,58 +115,28 @@ public class SkeletonBehaviour : MonoBehaviour
         delays[1] = (transform.position - hipTransform.position).magnitude / speed + hipDelay;
         delays[2] = 0;
         delays[3] = -(transform.position - headTransform.position).magnitude / speed * 2;
-
-        movement = new SkeletonMovement(limbEnds,speed);
-        var temp = new SkeletonPathfinding(ChestHeight, delays, orderedTransforms,2);
-        temp.GroundHeight = movement.GroundYValue;
-        mPath = temp;
-        mPath.PathFinished += () => { pathing = false; };
-        mPath.PathStarted += () => { pathing = true; };
-        movement.SetPath(temp, limbEnds);
-
-        //stablizer = new CatStablizer(null, 1000, groundYVal);
-        //stablizer.DestablizedEvent += () => { stablizing = false; Debug.Log("Fallen Cat!"); };
-        //foreach(var limb in limbEnds)
-        //{
-        //    stablizer.DestablizedEvent += limb.Destableized;
-        //}
     }
 
-    void PathToPoint(Vector3 destination)
+    bool PathToPoint(Vector3 destination)
     {
-        //destination.y = movement.ChestHeight;
-        mPath.PathToPoint(destination);
         targetPreviousPos = followTarget.transform.position;
+
+        List<Vector3> destinations =  pathfinding.GetPathPoints(transform.position, destination);
+        if (destinations == null)
+            return false;
+
+        IContinuousSkeletonPath basePath = pathBuilder.PathFromPoints(transform.position, transform.forward, destinations);
+        if (basePath == null)
+            return false;
+
+        movement.SetPath(basePath);
+        return true;
     }
 
     private void Update()
     {
         if(followTarget && (followTarget.transform.position - targetPreviousPos).magnitude > 0.05f)
             PathToPoint(followTarget.transform.position);
-
-        Vector3[] vectors = new Vector3[4];
-        if (pathing)
-        {
-            //get base positions from path
-            mPath.Move(Time.deltaTime, out Vector3 forward, vectors);
-
-            ////modify positions based on offsets
-            foreach (var limb in limbEnds)
-            {
-                vectors[limb.DelayIndex] += new Vector3(0, limb.HeightOffset, 0);
-            }
-            timer += Time.deltaTime;
-            vectors[0] += new Vector3(0, 0.07f + Mathf.Sin(timer * 1.5f * Mathf.PI) * stepHeight / 4, 0);
-
-
-            //apply new positions
-            transform.forward = forward;
-            for(int i = 0, count = orderedTransforms.Length; i < count;  i++)
-            {
-                orderedTransforms[i].position = vectors[i];
-            }
-        }
-
     }
 
     private void UpdateTunables(PathTunables tunables)

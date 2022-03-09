@@ -116,3 +116,34 @@ public class JumpArc : IContinuousSkeletonPath
         return (constVelComponent + new Vector3(0, initYVel + time * gravConst, 0)).normalized;
     }
 }
+
+// used to shorten the duration of a path without modifying the underlying path
+public class TrimmedPath : IContinuousSkeletonPath
+{
+    public float Duration { get; private set; }
+
+    private IContinuousSkeletonPath basePath;
+    private float startTime;
+
+    public Vector3 GetPointOnPath(float time)
+    {
+        return basePath.GetPointOnPath(time + startTime);
+    }
+
+    public Vector3 GetTangent(float time)
+    {
+        return basePath.GetTangent(time + startTime);
+    }
+
+    public Vector3 GetForward(float time)
+    {
+        return basePath.GetForward(time + startTime);
+    }
+
+    public TrimmedPath(IContinuousSkeletonPath toTrim, float startTime, float duration)
+    {
+        Duration = duration + startTime <= toTrim.Duration ? duration : toTrim.Duration - startTime;
+        this.startTime = startTime;
+        basePath = toTrim;
+    }
+}

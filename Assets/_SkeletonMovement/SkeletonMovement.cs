@@ -10,35 +10,33 @@ public class SkeletonMovement
     public event System.Action PathFinished;
     IContinuousSkeletonPath path;
 
-    //speed and ground height are temp, should be moved here eventually
-    public SkeletonMovement(List<LimbEnd> limbEnds)
-    {
+    List<PathTracer> footTracers;
+    List<PathTracer> spineTracers;
 
+    //speed and ground height are temp, should be moved here eventually
+    public SkeletonMovement(List<LimbData> limbEnds, List<SpineTransform>)
+    {
         LimbInit(limbEnds);
     }
 
-
-
     public void SetPath(IContinuousSkeletonPath basePath)
     {
-        this.path = path;
-        path.PathStarted += () => { pathing = true; };
-        path.PathFinished += () => { pathing = false; };
-        SkeletonPathfinding nav = path as SkeletonPathfinding;
-        nav.GroundHeight = GroundYValue;
-        nav.ChestHeightChange += (float val) => { SetGroundYValue(val- distFromGroundToChest); };
-        foreach (var limb in limbEnds)
+        this.path = basePath;
+        foreach(var tracer in footTracers) 
         {
-            path.PathStarted += limb.PathStarted;
-            path.JumpStarted += limb.StartJump;
+            tracer.Path = basePath;
+        }
+        foreach (var tracer in spineTracers)
+        {
+            tracer.Path = basePath;
         }
     }
 
-    private void LimbInit(List<LimbEnd> limbEnds)
+    private void LimbInit(List<LimbData> limbEnds)
     {
-        GroundYValue = 0;
+        float GroundYValue = 0;
         //holds limbs that shouldn't be considered for the min limb
-        HashSet<LimbEnd> outliers = new HashSet<LimbEnd>();
+        HashSet<LimbData> outliers = new HashSet<LimbData>();
         //if an outlier is found then remove it and check the set of limbs again
         bool recalculate = false;
         float minHeight;
@@ -48,7 +46,7 @@ public class SkeletonMovement
             //how far off the ground the limb will be when walking
             minHeight = float.MaxValue;
             float avgHeight = 0;
-            LimbEnd minLimb = null;
+            LimbData minLimb = null;
             foreach (var limb in limbEnds)
             {
                 if (outliers.Contains(limb))
@@ -57,7 +55,7 @@ public class SkeletonMovement
                 //reduce the lenght of limbs to account for bending
                 //.7 ~> root(2)/2 which give the cat a stride lenght roughly twice the lenght of the limb
                 //which is roughly realistic. stumps don't use this calculation because they can't bend
-                if (limb.Type != LimbEnd.LimbTag.Stump && limb.Type != LimbEnd.LimbTag.StumpSingle)
+                if (limb.Type != LimbData.LimbTag.Stump && limb.Type != LimbData.LimbTag.StumpSingle)
                     length *= .7f;
                 if (length < minHeight)
                 {
@@ -83,77 +81,6 @@ public class SkeletonMovement
             limb.StepStartEvent += LimbStartedStep;
             limb.StepEndEvent += LimbEndedStep;
         }
-    }
-
-    private void ResetPath()
-    {
-        //add paths for each transfrom behind the shoulders to lerp to the position
-        //of the key transform infront of it so at every point each key will be on the path
-        Vector3 previousPos = default;
-        var newPath = new LinkedList<PathComponent>();
-
-
-        //no additional information, use linar paths for transforms behind the shoulders
-        if (path == null || path.First == null)
-        {
-            //itterate backwards to go from head to tail
-            for (int i = transforms.Length - 2; i >= 0; i--)
-            {
-                float delay = delays[i];
-                if (delay > 0)
-                {
-                    newPath.AddFirst(new LinePath(delay - delays[i + 1],
-                        transforms[i].position,
-                        previousPos
-                        ));
-                }
-                previousPos = transforms[i].position;
-            }
-            elapsedTime = delays[0];
-        }
-        //if the cat's target was changed while following another path use the old
-        //path for higher precision
-        else if (path.First.Value as SplitPath == null)
-        {
-            //itterate backwards to go from head to tail
-            for (int i = transforms.Length - 2; i >= 0; i--)
-            {
-                float delay = delays[i];
-                if (delay > 0)
-                {
-                    GetPointOnPath(-delay, out Vector3 mPos);
-                    newPath.AddFirst(new LinePath(delay - delays[i + 1],
-                        mPos,
-                        previousPos
-                        ));
-                }
-                GetPointOnPath(-delay, out previousPos);
-            }
-            elapsedTime = delays[0];
-        }
-        else
-        {
-            var split = path.First.Value as SplitPath;
-            Vector3 pos;
-            for (int i = transforms.Length - 2; i >= 0; i--)
-            {
-                split.SetIndex(i);
-                pos = split.GetPointOnPath(split.SplitDuration);
-                if (delays[i] > 0)
-                {
-                    newPath.AddFirst(new LinePath(delays[i] - delays[i + 1],
-                        pos,
-                        previousPos
-                        ));
-                }
-                previousPos = pos;
-            }
-            elapsedTime = delays[0];
-        }
-
-        path = newPath;
-
-        PathReset?.Invoke();
     }
 
 #if UNITY_EDITOR

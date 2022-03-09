@@ -39,6 +39,8 @@ public class CompositePath : IContinuousSkeletonPath
         }
     }
 
+    public CompositePath( params IContinuousSkeletonPath[] components) : this(new LinkedList<IContinuousSkeletonPath>(components)) {}
+
     // get the corresponding path for a given time
     private IContinuousSkeletonPath GetPathForTime(float time, out float skippedPathDuration) 
     {

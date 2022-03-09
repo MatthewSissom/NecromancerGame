@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LimbEnd : MonoBehaviour
+public class LimbData : MonoBehaviour
 {
     //---Enums---//
 
@@ -70,9 +70,9 @@ public class LimbEnd : MonoBehaviour
     //---Public Events---//
 
     //delegates
-    public delegate void StepStartDelegate(LimbEnd callingLimb, Vector3 target);
-    public delegate void StepEndDelegate(LimbEnd callingLimb, Vector3? collisionPoint);
-    public delegate void LimbEventDelegate(LimbEnd callingLimb);
+    public delegate void StepStartDelegate(LimbData callingLimb, Vector3 target);
+    public delegate void StepEndDelegate(LimbData callingLimb, Vector3? collisionPoint);
+    public delegate void LimbEventDelegate(LimbData callingLimb);
 
     //Envoked when a limb moves off the ground with the intention of stepping
     //Step end is not gaurenteed to be called after step start
@@ -277,7 +277,7 @@ public class LimbEnd : MonoBehaviour
         StartStep();
     }
 
-    void LimbEndedStep(LimbEnd calling, Vector3? collisionPoint)
+    void LimbEndedStep(LimbData calling, Vector3? collisionPoint)
     {
         FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Footsteps/SkeletonFootsteps");
         calling.StartPush();
