@@ -14,7 +14,7 @@ public class BoneCollisionCylinder : MonoBehaviour
 
     private bool isParentsActiveCollision;
 
-    private bool IsParentsActiveCollision
+    public bool IsParentsActiveCollision
     {
         get
         {
@@ -123,12 +123,15 @@ public class BoneCollisionCylinder : MonoBehaviour
     {
         if (IsParentsActiveCollision)
         {
-            myLineRenderer.enabled = true;
-            myLineRenderer.SetPositions(new Vector3[2]);
-            myLineRenderer.SetPosition(0, myVertex.transform.position/*new Vector3(myVertex.transform.position.x,
+            if(myBone.currentCylinderHit)
+            {
+                myLineRenderer.enabled = true;
+                myLineRenderer.SetPositions(new Vector3[2]);
+                myLineRenderer.SetPosition(0, myVertex.transform.position/*new Vector3(myVertex.transform.position.x,
                 myBone.currentCylinderHit.MyVertex.transform.position.y, 
                 myVertex.transform.position.z)*/);
-            myLineRenderer.SetPosition(1, myBone.currentCylinderHit.MyVertex.transform.position);
+                myLineRenderer.SetPosition(1, myBone.currentCylinderHit.MyVertex.transform.position);
+            }
         } else
         {
             myLineRenderer.enabled = false;
@@ -160,7 +163,9 @@ public class BoneCollisionCylinder : MonoBehaviour
             {
                 myBone.currentCylinderHit = other.gameObject.GetComponent<BoneCollisionCylinder>();
                 IsParentsActiveCollision = true;
-                other.gameObject.GetComponent<BoneCollisionCylinder>().IsChildsActiveCollision = true;
+                BoneCollisionCylinder otherCyl = other.gameObject.GetComponent<BoneCollisionCylinder>();
+                otherCyl.IsChildsActiveCollision = true;
+                myBone.currentCollisionVertex = MyType;
             }
         }
     }
@@ -174,6 +179,8 @@ public class BoneCollisionCylinder : MonoBehaviour
                 myBone.currentCylinderHit = null;
                 IsParentsActiveCollision = false;
                 other.gameObject.GetComponent<BoneCollisionCylinder>().IsChildsActiveCollision = false;
+                myBone.currentCollisionVertex = null;
+                Debug.Log(null);
             }
         }
     }

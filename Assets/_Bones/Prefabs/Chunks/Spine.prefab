@@ -171,6 +171,7 @@ GameObject:
   - component: {fileID: -8509092279008970891}
   - component: {fileID: 2197170602775175497}
   - component: {fileID: 8203778505349969825}
+  - component: {fileID: -6682619256421634188}
   m_Layer: 8
   m_Name: Spine
   m_TagString: Untagged
@@ -252,7 +253,6 @@ MonoBehaviour:
   isLeaf: 0
   isAttached: 0
   isRoot: 0
-  rightForward: 0
   flippedMultiplier: 1
   mGhost: {fileID: 0}
 --- !u!65 &8203778505349969825
@@ -268,6 +268,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.06689053, y: 0.07813424, z: 0.06258478}
   m_Center: {x: 0.01655474, y: -0.03349939, z: 0.0032810755}
+--- !u!114 &-6682619256421634188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2823066793007793120}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68aff0b775e8c1b48bc923330ae3d7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3460256047794474608
 GameObject:
   m_ObjectHideFlags: 0

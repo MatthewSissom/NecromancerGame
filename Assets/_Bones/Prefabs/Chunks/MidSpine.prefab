@@ -1103,6 +1103,7 @@ GameObject:
   - component: {fileID: 7252164498012490067}
   - component: {fileID: -920843988487136122}
   - component: {fileID: 699230820564499649}
+  - component: {fileID: -5997284232437843705}
   m_Layer: 8
   m_Name: MidSpine
   m_TagString: Untagged
@@ -1184,7 +1185,6 @@ MonoBehaviour:
   isLeaf: 0
   isAttached: 0
   isRoot: 0
-  rightForward: 0
   flippedMultiplier: 1
   mGhost: {fileID: 0}
 --- !u!65 &699230820564499649
@@ -1200,3 +1200,15 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.08495816, y: 0.08641529, z: 0.05474963}
   m_Center: {x: 0.027953662, y: -0.027579755, z: -0.0007797731}
+--- !u!114 &-5997284232437843705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8681569674231407083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68aff0b775e8c1b48bc923330ae3d7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

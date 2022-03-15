@@ -261,6 +261,7 @@ GameObject:
   - component: {fileID: 2521039374162111853}
   - component: {fileID: 9074197535791914502}
   - component: {fileID: 7265391895719277720}
+  - component: {fileID: 8091989517950232616}
   m_Layer: 8
   m_Name: FRight Leg
   m_TagString: Untagged
@@ -341,7 +342,6 @@ MonoBehaviour:
   isLeaf: 0
   isAttached: 0
   isRoot: 0
-  rightForward: 0
   flippedMultiplier: 1
   mGhost: {fileID: 0}
 --- !u!65 &7265391895719277720
@@ -357,6 +357,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.09436509, y: 0.12774563, z: 0.044627763}
   m_Center: {x: 0.008698452, y: -0.04179263, z: 0.0025465917}
+--- !u!114 &8091989517950232616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7135591711045641832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68aff0b775e8c1b48bc923330ae3d7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8092935938025198024
 GameObject:
   m_ObjectHideFlags: 0

@@ -364,6 +364,7 @@ GameObject:
   - component: {fileID: 1878089781576458015}
   - component: {fileID: 4945550846597194201}
   - component: {fileID: 4480639572253322611}
+  - component: {fileID: 8449109969475187425}
   m_Layer: 8
   m_Name: BackSpine
   m_TagString: Untagged
@@ -444,7 +445,6 @@ MonoBehaviour:
   isLeaf: 0
   isAttached: 0
   isRoot: 0
-  rightForward: 0
   flippedMultiplier: 1
   mGhost: {fileID: 0}
 --- !u!65 &4480639572253322611
@@ -460,6 +460,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.12931009, y: 0.039446115, z: 0.07393013}
   m_Center: {x: 0.049490303, y: 0.0077446997, z: 0.0012693927}
+--- !u!114 &8449109969475187425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6420342891581815629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68aff0b775e8c1b48bc923330ae3d7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6505380826807758581
 GameObject:
   m_ObjectHideFlags: 0

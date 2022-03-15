@@ -16,6 +16,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
 
     private Rigidbody rB;
     private CustomGravity mCustomGravity;
+    private PointApproacher mPointApproacher;
 
     private bool firstPickup = true;
 
@@ -36,6 +37,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         rB = GetComponent<Rigidbody>();
         ResetMass();
         mCustomGravity = GetComponent<CustomGravity>();
+        mPointApproacher = GetComponent<PointApproacher>();
     }
 
     public void PickedUp()
@@ -73,23 +75,27 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         
         if (!this)
             return;
-        const float maxReleaseYVelocity = 1.0f;
-        if (mCustomGravity)
-            mCustomGravity.Enable();
-       
-        //rB.freezeRotation = false;
-        gameObject.layer = physicsLayer;
-        Vector3 velocity = rB.velocity;
-        if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
-        {
-            rB.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
-        }
 
         if(currentCylinderHit != null)
         {
+            Debug.Log(currentCollisionVertex);
+            mPointApproacher.StartApproach(
+                getRelativePosition(currentCollisionVertex.Value, currentCylinderHit.MyBone, currentCylinderHit.MyType), 0.5f);
+
             OnCollideDrop();
         } else
         {
+            const float maxReleaseYVelocity = 1.0f;
+            if (mCustomGravity)
+                mCustomGravity.Enable();
+
+            //rB.freezeRotation = false;
+            gameObject.layer = physicsLayer;
+            Vector3 velocity = rB.velocity;
+            if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
+            {
+                rB.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
+            }
             OnNoCollideDrop();
         }
         IEnumerator DelayedRotationLock()

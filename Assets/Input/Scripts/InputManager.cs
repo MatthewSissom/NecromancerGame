@@ -102,9 +102,9 @@ public partial class InputManager : MonoBehaviour
         }
         FindAndDisableUnused();
         #endregion
-
+#if (UNITY_EDITOR || PLATFORM_STANDALONE_WIN)
         #region mouseInput
-        if(UseMouseInputThisFrame())
+        if (UseMouseInputThisFrame())
         { 
             Vector3 pos = Input.mousePosition;
             pos.z = Camera.main.transform.position.y - height;
@@ -183,7 +183,8 @@ public partial class InputManager : MonoBehaviour
                 }
             }
         }
-#endregion
+        #endregion
+#endif
     }
 
     private bool UseMouseInputThisFrame()

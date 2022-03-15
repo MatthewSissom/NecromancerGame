@@ -50,6 +50,8 @@ public class BoneGroup : MonoBehaviour
     [SerializeField] //for debugging
     public BoneCollisionCylinder currentCylinderHit;
 
+    public BoneVertexType? currentCollisionVertex;
+
     protected virtual void Awake()
     {
         children = new Dictionary<BoneVertexType, BoneGroup>();
@@ -192,6 +194,16 @@ public class BoneGroup : MonoBehaviour
         backPrimaryCylinder.SetActive(true);
         leftAuxCylinder.SetActive(true);
         rightAuxCylinder.SetActive(true);
+
+        parent = null;
+        isLeaf = false;
+        isAttached = false;
+        currentCollisionVertex = null;
+        if(currentCylinderHit)
+        {
+            currentCylinderHit.IsParentsActiveCollision = false;
+            currentCylinderHit = null;
+        }
     }
 
     protected void OnNoCollideDrop()
@@ -216,5 +228,10 @@ public class BoneGroup : MonoBehaviour
         rightAuxCylinder.SetActive(true);
 
         Attach(otherGroup);
+    }
+
+    public Vector3 getRelativePosition(BoneVertexType myVertexType, BoneGroup otherBone, BoneVertexType otherVertexType)
+    {
+        return otherBone.getVertexPosition(otherVertexType) + transform.position - getVertexPosition(myVertexType);
     }
 }

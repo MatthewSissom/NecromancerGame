@@ -310,6 +310,7 @@ GameObject:
   - component: {fileID: -285752856894285577}
   - component: {fileID: -1638403512171476761}
   - component: {fileID: 971088478610252567}
+  - component: {fileID: 2535229826699212885}
   m_Layer: 8
   m_Name: Neck
   m_TagString: Untagged
@@ -391,7 +392,6 @@ MonoBehaviour:
   isLeaf: 0
   isAttached: 0
   isRoot: 0
-  rightForward: 0
   flippedMultiplier: 1
   mGhost: {fileID: 0}
 --- !u!65 &971088478610252567
@@ -407,6 +407,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 6.1663103, y: 4.7287135, z: 3.8985248}
   m_Center: {x: 0.8837179, y: -0.35156196, z: -1.2242264}
+--- !u!114 &2535229826699212885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4403942450086851822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68aff0b775e8c1b48bc923330ae3d7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5432335837358175254
 GameObject:
   m_ObjectHideFlags: 0

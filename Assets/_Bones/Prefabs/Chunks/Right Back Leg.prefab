@@ -261,6 +261,7 @@ GameObject:
   - component: {fileID: 6762894342292357181}
   - component: {fileID: 4346978155250477304}
   - component: {fileID: 665418710741958573}
+  - component: {fileID: 700210429202059434}
   m_Layer: 8
   m_Name: Right Back Leg
   m_TagString: Untagged
@@ -341,7 +342,6 @@ MonoBehaviour:
   isLeaf: 0
   isAttached: 0
   isRoot: 0
-  rightForward: 0
   flippedMultiplier: 1
   mGhost: {fileID: 0}
 --- !u!65 &665418710741958573
@@ -357,6 +357,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.08075174, y: 0.0987992, z: 0.02}
   m_Center: {x: 0.0044259056, y: -0.044448182, z: -7.384764e-18}
+--- !u!114 &700210429202059434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5426715947578482954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68aff0b775e8c1b48bc923330ae3d7e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7443591588666249601
 GameObject:
   m_ObjectHideFlags: 0
