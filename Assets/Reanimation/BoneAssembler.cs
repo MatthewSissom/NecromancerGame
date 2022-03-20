@@ -6,9 +6,35 @@ using System;
 
 public class BoneAssembler : State
 {
+    [SerializeField]
+    private GameObject rootBone;
+    private GameObject skeleton;
+    private List<IAssemblyStage> assemblyStages;
+    public void Start()
+    {
+        SetPipeline(rootBone,
+            new RemoveExcessBones(),
+            new ReassignParents(),
+            new RemoveGrabbableInfo(),
+            new TempDebugPause() //just pauses the game once it finishes, temporary
+        );
+    }
     public override IEnumerator Routine()
     {
-        yield break;
+        Debug.Log("starting bone assembly");
+        yield return RunPipeline();
+    }
+
+    void SetPipeline(GameObject startSkeleton, params IAssemblyStage[] assemblySequence)
+    {
+        assemblyStages = new List<IAssemblyStage>(assemblySequence);
+    }
+    IEnumerator RunPipeline()
+    {
+        foreach (IAssemblyStage stage in assemblyStages)
+        {
+            yield return stage.Execute(skeleton);
+        }
     }
     /*
     [SerializeField]

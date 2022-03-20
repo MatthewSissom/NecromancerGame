@@ -7,6 +7,7 @@ public enum BoneGroupType { Neck, Head, Ribcage, Spine, Pelvis, Tail, FrontLeftL
 public enum BoneVertexType { FrontPrimary, BackPrimary, LeftAux, RightAux}
 public class BoneGroup : MonoBehaviour
 {
+    private bool isCleaned;
 
     [SerializeField]
     protected GameObject frontPrimaryVertex;
@@ -44,6 +45,10 @@ public class BoneGroup : MonoBehaviour
     private float cylinderSize;
 
     protected BoneGroup parent;
+    public BoneGroup Parent
+    {
+        get { return parent; }
+    }
     protected BoneVertexType parentVertexCollisionType;
     protected Dictionary<BoneVertexType, BoneGroup> children;
 
@@ -103,21 +108,25 @@ public class BoneGroup : MonoBehaviour
 
     protected virtual void FixedUpdate()
     {
-        if(isRoot)
+        if(!isCleaned)
         {
-            transform.forward = Camera.main.transform.forward;
+            if (isRoot)
+            {
+                transform.forward = Camera.main.transform.forward;
+            }
+
+            //Debug.DrawLine(getPrimaryMidpoint(), getPrimaryMidpoint() + getAuxiliaryAxis() * 0.5f, Color.blue);
+
+            //Debug.DrawLine(getVertexPosition(BoneVertexType.FrontPrimary), getVertexPosition(BoneVertexType.FrontPrimary) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+            //Debug.DrawLine(getVertexPosition(BoneVertexType.BackPrimary), getVertexPosition(BoneVertexType.BackPrimary) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+            //Debug.DrawLine(getVertexPosition(BoneVertexType.LeftAux), getVertexPosition(BoneVertexType.LeftAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+            //Debug.DrawLine(getVertexPosition(BoneVertexType.RightAux), getVertexPosition(BoneVertexType.RightAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
+
+            PositionCylinder(frontPrimaryCylinder, frontPrimaryVertex);
+            PositionCylinder(backPrimaryCylinder, backPrimaryVertex);
+            PositionCylinder(leftAuxCylinder, leftAuxVertex);
+            PositionCylinder(rightAuxCylinder, rightAuxVertex);
         }
-        Debug.DrawLine(getPrimaryMidpoint(), getPrimaryMidpoint() + getAuxiliaryAxis() * 0.5f, Color.blue);
-
-        Debug.DrawLine(getVertexPosition(BoneVertexType.FrontPrimary), getVertexPosition(BoneVertexType.FrontPrimary) + getAuxiliaryAxis() * 0.5f, Color.yellow);
-        Debug.DrawLine(getVertexPosition(BoneVertexType.BackPrimary), getVertexPosition(BoneVertexType.BackPrimary) + getAuxiliaryAxis() * 0.5f, Color.yellow);
-        Debug.DrawLine(getVertexPosition(BoneVertexType.LeftAux), getVertexPosition(BoneVertexType.LeftAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
-        Debug.DrawLine(getVertexPosition(BoneVertexType.RightAux), getVertexPosition(BoneVertexType.RightAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
-
-        PositionCylinder(frontPrimaryCylinder, frontPrimaryVertex);
-        PositionCylinder(backPrimaryCylinder, backPrimaryVertex);
-        PositionCylinder(leftAuxCylinder, leftAuxVertex);
-        PositionCylinder(rightAuxCylinder, rightAuxVertex);
     }
 
     public bool isBeingDragged;
@@ -233,5 +242,25 @@ public class BoneGroup : MonoBehaviour
     public Vector3 getRelativePosition(BoneVertexType myVertexType, BoneGroup otherBone, BoneVertexType otherVertexType)
     {
         return otherBone.getVertexPosition(otherVertexType) + transform.position - getVertexPosition(myVertexType);
+    }
+
+    public void CleanUpIndicators()
+    {
+        Destroy(frontPrimaryCylinder);
+        Destroy(backPrimaryCylinder);
+        Destroy(leftAuxCylinder);
+        Destroy(rightAuxCylinder);
+
+        Destroy(frontPrimaryIndicator);
+        Destroy(backPrimaryIndicator);
+        Destroy(leftAuxIndicator);
+        Destroy(rightAuxIndicator);
+
+        Destroy(frontPrimaryVertex);
+        Destroy(backPrimaryVertex);
+        Destroy(leftAuxVertex);
+        Destroy(rightAuxVertex);
+
+        isCleaned = true;
     }
 }

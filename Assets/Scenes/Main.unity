@@ -15792,6 +15792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21c33330d642ce48a73ddc15af9bf1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rootBone: {fileID: 0}
 --- !u!114 &1416826186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16570,6 +16571,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4898323225309291012, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
+      propertyPath: boneObjects.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4898323225309291012, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
       propertyPath: followTarget
       value: 
       objectReference: {fileID: 0}
@@ -16613,6 +16619,11 @@ PrefabInstance:
       propertyPath: enabledColor.b
       value: 0.86649925
       objectReference: {fileID: 0}
+    - target: {fileID: 4898323225309291012, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: boneObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 1688429692}
     - target: {fileID: 5159527741905096400, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
       propertyPath: m_Enabled
@@ -20196,6 +20207,18 @@ CapsuleCollider:
   m_Height: 1.0745939
   m_Direction: 1
   m_Center: {x: -0.27619648, y: 0.10613334, z: -8.546852e-11}
+--- !u!114 &1688429692 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8302528047878664130, guid: 9db830be7935e314eb62a2e06dc2a82c,
+    type: 3}
+  m_PrefabInstance: {fileID: 1464288846}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f2c4970294b3842a7cf23c057cfca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1701788240
 GameObject:
   m_ObjectHideFlags: 0

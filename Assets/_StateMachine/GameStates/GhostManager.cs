@@ -95,6 +95,7 @@ public class GhostManager : State
             GameObject newBone = Instantiate(bones[i]);
             ghost.mBone = newBone.GetComponent<GrabbableGroup>();
             newBone.GetComponent<GrabbableGroup>().mGhost = ghost;
+            TableManager.Instance.boneObjects.Add(newBone.GetComponent<GrabbableGroup>());
         }
     }
 
