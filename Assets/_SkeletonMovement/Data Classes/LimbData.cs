@@ -21,9 +21,9 @@ public enum LimbLocationTag
 
 public class BasicLimbData
 {
-    public bool IsStump { get; private set; }
-    public bool IsSingle { get; private set; }
-    public bool IsFront { get; private set; }
+    public bool IsStump { get; set; }
+    public bool IsSingle { get; set; }
+    public bool IsFront { get; set; }
 }
 public class LimbData : MonoBehaviour, IDelayedTracerData
 {

@@ -84,18 +84,13 @@ public partial class InputManager : MonoBehaviour
     void ArrayInit()
     {
         activeTouches = new List<TouchProxy>();
-        movingTouch = new BoneMovingTouch();
-        rotationTouch = new RotationTouch();
         toDeactivate = null;
-       
 
-        
         movingTouch = Instantiate(moveTouchPref).GetComponent<BoneMovingTouch>();
         movingTouch.gameObject.SetActive(false);
 
         rotationTouch = Instantiate(rotationTouchPref).GetComponent<RotationTouch>();
-        rotationTouch.gameObject.SetActive(false);
-        
+        rotationTouch.gameObject.SetActive(false);   
     }
 
     private void ChangeHandedness(bool isRightHanded)
