@@ -180,7 +180,6 @@ public class BoneCollisionCylinder : MonoBehaviour
                 IsParentsActiveCollision = false;
                 other.gameObject.GetComponent<BoneCollisionCylinder>().IsChildsActiveCollision = false;
                 myBone.currentCollisionVertex = null;
-                Debug.Log(null);
             }
         }
     }
