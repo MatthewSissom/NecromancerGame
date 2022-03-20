@@ -632,7 +632,7 @@ GameObject:
   - component: {fileID: 2197170602775175497}
   - component: {fileID: 1375395018460956393}
   m_Layer: 0
-  m_Name: Spine
+  m_Name: Spine 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -695,9 +695,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f2c4970294b3842a7cf23c057cfca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mGhost: {fileID: 0}
-  rightFoward: 0
+  frontPrimaryVertex: {fileID: 0}
+  backPrimaryVertex: {fileID: 0}
+  leftAuxVertex: {fileID: 0}
+  rightAuxVertex: {fileID: 0}
+  cylColliderPrefab: {fileID: 0}
+  vertexIndicatorPrefab: {fileID: 0}
+  currentCylinderHit: {fileID: 0}
+  isBeingDragged: 0
+  isLeaf: 0
+  isAttached: 0
+  isRoot: 0
   flippedMultiplier: -1
+  mGhost: {fileID: 0}
 --- !u!114 &1375395018460956393
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -819,8 +829,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connecting: 0
-  axisKey: Rib Chunk Left (1)
 --- !u!1 &3684457879245778502
 GameObject:
   m_ObjectHideFlags: 0
@@ -2050,8 +2058,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connecting: 0
-  axisKey: Spine Chunk (1)
 --- !u!1 &7504774562320812425
 GameObject:
   m_ObjectHideFlags: 0
@@ -2193,8 +2199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37ab00a53fac0e4f9a8a32fc95cb2eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connecting: 0
-  axisKey: Rib Chunk Left (2)
 --- !u!1 &7737068646556396513
 GameObject:
   m_ObjectHideFlags: 0

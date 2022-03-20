@@ -20,14 +20,27 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     private float resistTime;
     private float resistTimer;
 
+    [SerializeField]
+    private GameObject homeObject;
+    
+    [SerializeField]
+    private GameObject awayObject;
+    
 
+    private Vector3 homePoint;
+    public Vector3 Home { get { return homePoint; } }
+    private Vector3 awayPoint;
+    public Vector3 Away { get { return awayPoint; } }
+    private bool returning = false;
     private bool on = false;
     public bool On { get { return on; } set { on = value; } }
+
     private Rigidbody rB;
-    private CustomGravity mCustomGravity;
 
     private bool resisting = false;
-    
+    [SerializeField]
+    float resistClamp = 0.5f;
+
 
     [SerializeField]
     private GameObject breakEffectObject;
@@ -35,12 +48,21 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     private GameObject touchEffectObject;
 
 
-    ParticleSystem breakEffect;
-    ParticleSystem touchEffect;
+    private ParticleSystem breakEffect;
+    private ParticleSystem touchEffect;
 
+    private const float lerpEndFrame = 30;
+    private float lerpCount = 0;
 
     Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return rB; } }
+
+    private bool grabbable = true;
+    public bool Grabbable { get { return grabbable; } set { grabbable = value; } }
+    private bool leaving = false;
+    public bool Leaving { get { return leaving; } set { leaving = value; } }
+    private bool left = false;
+    public bool Left { get { return left; } set { left = value; } }
 
     private void Awake()
     {
@@ -50,10 +72,11 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     {
         rB = GetComponent<Rigidbody>();
         //ResetMass();
-        mCustomGravity = GetComponent<CustomGravity>();
 
         breakEffect = breakEffectObject.GetComponent<ParticleSystem>();
         touchEffect = touchEffectObject.GetComponent<ParticleSystem>();
+        homePoint = homeObject.transform.position;
+        awayPoint = awayObject.transform.position;
     }
 
     protected void Update()
@@ -80,6 +103,21 @@ public class Stopwatch : MonoBehaviour, IGrabbable
             if (resistTimer > resistTime + 0.5f)
                 resisting = false;
         }
+        if (leaving)
+        {
+            lerpCount++;
+
+            Vector3 interpolation = new Vector3(Mathf.SmoothStep(homePoint.x, awayPoint.x, lerpCount / lerpEndFrame), Mathf.SmoothStep(homePoint.y, awayPoint.y, lerpCount / lerpEndFrame), Mathf.SmoothStep(homePoint.z, awayPoint.z, lerpCount / lerpEndFrame));
+
+            gameObject.transform.position = interpolation;
+
+            if (lerpCount == lerpEndFrame)
+            {
+                leaving = false;
+                left = true;
+            }
+        }
+
     }
 
 
@@ -100,8 +138,7 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     }
     public void PickedUp()
     {
-        if (mCustomGravity)
-            mCustomGravity.Disable();
+        
         rB.useGravity = false;
 
         //rB.constraints = (RigidbodyConstraints)112;
@@ -111,27 +148,36 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     }
     public void Dropped()
     {
-        touchEffect.Stop();
-
-        const float maxReleaseYVelocity = 1.0f;
-        if (mCustomGravity)
-            mCustomGravity.Enable();
-
-        //rB.freezeRotation = false;
-        gameObject.layer = 12;
-        Vector3 velocity = rB.velocity;
-        if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
+        grabbable = false;
+        lerpCount = 0;
+        IEnumerator Routine()
         {
-            rB.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
+            while (lerpCount != lerpEndFrame)
+            {
+
+                lerpCount++;
+
+                Vector3 interpolation = new Vector3(Mathf.SmoothStep(awayPoint.x, homePoint.x, lerpCount / lerpEndFrame), Mathf.SmoothStep(awayPoint.y, homePoint.y, lerpCount / lerpEndFrame), Mathf.SmoothStep(awayPoint.z, homePoint.z, lerpCount / lerpEndFrame));
+
+                gameObject.transform.position = interpolation;
+
+                yield return null;
+
+            }
+            lerpCount = 0;
+            left = false;
+            leaving = false;
+            touchEffect.Stop();
+            yield break;
         }
-        
+        StartCoroutine(Routine());
     }
     public void ChangeAngle(float change)
     {
         if (!on)
             return;
 
-        if (change < 0 && !resisting) {
+        if (change < -resistClamp && !resisting) {
             ResistDialBack();
         }
         else
@@ -139,5 +185,5 @@ public class Stopwatch : MonoBehaviour, IGrabbable
             angleChange += change;
         }
     }
-
+    
 }

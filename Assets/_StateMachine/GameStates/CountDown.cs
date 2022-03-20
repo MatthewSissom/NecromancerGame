@@ -42,10 +42,11 @@ public class CountDown : State
         {
             yield return null;
         }
+        stopWatch.Dropped();
         stopWatch.Angle = 0;
         stopWatch.On = false;
         text.text = "Finished!";
-        stopWatch.SetHandPercentage(0); 
+        stopWatch.SetHandPercentage(0);
         yield return new WaitForSeconds(1);
         text.gameObject.SetActive(false);
 

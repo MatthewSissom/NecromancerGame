@@ -37,6 +37,13 @@ public class BoneMovingTouch : TouchProxy
     public Vector3 primaryMidpoint { private set; get; }
     public Vector3 auxileryAxis { private set; get; }
 
+    //Home and Away for stop watch
+    private Vector3 watchHome;
+    private Vector3 watchAway;
+
+    private const float watchLerpEndFrame = 30;
+    private float watchLerpCount = 0;
+
     public void SetActive(Stopwatch watch)
     {
         activeWatch = watch;
@@ -104,6 +111,8 @@ public class BoneMovingTouch : TouchProxy
         {
             b.PickedUp();
             SetActive(b);
+            watchHome = b.Home;
+            watchAway = b.Away;
             return;
         }
         GrabbableGroup c = other.GetComponentInParent<GrabbableGroup>(); 
@@ -129,19 +138,9 @@ public class BoneMovingTouch : TouchProxy
             Vector3 toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
             Vector3.ClampMagnitude(toProxy, maxVelocity);
             activeBone.Rb.velocity = toProxy;
-        }else if(activeWatch != null)
+        } else if (activeWatch != null && watchLerpCount == 0 &&activeWatch.Grabbable)
         {
-
-            
-
-            const float maxVelocity = 7.0f;
-            const float baseMult = 20;
-            //find movement vector
-            Vector3 toProxy = (transform.position + offset - activeWatch.transform.root.position) * baseMult;
-            Vector3.ClampMagnitude(toProxy, maxVelocity);
-            activeWatch.Rb.velocity = toProxy;
-
-
+            activeWatch.Leaving = true;
         }
         //the rad of the touch collider quickly increases to the normal size when first being reenabled
         else if (radMult < 1)
@@ -149,7 +148,8 @@ public class BoneMovingTouch : TouchProxy
             radMult += Time.deltaTime * 5;
             transform.up = Camera.main.transform.position - transform.position;
             myVolume.size = new Vector3(radius * 2 * radMult, myVolume.size.y, radius * 2 * radMult);
-        }
+        }  
+        
     }
 
     // Start is called before the first frame update
@@ -173,9 +173,17 @@ public class BoneMovingTouch : TouchProxy
         base.OnDisable();
 
         if (activeWatch != null)
-            activeWatch.Dropped();
-
-        activeWatch = null;
+        {
+            if (activeWatch.Left || activeWatch.Leaving)
+            {
+                watchLerpCount = 0;
+                activeWatch.Leaving = false;
+                activeWatch.Left = false;
+                activeWatch.Dropped();
+            }
+            activeWatch.Grabbable = true;
+            activeWatch = null;
+        }
 
         if (activeBone != null)
             activeBone.Dropped();

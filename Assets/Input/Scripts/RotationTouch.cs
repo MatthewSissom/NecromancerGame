@@ -24,6 +24,7 @@ public class RotationTouch : TouchProxy
     float aVelocityClamp = 1.0f;
     [SerializeField]
     float stopWatchRotModifier = 0.5f;
+    
 
     //Score - tracks if the player is trying to spin or pinch
     const int scoresLength = 5;
@@ -129,7 +130,7 @@ public class RotationTouch : TouchProxy
 
         //remove any rotation along toParent, it is unwanted
         aVelocity += Vector3.Dot(aVelocity, toParent) * toParentPerp;
-        Debug.Log(aVelocity);
+       
 
         if (aVelocity.magnitude < aVelocityClamp)
         {

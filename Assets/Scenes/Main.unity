@@ -7349,47 +7349,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 670829818}
   m_Mesh: {fileID: -2432090755550338912, guid: d8962739f0bbd7b4fbbccc9a9d18b43b, type: 3}
---- !u!1 &674943366 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5122710491359956994, guid: 9db830be7935e314eb62a2e06dc2a82c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1464288846}
-  m_PrefabAsset: {fileID: 0}
---- !u!59 &674943372
-HingeJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 674943366}
-  m_ConnectedBody: {fileID: 1854733070}
-  m_Anchor: {x: 0, y: -0.0088, z: 0.0023}
-  m_Axis: {x: 1, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.0000000037252903, y: 0.0051477253, z: 0.030524703}
-  m_UseSpring: 1
-  m_Spring:
-    spring: 50
-    damper: 5
-    targetPosition: 0
-  m_UseMotor: 0
-  m_Motor:
-    targetVelocity: 0
-    force: 0
-    freeSpin: 0
-  m_UseLimits: 0
-  m_Limits:
-    min: 0
-    max: 0
-    bounciness: 0
-    bounceMinVelocity: 0.2
-    contactDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
 --- !u!1 &680484997
 GameObject:
   m_ObjectHideFlags: 0
@@ -16523,15 +16482,35 @@ PrefabInstance:
       propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1418311539360735189, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: stopAction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1418311539360735189, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: looping
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1579113033529271246, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
       propertyPath: roundTime
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 2310420313706021154, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: m_Name
+      value: TouchFX
+      objectReference: {fileID: 0}
     - target: {fileID: 2497825405398994649, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2508115003753603445, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3147301549176646308, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
@@ -16567,6 +16546,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4084239977892553280, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: stopAction
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4898323225309291012, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
@@ -16688,7 +16672,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1255377370138276127, guid: 9db830be7935e314eb62a2e06dc2a82c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9db830be7935e314eb62a2e06dc2a82c, type: 3}
 --- !u!1 &1472748268
 GameObject:
@@ -21874,7 +21859,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!65 &1854733071
 BoxCollider:

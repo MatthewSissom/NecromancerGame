@@ -253,7 +253,7 @@ MonoBehaviour:
   isLeaf: 0
   isAttached: 0
   isRoot: 0
-  flippedMultiplier: 1
+  flippedMultiplier: -1
   mGhost: {fileID: 0}
 --- !u!65 &8203778505349969825
 BoxCollider:

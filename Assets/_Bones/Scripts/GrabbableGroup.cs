@@ -51,7 +51,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         
         
         if(firstPickup)
-          transform.forward = Camera.main.transform.forward * FlippedMultiplier;
+          transform.forward = Camera.main.transform.forward * flippedMultiplier;
 
         rB.constraints = (RigidbodyConstraints)48;
        
