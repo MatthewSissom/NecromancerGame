@@ -9,6 +9,9 @@ using RootMotion.FinalIK;
 
 public class IkInit : IAssemblyStage
 {
+    // Todo add cat behavior to empty armature
+    // PlayPenState.Instance.SetSkeleton(EmptyArmature);
+
     IEnumerator IAssemblyStage.Execute(GameObject skeleton) 
     {
 #if USING_IK
