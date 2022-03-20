@@ -70,10 +70,10 @@ public class ActionQueue
     public void Add(IEnumerable<Action> actions)
     {
         IEnumerator<Action> enumerator = actions.GetEnumerator();
-        do
+        while (enumerator.MoveNext())
         {
             Add(enumerator.Current);
-        } while (enumerator.MoveNext());
+        }
     }
 }
 
