@@ -187,8 +187,6 @@ public class BoneGroup : MonoBehaviour
 
     public void Attach(BoneGroup parent/*, TableManager tableManager*/)
     {
-        Debug.Log("Attaching to: ");
-        Debug.Log(parent);
         this.parent = parent;
         isLeaf = true;
         parent.isLeaf = false;
