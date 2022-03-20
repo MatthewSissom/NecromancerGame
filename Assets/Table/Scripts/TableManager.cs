@@ -5,7 +5,7 @@ using System;
 
 public class TableManager : MonoBehaviour
 {
-    static TableManager Instance;
+    public static TableManager Instance;
     private int shipmentNumber;
 
     [SerializeField]
@@ -33,6 +33,10 @@ public class TableManager : MonoBehaviour
     Color disabledColor;
     [SerializeField]
     Color enabledColor;
+
+
+    [SerializeField]
+    public List<BoneGroup> boneObjects;
 
     void Awake()
     {

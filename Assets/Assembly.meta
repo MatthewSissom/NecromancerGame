@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Testing.meta
+guid: af4bfc76296043a4c9f9a066056ffd4f
+=======
 guid: 036249984a503e04fab50de120d563ea
+>>>>>>> master:Assets/Assembly.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

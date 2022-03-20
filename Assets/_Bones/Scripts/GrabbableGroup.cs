@@ -78,7 +78,6 @@ public class GrabbableGroup : BoneGroup, IGrabbable
 
         if(currentCylinderHit != null)
         {
-            Debug.Log(currentCollisionVertex);
             mPointApproacher.StartApproach(
                 getRelativePosition(currentCollisionVertex.Value, currentCylinderHit.MyBone, currentCylinderHit.MyType), 0.5f);
 

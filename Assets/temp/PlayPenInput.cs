@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayPenInput : MonoBehaviour
 {
-    Camera camera;
+    Camera mainCam;
     [SerializeField]
     GameObject followTarget;
     public GameObject FollowTarget { get { return followTarget; } }
@@ -21,7 +21,7 @@ public class PlayPenInput : MonoBehaviour
 
     private void Start()
     {
-        camera = Camera.main;
+        mainCam = Camera.main;
         enabled = false;
         GameManager.Instance.AddEventMethod(typeof(PlayPenState), "Begin", () => { enabled = true; });
         MenuManager.Instance.AddEventMethod(typeof(MenuMain), "Begin", () => { enabled = false; });
@@ -48,8 +48,8 @@ public class PlayPenInput : MonoBehaviour
 
             {
                 pos = Input.mousePosition;
-                pos.z = camera.transform.position.y - 1;
-                pos = camera.ScreenToWorldPoint(pos);
+                pos.z = mainCam.transform.position.y - 1;
+                pos = mainCam.ScreenToWorldPoint(pos);
             }
         }
 #else
@@ -61,12 +61,12 @@ public class PlayPenInput : MonoBehaviour
         {
             //pos represents the point in world space at the specified height
             pos = touches[0].position;
-            pos.z = camera.transform.position.y - 1;
-            pos = camera.ScreenToWorldPoint(pos);
+            pos.z = mainCam.transform.position.y - 1;
+            pos = mainCam.ScreenToWorldPoint(pos);
         }
 
-        Vector3 rayDirection = (camera.transform.position - pos).normalized;
-        Ray ray = new Ray(camera.transform.position, rayDirection);
+        Vector3 rayDirection = (mainCam.transform.position - pos).normalized;
+        Ray ray = new Ray(mainCam.transform.position, rayDirection);
 
         if(Physics.Raycast(ray,out RaycastHit info))
         {
