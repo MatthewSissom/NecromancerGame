@@ -118,9 +118,10 @@ public class JumpArc : IContinuousSkeletonPath
 }
 
 // used to shorten the duration of a path without modifying the underlying path
-public class TrimmedPath : IContinuousSkeletonPath
+public class TrimmedPath : IContinuousSkeletonPath, IHigherOrderPath, IRealDuration
 {
     public float Duration { get; private set; }
+    public float NegitiveDuration {get; private set;}
 
     private IContinuousSkeletonPath basePath;
     private float startTime;
@@ -140,10 +141,23 @@ public class TrimmedPath : IContinuousSkeletonPath
         return basePath.GetForward(time + startTime);
     }
 
+    public void DeletePathBefore(float time)
+    {
+        (basePath as IHigherOrderPath)?.DeletePathBefore(time + startTime);
+    }
+
     public TrimmedPath(IContinuousSkeletonPath toTrim, float startTime, float duration)
     {
-        Duration = duration + startTime <= toTrim.Duration ? duration : toTrim.Duration - startTime;
-        this.startTime = startTime;
         basePath = toTrim;
+        this.startTime = startTime;
+
+        // shorten duration if it would outrun the base path
+        float durationAdjustment = Mathf.Min(basePath.Duration - (startTime + duration), 0);
+        Duration = duration + durationAdjustment;
+
+        // see if base path has negitive duration
+        IRealDuration toTrimNegitiveGetter = basePath as IRealDuration;
+        float baseNegDuration = (toTrimNegitiveGetter?.NegitiveDuration) ?? 0;
+        NegitiveDuration = baseNegDuration - startTime;
     }
 }

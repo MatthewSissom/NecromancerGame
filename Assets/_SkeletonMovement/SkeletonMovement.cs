@@ -6,81 +6,125 @@ using UnityEngine;
 //Recives a base path from cat behavior
 public class SkeletonMovement
 {
-    public bool Pathing { get; private set; }
-    public event System.Action PathFinished;
-    IContinuousSkeletonPath path;
+    public IContinuousSkeletonPath Path { get => path; }
+    public float TraceTime { get; private set; }
+    public bool ActionIsCancelable { get => (action?.Cancelable ?? true); }
+    public bool CanSetAction { get => ActionIsCancelable || ActionCompletion >= 1; }
+    public float ActionCompletion {
+        get 
+        {
+            if (action == null)
+                return 1;
+            return Mathf.Max(1, TraceTime / action.Path.Duration);
+        }
+    }
 
-    List<PathTracer> footTracers;
-    List<PathTracer> spineTracers;
+    private Action action;
+    private IContinuousSkeletonPath path;
+    FootCoordinator footCoordinator;
+    SpineCoordinator spineCoordinator;
+
+    // temp?
+    Transform firstSpinePoint;
 
     //speed and ground height are temp, should be moved here eventually
-    public SkeletonMovement(List<LimbData> limbEnds, List<SpineTransform>)
+    public SkeletonMovement(LimbData[] limbEnds, SpinePointData[] spinePoints)
     {
-        LimbInit(limbEnds);
+        spineCoordinator = new SpineCoordinator(spinePoints);
+        footCoordinator = new FootCoordinator(limbEnds);
+
+        firstSpinePoint = spinePoints[0].Transform;
+        SetPath(null);
     }
 
-    public void SetPath(IContinuousSkeletonPath basePath)
+    public void SetAction(Action newAction)
     {
-        this.path = basePath;
-        foreach(var tracer in footTracers) 
-        {
-            tracer.Path = basePath;
-        }
-        foreach (var tracer in spineTracers)
-        {
-            tracer.Path = basePath;
-        }
-    }
+        if (!CanSetAction)
+            Debug.LogError("Set action called incorrectly, always check CanSetAction first");
 
-    private void LimbInit(List<LimbData> limbEnds)
-    {
-        float GroundYValue = 0;
-        //holds limbs that shouldn't be considered for the min limb
-        HashSet<LimbData> outliers = new HashSet<LimbData>();
-        //if an outlier is found then remove it and check the set of limbs again
-        bool recalculate = false;
-        float minHeight;
-
-        do
+        // make action active, check for specific transitions before 
+        bool isActive = UseSpecialActionTransition(newAction);
+        if (!isActive)
         {
-            //how far off the ground the limb will be when walking
-            minHeight = float.MaxValue;
-            float avgHeight = 0;
-            LimbData minLimb = null;
-            foreach (var limb in limbEnds)
+            if (action != null)
             {
-                if (outliers.Contains(limb))
-                    continue;
-                float length = limb.LimbLength;
-                //reduce the lenght of limbs to account for bending
-                //.7 ~> root(2)/2 which give the cat a stride lenght roughly twice the lenght of the limb
-                //which is roughly realistic. stumps don't use this calculation because they can't bend
-                if (limb.Type != LimbData.LimbTag.Stump && limb.Type != LimbData.LimbTag.StumpSingle)
-                    length *= .7f;
-                if (length < minHeight)
-                {
-                    minHeight = length;
-                    minLimb = limb;
-                }
-                avgHeight += length;
+                newAction.MakeActive(Path, TraceTime);
             }
-            avgHeight /= limbEnds.Count;
-            recalculate = minHeight < avgHeight / 2;
-            if (recalculate)
-                outliers.Add(minLimb);
-        } while (recalculate);
-
-        distFromGroundToChest = minHeight;
-        ChestHeight = minHeight + GroundYValue;
-
-        foreach (var limb in limbEnds)
-        {
-            limb.StepSpeed = speed * 4;
-            limb.StepHeight = 0.05f;
-            limb.SetStride(minHeight);
-            limb.StepStartEvent += LimbStartedStep;
-            limb.StepEndEvent += LimbEndedStep;
+            else
+            {
+                newAction.MakeActive(firstSpinePoint.forward, GetPathPos());
+            }
         }
+
+        SetPath(newAction.Path);
+        spineCoordinator.SetOffsets(newAction.SpineOffsets);
+        footCoordinator.SetOffsets(newAction.LimbOffsets);
+
+        action = newAction;
+    }
+
+    public Vector3 GetPathPos()
+    {
+        Vector3? pathPos = spineCoordinator.GetPathPos();
+        if (pathPos != null)
+            return pathPos.Value;
+
+        // no path, use raycast to find the ground
+        Vector3 rayDirection = new Vector3(0,-1,0);
+        Ray ray = new Ray(firstSpinePoint.position + new Vector3(0,.01f,0), rayDirection);
+        if (Physics.Raycast(ray, out RaycastHit info))
+        {
+            return info.point;
+        }
+
+        Debug.LogError("Raycast to find ground failed!");
+        return new Vector3();
+    }
+
+    private bool UseSpecialActionTransition(Action newAction)
+    {
+        if (action == null)
+            return false;
+
+        // make action active
+        switch (newAction.Type)
+        {
+            case Action.ActionType.Walk:
+                if (newAction.Type == action.Type)
+                {
+                    WalkAction newWalk = newAction as WalkAction;
+                    WalkAction oldWalk = action as WalkAction;
+                    newWalk.MakeActive(oldWalk, TraceTime);
+                    return true;
+                }
+                return false;
+            case Action.ActionType.Jump:
+                return false;
+            default:
+                return false;
+        }
+    }
+
+    private void SetPath(IContinuousSkeletonPath basePath)
+    {
+        if (basePath == null)
+            Debug.LogError("Null path");
+        path = basePath;
+        footCoordinator.SetPath(basePath);
+        spineCoordinator.SetPath(basePath);
+        TraceTime = 0;
+    }
+
+    public void Update(float dt)
+    {
+        footCoordinator.Update(dt);
+        spineCoordinator.Update(dt);
+
+        float duration = (Path?.Duration ?? 0);
+        if (TraceTime < duration)
+            TraceTime += dt;
+        else
+            TraceTime = duration;
     }
 
 #if UNITY_EDITOR

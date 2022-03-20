@@ -26,13 +26,12 @@ public class PlayPenState : State
 
         // set ai vars
         behavior.followTarget = PlayPenInput.Instance.FollowTarget;
-        behavior.GroundHeight = skeletonSpawnPoint.transform.position.y;
 
         // orient skeleton
         playSkeleton.transform.forward = Vector3.right;
         playSkeleton.transform.up = Vector3.up;
         Vector3 spawnPoint = skeletonSpawnPoint.transform.position;
-        playSkeleton.transform.position = new Vector3(spawnPoint.x, behavior.ChestHeight, spawnPoint.z);
+        playSkeleton.transform.position = new Vector3(spawnPoint.x, 0, spawnPoint.z);
 
         // set bone colors back to white if needed
         void ChangeMatRecursive(Transform t)

@@ -76,7 +76,6 @@ public class StateManager : StateManagerBase
                     PlayPenState.Instance.SetSkeleton(testSkeleton);
                     yield return SetState(GameManager.Instance.Game());
                 }
-                break;
         }
     }
 

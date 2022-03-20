@@ -51,10 +51,10 @@ public class SkeletonPathfinding
                     )
                 );
             radMult = Mathf.Min(1, radMult);
-            vector += toPrevious / distance * radMult * tunables.minTurningRad;
+            vector += toPrevious / distance * radMult * tunables.MinTurningRad;
 
             //skip points that would cause orientandpathto to fail
-            if ((previous - vector).magnitude < tunables.minTurningRad)
+            if ((previous - vector).magnitude < tunables.MinTurningRad)
                 continue;
 
             previous = vector;

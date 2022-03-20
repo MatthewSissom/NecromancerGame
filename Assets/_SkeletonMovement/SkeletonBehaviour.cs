@@ -7,13 +7,73 @@ using UnityEngine;
 
 public struct PathTunables
 {
-    public float minTurningRad;
-    public float speed;
+    public float MinTurningRad { get; private set; }
+    public float Speed { get; private set; }
+    public float SpineLength { get; private set; }
+    // add a small amount of extra time for buffer
+    public float SkeletonDuration { get => SpineLength / Speed + .25f; }
+    public float DelayedPathLenght { get => SkeletonDuration * Speed; }
 
-    public PathTunables(float minTurningRad, float speed)
+    public PathTunables(float minTurningRad, float speed, float spineLenght)
     {
-        this.minTurningRad = minTurningRad;
-        this.speed = speed;
+        MinTurningRad = minTurningRad;
+        Speed = speed;
+        SpineLength = spineLenght;
+    }
+}
+
+public struct SkeletonLayoutData
+{
+    public LimbData[] LimbEnds;
+    public SpinePointData[] SpinePoints;
+    public float SkeletonLenght;
+
+    public SkeletonLayoutData(LimbData[] limbEnds, SpinePointData[] spinePoints, float skeletonLength)
+    {
+        LimbEnds = limbEnds;
+        SpinePoints = spinePoints;
+        SkeletonLenght = skeletonLength;
+    }
+}
+
+public class ActionQueue
+{
+    public bool CurrentQueueIsActive { get; private set; }
+    public bool Empty { get => actionQueue.Count == 0; }
+
+    private Queue<Action> actionQueue;
+
+    public ActionQueue()
+    {
+        Clear();
+    }
+
+    public Action SetNextAsActive()
+    {
+        if (Empty)
+            return null;
+        CurrentQueueIsActive = true;
+        return actionQueue.Dequeue();
+    }
+
+    public void Clear()
+    {
+        actionQueue = new Queue<Action>();
+        CurrentQueueIsActive = false;
+    }
+
+    public void Add(Action action)
+    {
+        actionQueue.Enqueue(action);
+    }
+
+    public void Add(IEnumerable<Action> actions)
+    {
+        IEnumerator<Action> enumerator = actions.GetEnumerator();
+        do
+        {
+            Add(enumerator.Current);
+        } while (enumerator.MoveNext());
     }
 }
 
@@ -24,19 +84,17 @@ public class SkeletonBehaviour : MonoBehaviour
     [SerializeField]
     public GameObject followTarget;
     Vector3 targetPreviousPos = new Vector3(-1000,-1000,-1000);
-    bool pathing = false;
 
     [SerializeField]
     float speed;
 
+    // used to set up test cats, unused in game pipeline
     [SerializeField]
     List<LimbData> limbEnds;
     [SerializeField]
     float stepHeight;
     [SerializeField]
-    float chestHeight;
-    [SerializeField]
-    float hipDelay;
+    float chestHeight; 
 
     [SerializeField]
     private Transform hipTransform;
@@ -47,101 +105,146 @@ public class SkeletonBehaviour : MonoBehaviour
 
     public bool Initalized { get; private set; } = false;
     
-    //holds transforms along the main line of the cat 
-    Transform[] orderedTransforms;
-
     SkeletonMovement movement;
     SkeletonPathfinding pathfinding;
+    ActionQueue actionQueue;
+    SkeletonLocomotionPlanner locomotionPlanner;
     SkeletonBasePathBuilder pathBuilder;
-
-    // if cat can't change paths immeditely (jumping) queue it instead
-    public Vector3? queuedDestination = null;
 
     //temp
     float timer;
 
-    public void BehaviorInit(List<LimbData> limbEnds, Transform[] orderedTransforms, float[] transformDistances, int shoulderIndex)
+    public void BehaviorInit(SkeletonLayoutData initData)
     {
         if (Initalized)
             return;
         Initalized = true;
 
+        // inits pathfinder and path builder
         UpdateTunables(new PathTunables(
             .1f,
-            speed
+            speed,
+            initData.SkeletonLenght
         ));
 
-        this.orderedTransforms = orderedTransforms;
-        this.limbEnds = limbEnds;
+        movement = new SkeletonMovement(initData.LimbEnds, initData.SpinePoints);
+        locomotionPlanner = new SkeletonLocomotionPlanner(pathBuilder, initData);
+        actionQueue = new ActionQueue();
 
-        speed = 0.3f;
-        stepHeight = 0.05f;
-
-        for (int i = 0; i < transformDistances.Length; i++)
-        {
-            transformDistances[i] /= speed;
-            if (i > shoulderIndex)
-                transformDistances[i] *= -1;
-        }
-
+        //speed = 0.3f;
+        //stepHeight = 0.05f;
     }
 
 
 
     private void Start()
     {
-        void CleanUp()
-        {
-            GameManager.Instance.RemoveEventMethod(typeof(GameCleanUp), "Begin", CleanUp);
-            Destroy(gameObject.transform.root.gameObject);
-        }
         if(GameManager.Instance)
             GameManager.Instance.AddEventMethod(typeof(GameCleanUp), "Begin", CleanUp);
 
         if (Initalized)
             return;
-        Initalized = true;
 
-        Debug.Log("Start init used on catbehavior. This should only happen when ");
+        Debug.Log("Start init used on catbehavior. This should only happen when using the playpen debug mode");
 
-        orderedTransforms = new Transform[4];
-        orderedTransforms[0] = tailTransform;
-        orderedTransforms[1] = hipTransform;
-        orderedTransforms[2] = transform;
-        orderedTransforms[3] = headTransform;
+        Transform[] orderedTransforms = new Transform[4];
+        orderedTransforms[0] = headTransform;
+        orderedTransforms[1] = transform;
+        orderedTransforms[2] = hipTransform;
+        orderedTransforms[3] = tailTransform;
 
-        float[] delays= new float[4];
-        delays[0] = (tailTransform.position - hipTransform.position).magnitude / speed * 2 + (transform.position - hipTransform.position).magnitude / speed + hipDelay;
-        delays[1] = (transform.position - hipTransform.position).magnitude / speed + hipDelay;
-        delays[2] = 0;
-        delays[3] = -(transform.position - headTransform.position).magnitude / speed * 2;
+        float[] distances = new float[4];
+        distances[0] = 0;
+        distances[1] = (orderedTransforms[0].transform.position - orderedTransforms[1].transform.position).magnitude;
+        distances[2] = (orderedTransforms[1].transform.position - orderedTransforms[2].transform.position).magnitude;
+        distances[3] = (orderedTransforms[2].transform.position - orderedTransforms[3].transform.position).magnitude;
+        float totalDistance = distances[1] + distances[2] + distances[3];
+
+        // set spine delays
+        SpinePointData[] spinePoints = new SpinePointData[orderedTransforms.Length];
+        float cumulativeDelay = 0;
+        for (int i = 0; i < spinePoints.Length; i++)
+        {
+            cumulativeDelay += distances[i] / speed;
+            spinePoints[i] = new SpinePointData(
+                orderedTransforms[i],
+                cumulativeDelay
+            );
+        }
+
+        // set limb delays to match their corresponding spine point (shoulders for front legs, hips for back legs)
+        foreach(LimbData limbEnd in limbEnds)
+        {
+            switch (limbEnd.LocationTag)
+            {
+                case LimbLocationTag.FrontLeft:
+                    limbEnd.SetDelay(spinePoints[1].Delay);
+                    break;
+                case LimbLocationTag.FrontRight:
+                    limbEnd.SetDelay(spinePoints[1].Delay);
+                    break;
+                case LimbLocationTag.BackLeft:
+                    limbEnd.SetDelay(spinePoints[2].Delay);
+                    break;
+                case LimbLocationTag.BackRight:
+                    limbEnd.SetDelay(spinePoints[2].Delay);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        BehaviorInit(new SkeletonLayoutData(limbEnds.ToArray(), spinePoints, totalDistance));
     }
 
-    bool PathToPoint(Vector3 destination)
+    private bool MoveToPoint(Vector3 destination)
     {
         targetPreviousPos = followTarget.transform.position;
+        Vector3 currentPathPos = movement.GetPathPos();
 
-        List<Vector3> destinations =  pathfinding.GetPathPoints(transform.position, destination);
+        // get list of points to visit from unity's nav mesh
+        List<Vector3> destinations =  pathfinding.GetPathPoints(currentPathPos, destination);
         if (destinations == null)
             return false;
 
-        IContinuousSkeletonPath basePath = pathBuilder.PathFromPoints(transform.position, transform.forward, destinations);
-        if (basePath == null)
+        // plan actions to move between destinations
+        Queue<Action> actions = locomotionPlanner.PlanMovementFromDestinations(destinations);
+        if (actions == null)
             return false;
+        actionQueue.Clear();
+        actionQueue.Add(actions);
 
-        movement.SetPath(basePath);
         return true;
     }
 
     private void Update()
     {
         if(followTarget && (followTarget.transform.position - targetPreviousPos).magnitude > 0.05f)
-            PathToPoint(followTarget.transform.position);
+            MoveToPoint(followTarget.transform.position);
+
+        // update movement and check if action needs to be changed
+        movement.Update(Time.deltaTime);
+        if (movement.CanSetAction && !actionQueue.Empty)
+        {
+            // always switch to current queue if it's not already active
+            if (!actionQueue.CurrentQueueIsActive)
+                movement.SetAction(actionQueue.SetNextAsActive());
+
+            // if current action is finished, start the next action
+            if (movement.ActionCompletion == 1)
+                movement.SetAction(actionQueue.SetNextAsActive());
+        }
     }
 
     private void UpdateTunables(PathTunables tunables)
     {
         pathBuilder = new SkeletonBasePathBuilder(tunables);
         pathfinding = new SkeletonPathfinding(tunables);
+    }
+
+    private void CleanUp()
+    {
+        GameManager.Instance.RemoveEventMethod(typeof(GameCleanUp), "Begin", CleanUp);
+        Destroy(gameObject.transform.root.gameObject);
     }
 }

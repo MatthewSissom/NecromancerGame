@@ -12,41 +12,66 @@ public class SkeletonBasePathBuilder
         this.tunables = tunables;
     }
 
-    public IContinuousSkeletonPath PathFromPoints(Vector3 start, Vector3 startForward, List<Vector3> destinations)
+    // should only be called the first time a skeleton starts a path
+    public IContinuousSkeletonPath GroundPathFromPoints(Vector3 start, Vector3 startForward, Vector3[] destinations)
     {
         path = new LinkedList<IContinuousSkeletonPath>();
 
+        // add line for delayed points
+        path.AddFirst(new LinePath(
+            tunables.SkeletonDuration,
+            start + startForward * -1 * tunables.DelayedPathLenght,
+            start
+        ));
+
+        // try to path. if failed return null
+        if (!CalculateGroundPathInternal(start, startForward, destinations))
+            return null;
+
+        IContinuousSkeletonPath finalPath =  new CompositePath(path, -1 * tunables.SkeletonDuration);
+        return finalPath;
+    }
+
+    public IContinuousSkeletonPath SwitchGroundPath(IContinuousSkeletonPath previousPath, float traceTime, Vector3[] destinations)
+    {
+        path = new LinkedList<IContinuousSkeletonPath>();
+
+        // use previous path for delayed points
+        float adjustedTraceTime = traceTime - tunables.SkeletonDuration;
+        TrimmedPath delayedPath = new TrimmedPath(previousPath, adjustedTraceTime, tunables.SkeletonDuration);
+        delayedPath.DeletePathBefore(0);
+        path.AddFirst(delayedPath);
+
+        // try to path. if failed return null
+        if (!CalculateGroundPathInternal(previousPath.GetPointOnPath(traceTime), previousPath.GetForward(traceTime), destinations))
+            return null;
+
+        IContinuousSkeletonPath finalPath = new CompositePath(path, -1 * tunables.SkeletonDuration);
+        return finalPath;
+    }
+
+    private bool CalculateGroundPathInternal(Vector3 start, Vector3 startForward, Vector3[] destinations)
+    {
         Vector3 pos = start;
         Vector3 forward = startForward;
         foreach (var destination in destinations)
         {
-            //height changes require a jump
-            if (Mathf.Abs(destination.y - pos.y) > .07f)
+            //change the current forward to the forward the cat will have at the
+            //end of the previous section
+            if (!OrientAndGoToPoint(destination, pos, forward, out forward))
             {
-                //TODO: Add jumping back in
-                //JumpToPoint(destination, pos, .1f);
-            }
-            else
-            {
-                //change the current forward to the forward the cat will have at the
-                //end of the previous section
-                if (!OrientAndPathTo(destination, pos, forward, out forward))
-                {
-                    Debug.Log("bad path aborting");
-                    return null;
-                }
+                Debug.Log("bad path aborting");
+                return false;
             }
 
             //update the position for next loop
             pos = destination;
         }
 
-        IContinuousSkeletonPath finalPath =  new CompositePath(path);
-        path = null;
-        return finalPath;
+        return true;
     }
 
-    private bool OrientAndPathTo(Vector3 destination, Vector3 currentPos, Vector3 currentForward, out Vector3 endForward)
+    private bool OrientAndGoToPoint(Vector3 destination, Vector3 currentPos, Vector3 currentForward, out Vector3 endForward)
     {
         //add a curve that ends with the cat pointing at the destination
         OrientTwardsPoint(destination, currentPos, currentForward, out Vector3? lineStart);
@@ -60,7 +85,7 @@ public class SkeletonBasePathBuilder
         //move to the destination
         Vector3 toDest = destination - currentPos;
         path.AddLast(new LinePath(
-            toDest.magnitude / tunables.speed,
+            toDest.magnitude / tunables.Speed,
             currentPos,
             destination
             ));
@@ -87,20 +112,20 @@ public class SkeletonBasePathBuilder
         //the destination as possible
         Vector3 currentToCircleCenter = new Vector3(-currentForward.z, 0, currentForward.x);  //get perpendicular of forward
         currentToCircleCenter = Vector3.Project(currentToDest, currentToCircleCenter);        //project the delta on to the perpendicular
-        currentToCircleCenter = currentToCircleCenter.normalized * tunables.minTurningRad;             //adjust length to equal rad
+        currentToCircleCenter = currentToCircleCenter.normalized * tunables.MinTurningRad;             //adjust length to equal rad
 
         Vector3 center = currentPos + currentToCircleCenter;
         Vector3 delta = new Vector3(destination.x - center.x, 0, destination.z - center.z);
         Vector3 deltaPerp = new Vector3(-delta.z, 0, delta.x);
         float deltaMagnitude = delta.magnitude;
-        if (deltaMagnitude < tunables.minTurningRad) //algorithm doesn't work for points inside the circle
+        if (deltaMagnitude < tunables.MinTurningRad) //algorithm doesn't work for points inside the circle
         {
             return false;
         }
 
         //calculate points of tangency on the circle passing through the destination point by constructing
         //a similar triangle with r being similar to the tangent line passing through p
-        float scaleFactor = tunables.minTurningRad / deltaMagnitude; //divide hypotonuses to get scale factor
+        float scaleFactor = tunables.MinTurningRad / deltaMagnitude; //divide hypotonuses to get scale factor
         float aScale = scaleFactor * scaleFactor;
         float bScale = scaleFactor * Mathf.Sqrt(1 - aScale);
 
@@ -140,9 +165,9 @@ public class SkeletonBasePathBuilder
         //add the calculated semicircle to the path
         path.AddLast(
             new SemicirclePath(
-                Mathf.Abs(endTheta - startTheta) * tunables.minTurningRad / tunables.speed,
+                Mathf.Abs(endTheta - startTheta) * tunables.MinTurningRad / tunables.Speed,
                 center,
-                tunables.minTurningRad,
+                tunables.MinTurningRad,
                 startTheta,
                 endTheta
                 ));
