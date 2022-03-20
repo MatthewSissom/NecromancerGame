@@ -16,6 +16,7 @@ TagManager:
   - Tail
   - Pelvis
   - Ghost
+  - ColliderCylinder
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - Ghost
   - Bone
   - BoneTrigger
-  - 
+  - StopWatch
   - 
   - 
   - 

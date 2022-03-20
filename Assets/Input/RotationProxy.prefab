@@ -140,5 +140,7 @@ MonoBehaviour:
   id: 0
   moved: 0
   aroundToParentMult: 1000
-  acceleration: 1000
+  acceleration: 8000
   switchResistance: 0
+  aVelocityClamp: 0.05
+  stopWatchRotModifier: 0.05

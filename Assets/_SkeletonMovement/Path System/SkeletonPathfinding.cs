@@ -22,10 +22,6 @@ public class SkeletonPathfinding
             return null;
         }
 
-#if UNITY_EDITOR
-        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.NavMeshPath, mPath.corners);
-#endif
-
         var points = new List<Vector3>();
         Vector3 previous = pathStart;
         for (int i = 1, length = mPath.corners.Length - 1; i < length; i++)

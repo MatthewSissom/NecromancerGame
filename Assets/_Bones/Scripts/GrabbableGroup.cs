@@ -14,139 +14,105 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     const float realBoneDensity = 1850;
     const float density = realBoneDensity * 5;
 
-    private Rigidbody rb;
-    //maps colliders to the bones they belong to
-    private Dictionary<Collider, Bone> colliderToBone;
-    BoneCollisionHandler collisionHandler;
+    private Rigidbody rB;
     private CustomGravity mCustomGravity;
+    private PointApproacher mPointApproacher;
+
+    private bool firstPickup = true;
 
     Transform IGrabbable.transform { get { return transform; } }
-    public Rigidbody Rb { get { return rb; } }
+    public Rigidbody Rb { get {  return rB; } }
+    public Vector3 PrimaryMidpoint { get { return getPrimaryMidpoint(); } }
+    public Vector3 AuxilieryAxis { get { return getAuxiliaryAxis(); } }
+
     protected override void Awake()
     {
         base.Awake();
-
-        //physics init
-        rb = GetComponent<Rigidbody>();
-        ResetMass();
-        colliderToBone = new Dictionary<Collider, Bone>();
-        mCustomGravity = GetComponent<CustomGravity>();
-
-        //finds all bones in the higharcy and adds their colliders to the dictionary
-        //returns if a bone was found lower in the higharchy
-        bool RecursiveColliderSearch(Transform toCheck, Bone bone = null)
-        {
-            bool boneFound = false;
-            if (!bone)
-            {
-                //search for bone if none has been found 
-                boneFound = toCheck.TryGetComponent(out bone);
-                if (boneFound)
-                    bone.AttachedEvent += BoneWasConnected;
-            }
-            else
-            {
-                //if bones have been found search for colliders which belong to 
-                //the found bone
-                if(toCheck.TryGetComponent(out Collider c))
-                    colliderToBone.Add(c,bone);
-            }
-
-            //recurse
-            for (int i = 0; i < toCheck.childCount; i++)
-                boneFound |= RecursiveColliderSearch(toCheck.GetChild(i), bone);
-
-            return boneFound;
-        }
-        bool isValid = RecursiveColliderSearch(transform);
-        if (!isValid)
-            Debug.LogError("Compound bone has no children!");
     }
 
     protected override void Start()
     {
         base.Start();
-        collisionHandler = BoneManager.Collision;
+        //physics init
+        rB = GetComponent<Rigidbody>();
+        ResetMass();
+        mCustomGravity = GetComponent<CustomGravity>();
+        mPointApproacher = GetComponent<PointApproacher>();
     }
 
     public void PickedUp()
     {
         if (mGhost)
             mGhost.LostBone();
-
+      
         if (mCustomGravity)
             mCustomGravity.Disable();
-        rb.useGravity = false;
+        rB.useGravity = false;
+        
+        
+        if(firstPickup)
+          transform.forward = Camera.main.transform.forward * FlippedMultiplier;
 
+        rB.constraints = (RigidbodyConstraints)48;
+       
+
+        OnPickup();
+        firstPickup = false;
         IEnumerator DelayedLayerChange()
         {
+            
             yield return new WaitForSeconds(0.4f);
-            rb.freezeRotation = false;
             gameObject.layer = physicsLayer;
-            ApplyToAll((Bone b, FunctionArgs args) =>
-            {
-                BoneManager.Collision.SetPhysicsLayer(b, physicsLayer);
-            });
+      
             yield break;
         }
         StartCoroutine(DelayedLayerChange());
+        
     }
 
     public void Dropped()
     {
+        
         if (!this)
             return;
-        const float maxReleaseYVelocity = 1.0f;
-        if (mCustomGravity)
-            mCustomGravity.Enable();
-        rb.freezeRotation = false;
-        Vector3 velocity = rb.velocity;
-        if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
+
+        if(currentCylinderHit != null)
         {
-            rb.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
+            Debug.Log(currentCollisionVertex);
+            mPointApproacher.StartApproach(
+                getRelativePosition(currentCollisionVertex.Value, currentCylinderHit.MyBone, currentCylinderHit.MyType), 0.5f);
+
+            OnCollideDrop();
+        } else
+        {
+            const float maxReleaseYVelocity = 1.0f;
+            if (mCustomGravity)
+                mCustomGravity.Enable();
+
+            //rB.freezeRotation = false;
+            gameObject.layer = physicsLayer;
+            Vector3 velocity = rB.velocity;
+            if (Mathf.Abs(velocity.y) > maxReleaseYVelocity)
+            {
+                rB.velocity = Vector3.ProjectOnPlane(velocity, Vector3.up) + (Vector3.up * maxReleaseYVelocity);
+            }
+            OnNoCollideDrop();
         }
-    }
+        IEnumerator DelayedRotationLock()
+        {
 
-    protected override void RemoveChild(BoneGroup toRemove)
-    {
-        base.RemoveChild(toRemove);
-        if (children.Count == 0)
-            Destroy(gameObject);
-    }
-
-    public void BoneWasConnected(Bone bone)
-    {
-        bone.transform.parent = null;
-        RemoveChild(bone.Group);
-        ResetMass();
-    }
-
-    public Bone BoneFromCollider(Collider collider)
-    {
-        if (colliderToBone.TryGetValue(collider, out Bone toReturn))
-            return toReturn;
-        return null;
+            yield return new WaitForSeconds(0.2f);
+            rB.freezeRotation = true;
+            yield break;
+        }
+        StartCoroutine(DelayedRotationLock());
+        
     }
 
     private void ResetMass()
     {
-        Rb.SetDensity(density);
+        rB.SetDensity(density);
         //mass is considered temporary and will be written over unless directly set
-        Rb.mass = Rb.mass;
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        colliderToBone.TryGetValue(collision.GetContact(0).thisCollider, out Bone collided);
-        if(collided)
-            collisionHandler.AddBoneCollision(collided, collision);
-        //---Bone on horizontal surface---//
-        if (collision.gameObject.CompareTag("Horizontal") 
-            && mCustomGravity!= null 
-            && mCustomGravity.enabled)
-        {
-            if (mCustomGravity)
-                mCustomGravity.Disable();
-        }
+        rB.mass = rB.mass;
     }
 }

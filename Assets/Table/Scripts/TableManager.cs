@@ -20,10 +20,11 @@ public class TableManager : MonoBehaviour
     [SerializeField]
     private List<int> areaShipmentNumbers = default;
 
+
     //outlines in the order that they appear for shipments
-    [SerializeField]
-    private List<GameObject> outlineRenders = default;
-    private List<SpriteRenderer> outlines;
+    //[SerializeField]
+    //private List<GameObject> outlineRenders = default;
+    //private List<SpriteRenderer> outlines;
 
     private List<TableConnectionArea> allAreas;
     private List<List<TableConnectionArea>> deliveryAreas;
@@ -42,11 +43,6 @@ public class TableManager : MonoBehaviour
 
         allAreas = new List<TableConnectionArea>();
         deliveryAreas = new List<List<TableConnectionArea>>();
-        outlines = new List<SpriteRenderer>(); 
-        foreach(var go in outlineRenders)
-        {
-            outlines.Add(go.GetComponent<SpriteRenderer>());
-        }
 
         TableConnectionArea temp;
         void FindAreasRecursive(Transform toCheck,int shipmentNumber)
@@ -84,54 +80,17 @@ public class TableManager : MonoBehaviour
         {
             connectionArea.gameObject.SetActive(false);
         }
-        //disable all outlines
-        foreach(Renderer outline in outlines)
-        {
-            outline.enabled = false;
-        }
     }
     
     //called at the begining of the next shipment
     private void NextShipment()
     {
         ++shipmentNumber;
-        IEnumerator WaitForFade()
-        {
-            //enable new group
-            yield return StartCoroutine(FadeColor(outlines[shipmentNumber], disabledColor, enabledColor, 1));
-            ToggleGroupActive(shipmentNumber);
-        }
-        StartCoroutine(WaitForFade());
     }
 
     public void ReadyNextShipment()
     {
-        if (shipmentNumber + 1 < outlines.Count)
-        {
-            SpriteRenderer toReady = outlines[shipmentNumber + 1];
-            toReady.enabled = true;
-            Color newColor = disabledColor;
-            newColor.a = 0;
-            //fade up from nothing to current color
-            StartCoroutine(FadeColor(toReady, newColor, disabledColor, 1)); 
-        }
 
-        if (shipmentNumber >= 0)
-        {
-            SpriteRenderer toUnready = outlines[shipmentNumber];
-            toUnready.enabled = true;
-            Color newColor = toUnready.color;
-            newColor.a = 0;
-            //fade down to nothing from current color
-
-            IEnumerator WaitForFade()
-            {
-                //enable new group
-                yield return StartCoroutine(FadeColor(toUnready, toUnready.color, newColor, 1));
-                ToggleGroupActive(shipmentNumber);
-            }
-            StartCoroutine(WaitForFade());
-        }
     }
 
     void ToggleGroupActive(int deliveryNumber)
@@ -143,7 +102,6 @@ public class TableManager : MonoBehaviour
         {
             bool isActive = !area.isActiveAndEnabled;
             area.gameObject.SetActive(isActive);
-            area.ApplyToAll((Bone b, FunctionArgs args) => { b.connecting = isActive; });
         }
     }
 
@@ -165,10 +123,7 @@ public class TableManager : MonoBehaviour
         shipmentNumber = -1;
         EmptyArmature = Instantiate(emptyArmaturePrefab, new Vector3(-.093f,.183f,.053f), Quaternion.Euler(0,-90,-90), transform);
 
-        foreach (TableConnectionArea ta in allAreas)
-            ta.ResetArea();
-        foreach (var outline in outlines)
-            outline.enabled = false;
+        PlayPenState.Instance.SetSkeleton(EmptyArmature);
     }
 
     private void Start()

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TableVoxel : MonoBehaviour
 {
+    /*
     public TableConnectionArea parent { private get; set; }
 
     private void OnTriggerEnter(Collider other)
@@ -25,5 +26,5 @@ public class TableVoxel : MonoBehaviour
         Bone temp = other.transform.root.GetComponent<Bone>();
         if (temp)
             parent.RemoveCollision(temp);
-    }
+    }*/
 }

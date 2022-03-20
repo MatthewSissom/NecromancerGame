@@ -7,7 +7,7 @@ public class CountDown : State
 {
     public static CountDown instance;
     public TextMeshProUGUI text;
-    public Stopwatch stopwatch;
+    public Stopwatch stopWatch;
     public StopwatchLid lid;
 
     string eventName = ""; 
@@ -33,33 +33,19 @@ public class CountDown : State
     public override IEnumerator Routine()
     {
         Begin();
-
-        stopwatch.SetHandPercentage(0); 
+        stopWatch.SetHandPercentage(0); 
         text.gameObject.SetActive(true);
         lidClosed = false;
         text.text = "Next Event: " + eventName;
-        yield return new WaitForSeconds(1);
-        stopwatch.SetHandPercentage(1 / time); 
-        yield return new WaitForSeconds(1);
-        stopwatch.SetHandPercentage(2 / time);
-
-        for (int i = (int)System.Math.Ceiling(time - 2); i > 0; i--)
+        stopWatch.On = true;
+        while (stopWatch.Angle < 360)
         {
-            if (lidClosed)
-                break;
-
-            text.text = eventName + "!";
-
-            if (i <= warningTime)
-                AudioManager.Instance.PlayTickTock(true);
-            else
-                AudioManager.Instance.PlayTickTock(false);
-
-            yield return new WaitForSeconds(1);
-            stopwatch.SetHandPercentage((time-i+1) / time);
+            yield return null;
         }
+        stopWatch.Angle = 0;
+        stopWatch.On = false;
         text.text = "Finished!";
-        stopwatch.SetHandPercentage(0); 
+        stopWatch.SetHandPercentage(0); 
         yield return new WaitForSeconds(1);
         text.gameObject.SetActive(false);
 

@@ -5,24 +5,22 @@ using UnityEngine;
 public partial class InputManager : MonoBehaviour
 {
 
-    //holds 5 bone moving touches, which will be enabled and disabled as needed
-    private int moveIndex;
-    private BoneMovingTouch[] movingTouches;
-    //holds 5 rotation proxies, which will be enabled and disabled as needed
-    private int rotationIndex;
-    private RotationTouch[] rotationTouches;
-
+    //holds a bone moving touch, which will be enabled and disabled as needed
+    private BoneMovingTouch movingTouch;
+    //holds a rotation proxy, which will be enabled and disabled as needed
+    private RotationTouch rotationTouch;
     //holds a list of active touches
     private List<TouchProxy> activeTouches;
     private List<TouchProxy> toDeactivate;
+   
 
     TouchProxy FindNearestActive(Vector3 pos)
     {
         float distance, currentDist;
-        distance = (activeTouches[0].transform.position - pos).magnitude;
-        TouchProxy toReturn = activeTouches[0];
+        distance = float.MaxValue;
+        TouchProxy toReturn = null;
 
-        for(int i = 1; i < activeTouches.Count; i++)
+        for(int i = 0; i < activeTouches.Count; i++)
         {
             currentDist = (activeTouches[i].transform.position - pos).magnitude;
             if (currentDist < distance)
@@ -39,16 +37,10 @@ public partial class InputManager : MonoBehaviour
     {
         if (!toDisable.isActiveAndEnabled) return;
 
-        if (toDisable is BoneMovingTouch)
-        {
-            moveIndex--;
-        }
-        else
-        {
-            rotationIndex--;
-        }
-        toDisable.gameObject.SetActive(false);
+        if (toDisable == movingTouch && rotationTouch)
+            DisableTouch(rotationTouch);
 
+        toDisable.gameObject.SetActive(false);
         if (activeTouches.Count == 1)
         {
             activeTouches.Clear();
@@ -64,21 +56,20 @@ public partial class InputManager : MonoBehaviour
 
     TouchProxy NewMoveTouch(Vector3 position, int id)
     {
-        BoneMovingTouch mTouch = movingTouches[moveIndex];
-        moveIndex++;
+        BoneMovingTouch mTouch = movingTouch;
 
         activeTouches.Add(mTouch);
         mTouch.Move(position, 0);
         mTouch.gameObject.SetActive(true);
         mTouch.id = id;
 
-        return mTouch;
+        return movingTouch;
     }
 
     TouchProxy NewRotationTouch(Vector3 position,int id, BoneMovingTouch parent)
     {
-        RotationTouch mTouch = rotationTouches[rotationIndex];
-        rotationIndex++;
+
+        RotationTouch mTouch = rotationTouch;
 
         activeTouches.Add(mTouch);
 
@@ -87,36 +78,39 @@ public partial class InputManager : MonoBehaviour
         mTouch.gameObject.SetActive(true);
         mTouch.id = id;
 
-        return mTouch;
+        return rotationTouch;
     }
 
     void ArrayInit()
     {
         activeTouches = new List<TouchProxy>();
-        movingTouches = new BoneMovingTouch[5];
-        rotationTouches = new RotationTouch[5];
+        movingTouch = new BoneMovingTouch();
+        rotationTouch = new RotationTouch();
         toDeactivate = null;
-        moveIndex = 0;
-        rotationIndex = 0;
+       
 
-        for(int i = 0; i < 5; i++)
-        {
-            movingTouches[i] = Instantiate(moveTouchPref).GetComponent<BoneMovingTouch>();
-            movingTouches[i].gameObject.SetActive(false);
+        
+        movingTouch = Instantiate(moveTouchPref).GetComponent<BoneMovingTouch>();
+        movingTouch.gameObject.SetActive(false);
 
-            rotationTouches[i] = Instantiate(rotationTouchPref).GetComponent<RotationTouch>();
-            rotationTouches[i].gameObject.SetActive(false);
-        }
+        rotationTouch = Instantiate(rotationTouchPref).GetComponent<RotationTouch>();
+        rotationTouch.gameObject.SetActive(false);
+        
     }
 
     private void ChangeHandedness(bool isRightHanded)
     {
+        
+        // TEMP - make better offset options
+        if (isRightHanded)
+             movingTouch.offset.x *= -1;
+        
+#if UNITY_STANDALONE_WIN
         for (int i = 0; i < 5; i++)
         {
-            // TEMP - make better offset options
-            if (isRightHanded)
-                movingTouches[i].offset.x *= -1;
+            movingTouch.offset = new Vector3(.001f,.001f,0);
         }
+#endif
     }
 }
 

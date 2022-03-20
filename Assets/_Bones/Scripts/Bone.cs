@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Bone : MonoBehaviour
 {
+    /*
     //physics
     protected static BoneCollisionHandler collisionHandler;
 
@@ -57,5 +58,5 @@ public class Bone : MonoBehaviour
                 collisionHandler.RemoveBoneCollision(this, colliding);
         }
     }
-
+    */
 }

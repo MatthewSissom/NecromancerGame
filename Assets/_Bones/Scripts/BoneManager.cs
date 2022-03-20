@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 
 public partial class BoneManager : MonoBehaviour
-{
+{/*
     static public BoneManager Instance { get; private set; }
     static public BoneCollisionHandler Collision { get; private set; }
 
@@ -105,5 +105,5 @@ public partial class BoneManager : MonoBehaviour
             Destroy(b.transform.root.gameObject);
         }
         activeBones = new HashSet<Bone>();
-    }
+    }*/
 }

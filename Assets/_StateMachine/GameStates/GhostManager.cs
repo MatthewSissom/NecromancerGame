@@ -14,7 +14,7 @@ public class GhostManager : State
     [SerializeField]
     float timePerShipment = default;
     [SerializeField]
-    public float timeBetweenShipments { get; private set; } = default;
+    public float timeBetweenShipments = default;
     private int currentShipment = 0;
 
     [Header("Ghosts")]
@@ -53,8 +53,9 @@ public class GhostManager : State
     public GhostBehavior CreateGhost(List<GameObject> path)
     {
         GhostBehavior newGhost = Instantiate(ghostPref, path[0].transform.position, path[0].transform.rotation).GetComponent<GhostBehavior>();
+        
         ghosts.Add(newGhost);
-        for(int i = 0; i < path.Count; i++)
+        for (int i = 0; i < path.Count; i++)
         {
             newGhost.AddToPath(path[i], i == path.Count - 1);
         }
@@ -80,17 +81,20 @@ public class GhostManager : State
         Transform pathRoot;
         List<GameObject> path;
         // create a ghost for each bone in the delivery
-        for(int i = 0, size = bones.Count; i< size; i++)
+        for (int i = 0, size = bones.Count; i < size; i++)
         {
             path = new List<GameObject>();
             pathRoot = boneShipment.transform.GetChild(i);
             // add all path nodes in the delivery to the ghost's path
-            for(int p = 0; p < pathRoot.childCount; p++)
+            for (int p = 0; p < pathRoot.childCount; p++)
             {
                 path.Add(pathRoot.GetChild(p).gameObject);
             }
             GhostBehavior ghost = CreateGhost(path);
-            BoneManager.Instance.NewBoneGroup(bones[i], ghost);
+            //TODO: give the ghost the bones
+            GameObject newBone = Instantiate(bones[i]);
+            ghost.mBone = newBone.GetComponent<GrabbableGroup>();
+            newBone.GetComponent<GrabbableGroup>().mGhost = ghost;
         }
     }
 
@@ -101,13 +105,7 @@ public class GhostManager : State
     public void DestroyGhost(GhostBehavior toRemove)
     {
         ghosts.Remove(toRemove);
-        if(toRemove.mBone)
-        {
-            toRemove.mBone.ApplyToAll((Bone b, FunctionArgs args) =>
-            {
-                BoneManager.Instance.DestroyBone(b);
-            });
-        }
+        //TODO: remove the bone from existence
         Destroy(toRemove.transform.root.gameObject);
     }
 
@@ -117,7 +115,7 @@ public class GhostManager : State
     /// <param name="lifeSpan">How long the ghosts have until they're destroyed</param>
     public void RecallGhosts(float lifeSpan)
     {
-        foreach(GhostBehavior b in ghosts)
+        foreach (GhostBehavior b in ghosts)
         {
             b.Recall(lifeSpan);
         }
@@ -181,7 +179,7 @@ public class GhostManager : State
     override protected void Awake()
     {
         base.Awake();
-        if(Instance)
+        if (Instance)
         {
             Destroy(this);
         }

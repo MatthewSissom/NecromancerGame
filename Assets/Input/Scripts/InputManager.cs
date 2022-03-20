@@ -15,10 +15,12 @@ public partial class InputManager : MonoBehaviour
 
     static public InputManager Instance;
 
-#if UNITY_EDITOR
+
+#if (UNITY_EDITOR || PLATFORM_STANDALONE_WIN)
     // mouse input vars
     bool holdingMouseDown = false;
     bool rotating = false;
+    bool activeTouchesFromFingersExist = false;
 #endif
 
     //disables all proxies
@@ -30,59 +32,15 @@ public partial class InputManager : MonoBehaviour
         }
     }
 
-    private BoneMovingTouch isRotationTouch(Vector3 pos)
+
+    private void FindAndDisableUnused()
     {
-        HashSet<BoneMovingTouch> cantBeParent = new HashSet<BoneMovingTouch>();
-        for (int i = 0; i < activeTouches.Count; i++)
-        {
-            RotationTouch rt = activeTouches[i] as RotationTouch;
-            if (rt
-                && rt.Parent != null)
-            {
-                cantBeParent.Add(rt.Parent);
-            }
-        }
-        for (int i = 0; i < activeTouches.Count; i++)
-        {
-            BoneMovingTouch ft = activeTouches[i] as BoneMovingTouch;
-            if (ft
-                && (ft.transform.position - pos).sqrMagnitude < rotationRadSquared
-                && !cantBeParent.Contains(ft))
-                return ft;
-        }
-        return null;
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-    #region touchInput
-        foreach (Touch t in Input.touches)
-        {
-            //pos represents the point in world space at the specified height
-            Vector3 pos = t.position;
-            pos.z = Camera.main.transform.position.y - height;
-            Vector3 radVec = pos + new Vector3(t.radius, 0, 0);
-
-            pos = Camera.main.ScreenToWorldPoint(pos);
-            float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
-
-            int id = t.fingerId;
-            TouchProxy mProxy = activeTouches.Find(a => a.id == id);
-            if (!mProxy)
-            {
-                BoneMovingTouch parent = isRotationTouch(pos);
-                if (parent)
-                {
-                    mProxy = NewRotationTouch(pos, id, parent);
-                }
-                else
-                {
-                    mProxy = NewMoveTouch(pos, id);
-                }
-            }
-            mProxy.Move(pos, rad);
-        }
+#if UNITY_EDITOR
+        if (!activeTouchesFromFingersExist)
+            return;
+#elif UNITY_STANDALONE_WIN
+        return;
+#endif
 
         foreach (TouchProxy tp in activeTouches)
         {
@@ -102,12 +60,52 @@ public partial class InputManager : MonoBehaviour
             }
             toDeactivate = null;
         }
-        #endregion
 
-    #region mouseInput
 #if UNITY_EDITOR
-        if (DebugModes.UseMouseInput)
+        if (activeTouches.Count == 0)
+            activeTouchesFromFingersExist = false;
+#endif
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+#region touchInput
+        foreach (Touch t in Input.touches)
         {
+            //pos represents the point in world space at the specified height
+            Vector3 pos = t.position;
+            pos.z = Camera.main.transform.position.y - height;
+            Vector3 radVec = pos + new Vector3(t.radius, 0, 0);
+
+            pos = Camera.main.ScreenToWorldPoint(pos);
+            float rad = (Camera.main.ScreenToWorldPoint(radVec) - pos).magnitude;
+
+            int id = t.fingerId;
+            TouchProxy mProxy = activeTouches.Find(a => a.id == id);
+            if (!mProxy)
+            {
+                if (!movingTouch.isActiveAndEnabled)
+                {
+                    mProxy = NewMoveTouch(pos, id);
+                }
+                else if(!rotationTouch.isActiveAndEnabled)
+                {
+                    mProxy = NewRotationTouch(pos, id, movingTouch);
+                }
+            }
+            if(mProxy)
+                mProxy.Move(pos, rad);
+#if UNITY_EDITOR
+            activeTouchesFromFingersExist = true;
+#endif
+        }
+        FindAndDisableUnused();
+        #endregion
+#if (UNITY_EDITOR || PLATFORM_STANDALONE_WIN)
+        #region mouseInput
+        if (UseMouseInputThisFrame())
+        { 
             Vector3 pos = Input.mousePosition;
             pos.z = Camera.main.transform.position.y - height;
             Vector3 radVec = pos + new Vector3(5, 0, 0);
@@ -130,16 +128,18 @@ public partial class InputManager : MonoBehaviour
                 Vector3 cameraSpaceVec = pos - center;
                 Vector3 projection = Vector3.Project(cameraSpaceVec, Camera.main.transform.forward);
                 pos = center + (cameraSpaceVec - projection).normalized;
-
-                Vector3 angularVelocity = (activeTouches[0] as BoneMovingTouch).activeObj.Rb.angularVelocity;
-                (activeTouches[0] as BoneMovingTouch).activeObj.Rb.angularVelocity = Vector3.Project(angularVelocity, Camera.main.transform.forward);
+               
+               Vector3 angularVelocity = (activeTouches[0] as BoneMovingTouch).activeBone.Rb.angularVelocity;
+               (activeTouches[0] as BoneMovingTouch).activeBone.Rb.angularVelocity = Vector3.Project(angularVelocity, Camera.main.transform.forward);
+         
             }
             else if (rotating)
             {
                 rotating = false;
-                pos = Input.mousePosition;
-                pos.z = Camera.main.transform.position.y - height;
-                pos = Camera.main.ScreenToWorldPoint(pos);
+                Vector3 center = Camera.main.ScreenToWorldPoint(new Vector3(5, 0, 0));
+                Vector3 cameraSpaceVec = pos - center;
+                Vector3 projection = Vector3.Project(cameraSpaceVec, Camera.main.transform.forward);
+                pos = center + (cameraSpaceVec - projection).normalized;
                 DisableTouch(pos);
             }
             else if (Input.GetMouseButton(0))
@@ -183,8 +183,19 @@ public partial class InputManager : MonoBehaviour
                 }
             }
         }
+        #endregion
 #endif
-#endregion
+    }
+
+    private bool UseMouseInputThisFrame()
+    {
+#if UNITY_EDITOR
+        return DebugModes.UseMouseInput && !activeTouchesFromFingersExist;
+#elif UNITY_STANDALONE_WIN
+        return true;
+#else
+        return false;
+#endif
     }
 
     private void Awake()
