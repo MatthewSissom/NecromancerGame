@@ -6,7 +6,7 @@ using UnityEngine;
 //players finger
 public class BoneMovingTouch : TouchProxy
 {
-    public IGrabbable activeWatch { private set; get; }
+    public Stopwatch activeWatch { private set; get; }
     public GrabbableGroup activeBone { private set; get; }
     //public BoneGroup.applyToAllType applyToActiveGroup;
 
@@ -37,7 +37,7 @@ public class BoneMovingTouch : TouchProxy
     public Vector3 primaryMidpoint { private set; get; }
     public Vector3 auxileryAxis { private set; get; }
 
-    public void SetActive(IGrabbable watch)
+    public void SetActive(Stopwatch watch)
     {
         activeWatch = watch;
     }
@@ -99,9 +99,10 @@ public class BoneMovingTouch : TouchProxy
     {
         if (activeWatch != null||activeBone!=null)
             return;
-        IGrabbable b = null; //other.GetComponentInParent<GrabbableGroup>(); This will be to grab the stopwatch.
+        Stopwatch b = other.GetComponent<Stopwatch>(); 
         if (b != null)
         {
+            b.PickedUp();
             SetActive(b);
             return;
         }
@@ -131,7 +132,7 @@ public class BoneMovingTouch : TouchProxy
         }else if(activeWatch != null)
         {
 
-            //-move the active object to the proxy-//
+            
 
             const float maxVelocity = 7.0f;
             const float baseMult = 20;

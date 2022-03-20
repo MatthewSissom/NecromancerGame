@@ -22,6 +22,8 @@ public class RotationTouch : TouchProxy
     float switchResistance = 0;
     [SerializeField]
     float aVelocityClamp = 1.0f;
+    [SerializeField]
+    float stopWatchRotModifier = 0.5f;
 
     //Score - tracks if the player is trying to spin or pinch
     const int scoresLength = 5;
@@ -91,6 +93,15 @@ public class RotationTouch : TouchProxy
     {
         if (parent.activeWatch == null && parent.activeBone == null)
             return;
+
+        if (parent.activeWatch != null)
+        {
+            parent.activeWatch.ChangeAngle(angleDistAroundUp * stopWatchRotModifier);
+            if (angleDistAroundUp < 0)
+                angleDistAroundUp = 0;
+            return;
+        }
+        
 
         //calculate angular velocities around axies
         GrabbableGroup bone = parent.activeBone;
