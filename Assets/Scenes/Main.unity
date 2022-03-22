@@ -13738,7 +13738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb58ae06b3377544b9acf743651334c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateMode: 3
+  stateMode: 0
   skipCameraTransitions: 0
   toggleMouseInput: 1
   ikTestPrefab: {fileID: 8616413023913154642, guid: 45a8667e89562564ab370b39320cf771,
