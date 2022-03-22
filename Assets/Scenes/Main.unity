@@ -3129,12 +3129,6 @@ CapsuleCollider:
   m_Height: 1.0745939
   m_Direction: 1
   m_Center: {x: -0.27619648, y: 0.10613334, z: -8.546852e-11}
---- !u!4 &238176744 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3230462175975831412, guid: 9db830be7935e314eb62a2e06dc2a82c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1464288846}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &241589200
 GameObject:
   m_ObjectHideFlags: 0
@@ -5126,7 +5120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Tail
+  axisKey: 
 --- !u!114 &403111313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5204,7 +5198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Spine Chunk (1)
+  axisKey: 
 --- !u!1 &435126815
 GameObject:
   m_ObjectHideFlags: 0
@@ -6315,7 +6309,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Jaw
+  axisKey: 
 --- !u!23 &567033570
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -8377,7 +8371,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Rib Chunk Left (1)
+  axisKey: 
 --- !u!114 &752798947
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9417,7 +9411,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Tail (1)
+  axisKey: 
 --- !u!1 &895335965
 GameObject:
   m_ObjectHideFlags: 0
@@ -12852,7 +12846,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Spine Chunk (1)
+  axisKey: 
 --- !u!1 &1179798508
 GameObject:
   m_ObjectHideFlags: 0
@@ -13356,7 +13350,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Rib Chunk Left (1)
+  axisKey: 
 --- !u!1 &1235371127
 GameObject:
   m_ObjectHideFlags: 0
@@ -15698,7 +15692,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Rib Chunk Left (1)
+  axisKey: 
 --- !u!1 &1416826180
 GameObject:
   m_ObjectHideFlags: 0
@@ -15773,12 +15767,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f21c33330d642ce48a73ddc15af9bf1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  connectionColliders: {fileID: 1464288847}
-  ribTransforms:
-  - {fileID: 238176744}
-  - {fileID: 1781630937}
-  boneAxisDict: {fileID: 11400000, guid: 352b3446ccf791a478df0920c872c49a, type: 2}
-  tableAxisDict: {fileID: 11400000, guid: 2d6c16acf46ab424c977c3552147785e, type: 2}
+  connectionColliders: {fileID: 0}
+  ribTransforms: []
+  boneAxisDict: {fileID: 0}
+  tableAxisDict: {fileID: 0}
 --- !u!114 &1416826186
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16255,7 +16247,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Skull
+  axisKey: 
 --- !u!23 &1445846235
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -16595,12 +16587,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9db830be7935e314eb62a2e06dc2a82c, type: 3}
---- !u!4 &1464288847 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8234512959880066746, guid: 9db830be7935e314eb62a2e06dc2a82c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1464288846}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1472748268
 GameObject:
   m_ObjectHideFlags: 0
@@ -17701,7 +17687,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Rib Chunk Left (1)
+  axisKey: 
 --- !u!114 &1564349323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17951,7 +17937,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Pelvis
+  axisKey: 
 --- !u!23 &1570699472
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -20988,12 +20974,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1781282719}
   m_Mesh: {fileID: -2432090755550338912, guid: d8962739f0bbd7b4fbbccc9a9d18b43b, type: 3}
---- !u!4 &1781630937 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 660320343406180477, guid: 9db830be7935e314eb62a2e06dc2a82c,
-    type: 3}
-  m_PrefabInstance: {fileID: 1464288846}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1792101447
 GameObject:
   m_ObjectHideFlags: 0
@@ -28822,7 +28802,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: L1
+  axisKey: 
 --- !u!1 &1725223888855072130
 GameObject:
   m_ObjectHideFlags: 0
@@ -30366,6 +30346,75 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1001 &2628999853942625065
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 19.530823
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -12.619914
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 14.118671
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4993557536285249066, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5190167754784798924, guid: b5d01de1c2fc7374084a400c20c6f51e,
+        type: 3}
+      propertyPath: m_Name
+      value: BoneRain
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b5d01de1c2fc7374084a400c20c6f51e, type: 3}
 --- !u!4 &2634355417559900648
 Transform:
   m_ObjectHideFlags: 0
@@ -32473,7 +32522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: L1
+  axisKey: 
 --- !u!4 &3741423766219707376
 Transform:
   m_ObjectHideFlags: 0
@@ -32810,7 +32859,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Paw
+  axisKey: 
 --- !u!1 &3871149682592927438
 GameObject:
   m_ObjectHideFlags: 0
@@ -33126,7 +33175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: L1
+  axisKey: 
 --- !u!114 &4061537315257566130
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33140,7 +33189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Paw
+  axisKey: 
 --- !u!4 &4064734340024136592
 Transform:
   m_ObjectHideFlags: 0
@@ -36139,7 +36188,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Paw
+  axisKey: 
 --- !u!135 &5592465208362196426
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -36620,7 +36669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: L1
+  axisKey: 
 --- !u!135 &5846886778768882059
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -38254,7 +38303,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Scapula_Left
+  axisKey: 
 --- !u!23 &6747788217590923476
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -38808,7 +38857,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Scapula_Right
+  axisKey: 
 --- !u!136 &7009467058458398374
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -41083,7 +41132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: L1
+  axisKey: 
 --- !u!23 &8335729887361001132
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -41246,7 +41295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: Paw
+  axisKey: 
 --- !u!136 &8418604365261926413
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -41426,7 +41475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   connecting: 0
-  axisKey: L1
+  axisKey: 
 --- !u!23 &8586050456247011972
 MeshRenderer:
   m_ObjectHideFlags: 0
