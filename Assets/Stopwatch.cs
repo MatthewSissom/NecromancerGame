@@ -150,6 +150,7 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     {
         grabbable = false;
         lerpCount = 0;
+        Vector3 startPosition = gameObject.transform.position;
         IEnumerator Routine()
         {
             while (lerpCount != lerpEndFrame)
@@ -157,8 +158,8 @@ public class Stopwatch : MonoBehaviour, IGrabbable
 
                 lerpCount++;
 
-                Vector3 interpolation = new Vector3(Mathf.SmoothStep(gameObject.transform.position.x, homePoint.x, lerpCount / lerpEndFrame), Mathf.SmoothStep(gameObject.transform.position.y, homePoint.y, lerpCount / lerpEndFrame), 
-                    Mathf.SmoothStep(gameObject.transform.position.z, homePoint.z, lerpCount / lerpEndFrame));
+                Vector3 interpolation = new Vector3(Mathf.SmoothStep(startPosition.x, homePoint.x, lerpCount / lerpEndFrame), Mathf.SmoothStep(startPosition.y, homePoint.y, lerpCount / lerpEndFrame), 
+                    Mathf.SmoothStep(startPosition.z, homePoint.z, lerpCount / lerpEndFrame));
 
                 gameObject.transform.position = interpolation;
 
