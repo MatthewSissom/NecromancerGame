@@ -157,7 +157,8 @@ public class Stopwatch : MonoBehaviour, IGrabbable
 
                 lerpCount++;
 
-                Vector3 interpolation = new Vector3(Mathf.SmoothStep(awayPoint.x, homePoint.x, lerpCount / lerpEndFrame), Mathf.SmoothStep(awayPoint.y, homePoint.y, lerpCount / lerpEndFrame), Mathf.SmoothStep(awayPoint.z, homePoint.z, lerpCount / lerpEndFrame));
+                Vector3 interpolation = new Vector3(Mathf.SmoothStep(gameObject.transform.position.x, homePoint.x, lerpCount / lerpEndFrame), Mathf.SmoothStep(gameObject.transform.position.y, homePoint.y, lerpCount / lerpEndFrame), 
+                    Mathf.SmoothStep(gameObject.transform.position.z, homePoint.z, lerpCount / lerpEndFrame));
 
                 gameObject.transform.position = interpolation;
 
@@ -170,7 +171,8 @@ public class Stopwatch : MonoBehaviour, IGrabbable
             touchEffect.Stop();
             yield break;
         }
-        StartCoroutine(Routine());
+        if (left || leaving) 
+            StartCoroutine(Routine());
     }
     public void ChangeAngle(float change)
     {
