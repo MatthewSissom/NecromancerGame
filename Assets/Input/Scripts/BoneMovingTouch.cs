@@ -42,7 +42,7 @@ public class BoneMovingTouch : TouchProxy
     private Vector3 watchAway;
 
     private const float watchLerpEndFrame = 30;
-    private float watchLerpCount = 0;
+
 
     public void SetActive(Stopwatch watch)
     {
@@ -172,11 +172,8 @@ public class BoneMovingTouch : TouchProxy
         if (activeWatch != null)
         {
             if (!activeWatch.Returning)
-            {
-                watchLerpCount = 0;
-                activeWatch.Returning = true;
                 activeWatch.Dropped();
-            }
+
             activeWatch = null;
         }
 

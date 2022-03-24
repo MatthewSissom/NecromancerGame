@@ -117,6 +117,7 @@ public class Stopwatch : MonoBehaviour, IGrabbable
             {
                 leaving = false;
                 left = true;
+                lerpCount = 0;
             }
         }
 
@@ -153,6 +154,7 @@ public class Stopwatch : MonoBehaviour, IGrabbable
         Vector3 startPosition = gameObject.transform.position;
         IEnumerator Routine()
         {
+            returning = true;
             left = false;
             leaving = false;
             lerpCount = 0;
@@ -174,7 +176,7 @@ public class Stopwatch : MonoBehaviour, IGrabbable
             touchEffect.Stop();
             yield break;
         }
-        if (left || leaving) 
+        if ((left || leaving)&&!returning) 
             StartCoroutine(Routine());
 
         

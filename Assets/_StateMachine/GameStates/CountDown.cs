@@ -43,10 +43,7 @@ public class CountDown : State
             yield return null;
         }
         if (!stopWatch.Returning)
-        {
-            stopWatch.Returning = true;
             stopWatch.Dropped();
-        }
         stopWatch.Angle = 0;
         stopWatch.On = false;
         text.text = "Finished!";
