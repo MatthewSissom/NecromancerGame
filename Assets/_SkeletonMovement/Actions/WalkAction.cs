@@ -41,7 +41,21 @@ public class WalkAction : Action
         if (previousWalk != null)
             return previousWalk.LimbOffsets;
 
-        throw new System.NotImplementedException();
+        int cnt = layoutData.LimbEnds.Length;
+        SkeletonPathOffset[] offsets = new SkeletonPathOffset[cnt];
+        for (int i = 0; i < cnt; i++)
+        {
+            offsets[i] = CreateLimbOffsetFromData(layoutData.LimbEnds[i]);
+        }
+        return offsets;
+    }
+
+    private SkeletonPathOffset CreateLimbOffsetFromData(LimbData data)
+    {
+        return new CompositeOffsite(
+            new PerpendicularOffset(data.Measurements.OffsetFromSpine * (data.IdentityData.IsRight ? -1 : 1)),
+            new HeightOffset(0)
+            );
     }
 
     protected override SkeletonPathOffset[] CreateSpineOffsets()
@@ -49,6 +63,20 @@ public class WalkAction : Action
         if (previousWalk != null)
             return previousWalk.SpineOffsets;
 
-        throw new System.NotImplementedException();
+        int cnt = layoutData.SpinePoints.Length;
+        SkeletonPathOffset[] offsets = new SkeletonPathOffset[cnt];
+        for(int i = 0; i < cnt; i++)
+        {
+            offsets[i] = CreateSpineOffsetFromData(layoutData.SpinePoints[i]);
+        }
+        return offsets;
+    }
+
+    private SkeletonPathOffset CreateSpineOffsetFromData(SpinePointData data)
+    {
+        return new CompositeOffsite(
+            new HeightOffset(data.BaseHeight),
+            new HeightOffset(0)
+            );
     }
 }

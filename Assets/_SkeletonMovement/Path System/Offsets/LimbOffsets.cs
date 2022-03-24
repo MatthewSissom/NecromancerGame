@@ -39,9 +39,9 @@ public class StepOffset : SkeletonPathOffset
 
     private ISkeletonPath GetStepPath(Vector3 start, Vector3 end)
     {
-        SkeletonPathOffset sinOffset = new SinOffset(mData.StepHeight);
+        SkeletonPathOffset sinOffset = new SinOffset(mData.Measurements.StepHeight);
 
-        float stepTime = (end - start).magnitude / mData.StepSpeed;
+        float stepTime = (end - start).magnitude / mData.Tunables.StepSpeed;
         sinOffset.BasePath = new LinePath(stepTime, start, end);
 
         return sinOffset;

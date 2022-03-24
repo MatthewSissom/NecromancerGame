@@ -40,7 +40,15 @@ public class SkeletonMovement
     public void SetAction(Action newAction)
     {
         if (!CanSetAction)
+        {
             Debug.LogError("Set action called incorrectly, always check CanSetAction first");
+            return;
+        }
+        if(newAction == null)
+        {
+            Debug.LogError("Set null action");
+            return;
+        }
 
         // make action active, check for specific transitions before 
         bool isActive = UseSpecialActionTransition(newAction);

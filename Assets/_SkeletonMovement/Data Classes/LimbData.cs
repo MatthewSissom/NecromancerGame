@@ -1,96 +1,129 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public enum LimbTag
+// Holds basic bool values about the limb
+[Serializable]
+public class LimbIdentityData
 {
-    Pair,   //There two legs on this half of the body (two front or two back)
-    Single, //There is only one leg on this half of the body
-    Stump,
-    StumpSingle
-}
-
-//Where this limb starts on the body
-public enum LimbLocationTag
-{
-    FrontLeft,
-    FrontRight,
-    BackLeft,
-    BackRight,
-}
-
-public class BasicLimbData
-{
+    [field: SerializeField]
     public bool IsStump { get; set; }
+    [field: SerializeField]
     public bool IsSingle { get; set; }
+    [field: SerializeField]
     public bool IsFront { get; set; }
+    [field: SerializeField]
+    public bool IsRight { get; set; }
 }
-public class LimbData : MonoBehaviour, IDelayedTracerData
+
+// Holds various dimensions and extents of the limb
+[Serializable]
+public class LimbMeasurements
 {
-    //---Enums---//
-
-    //Describes what type of animation this leg should use
-
-
-
-    //---Public Felids---//
-    public float StepSpeed;
+    [field: SerializeField]
     public float StepHeight { get; private set; }
-
-    //A combination of where this limb is on the body and how it should move
     [field: SerializeField]
-    public LimbTag Type { get; private set; }
-    //where on the body the limb is located
+    public float TotalLength { get; private set; }
     [field: SerializeField]
-    public LimbLocationTag LocationTag { get; private set; }
-    [field: SerializeField]
-    //how long the limb is when fully extended
-    public float LimbLength { get; private set; }
+    public float OffsetFromSpine { get; private set; }
     [field: SerializeField]
     //the diamater of the circle that the limb can trace on the ground
     public float StrideLength { get; private set; }
-    [field: SerializeField]
-    //The gameobject that this limb will orient to
-    public GameObject Target { get; private set; }
-    //the gameobject that marks the start of the limb
-    [field: SerializeField]
-    public GameObject LimbStart { get; private set; }
 
-    [field: SerializeField]
-    public int DelayIndex { get; private set; }
 
-    public Transform Transform { get => Target.transform; }
-
-    public float Delay { get; private set; }
-
-    public void LimbInit(float length, GameObject target, GameObject limbStart)
-    {
-        LimbLength = length;
-        Target = target;
-        LimbStart = limbStart;
-    }
-
-    public void SetTags(LimbTag type, LimbLocationTag limbLocation)
-    {
-        Type = type;
-        LocationTag = limbLocation;
-    }
-
-    public void SetDelay(float delay)
-    {
-        Delay = delay;
-    }
 
     //get lenght of distance the limb will spend on ground based on length (hypotenuse) and distance from ground
     public void SetStride(float chestDistFromGround)
     {
         //avoid irrational and 0 solutions
-        if (LimbLength <= chestDistFromGround)
-            StrideLength = LimbLength;
+        if (TotalLength <= chestDistFromGround)
+            StrideLength = TotalLength;
         else
-            StrideLength = Mathf.Sqrt(LimbLength * LimbLength - chestDistFromGround  * chestDistFromGround);
+            StrideLength = Mathf.Sqrt(TotalLength * TotalLength - chestDistFromGround * chestDistFromGround);
 
         if (float.IsNaN(StrideLength))
             Debug.Log("NAN length!");
+    }
+}
+
+// Holds game objects associated with the limb
+[Serializable]
+public class LimbGameObjects
+{
+    [field: SerializeField]
+    public GameObject Target { get; private set; }
+    [field: SerializeField]
+    public GameObject LimbStart { get; private set; }
+}
+
+[Serializable]
+public class LimbTunables
+{
+    [field: SerializeField]
+    public float StepHeightMult;
+    public float StepSpeed { get; private set; } = 0;
+
+    [SerializeField]
+    private float stepSpeedMult;
+
+    public void Init(float speed)
+    {
+        StepSpeed = stepSpeedMult * speed;
+    }
+}
+
+public class LimbTracingData
+{
+    public float Delay { get; private set; }
+
+    public LimbTracingData(float delay)
+    {
+        Delay = delay;
+    }
+}
+
+public class LimbData : MonoBehaviour, IDelayedTracerData
+{
+    // Editor Interface
+    [field: SerializeField]
+    public LimbGameObjects GameObjects { get; private set; }
+    [field: SerializeField]
+    public LimbIdentityData IdentityData { get; private set; }
+    [field: SerializeField]
+    public LimbMeasurements Measurements { get; private set; }
+
+    // Script-only interface
+    public  LimbTunables Tunables { get; private set; }
+    public LimbTracingData TracingData { get; private set; }
+
+    // IDealyedTracerData
+    public Transform Transform { get => GameObjects.Target.transform; }
+    public float Delay { get => TracingData.Delay; }
+
+    // Script constructor
+    public void Init( 
+        LimbGameObjects GameObjects, 
+        LimbIdentityData IdentityData, 
+        LimbMeasurements Measurements,
+        LimbTunables Tunables,
+        LimbTracingData TracingData
+    )
+    {
+       this.GameObjects = GameObjects;
+       this.IdentityData = IdentityData;
+       this.Measurements = Measurements;
+       this.Tunables = Tunables;
+       this.TracingData = TracingData;
+    }
+
+    // Editor/Debug constructor
+    public void EditorInit(
+        LimbTunables Tunables,
+        LimbTracingData TracingData
+    )
+    {
+        this.Tunables = Tunables;
+        this.TracingData = TracingData;
     }
 }

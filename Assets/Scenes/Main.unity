@@ -13738,7 +13738,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb58ae06b3377544b9acf743651334c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateMode: 2
+  stateMode: 3
   skipCameraTransitions: 0
   toggleMouseInput: 1
   ikTestPrefab: {fileID: 8616413023913154642, guid: 45a8667e89562564ab370b39320cf771,
@@ -27572,6 +27572,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  axis: {x: 0, y: 0, z: 1}
+  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+  limit: 45
+  twistLimit: 180
 --- !u!23 &1739539637073928986
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -33604,6 +33608,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  axis: {x: 0, y: 0, z: 1}
+  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+  limit: 45
+  twistLimit: 180
 --- !u!4 &4937570102027937898
 Transform:
   m_ObjectHideFlags: 0
@@ -36761,6 +36769,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  axis: {x: 0, y: 0, z: 1}
+  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+  limit: 45
+  twistLimit: 180
 --- !u!136 &6671215200911340808
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -40997,6 +41009,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  axis: {x: 0, y: 0, z: 1}
+  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+  limit: 45
+  twistLimit: 180
 --- !u!23 &9081441442332157571
 MeshRenderer:
   m_ObjectHideFlags: 0

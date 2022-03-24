@@ -92,7 +92,7 @@ public class SkeletonBehaviour : MonoBehaviour
     [SerializeField]
     List<LimbData> limbEnds;
     [SerializeField]
-    float stepHeight;
+    LimbTunables limbTunables;
     [SerializeField]
     float chestHeight; 
 
@@ -175,22 +175,13 @@ public class SkeletonBehaviour : MonoBehaviour
         // set limb delays to match their corresponding spine point (shoulders for front legs, hips for back legs)
         foreach(LimbData limbEnd in limbEnds)
         {
-            switch (limbEnd.LocationTag)
+            if (limbEnd.IdentityData.IsFront)
             {
-                case LimbLocationTag.FrontLeft:
-                    limbEnd.SetDelay(spinePoints[1].Delay);
-                    break;
-                case LimbLocationTag.FrontRight:
-                    limbEnd.SetDelay(spinePoints[1].Delay);
-                    break;
-                case LimbLocationTag.BackLeft:
-                    limbEnd.SetDelay(spinePoints[2].Delay);
-                    break;
-                case LimbLocationTag.BackRight:
-                    limbEnd.SetDelay(spinePoints[2].Delay);
-                    break;
-                default:
-                    break;
+                limbEnd.EditorInit(limbTunables, new LimbTracingData(spinePoints[1].Delay));
+            }
+            else
+            {
+                limbEnd.EditorInit(limbTunables, new LimbTracingData(spinePoints[2].Delay));
             }
         }
 
@@ -240,6 +231,7 @@ public class SkeletonBehaviour : MonoBehaviour
     {
         pathBuilder = new SkeletonBasePathBuilder(tunables);
         pathfinding = new SkeletonPathfinding(tunables);
+        limbTunables.Init(tunables.Speed);
     }
 
     private void CleanUp()
