@@ -135,7 +135,12 @@ public class BoneMovingTouch : TouchProxy
             const float maxVelocity = 7.0f;
             const float baseMult = 20;
             //find movement vector
-            Vector3 toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
+            Vector3 toProxy;
+            //don't engage the offset until the bone is above the table.
+            if(activeBone.transform.position.y >0.1f)
+                toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
+            else
+                toProxy = (transform.position - activeBone.transform.root.position) * baseMult;
             Vector3.ClampMagnitude(toProxy, maxVelocity);
             activeBone.Rb.velocity = toProxy;
         } 
