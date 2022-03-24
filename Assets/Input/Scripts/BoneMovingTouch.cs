@@ -43,6 +43,9 @@ public class BoneMovingTouch : TouchProxy
 
     private const float watchLerpEndFrame = 30;
 
+    [SerializeField]
+    private float offSetHeight = 0.1f;
+
 
     public void SetActive(Stopwatch watch)
     {
@@ -137,7 +140,7 @@ public class BoneMovingTouch : TouchProxy
             //find movement vector
             Vector3 toProxy;
             //don't engage the offset until the bone is above the table.
-            if(activeBone.transform.position.y >0.1f)
+            if(activeBone.transform.position.y > offSetHeight)
                 toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
             else
                 toProxy = (transform.position - activeBone.transform.root.position) * baseMult;
