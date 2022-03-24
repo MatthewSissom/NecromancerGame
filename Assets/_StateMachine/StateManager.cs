@@ -16,6 +16,7 @@ public class StateManager : StateManagerBase
     private IEnumerator MainLoop()
     {
         MenuManager.Instance.GoToMenu("Main");
+        yield break;
         yield return SetState(MenuManager.Instance.InMenus());
         while (true)
         {

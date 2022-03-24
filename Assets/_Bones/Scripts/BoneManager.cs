@@ -59,7 +59,7 @@ public partial class BoneManager : MonoBehaviour
         GrabbableGroup grabbableGroup = newBone.transform.root.gameObject.GetComponent<GrabbableGroup>();
         if(!grabbableGroup)
         {
-            Debug.LogError("Bone is not grabbable, please add a grabbableGroup component");
+            Debug.LogError("Bone is not grabbable, please add a grabbableGroup component"); 
             return;
         }
         BoneGroup.CombineGroups(grabbableGroup, group);

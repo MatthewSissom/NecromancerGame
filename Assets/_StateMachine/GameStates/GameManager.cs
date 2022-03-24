@@ -28,6 +28,7 @@ public class GameManager : StateManagerBase
 
     public IEnumerator Game()
     {
+        yield break;
 #if (UNITY_EDITOR == false)
         yield return StartCoroutine(MainGameLoop());
 #else

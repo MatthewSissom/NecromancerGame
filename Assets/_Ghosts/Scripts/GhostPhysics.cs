@@ -69,7 +69,7 @@ public class GhostPhysics : MonoBehaviour
         target = destination;
         this.targetRad = targetRad;
         useArrivalForces = arivalForces;
-        if(useArrivalForces)
+        if (useArrivalForces)
         {
             foreach (PID pid in movementPIDs)
                 pid.Reset();
@@ -249,6 +249,7 @@ public class GhostPhysics : MonoBehaviour
         acceleration = maxAcceleration;
         targetSpeed = maxSpeed;
         targetForward = transform.forward;
+        target = transform.position;
 
         if (movementPIDs.Count != 3)
         {
