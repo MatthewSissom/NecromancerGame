@@ -109,8 +109,8 @@ public class BoneMovingTouch : TouchProxy
         Stopwatch b = other.GetComponent<Stopwatch>(); 
         if (b != null)
         {
-            b.PickedUp();
             SetActive(b);
+            b.PickedUp();
             watchHome = b.Home;
             watchAway = b.Away;
             return;
@@ -138,10 +138,7 @@ public class BoneMovingTouch : TouchProxy
             Vector3 toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
             Vector3.ClampMagnitude(toProxy, maxVelocity);
             activeBone.Rb.velocity = toProxy;
-        } else if (activeWatch != null && watchLerpCount == 0 &&activeWatch.Grabbable)
-        {
-            activeWatch.Leaving = true;
-        }
+        } 
         //the rad of the touch collider quickly increases to the normal size when first being reenabled
         else if (radMult < 1)
         {
@@ -171,17 +168,15 @@ public class BoneMovingTouch : TouchProxy
     protected override void OnDisable()
     {
         base.OnDisable();
-
+       
         if (activeWatch != null)
         {
-            if (activeWatch.Left || activeWatch.Leaving)
+            if (!activeWatch.Returning)
             {
                 watchLerpCount = 0;
-                activeWatch.Leaving = false;
-                activeWatch.Left = false;
+                activeWatch.Returning = true;
                 activeWatch.Dropped();
             }
-            activeWatch.Grabbable = true;
             activeWatch = null;
         }
 

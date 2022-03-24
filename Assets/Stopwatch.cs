@@ -31,7 +31,7 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     public Vector3 Home { get { return homePoint; } }
     private Vector3 awayPoint;
     public Vector3 Away { get { return awayPoint; } }
-    private bool returning = false;
+    
     private bool on = false;
     public bool On { get { return on; } set { on = value; } }
 
@@ -60,9 +60,11 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     private bool grabbable = true;
     public bool Grabbable { get { return grabbable; } set { grabbable = value; } }
     private bool leaving = false;
-    public bool Leaving { get { return leaving; } set { leaving = value; } }
+    //public bool Leaving { get { return leaving; } set { leaving = value; } }
     private bool left = false;
-    public bool Left { get { return left; } set { left = value; } }
+    //public bool Left { get { return left; } set { left = value; } }
+    private bool returning = false;
+    public bool Returning { get { return returning; } set { returning = value; } }
 
     private void Awake()
     {
@@ -140,40 +142,42 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     {
         
         rB.useGravity = false;
-
+        leaving = true;
+        grabbable = false;
         //rB.constraints = (RigidbodyConstraints)112;
-
         touchEffect.Play();
 
     }
     public void Dropped()
     {
-        grabbable = false;
-        lerpCount = 0;
         Vector3 startPosition = gameObject.transform.position;
         IEnumerator Routine()
         {
+            left = false;
+            leaving = false;
+            lerpCount = 0;
             while (lerpCount != lerpEndFrame)
             {
-
+             
                 lerpCount++;
 
                 Vector3 interpolation = new Vector3(Mathf.SmoothStep(startPosition.x, homePoint.x, lerpCount / lerpEndFrame), Mathf.SmoothStep(startPosition.y, homePoint.y, lerpCount / lerpEndFrame), 
                     Mathf.SmoothStep(startPosition.z, homePoint.z, lerpCount / lerpEndFrame));
 
                 gameObject.transform.position = interpolation;
-
                 yield return null;
 
             }
             lerpCount = 0;
-            left = false;
-            leaving = false;
+            grabbable = true;
+            returning = false;
             touchEffect.Stop();
             yield break;
         }
         if (left || leaving) 
             StartCoroutine(Routine());
+
+        
     }
     public void ChangeAngle(float change)
     {
