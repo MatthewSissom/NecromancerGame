@@ -6,12 +6,14 @@ public class MultiTracer
 {
     protected DelayedTracer[] tracers;
 
-    public void Update(float dt)
+    public bool Update(float dt)
     {
+        bool tracing = false;
         foreach (var tracer in tracers)
         {
-            tracer.Update(dt);
+            tracing |= tracer.Update(dt);
         }
+        return tracing;
     }
 
     public void SetPath(IContinuousSkeletonPath basePath)

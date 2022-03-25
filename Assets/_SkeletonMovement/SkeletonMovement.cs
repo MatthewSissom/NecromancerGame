@@ -15,7 +15,7 @@ public class SkeletonMovement
         {
             if (action == null)
                 return 1;
-            return Mathf.Max(1, TraceTime / action.Path.Duration);
+            return Mathf.Min(1, TraceTime / action.Path.Duration);
         }
     }
 
@@ -60,7 +60,7 @@ public class SkeletonMovement
             }
             else
             {
-                newAction.MakeActive(firstSpinePoint.forward, GetPathPos());
+                newAction.MakeActive(firstSpinePoint.forward);
             }
         }
 
@@ -134,15 +134,4 @@ public class SkeletonMovement
         else
             TraceTime = duration;
     }
-
-#if UNITY_EDITOR
-    private void RenderDebugPaths()
-    {
-        float simulatedTime = 0;
-        const float simulatedTimeStep = .05f;
-        List<Vector3> points = new List<Vector3>();
-        // sample points on path for debugging
-        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.TruePath, points);
-    }
-#endif
 }

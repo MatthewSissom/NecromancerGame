@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class JumpAction : Action
 {
+    public override bool Cancelable { get => false; }
+
     public JumpAction(Vector3[] destinations, SkeletonBasePathBuilder pathBuilder, SkeletonLayoutData layoutData) : base(destinations, pathBuilder, layoutData)
     {
 
     }
 
-    public override void MakeActive(Vector3 forward, Vector3 groundPosition)
+    public override void MakeActive(Vector3 forward)
     {
         throw new System.NotImplementedException();
     }

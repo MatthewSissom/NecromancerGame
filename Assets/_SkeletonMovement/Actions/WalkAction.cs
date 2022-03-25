@@ -5,13 +5,14 @@ using UnityEngine;
 public class WalkAction : Action
 {
     public override ActionType Type => ActionType.Walk;
+    public override bool Cancelable { get => true; }
 
     private WalkAction previousWalk = null;
     private float previousTraceTime = 0;
     private Vector3 forward;
     private Vector3 groundPosition;
 
-    override public void MakeActive( Vector3 forward, Vector3 groundPosition)
+    override public void MakeActive( Vector3 forward)
     {
         this.forward = forward;
         this.groundPosition = groundPosition;
@@ -31,9 +32,16 @@ public class WalkAction : Action
 
     protected override IContinuousSkeletonPath CalculatePath()
     {
+        IContinuousSkeletonPath path;
         if (previousWalk != null)
-            return pathBuilder.SwitchGroundPath(previousWalk.Path, previousTraceTime, destinations);
-        return pathBuilder.GroundPathFromPoints(groundPosition,forward,destinations);
+            path = pathBuilder.SwitchGroundPath(previousWalk.Path, previousTraceTime, destinations);
+        else
+            path = pathBuilder.GroundPathFromPoints(forward,destinations);
+
+#if UNITY_EDITOR
+        RenderDebugPath(path);
+#endif
+        return path;
     }
 
     protected override SkeletonPathOffset[] CreateLimbOffsets()
@@ -79,4 +87,20 @@ public class WalkAction : Action
             new HeightOffset(0)
             );
     }
+
+#if UNITY_EDITOR
+    private void RenderDebugPath(ISkeletonPath path)
+    {
+        const float simulatedTimeStep = .1f;
+        List<Vector3> points = new List<Vector3>();
+        float startTime = (path as INegitiveDuration)?.NegitiveDuration ?? 0;
+        for(float time = startTime; time < path.Duration; time+= simulatedTimeStep)
+        {
+            points.Add(path.GetPointOnPath(time));
+        }
+
+        // sample points on path for debugging
+        DebugRendering.UpdatePath(DebugModes.DebugPathFlags.TruePath, points);
+    }
+#endif
 }

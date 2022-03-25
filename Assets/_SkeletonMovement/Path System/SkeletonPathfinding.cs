@@ -23,6 +23,7 @@ public class SkeletonPathfinding
         }
 
         var points = new List<Vector3>();
+        points.Add(pathStart);
         Vector3 previous = pathStart;
         for (int i = 1, length = mPath.corners.Length - 1; i < length; i++)
         {
