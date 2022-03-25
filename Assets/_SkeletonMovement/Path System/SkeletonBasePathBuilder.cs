@@ -5,12 +5,14 @@ using UnityEngine.Assertions;
 
 public class SkeletonBasePathBuilder
 {
-    private PathTunables tunables;
+    private SkeletonPathTunables tunables;
+    private SkeletonPathData pathData;
     private LinkedList<IContinuousSkeletonPath> path;
 
-    public SkeletonBasePathBuilder(PathTunables tunables)
+    public SkeletonBasePathBuilder(SkeletonPathTunables tunables, SkeletonPathData pathData)
     {
         this.tunables = tunables;
+        this.pathData = pathData;
     }
 
     // should only be called the first time a skeleton starts a path
@@ -22,8 +24,8 @@ public class SkeletonBasePathBuilder
         Vector3 start = destinations[0];
         // add line for delayed points
         path.AddFirst(new LinePath(
-            tunables.SkeletonDuration,
-            start + startForward * -1 * tunables.DelayedPathLenght,
+            pathData.SkeletonDuration,
+            start + startForward * -1 * pathData.DelayedPathLenght,
             start
         ));
 
@@ -31,7 +33,7 @@ public class SkeletonBasePathBuilder
         if (!CalculateGroundPathInternal(startForward, destinations))
             return null;
 
-        IContinuousSkeletonPath finalPath =  new CompositePath(path, -1 * tunables.SkeletonDuration);
+        IContinuousSkeletonPath finalPath =  new CompositePath(path, -1 * pathData.SkeletonDuration);
         return finalPath;
     }
 
@@ -40,8 +42,8 @@ public class SkeletonBasePathBuilder
         path = new LinkedList<IContinuousSkeletonPath>();
 
         // use previous path for delayed points
-        float adjustedTraceTime = traceTime - tunables.SkeletonDuration;
-        TrimmedPath delayedPath = new TrimmedPath(previousPath, adjustedTraceTime, tunables.SkeletonDuration);
+        float adjustedTraceTime = traceTime - pathData.SkeletonDuration;
+        TrimmedPath delayedPath = new TrimmedPath(previousPath, adjustedTraceTime, pathData.SkeletonDuration);
         delayedPath.DeletePathBefore(0);
         path.AddFirst(delayedPath);
 
@@ -54,7 +56,7 @@ public class SkeletonBasePathBuilder
         if (!CalculateGroundPathInternal(previousPath.GetForward(traceTime), destinations))
             return null;
 
-        IContinuousSkeletonPath finalPath = new CompositePath(path, -1 * tunables.SkeletonDuration);
+        IContinuousSkeletonPath finalPath = new CompositePath(path, -1 * pathData.SkeletonDuration);
         return finalPath;
     }
 

@@ -5,9 +5,9 @@ using UnityEngine.AI;
 
 public class SkeletonPathfinding
 {
-    PathTunables tunables;
+    SkeletonPathTunables tunables;
 
-    public SkeletonPathfinding(PathTunables tunables)
+    public SkeletonPathfinding(SkeletonPathTunables tunables)
     {
         this.tunables = tunables;
     }

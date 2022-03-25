@@ -40,7 +40,7 @@ public abstract class Action
         for(int i = 0; i < count; i++)
         {
             SpinePointData data = layoutData.SpinePoints[i];
-            if (data.IsShoulder)
+            if (data.Identity.IsShoulder)
             {
 
             }

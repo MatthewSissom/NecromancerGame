@@ -30,21 +30,6 @@ public class LimbMeasurements
     [field: SerializeField]
     //the diamater of the circle that the limb can trace on the ground
     public float StrideLength { get; private set; }
-
-
-
-    //get lenght of distance the limb will spend on ground based on length (hypotenuse) and distance from ground
-    public void SetStride(float chestDistFromGround)
-    {
-        //avoid irrational and 0 solutions
-        if (TotalLength <= chestDistFromGround)
-            StrideLength = TotalLength;
-        else
-            StrideLength = Mathf.Sqrt(TotalLength * TotalLength - chestDistFromGround * chestDistFromGround);
-
-        if (float.IsNaN(StrideLength))
-            Debug.Log("NAN length!");
-    }
 }
 
 // Holds game objects associated with the limb
