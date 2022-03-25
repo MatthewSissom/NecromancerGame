@@ -42,7 +42,8 @@ public class CountDown : State
         {
             yield return null;
         }
-        stopWatch.Dropped();
+        if (!stopWatch.Returning)
+            stopWatch.Dropped();
         stopWatch.Angle = 0;
         stopWatch.On = false;
         text.text = "Finished!";
