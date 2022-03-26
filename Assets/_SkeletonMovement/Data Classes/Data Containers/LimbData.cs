@@ -29,17 +29,23 @@ public class LimbMeasurements
     public float OffsetFromSpine { get; private set; }
     [field: SerializeField]
     //the diamater of the circle that the limb can trace on the ground
-    public float StrideLength { get; private set; }
+    public float StrideLength { get; set; }
 }
 
 // Holds game objects associated with the limb
 [Serializable]
-public class LimbGameObjects
+public class LimbTransforms
 {
     [field: SerializeField]
-    public GameObject Target { get; private set; }
+    public Transform Target { get; private set; }
     [field: SerializeField]
-    public GameObject LimbStart { get; private set; }
+    public Transform LimbStart { get; private set; }
+
+    public LimbTransforms(Transform start, Transform target)
+    {
+        LimbStart = start;
+        Target = target;
+    }
 }
 
 [Serializable]
@@ -72,30 +78,29 @@ public class LimbData : MonoBehaviour, IDelayedTracerData
 {
     // Editor Interface
     [field: SerializeField]
-    public LimbGameObjects GameObjects { get; private set; }
-    [field: SerializeField]
     public LimbIdentityData IdentityData { get; private set; }
     [field: SerializeField]
     public LimbMeasurements Measurements { get; private set; }
 
     // Script-only interface
+    public LimbTransforms Transforms { get; private set; }
     public  LimbTunables Tunables { get; private set; }
     public LimbTracingData TracingData { get; private set; }
 
     // IDealyedTracerData
-    public Transform Transform { get => GameObjects.Target.transform; }
+    public Transform Transform { get => Transforms.Target.transform; }
     public float Delay { get => TracingData.Delay; }
 
     // Script constructor
     public void Init( 
-        LimbGameObjects GameObjects, 
+        LimbTransforms Transforms, 
         LimbIdentityData IdentityData, 
         LimbMeasurements Measurements,
         LimbTunables Tunables,
         LimbTracingData TracingData
     )
     {
-       this.GameObjects = GameObjects;
+       this.Transforms = Transforms;
        this.IdentityData = IdentityData;
        this.Measurements = Measurements;
        this.Tunables = Tunables;
@@ -104,11 +109,13 @@ public class LimbData : MonoBehaviour, IDelayedTracerData
 
     // Editor/Debug constructor
     public void EditorInit(
-        LimbTunables Tunables,
-        LimbTracingData TracingData
+        LimbTransforms gameObjects,
+        LimbTunables tunables,
+        LimbTracingData tracingData
     )
     {
-        this.Tunables = Tunables;
-        this.TracingData = TracingData;
+        Transforms = gameObjects;
+        Tunables = tunables;
+        TracingData = tracingData;
     }
 }

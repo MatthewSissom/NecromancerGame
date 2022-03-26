@@ -1907,19 +1907,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0
     <IsFront>k__BackingField: 1
     <IsRight>k__BackingField: 1
   <Measurements>k__BackingField:
-    <StepHeight>k__BackingField: 0
-    <TotalLength>k__BackingField: 0
-    <OffsetFromSpine>k__BackingField: 0
-    <StrideLength>k__BackingField: 0
+    <StepHeight>k__BackingField: 0.03
+    <TotalLength>k__BackingField: 0.2
+    <OffsetFromSpine>k__BackingField: 0.03
+    <StrideLength>k__BackingField: 0.4
 --- !u!1 &2210428184487629406
 GameObject:
   m_ObjectHideFlags: 0
@@ -2659,19 +2656,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0
     <IsFront>k__BackingField: 0
     <IsRight>k__BackingField: 1
   <Measurements>k__BackingField:
-    <StepHeight>k__BackingField: 0
-    <TotalLength>k__BackingField: 0
-    <OffsetFromSpine>k__BackingField: 0
-    <StrideLength>k__BackingField: 0
+    <StepHeight>k__BackingField: 0.03
+    <TotalLength>k__BackingField: 0.2
+    <OffsetFromSpine>k__BackingField: 0.03
+    <StrideLength>k__BackingField: 0.4
 --- !u!1 &3008097790627347491
 GameObject:
   m_ObjectHideFlags: 0
@@ -3690,19 +3684,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0
     <IsFront>k__BackingField: 0
     <IsRight>k__BackingField: 0
   <Measurements>k__BackingField:
-    <StepHeight>k__BackingField: 0
-    <TotalLength>k__BackingField: 0
-    <OffsetFromSpine>k__BackingField: 0
-    <StrideLength>k__BackingField: 0
+    <StepHeight>k__BackingField: 0.03
+    <TotalLength>k__BackingField: 0.2
+    <OffsetFromSpine>k__BackingField: 0.03
+    <StrideLength>k__BackingField: 0.4
 --- !u!1 &4684184758640098586
 GameObject:
   m_ObjectHideFlags: 0
@@ -6250,19 +6241,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0
     <IsFront>k__BackingField: 1
     <IsRight>k__BackingField: 0
   <Measurements>k__BackingField:
-    <StepHeight>k__BackingField: 0
-    <TotalLength>k__BackingField: 0
-    <OffsetFromSpine>k__BackingField: 0
-    <StrideLength>k__BackingField: 0
+    <StepHeight>k__BackingField: 0.03
+    <TotalLength>k__BackingField: 0.2
+    <OffsetFromSpine>k__BackingField: 0.03
+    <StrideLength>k__BackingField: 0.4
 --- !u!1 &9086822433354876611
 GameObject:
   m_ObjectHideFlags: 0

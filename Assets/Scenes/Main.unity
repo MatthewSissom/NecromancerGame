@@ -13741,7 +13741,7 @@ MonoBehaviour:
   stateMode: 3
   skipCameraTransitions: 0
   toggleMouseInput: 1
-  ikTestPrefab: {fileID: 8616413023913154642, guid: 45a8667e89562564ab370b39320cf771,
+  ikTestPrefab: {fileID: 2490182504392057553, guid: db5d4f8137a3479459bac7f47d9fc302,
     type: 3}
   skeletonPathMode: 7
 --- !u!4 &1329063383

@@ -22,8 +22,9 @@ public class SpinePointData : IDelayedTracerData
     public SpineIdentityData Identity { get; private set; }
     public float BaseHeight { get; private set; }
 
-    public SpinePointData(Transform transform, float delay, SpineIdentityData IdData)
+    public SpinePointData(Transform transform, float delay, float baseHeight, SpineIdentityData IdData)
     {
+        BaseHeight = baseHeight;
         Transform = transform;
         Delay = delay;
         if (delay < 0)

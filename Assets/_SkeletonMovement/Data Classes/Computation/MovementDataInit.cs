@@ -40,10 +40,10 @@ public class MovementDataInit : IAssemblyStage
     public SkeletonLayoutData EditorInit(LimbData[] limbEnds , SkeletonTransforms transforms, SkeletonTransforms targets, SkeletonPathTunables tunables)
     {
         Transform[] orderedTransforms = new Transform[4];
-        orderedTransforms[0] = transforms.Head;
-        orderedTransforms[1] = transforms.Shoulder;
-        orderedTransforms[2] = transforms.Hip;
-        orderedTransforms[3] = transforms.Tail;
+        orderedTransforms[0] = targets.Head;
+        orderedTransforms[1] = targets.Shoulder;
+        orderedTransforms[2] = targets.Hip;
+        orderedTransforms[3] = targets.Tail;
 
         float[] distances = new float[4];
         distances[0] = 0;
@@ -51,6 +51,27 @@ public class MovementDataInit : IAssemblyStage
         distances[2] = (orderedTransforms[1].transform.position - orderedTransforms[2].transform.position).magnitude;
         distances[3] = (orderedTransforms[2].transform.position - orderedTransforms[3].transform.position).magnitude;
         float totalDistance = distances[1] + distances[2] + distances[3];
+
+        Transform GetMatchingTransform(SkeletonTransforms findFrom, LimbIdentityData identityData)
+        {
+            if(identityData.IsFront)
+            {
+                if (identityData.IsRight)
+                {
+                    return findFrom.FrontRightLeg;
+                }
+                return findFrom.FrontLeftLeg;
+            }
+            else
+            {
+
+                if (identityData.IsRight)
+                {
+                    return findFrom.BackRightLeg;
+                }
+                return findFrom.BackLeftLeg;
+            }
+        }
 
         // Create data
         SpinePointData[] spinePoints = new SpinePointData[orderedTransforms.Length];
@@ -65,6 +86,8 @@ public class MovementDataInit : IAssemblyStage
             spinePoints[i] = new SpinePointData(
                 orderedTransforms[i],
                 cumulativeDelay,
+                //temp
+                .7f * .2f,
                 idData
             );
         }
@@ -72,15 +95,20 @@ public class MovementDataInit : IAssemblyStage
         // set limb delays to match their corresponding spine point (shoulders for front legs, hips for back legs)
         foreach (LimbData limbEnd in limbEnds)
         {
+            Transform start = GetMatchingTransform(transforms, limbEnd.IdentityData);
+            Transform target = GetMatchingTransform(targets, limbEnd.IdentityData);
+            LimbTransforms limbGo = new LimbTransforms(start, target);
+
             if (limbEnd.IdentityData.IsFront)
             {
-                limbEnd.EditorInit(limbTunables, new LimbTracingData(spinePoints[1].Delay));
+                limbEnd.EditorInit(limbGo, limbTunables, new LimbTracingData(spinePoints[1].Delay));
             }
             else
             {
-                limbEnd.EditorInit(limbTunables, new LimbTracingData(spinePoints[2].Delay));
+                limbEnd.EditorInit(limbGo, limbTunables, new LimbTracingData(spinePoints[2].Delay));
             }
         }
+
 
         initalized = true;
         return new SkeletonLayoutData(limbEnds, spinePoints, totalDistance);
