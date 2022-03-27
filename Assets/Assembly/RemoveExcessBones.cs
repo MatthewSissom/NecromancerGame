@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RemoveExcessBones : IAssemblyStage
 {
-    IEnumerator IAssemblyStage.Execute(GameObject skeleton)
+    IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
     {
         Debug.Log("removing excess bones...");
         /*foreach (BoneGroup bone in TableManager.Instance.boneObjects)

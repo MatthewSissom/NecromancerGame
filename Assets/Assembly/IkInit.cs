@@ -12,7 +12,7 @@ public class IkInit : IAssemblyStage
     // Todo add cat behavior to empty armature
     // PlayPenState.Instance.SetSkeleton(EmptyArmature);
 
-    IEnumerator IAssemblyStage.Execute(GameObject skeleton) 
+    IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous) 
     {
 #if USING_IK
         RebuildIKChains(skeleton, out List<TransformChain> validTransformChains);

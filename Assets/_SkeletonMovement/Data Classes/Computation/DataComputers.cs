@@ -47,6 +47,21 @@ public class LimbLength : ValComputer<float>
     }
 }
 
+public class SpineLenght : ValComputer<float>
+{
+    public Transform SpinePoint { private get; set; }
+
+    protected override float ComputeVal()
+    {
+        float totalLen = 0;
+
+
+        base.ComputeVal();
+        return totalLen;
+    }
+}
+
+
 public class StrideLenght : ValComputer<float>
 {
     public ValComputer<float> SpinePointHeight { private get; set; }

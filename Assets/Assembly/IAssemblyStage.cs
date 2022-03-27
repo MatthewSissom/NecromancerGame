@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IAssemblyStage
 {
-    IEnumerator Execute(GameObject skeleton);
+    IEnumerator Execute(GameObject skeleton, IAssemblyStage previous);
     bool ExecutedSuccessfully();
 }

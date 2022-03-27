@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RemoveGrabbableInfo : IAssemblyStage
 {
-    IEnumerator IAssemblyStage.Execute(GameObject skeleton)
+    IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
     {
         Debug.Log("removing grabbable info...");
         foreach (BoneGroup bone in TableManager.Instance.boneObjects)
