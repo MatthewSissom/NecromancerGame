@@ -13743,7 +13743,7 @@ MonoBehaviour:
   toggleMouseInput: 1
   ikTestPrefab: {fileID: 2490182504392057553, guid: db5d4f8137a3479459bac7f47d9fc302,
     type: 3}
-  skeletonPathMode: 7
+  skeletonPathMode: 0
 --- !u!4 &1329063383
 Transform:
   m_ObjectHideFlags: 0
@@ -30328,9 +30328,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0
@@ -33262,9 +33259,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0
@@ -34395,9 +34389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0
@@ -37846,9 +37837,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0

@@ -15,6 +15,8 @@ public class SkeletonTransforms
     public Transform Hip { get; private set; }
     [field: SerializeField]
     public Transform Tail { get; private set; }
+    [field:SerializeField]
+    public Transform[] OrderedSpineTransforms { get; private set; }
 
     // Leg transforms should correspond to the transform 
     [field: SerializeField]
@@ -31,6 +33,7 @@ public class SkeletonTransforms
         Transform shoulder,
         Transform hip,
         Transform tail,
+        Transform[] orderedSpineTransforms,
         Transform frontLeftLeg,
         Transform frontRightLeg,
         Transform backLeftLeg,
@@ -41,6 +44,7 @@ public class SkeletonTransforms
         Shoulder      = shoulder;
         Hip           = hip ;
         Tail          = tail;
+        OrderedSpineTransforms = orderedSpineTransforms;
         FrontLeftLeg  = frontLeftLeg;
         FrontRightLeg = frontRightLeg;
         BackLeftLeg   = backLeftLeg;

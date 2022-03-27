@@ -17,31 +17,30 @@ public class SinOffset : SkeletonPathOffset
 
 public class StepOffset : SkeletonPathOffset
 {
-    public class FootData
+    public enum LimbStates
     {
-        public enum LimbStates
-        {
-            Tracing,
-            Pinned
-        }
-
-        public LimbStates LimbState { get; private set; }
+        Tracing,
+        Pinned,
+        Init
     }
 
     private LimbData mData;
-    private ISkeletonPath stepPath;
-    private float stepEndTime;
+    private LimbStates state;
 
-    public StepOffset(LimbData data, System.Predicate<FootData> shouldStep)
+    private ISkeletonPath stepPath;
+    private float stepStartTime;
+
+    private Vector3 pinPos;
+
+    public StepOffset(LimbData data /*,System.Predicate<FootData> shouldStep*/)
     {
         mData = data;
+        state = LimbStates.Init;
     }
 
-    private ISkeletonPath GetStepPath(Vector3 start, Vector3 end)
+    private ISkeletonPath GetStepPath(Vector3 start, Vector3 end, float stepTime)
     {
         SkeletonPathOffset sinOffset = new SinOffset(mData.Measurements.StepHeight);
-
-        float stepTime = (end - start).magnitude / mData.Tunables.StepSpeed;
         sinOffset.BasePath = new LinePath(stepTime, start, end);
 
         return sinOffset;
@@ -49,35 +48,40 @@ public class StepOffset : SkeletonPathOffset
 
     protected override Vector3 ApplyOffset(float time, Vector3 inital)
     {
+        switch (state)
+        {
+            case LimbStates.Tracing:
+                float stepPathTime = time - stepStartTime;
+                stepPathTime = Mathf.Min(stepPath.Duration, stepPathTime);
+
+                if (stepStartTime == stepPath.Duration)
+                    return StartPin(stepPath.GetPointOnPath(stepPathTime));
+
+                return inital + stepPath.GetPointOnPath(stepPathTime);
+            case LimbStates.Pinned:
+
+                var transforms = mData.Transforms;
+                if ((transforms.LimbStart.position - transforms.Target.position).magnitude >= mData.Measurements.TotalLength)
+                    StartStep(time);
+
+                break;
+            case LimbStates.Init:
+                break;
+            default:
+                break;
+        }
+
+        return new Vector3();
+    }
+
+    Vector3 StartStep(float  time)
+    {
         throw new System.NotImplementedException();
+    }
 
-        //FMODUnity.RuntimeManager.PlayOneShot("event:/SFX/Cats/Footsteps/SkeletonFootsteps");
-
-        //private IEnumerator StepRoutine()
-        //{
-        //    //final position of foot relitive to the origin
-        //    Vector3 inital = Target.transform.position;
-        //    float elapsedTime = 0;
-        //    float percentFinished = 0;
-        //    float stepTime = (stepTargetPos - inital).magnitude / StepSpeed;
-        //    if (stepTime == 0)
-        //    {
-        //        yield break;
-        //    }
-        //    float initalHOffset = HeightOffset;
-        //    while (percentFinished < 1)
-        //    {
-        //        elapsedTime += Time.deltaTime;
-        //        percentFinished = elapsedTime / stepTime;
-
-        //        HeightOffset = initalHOffset * (1 - percentFinished);
-
-        //        Target.transform.position = Vector3.Lerp(inital, stepTargetPos, percentFinished)
-        //            + new Vector3(0, Mathf.Sin(percentFinished * Mathf.PI) * StepHeight, 0);
-        //        yield return null;
-        //    }
-        //    Target.transform.position = stepTargetPos;
-        //    yield break;
-        //}
+    Vector3 StartPin(Vector3 newPos)
+    {
+        pinPos = newPos;
+        return pinPos;
     }
 }
