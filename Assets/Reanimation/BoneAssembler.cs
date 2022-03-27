@@ -31,9 +31,11 @@ public class BoneAssembler : State
     }
     IEnumerator RunPipeline()
     {
+        IAssemblyStage previousStage = null;
         foreach (IAssemblyStage stage in assemblyStages)
         {
-            yield return stage.Execute(skeleton);
+            yield return stage.Execute(skeleton,previousStage);
+            previousStage = stage;
         }
     }
     /*

@@ -16,7 +16,7 @@ public class MovementDataInit : IAssemblyStage
         return this;
     }
 
-    public IEnumerator Execute(GameObject skeleton)
+    public IEnumerator Execute(GameObject skeleton, IAssemblyStage previous)
     {
         // Create computers
 

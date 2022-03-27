@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ReassignParents : IAssemblyStage
 {
-    IEnumerator IAssemblyStage.Execute(GameObject skeleton)
+    IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
     {
         Debug.Log("reassigning parents...");
         foreach (BoneGroup bone in TableManager.Instance.boneObjects)

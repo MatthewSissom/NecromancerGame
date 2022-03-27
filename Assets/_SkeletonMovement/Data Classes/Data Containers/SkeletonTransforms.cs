@@ -7,6 +7,7 @@ using UnityEngine;
 public class SkeletonTransforms
 {
     // Spine transforms should be at the END of their gameObject, tip of the nose, tip of the tail, etc.
+    // Values should be null if 
     [field: SerializeField]
     public Transform Head { get; private set; }
     [field: SerializeField]
@@ -15,10 +16,11 @@ public class SkeletonTransforms
     public Transform Hip { get; private set; }
     [field: SerializeField]
     public Transform Tail { get; private set; }
+    // Ordered from head to tail
     [field:SerializeField]
     public Transform[] OrderedSpineTransforms { get; private set; }
 
-    // Leg transforms should correspond to the transform 
+    // Leg transforms should correspond to the transform coming off of the shoulder or the hips excluding offsets
     [field: SerializeField]
     public Transform FrontLeftLeg { get; private set; }
     [field: SerializeField]
