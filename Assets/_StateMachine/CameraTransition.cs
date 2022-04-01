@@ -50,8 +50,10 @@ public class CameraTransition : State
 
         while(elapsedTime < time)
         {
-            transform.localPosition = Vector3.Lerp(initalPos, pos, elapsedTime / time);
-            transform.rotation = Quaternion.Slerp(initalQuat, endQuat, elapsedTime / time);
+            // Use trig to aproximate physics
+            float adjustedPercentage = (1 - Mathf.Cos(elapsedTime / time * Mathf.PI)) / 2;
+            transform.localPosition = Vector3.Lerp(initalPos, pos, adjustedPercentage);
+            transform.rotation = Quaternion.Slerp(initalQuat, endQuat, adjustedPercentage);
             elapsedTime = Time.time - initalTime;
             yield return null;
         }
