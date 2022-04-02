@@ -9669,7 +9669,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transitionName: TableTrans
   time: 1
-  pos: {x: 0.033, y: 0.611, z: -0.018}
+  pos: {x: 0.033, y: 0.5, z: -0.036}
   forward: {x: 0, y: -0.99837625, z: 0.056964517}
   up: {x: 0, y: 0.056964517, z: 0.99837625}
 --- !u!114 &963194234
@@ -13741,7 +13741,7 @@ MonoBehaviour:
   stateMode: 0
   skipCameraTransitions: 0
   toggleMouseInput: 1
-  ikTestPrefab: {fileID: 8616413023913154642, guid: 45a8667e89562564ab370b39320cf771,
+  ikTestPrefab: {fileID: 2490182504392057553, guid: db5d4f8137a3479459bac7f47d9fc302,
     type: 3}
   skeletonPathMode: 0
 --- !u!4 &1329063383
@@ -30324,9 +30324,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0
@@ -33258,9 +33255,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0
@@ -34387,9 +34381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0
@@ -37834,9 +37825,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <GameObjects>k__BackingField:
-    <Target>k__BackingField: {fileID: 0}
-    <LimbStart>k__BackingField: {fileID: 0}
   <IdentityData>k__BackingField:
     <IsStump>k__BackingField: 0
     <IsSingle>k__BackingField: 0

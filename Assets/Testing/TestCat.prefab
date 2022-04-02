@@ -1907,17 +1907,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StepSpeed: 0
-  <StepHeight>k__BackingField: 0
-  BodyMovementMult: 0.015
-  <Type>k__BackingField: 0
-  <LocationTag>k__BackingField: 1
-  <LimbState>k__BackingField: 2
-  <LimbLength>k__BackingField: 0.2
-  <StrideLength>k__BackingField: 0
-  <Target>k__BackingField: {fileID: 3157923432646105934}
-  <LimbStart>k__BackingField: {fileID: 6516851309281206284}
-  <DelayIndex>k__BackingField: 0
+  <IdentityData>k__BackingField:
+    <IsStump>k__BackingField: 0
+    <IsSingle>k__BackingField: 0
+    <IsFront>k__BackingField: 1
+    <IsRight>k__BackingField: 1
+  <Measurements>k__BackingField:
+    <StepHeight>k__BackingField: 0.03
+    <TotalLength>k__BackingField: 0.2
+    <OffsetFromSpine>k__BackingField: 0.03
+    <StrideLength>k__BackingField: 0.4
 --- !u!1 &2210428184487629406
 GameObject:
   m_ObjectHideFlags: 0
@@ -2411,17 +2410,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followTarget: {fileID: 0}
   speed: 0.2
+  skeletonPositions:
+    <Head>k__BackingField: {fileID: 2672171166120686089}
+    <Shoulder>k__BackingField: {fileID: 2102842313671347762}
+    <Hip>k__BackingField: {fileID: 1351745461954622139}
+    <Tail>k__BackingField: {fileID: 2741528689462362405}
+    <FrontLeftLeg>k__BackingField: {fileID: 7573356984075753951}
+    <FrontRightLeg>k__BackingField: {fileID: 4320754380103469748}
+    <BackLeftLeg>k__BackingField: {fileID: 7406632066301648406}
+    <BackRightLeg>k__BackingField: {fileID: 8051840391395556223}
+  targets:
+    <Head>k__BackingField: {fileID: 9114611288765783643}
+    <Shoulder>k__BackingField: {fileID: 7263244047530817204}
+    <Hip>k__BackingField: {fileID: 5750491859503318300}
+    <Tail>k__BackingField: {fileID: 3215259925699428739}
+    <FrontLeftLeg>k__BackingField: {fileID: 6712904332773770665}
+    <FrontRightLeg>k__BackingField: {fileID: 5827459413320459236}
+    <BackLeftLeg>k__BackingField: {fileID: 7378481392430804427}
+    <BackRightLeg>k__BackingField: {fileID: 2445571960859140093}
+  limbTunables:
+    StepHeightMult: 0
+    stepSpeedMult: 0
   limbEnds:
   - {fileID: 8344809999884225324}
   - {fileID: 1449528777897906738}
   - {fileID: 6499594792462967228}
   - {fileID: 8877774101091694432}
-  stepHeight: 0.05
-  chestHeight: 0.15
-  hipDelay: 0.8
-  hipTransform: {fileID: 5750491859503318300}
-  headTransform: {fileID: 9114611288765783643}
-  tailTransform: {fileID: 3215259925699428739}
 --- !u!1 &2625304745404510694
 GameObject:
   m_ObjectHideFlags: 0
@@ -2642,17 +2656,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StepSpeed: 0
-  <StepHeight>k__BackingField: 0
-  BodyMovementMult: 0.015
-  <Type>k__BackingField: 0
-  <LocationTag>k__BackingField: 3
-  <LimbState>k__BackingField: 2
-  <LimbLength>k__BackingField: 0.2
-  <StrideLength>k__BackingField: 0
-  <Target>k__BackingField: {fileID: 2371745979177330229}
-  <LimbStart>k__BackingField: {fileID: 2373223986540089728}
-  <DelayIndex>k__BackingField: 0
+  <IdentityData>k__BackingField:
+    <IsStump>k__BackingField: 0
+    <IsSingle>k__BackingField: 0
+    <IsFront>k__BackingField: 0
+    <IsRight>k__BackingField: 1
+  <Measurements>k__BackingField:
+    <StepHeight>k__BackingField: 0.03
+    <TotalLength>k__BackingField: 0.2
+    <OffsetFromSpine>k__BackingField: 0.03
+    <StrideLength>k__BackingField: 0.4
 --- !u!1 &3008097790627347491
 GameObject:
   m_ObjectHideFlags: 0
@@ -3671,17 +3684,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StepSpeed: 0
-  <StepHeight>k__BackingField: 0
-  BodyMovementMult: 0.015
-  <Type>k__BackingField: 0
-  <LocationTag>k__BackingField: 2
-  <LimbState>k__BackingField: 2
-  <LimbLength>k__BackingField: 0.2
-  <StrideLength>k__BackingField: 0
-  <Target>k__BackingField: {fileID: 9156600238342720493}
-  <LimbStart>k__BackingField: {fileID: 692731385933252297}
-  <DelayIndex>k__BackingField: 0
+  <IdentityData>k__BackingField:
+    <IsStump>k__BackingField: 0
+    <IsSingle>k__BackingField: 0
+    <IsFront>k__BackingField: 0
+    <IsRight>k__BackingField: 0
+  <Measurements>k__BackingField:
+    <StepHeight>k__BackingField: 0.03
+    <TotalLength>k__BackingField: 0.2
+    <OffsetFromSpine>k__BackingField: 0.03
+    <StrideLength>k__BackingField: 0.4
 --- !u!1 &4684184758640098586
 GameObject:
   m_ObjectHideFlags: 0
@@ -6229,17 +6241,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StepSpeed: 0
-  <StepHeight>k__BackingField: 0
-  BodyMovementMult: 0.015
-  <Type>k__BackingField: 0
-  <LocationTag>k__BackingField: 0
-  <LimbState>k__BackingField: 2
-  <LimbLength>k__BackingField: 0.2
-  <StrideLength>k__BackingField: 0
-  <Target>k__BackingField: {fileID: 6663863804772729921}
-  <LimbStart>k__BackingField: {fileID: 9088379016934014465}
-  <DelayIndex>k__BackingField: 0
+  <IdentityData>k__BackingField:
+    <IsStump>k__BackingField: 0
+    <IsSingle>k__BackingField: 0
+    <IsFront>k__BackingField: 1
+    <IsRight>k__BackingField: 0
+  <Measurements>k__BackingField:
+    <StepHeight>k__BackingField: 0.03
+    <TotalLength>k__BackingField: 0.2
+    <OffsetFromSpine>k__BackingField: 0.03
+    <StrideLength>k__BackingField: 0.4
 --- !u!1 &9086822433354876611
 GameObject:
   m_ObjectHideFlags: 0

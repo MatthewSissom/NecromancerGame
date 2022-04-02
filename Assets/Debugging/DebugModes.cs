@@ -8,6 +8,7 @@ public class DebugModes : MonoBehaviour
     public enum EStateDebugMode
     {
         None,
+        Tutorial,
         SkipMenus,
         AssemblyAndPlayPen,
         PlaypenOnly

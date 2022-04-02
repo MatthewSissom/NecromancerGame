@@ -1,34 +1,39 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class SkeletonBasePathBuilder
 {
-    private PathTunables tunables;
+    private SkeletonPathTunables tunables;
+    private SkeletonPathData pathData;
     private LinkedList<IContinuousSkeletonPath> path;
 
-    public SkeletonBasePathBuilder(PathTunables tunables)
+    public SkeletonBasePathBuilder(SkeletonPathTunables tunables, SkeletonPathData pathData)
     {
         this.tunables = tunables;
+        this.pathData = pathData;
     }
 
     // should only be called the first time a skeleton starts a path
-    public IContinuousSkeletonPath GroundPathFromPoints(Vector3 start, Vector3 startForward, Vector3[] destinations)
+    public IContinuousSkeletonPath GroundPathFromPoints(Vector3 startForward, Vector3[] destinations)
     {
-        path = new LinkedList<IContinuousSkeletonPath>();
+        Debug.Log("Inital path created");
 
+        path = new LinkedList<IContinuousSkeletonPath>();
+        Vector3 start = destinations[0];
         // add line for delayed points
         path.AddFirst(new LinePath(
-            tunables.SkeletonDuration,
-            start + startForward * -1 * tunables.DelayedPathLenght,
+            pathData.SkeletonDuration,
+            start + startForward * -1 * pathData.DelayedPathLenght,
             start
         ));
 
         // try to path. if failed return null
-        if (!CalculateGroundPathInternal(start, startForward, destinations))
+        if (!CalculateGroundPathInternal(startForward, destinations))
             return null;
 
-        IContinuousSkeletonPath finalPath =  new CompositePath(path, -1 * tunables.SkeletonDuration);
+        IContinuousSkeletonPath finalPath =  new CompositePath(path, -1 * pathData.SkeletonDuration);
         return finalPath;
     }
 
@@ -37,25 +42,31 @@ public class SkeletonBasePathBuilder
         path = new LinkedList<IContinuousSkeletonPath>();
 
         // use previous path for delayed points
-        float adjustedTraceTime = traceTime - tunables.SkeletonDuration;
-        TrimmedPath delayedPath = new TrimmedPath(previousPath, adjustedTraceTime, tunables.SkeletonDuration);
+        float adjustedTraceTime = traceTime - pathData.SkeletonDuration;
+        TrimmedPath delayedPath = new TrimmedPath(previousPath, adjustedTraceTime, pathData.SkeletonDuration);
         delayedPath.DeletePathBefore(0);
         path.AddFirst(delayedPath);
 
+        // check that current position and pathfinding start pos are ==
+        Assert.AreApproximatelyEqual(previousPath.GetPointOnPath(traceTime).x, destinations[0].x,.01f);
+        Assert.AreApproximatelyEqual(previousPath.GetPointOnPath(traceTime).y, destinations[0].y,.01f);
+        Assert.AreApproximatelyEqual(previousPath.GetPointOnPath(traceTime).z, destinations[0].z,.01f);
+
         // try to path. if failed return null
-        if (!CalculateGroundPathInternal(previousPath.GetPointOnPath(traceTime), previousPath.GetForward(traceTime), destinations))
+        if (!CalculateGroundPathInternal(previousPath.GetForward(traceTime), destinations))
             return null;
 
-        IContinuousSkeletonPath finalPath = new CompositePath(path, -1 * tunables.SkeletonDuration);
+        IContinuousSkeletonPath finalPath = new CompositePath(path, -1 * pathData.SkeletonDuration);
         return finalPath;
     }
 
-    private bool CalculateGroundPathInternal(Vector3 start, Vector3 startForward, Vector3[] destinations)
+    private bool CalculateGroundPathInternal(Vector3 startForward, Vector3[] destinations)
     {
-        Vector3 pos = start;
+        Vector3 pos = destinations[0];
         Vector3 forward = startForward;
-        foreach (var destination in destinations)
+        for(int i = 1; i < destinations.Length; i++)
         {
+            Vector3 destination = destinations[i];
             //change the current forward to the forward the cat will have at the
             //end of the previous section
             if (!OrientAndGoToPoint(destination, pos, forward, out forward))

@@ -10,7 +10,7 @@ public abstract class Action
         Jump
     }
 
-    public bool Cancelable { get; }
+    public abstract bool Cancelable { get; }
     public IContinuousSkeletonPath Path { get => path ?? (path = CalculatePath()); }
     public SkeletonPathOffset[] LimbOffsets { get => limbOffsets ??  (limbOffsets = CreateLimbOffsets()); }
     public SkeletonPathOffset[] SpineOffsets { get => spineOffsets ?? (spineOffsets  = CreateSpineOffsets()); }
@@ -23,7 +23,7 @@ public abstract class Action
     protected SkeletonBasePathBuilder pathBuilder;
     protected SkeletonLayoutData layoutData;
 
-    abstract public void MakeActive(Vector3 forward, Vector3 groundPosition);
+    abstract public void MakeActive(Vector3 forward);
     abstract public void MakeActive(IContinuousSkeletonPath path, float traceTime);
 
     // returns base paths common to most actions
@@ -40,7 +40,7 @@ public abstract class Action
         for(int i = 0; i < count; i++)
         {
             SpinePointData data = layoutData.SpinePoints[i];
-            if (data.IsShoulder)
+            if (data.Identity.IsShoulder)
             {
 
             }

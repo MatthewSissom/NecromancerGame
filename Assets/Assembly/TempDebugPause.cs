@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TempDebugPause : IAssemblyStage
 {
-    IEnumerator IAssemblyStage.Execute(GameObject skeleton)
+    IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
     {
         Debug.Break();
         yield break;

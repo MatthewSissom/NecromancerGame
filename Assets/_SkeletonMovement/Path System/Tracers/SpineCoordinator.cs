@@ -39,9 +39,9 @@ public class SpineCoordinator : MultiTracer
         for(int i = 0; i < tracers.Length; i++)
         {
             SpineTracer newTracer =  new SpineTracer(pointData[i].Transform, pointData[i].Delay);
-            if (pointData[i].IsHip)
+            if (pointData[i].Identity.IsHip)
                 Hip = newTracer;
-            if (pointData[i].IsShoulder)
+            if (pointData[i].Identity.IsShoulder)
                 Shoulder = newTracer;
 
             tracers[i] = newTracer;

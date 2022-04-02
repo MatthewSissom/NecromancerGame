@@ -26,6 +26,7 @@ public class SkeletonLocomotionPlanner
             Vector3 previousDest = destinations[i - 1];
             Vector3 currentDest = destinations[i];
 
+            // endIndex is EXCLUSIVE
             void FinishWalkIfNeeded(int endIndex)
             {
                 if (walkStartIndex == -1 || endIndex == walkStartIndex)
@@ -58,7 +59,7 @@ public class SkeletonLocomotionPlanner
                 // no other paths were added, ok to walk between all destinations
                 if (walkStartIndex == -1)
                     walkStartIndex = 0;
-                FinishWalkIfNeeded(i);
+                FinishWalkIfNeeded(destinations.Count);
             }
         }
 

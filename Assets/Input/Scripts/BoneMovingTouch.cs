@@ -46,7 +46,8 @@ public class BoneMovingTouch : TouchProxy
     [SerializeField]
     private float offSetHeight = 0.1f;
 
-
+    private GrabbableGroup potentialPickup;
+    private float potentialPickupTimer;
     public void SetActive(Stopwatch watch)
     {
         activeWatch = watch;
@@ -121,10 +122,27 @@ public class BoneMovingTouch : TouchProxy
         GrabbableGroup c = other.GetComponentInParent<GrabbableGroup>(); 
         if (c != null && !c.isRoot && (!c.isAttached || c.isLeaf))
         {
-            c.PickedUp();
-            SetActive(c, c.PrimaryMidpoint, c.AuxilieryAxis); 
-            StopRotation(1000 * Mathf.Deg2Rad);
+            if(!c.isAttached)
+            {
+                c.PickedUp();
+                SetActive(c, c.PrimaryMidpoint, c.AuxilieryAxis);
+                StopRotation(1000 * Mathf.Deg2Rad);
+                potentialPickup = null;
+            } else if(c.isLeaf)
+            {
+                potentialPickup = c;
+                potentialPickupTimer = 0.25f;
+            }
             //touchLights.Play();
+        }
+    }
+
+    protected virtual void OnTriggerExit(Collider other)
+    {
+        GrabbableGroup c = other.GetComponentInParent<GrabbableGroup>();
+        if (c == potentialPickup)
+        {
+            potentialPickup = null;
         }
     }
 
@@ -154,6 +172,18 @@ public class BoneMovingTouch : TouchProxy
             transform.up = Camera.main.transform.position - transform.position;
             myVolume.size = new Vector3(radius * 2 * radMult, myVolume.size.y, radius * 2 * radMult);
         }  
+
+        if(activeBone == null && potentialPickup != null)
+        {
+            potentialPickupTimer -= Time.deltaTime;
+            if (potentialPickupTimer <= 0)
+            {
+                potentialPickup.PickedUp();
+                SetActive(potentialPickup, potentialPickup.PrimaryMidpoint, potentialPickup.AuxilieryAxis);
+                StopRotation(1000 * Mathf.Deg2Rad);
+                potentialPickup = null;
+            }
+        }
         
     }
 
