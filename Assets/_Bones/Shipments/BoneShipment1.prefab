@@ -354,6 +354,7 @@ MonoBehaviour:
   - {fileID: 7135591711045641832, guid: cd38272d0a79da444a081738c7e4f4c5, type: 3}
   - {fileID: 6783804912498929454, guid: fe6481c05631317478603e29119f78b4, type: 3}
   - {fileID: 6420342891581815629, guid: 9254181329b720d4d9c1400777bd3826, type: 3}
+  specialBones: []
 --- !u!1001 &1039582010538889582
 PrefabInstance:
   m_ObjectHideFlags: 0
