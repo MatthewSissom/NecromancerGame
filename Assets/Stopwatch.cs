@@ -194,5 +194,10 @@ public class Stopwatch : MonoBehaviour, IGrabbable
             angleChange += change;
         }
     }
+
+    public void Enabled(bool enabled)
+    {
+        gameObject.SetActive(enabled);
+    }
     
 }
