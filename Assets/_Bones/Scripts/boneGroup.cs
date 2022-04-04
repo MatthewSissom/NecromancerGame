@@ -42,6 +42,8 @@ public class BoneGroup : MonoBehaviour
     private GameObject rightAuxIndicator;
 
 
+    public ResidualBoneData residualBoneData;
+
     private float cylinderSize;
 
     protected BoneGroup parent;
@@ -49,11 +51,16 @@ public class BoneGroup : MonoBehaviour
     {
         get { return parent; }
     }
-    protected BoneVertexType parentVertexCollisionType;
-    protected Dictionary<BoneVertexType, BoneGroup> children;
+    /// <summary>
+    /// The vertex of the parent that this bone is connected to
+    /// </summary>
+    public BoneVertexType parentVertexCollisionType;
+    public Dictionary<BoneVertexType, BoneGroup> children;
 
     [SerializeField] //for debugging
     public BoneCollisionCylinder currentCylinderHit;
+
+    public BoneCollisionCylinder currentCylinderDoingHitting;
 
     public BoneVertexType? currentCollisionVertex;
 
@@ -99,6 +106,7 @@ public class BoneGroup : MonoBehaviour
             rightAuxCylinder.SetActive(false);
         }
 
+        residualBoneData = gameObject.AddComponent<ResidualBoneData>();
     }
 
     protected virtual void Start()
@@ -185,8 +193,10 @@ public class BoneGroup : MonoBehaviour
         colCyl.MyIndicator = indicator;
     }
 
-    public void Attach(BoneGroup parent/*, TableManager tableManager*/)
+    public void Attach(BoneGroup parent)
     {
+        Debug.Log("attaching to parent's " + parentVertexCollisionType);
+        parent.children[parentVertexCollisionType] = this;
         this.parent = parent;
         isLeaf = true;
         parent.isLeaf = false;
@@ -202,6 +212,11 @@ public class BoneGroup : MonoBehaviour
         leftAuxCylinder.SetActive(true);
         rightAuxCylinder.SetActive(true);
 
+        if(parent)
+        {
+            parent.children[parentVertexCollisionType] = null;
+            parent.isLeaf = true;
+        }
         parent = null;
         isLeaf = false;
         isAttached = false;
@@ -226,6 +241,7 @@ public class BoneGroup : MonoBehaviour
     protected void OnCollideDrop()
     {
         BoneGroup otherGroup = currentCylinderHit.MyBone;
+        parentVertexCollisionType = currentCylinderHit.MyType;
 
         isBeingDragged = false;
 
@@ -260,5 +276,25 @@ public class BoneGroup : MonoBehaviour
         Destroy(rightAuxVertex);
 
         isCleaned = true;
+    }
+    public BoneVertexType FindBoneInChildren(BoneGroup bone)
+    {
+        if (children.ContainsKey(BoneVertexType.FrontPrimary) && children[BoneVertexType.FrontPrimary] == bone)
+        {
+            return BoneVertexType.FrontPrimary;
+        }
+        if (children.ContainsKey(BoneVertexType.BackPrimary) && children[BoneVertexType.BackPrimary] == bone)
+        {
+            return BoneVertexType.BackPrimary;
+        }
+        if (children.ContainsKey(BoneVertexType.LeftAux) && children[BoneVertexType.LeftAux] == bone)
+        {
+            return BoneVertexType.LeftAux;
+        }
+        if (children.ContainsKey(BoneVertexType.RightAux) && children[BoneVertexType.RightAux] == bone)
+        {
+            return BoneVertexType.RightAux;
+        }
+        return BoneVertexType.FrontPrimary;
     }
 }

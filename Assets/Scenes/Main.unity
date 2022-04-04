@@ -9608,6 +9608,7 @@ MonoBehaviour:
   pos: {x: -1.05, y: 0.705, z: -3.038}
   forward: {x: 0.53486735, y: -0.019289743, z: 0.84471583}
   up: {x: 0.010317955, y: 0.9998139, z: 0.016298283}
+  fov: 60
 --- !u!114 &963194230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9625,6 +9626,7 @@ MonoBehaviour:
   pos: {x: 1.109, y: 0.195, z: -0.747}
   forward: {x: 0, y: -0.10925722, z: -0.99401355}
   up: {x: 0, y: 0.9940135, z: -0.10925722}
+  fov: 60
 --- !u!114 &963194231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9655,6 +9657,7 @@ MonoBehaviour:
   pos: {x: 0.033, y: 0.779, z: -0.018}
   forward: {x: 0, y: -0.98726887, z: 0.15906024}
   up: {x: 0, y: 0.15906024, z: 0.98726887}
+  fov: 60
 --- !u!114 &963194233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9669,9 +9672,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transitionName: TableTrans
   time: 1
-  pos: {x: 0.033, y: 0.5, z: -0.036}
+  pos: {x: 0.033, y: 1, z: -0.05}
   forward: {x: 0, y: -0.99837625, z: 0.056964517}
   up: {x: 0, y: 0.056964517, z: 0.99837625}
+  fov: 30
 --- !u!114 &963194234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9689,6 +9693,7 @@ MonoBehaviour:
   pos: {x: 0.119, y: 1.122, z: 0.974}
   forward: {x: 0, y: 0, z: 1}
   up: {x: 0, y: 1, z: 0}
+  fov: 60
 --- !u!114 &963194237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9706,6 +9711,7 @@ MonoBehaviour:
   pos: {x: 0.119, y: 1.122, z: 1.213}
   forward: {x: 0, y: 0, z: 1}
   up: {x: 0, y: 1, z: 0}
+  fov: 60
 --- !u!114 &963194238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9737,6 +9743,7 @@ MonoBehaviour:
   pos: {x: -0.7946987, y: 0.6479821, z: -0.2501359}
   forward: {x: 0.89897025, y: -0.36206105, z: -0.24650449}
   up: {x: 0.34918278, y: 0.9321544, z: -0.09570578}
+  fov: 60
 --- !u!1 &964694954
 GameObject:
   m_ObjectHideFlags: 0
@@ -13719,6 +13726,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1329063383}
   - component: {fileID: 1329063382}
+  - component: {fileID: 1329063384}
   m_Layer: 0
   m_Name: DebugOptions
   m_TagString: Untagged
@@ -13738,7 +13746,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: deb58ae06b3377544b9acf743651334c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateMode: 0
+  stateMode: 2
   skipCameraTransitions: 0
   toggleMouseInput: 1
   ikTestPrefab: {fileID: 2490182504392057553, guid: db5d4f8137a3479459bac7f47d9fc302,
@@ -13760,6 +13768,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1329063384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329063381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67c9007b36f3bd140a6b55180049428a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headMat: {fileID: 2100000, guid: b9111af962b3bd34f890d387d2b8e2bd, type: 2}
+  shoulderSpineMat: {fileID: 2100000, guid: 5a15f374e2a98814280b869796605553, type: 2}
+  hipSpineMat: {fileID: 2100000, guid: e66aaef1a9e87a54b975175da891fea9, type: 2}
+  shoulderMat: {fileID: 2100000, guid: d2b3249b0bf696a49aa65949b0a81b2d, type: 2}
+  hipMat: {fileID: 2100000, guid: f75a48c1af3e5fb469297dbd154620b1, type: 2}
+  tailMat: {fileID: 2100000, guid: bdd9841ad43d5024fa8d9048d9ff39c0, type: 2}
+  footMat: {fileID: 2100000, guid: 0d5d0227782227d48943e9e27096bb70, type: 2}
+  leftLegStartMat: {fileID: 2100000, guid: 841bbb60e85b84c429b73b403f70e2e9, type: 2}
+  rightLegStartMat: {fileID: 2100000, guid: dbc773e1e34187d48a5f002c0d3cd6b8, type: 2}
 --- !u!1001 &1331266153
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22664,7 +22693,10 @@ MonoBehaviour:
   rightAuxVertex: {fileID: 0}
   cylColliderPrefab: {fileID: 0}
   vertexIndicatorPrefab: {fileID: 0}
+  residualBoneData: {fileID: 0}
+  parentVertexCollisionType: 0
   currentCylinderHit: {fileID: 0}
+  currentCylinderDoingHitting: {fileID: 0}
   isBeingDragged: 0
   isLeaf: 0
   isAttached: 0
@@ -26001,6 +26033,7 @@ MonoBehaviour:
   pos: {x: 0.12224, y: 1.132, z: 2.7854}
   forward: {x: 0, y: -1, z: 0}
   up: {x: -1, y: 0, z: 0}
+  fov: 60
 --- !u!114 &919132148114295351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26018,6 +26051,7 @@ MonoBehaviour:
   pos: {x: 0.12224, y: 1.132, z: 2.7854}
   forward: {x: 0, y: 1, z: 0}
   up: {x: -1, y: 0, z: 0}
+  fov: 60
 --- !u!114 &919132148114295352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26035,6 +26069,7 @@ MonoBehaviour:
   pos: {x: -0.09194, y: -0.009000063, z: -0.1716001}
   forward: {x: 0, y: 1, z: 0}
   up: {x: -1, y: 0, z: 0}
+  fov: 60
 --- !u!114 &919132148114295353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26052,6 +26087,7 @@ MonoBehaviour:
   pos: {x: -0.09194, y: -0.009000063, z: -0.1716001}
   forward: {x: 0, y: -1, z: 0}
   up: {x: -1, y: 0, z: 0}
+  fov: 60
 --- !u!114 &923548364271165764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26265,7 +26301,10 @@ MonoBehaviour:
   rightAuxVertex: {fileID: 0}
   cylColliderPrefab: {fileID: 0}
   vertexIndicatorPrefab: {fileID: 0}
+  residualBoneData: {fileID: 0}
+  parentVertexCollisionType: 0
   currentCylinderHit: {fileID: 0}
+  currentCylinderDoingHitting: {fileID: 0}
   isBeingDragged: 0
   isLeaf: 0
   isAttached: 0
@@ -40823,7 +40862,10 @@ MonoBehaviour:
   rightAuxVertex: {fileID: 0}
   cylColliderPrefab: {fileID: 0}
   vertexIndicatorPrefab: {fileID: 0}
+  residualBoneData: {fileID: 0}
+  parentVertexCollisionType: 0
   currentCylinderHit: {fileID: 0}
+  currentCylinderDoingHitting: {fileID: 0}
   isBeingDragged: 0
   isLeaf: 0
   isAttached: 0

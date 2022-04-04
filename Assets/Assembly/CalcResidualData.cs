@@ -1,0 +1,251 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class CalcResidualData : IAssemblyStage
+{
+
+    IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
+    {
+        Debug.Log("removing grabbable info...");
+        foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
+        {
+            bone.GetComponent<ResidualBoneData>().PopulateDataFrom(bone);
+            bone.GetComponent<ResidualBoneData>().PopulateChildrenFrom(bone);
+        }
+        /*foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
+        {
+            bone.GetComponent<ResidualBoneData>().DEBUG_distanceFromRoot = bone.GetComponent<ResidualBoneData>().distanceToRootBone(null);
+        }*/
+
+        List<ResidualBoneData> boneData = new List<ResidualBoneData>();
+        //path to tail
+        ResidualBoneData rootBoneData = null;
+        foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
+        {
+            boneData.Add(bone.residualBoneData);
+            if(bone.isRoot)
+            {
+                rootBoneData = bone.residualBoneData;
+            }
+        }
+
+        List<Transform> orderedSpine = new List<Transform>();
+
+        ResidualBoneData boneDataStepper = rootBoneData.GetChild(BoneVertexType.FrontPrimary);
+        while(boneDataStepper.getAcrossVertex() != null)
+        {
+            boneDataStepper.MarkShoulderSideSpine();
+            orderedSpine.Add(boneDataStepper.transform);
+            boneDataStepper = boneDataStepper.GetChild(boneDataStepper.getAcrossVertex().Value);
+        }
+        ResidualBoneData headBoneData = boneDataStepper;
+        boneDataStepper.MarkHead();
+        orderedSpine.Reverse();
+        orderedSpine.Add(rootBoneData.transform);
+
+        boneDataStepper = rootBoneData.GetChild(BoneVertexType.BackPrimary);
+        while (boneDataStepper.getAcrossVertex() != null)
+        {
+            boneDataStepper.MarkHipSideSpine();
+            orderedSpine.Add(boneDataStepper.transform);
+            boneDataStepper = boneDataStepper.GetChild(boneDataStepper.getAcrossVertex().Value);
+        }
+        ResidualBoneData tailBoneData = boneDataStepper;
+        boneDataStepper.MarkTail();
+
+        boneDataStepper = headBoneData;
+        ResidualBoneData boneDataStepper2 = tailBoneData;
+        bool doTailStepFlag = false;
+        List<ResidualBoneData> threeChilders = new List<ResidualBoneData>();
+        List<ResidualBoneData> twoChilders = new List<ResidualBoneData>();
+        List<ResidualBoneData> backups = new List<ResidualBoneData>();
+        backups.Add(headBoneData.parentBone);
+        backups.Add(tailBoneData.parentBone);
+        while(threeChilders.Count < 2 && (boneDataStepper2.parentBone || boneDataStepper.parentBone))
+        {
+            if(doTailStepFlag)
+            {
+                if(!boneDataStepper2.parentBone)
+                {
+                    continue;
+                }
+                boneDataStepper2 = boneDataStepper2.parentBone;
+                if(boneDataStepper2.numChildren == 3)
+                {
+                    threeChilders.Add(boneDataStepper2);
+                }
+                if(boneDataStepper2.numChildren == 2)
+                {
+                    twoChilders.Add(boneDataStepper2);
+                }
+            } else
+            {
+                if (!boneDataStepper.parentBone)
+                {
+                    continue;
+                }
+                boneDataStepper = boneDataStepper.parentBone;
+                if (boneDataStepper.numChildren == 3)
+                {
+                    threeChilders.Add(boneDataStepper);
+                }
+                if (boneDataStepper.numChildren == 2)
+                {
+                    twoChilders.Add(boneDataStepper);
+                }
+            }
+            doTailStepFlag = !doTailStepFlag;
+        }
+
+        ResidualBoneData shoulderBoneData = null;
+        ResidualBoneData hipBoneData = null;
+        foreach(ResidualBoneData bd in threeChilders)
+        {
+            if(shoulderBoneData == null && bd.isShoulderSideSpine)
+            {
+                shoulderBoneData = bd;
+            }
+            if(hipBoneData == null && bd.isHipSideSpine)
+            {
+                hipBoneData = bd;
+            }
+        }
+        foreach (ResidualBoneData bd in twoChilders)
+        {
+            if (shoulderBoneData == null && bd.isShoulderSideSpine)
+            {
+                shoulderBoneData = bd;
+            }
+            if (hipBoneData == null && bd.isHipSideSpine)
+            {
+                hipBoneData = bd;
+            }
+        }
+        foreach (ResidualBoneData bd in backups)
+        {
+            if (shoulderBoneData == null && bd.isShoulderSideSpine)
+            {
+                shoulderBoneData = bd;
+            }
+            if (hipBoneData == null && bd.isHipSideSpine)
+            {
+                hipBoneData = bd;
+            }
+        }
+
+        shoulderBoneData.MarkShoulder();
+        hipBoneData.MarkHip();
+
+        BoneVertexType shoulderLeftDir = ResidualBoneData.Left(shoulderBoneData.myParentConnectLocation);
+        BoneVertexType shoulderRightDir = ResidualBoneData.Right(shoulderBoneData.myParentConnectLocation);
+
+        ResidualBoneData FLLStart = null;
+        ResidualBoneData FRLStart = null;
+        if(shoulderBoneData.GetChild(shoulderLeftDir))
+        {
+            FLLStart = shoulderBoneData.GetChild(shoulderLeftDir);
+            shoulderBoneData.GetChild(shoulderLeftDir).MarkFLLStart();
+        }
+        if (shoulderBoneData.GetChild(shoulderRightDir))
+        {
+            FRLStart = shoulderBoneData.GetChild(shoulderRightDir);
+            shoulderBoneData.GetChild(shoulderRightDir).MarkFRLStart();
+        }
+
+        BoneVertexType hipLeftDir = ResidualBoneData.Left(hipBoneData.myParentConnectLocation);
+        BoneVertexType hipRightDir = ResidualBoneData.Right(hipBoneData.myParentConnectLocation);
+
+        ResidualBoneData BLLStart = null;
+        ResidualBoneData BRLStart = null;
+        if (hipBoneData.GetChild(hipLeftDir))
+        {
+            BRLStart = hipBoneData.GetChild(hipLeftDir);
+            hipBoneData.GetChild(hipLeftDir).MarkBRLStart();
+        }
+        if (hipBoneData.GetChild(hipRightDir))
+        {
+            BLLStart = hipBoneData.GetChild(hipRightDir);
+            hipBoneData.GetChild(hipRightDir).MarkBLLStart();
+        }
+
+        ResidualBoneData FLFoot = null;
+        float FLLength = 0;
+        ResidualBoneData FRFoot = null;
+        float FRLength = 0;
+        ResidualBoneData BLFoot = null;
+        float BLLength = 0;
+        ResidualBoneData BRFoot = null;
+        float BRLength = 0;
+
+        boneDataStepper = FLLStart;
+        if(boneDataStepper)
+        {
+            while (boneDataStepper.getAcrossVertex() != null)
+            {
+                boneDataStepper = boneDataStepper.GetChild(boneDataStepper.getAcrossVertex().Value);
+            }
+            FLFoot = boneDataStepper;
+            FLLength = FLFoot.distanceToParentedBone(null, (ResidualBoneData d) => d.isFLLStart);
+            FLLStart.myLegLength = FLLength;
+
+            boneDataStepper.MarkFoot();
+        }
+
+        boneDataStepper = FRLStart;
+        if (boneDataStepper)
+        {
+            while (boneDataStepper.getAcrossVertex() != null)
+            {
+                boneDataStepper = boneDataStepper.GetChild(boneDataStepper.getAcrossVertex().Value);
+            }
+            FRFoot = boneDataStepper;
+            FRLength = FRFoot.distanceToParentedBone(null, (ResidualBoneData d) => d.isFRLStart);
+            FRLStart.myLegLength = FRLength;
+            boneDataStepper.MarkFoot();
+        }
+
+        boneDataStepper = BLLStart;
+        if (boneDataStepper)
+        {
+            while (boneDataStepper.getAcrossVertex() != null)
+            {
+                boneDataStepper = boneDataStepper.GetChild(boneDataStepper.getAcrossVertex().Value);
+            }
+            BLFoot = boneDataStepper;
+            BLLength = BLFoot.distanceToParentedBone(null, (ResidualBoneData d) => d.isBLLStart);
+            BLLStart.myLegLength = BLLength;
+            boneDataStepper.MarkFoot();
+        }
+
+        boneDataStepper = BRLStart;
+        if (boneDataStepper)
+        {
+            while (boneDataStepper.getAcrossVertex() != null)
+            {
+                boneDataStepper = boneDataStepper.GetChild(boneDataStepper.getAcrossVertex().Value);
+            }
+            BRFoot = boneDataStepper;
+            BRLength = BRFoot.distanceToParentedBone(null, (ResidualBoneData d) => d.isBRLStart);
+            BRLStart.myLegLength = BRLength;
+            boneDataStepper.MarkFoot();
+        }
+
+        SkeletonTransforms skeletonTransforms = new SkeletonTransforms(
+            headBoneData.transform,
+            shoulderBoneData.transform,
+            hipBoneData.transform,
+            tailBoneData.transform,
+            orderedSpine.ToArray(),
+            FLLStart.transform,
+            FRLStart.transform,
+            BLLStart.transform,
+            BRLStart.transform
+        );
+        
+        yield break;
+    }
+
+    // TEMP
+    bool IAssemblyStage.ExecutedSuccessfully() { return true; }
+}

@@ -14,10 +14,11 @@ public class BoneAssembler : State
     {
         SetPipeline(rootBone,
             new RemoveExcessBones(),
+            new CalcResidualData(),
             new ReassignParents(),
             new RemoveGrabbableInfo(),
             new TempDebugPause() //just pauses the game once it finishes, temporary
-        );
+        ) ;
     }
     public override IEnumerator Routine()
     {

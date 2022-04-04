@@ -20,6 +20,7 @@ public class CameraTransitionEditor : Editor
             Transform cameraTrans = myScript.transform;
             cameraTrans.localPosition = myScript.pos;
             cameraTrans.rotation = Quaternion.LookRotation(myScript.forward, myScript.up);
+            myScript.gameObject.GetComponent<Camera>().fieldOfView = myScript.fov;
         }
         if (GUILayout.Button("Set Scene View"))
         {

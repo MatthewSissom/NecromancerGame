@@ -54,8 +54,15 @@ public class GrabbableGroup : BoneGroup, IGrabbable
           transform.forward = Camera.main.transform.forward * flippedMultiplier;
 
         rB.constraints = (RigidbodyConstraints)48;
-       
 
+        if(currentCylinderDoingHitting)
+        {
+            currentCylinderDoingHitting.SetVisible();
+        }
+        if(currentCylinderHit)
+        {
+            currentCylinderHit.SetVisible();
+        }
         OnPickup();
         firstPickup = false;
         IEnumerator DelayedLayerChange()
@@ -81,6 +88,14 @@ public class GrabbableGroup : BoneGroup, IGrabbable
             mPointApproacher.StartApproach(
                 getRelativePosition(currentCollisionVertex.Value, currentCylinderHit.MyBone, currentCylinderHit.MyType), 0.5f);
 
+            if (currentCylinderDoingHitting)
+            {
+                currentCylinderDoingHitting.SetInvisible();
+            }
+            if (currentCylinderHit)
+            {
+                currentCylinderHit.SetInvisible();
+            }
             OnCollideDrop();
         } else
         {

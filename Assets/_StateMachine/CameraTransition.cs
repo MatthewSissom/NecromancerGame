@@ -17,6 +17,12 @@ public class CameraTransition : State
     private float initalTime;
     private float elapsedTime;
     private float degrees;
+    private float initialFOV;
+
+    private bool hasCamera;
+    private Camera camera;
+
+    public float fov = 60;
 
     public override IEnumerator Routine()
     {
@@ -33,6 +39,10 @@ public class CameraTransition : State
         initalTime = Time.time;
         initalQuat = transform.rotation;
         Quaternion endQuat = Quaternion.LookRotation(forward, up);
+        if(hasCamera)
+        {
+            initialFOV = camera.fieldOfView;
+        }
         elapsedTime = 0;
         yield return null;
 
@@ -41,6 +51,10 @@ public class CameraTransition : State
         {
             transform.localPosition = pos;
             transform.rotation = endQuat;
+            if (hasCamera)
+            {
+                camera.fieldOfView = fov;
+            }
 
             End();
             yield break;
@@ -53,7 +67,11 @@ public class CameraTransition : State
             // Use trig to aproximate physics
             float adjustedPercentage = (1 - Mathf.Cos(elapsedTime / time * Mathf.PI)) / 2;
             transform.localPosition = Vector3.Lerp(initalPos, pos, adjustedPercentage);
-            transform.rotation = Quaternion.Slerp(initalQuat, endQuat, adjustedPercentage);
+            transform.rotation = Quaternion.Slerp(initalQuat, endQuat, adjustedPercentage); 
+            if (hasCamera)
+            {
+                camera.fieldOfView = Mathf.Lerp(initialFOV, fov, adjustedPercentage);
+            }
             elapsedTime = Time.time - initalTime;
             yield return null;
         }
@@ -62,8 +80,11 @@ public class CameraTransition : State
         AudioManager.Instance.PlayChalkboardSFX();
 
         transform.localPosition = pos;
-        transform.rotation = endQuat;
-
+        transform.rotation = endQuat; 
+        if (hasCamera)
+        {
+            camera.fieldOfView = fov;
+        }
         End();
         yield break;
     }
@@ -77,5 +98,7 @@ public class CameraTransition : State
     {
         base.Awake();
         forward.Normalize();
+        camera = GetComponent<Camera>();
+        hasCamera = camera; //if has camera, true;
     }
 }

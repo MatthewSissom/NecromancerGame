@@ -44,7 +44,7 @@ public class BoneMovingTouch : TouchProxy
     private const float watchLerpEndFrame = 30;
 
     [SerializeField]
-    private float offSetHeight = 0.1f;
+    private float offSetHeight = 0.05f;
 
     private GrabbableGroup potentialPickup;
     private float potentialPickupTimer;

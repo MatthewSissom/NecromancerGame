@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1525966360571531961}
   - component: {fileID: 8659434587553313641}
   - component: {fileID: 5591430841916017065}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 8541954969113094319}
   - component: {fileID: 4830337078421668812}
   - component: {fileID: -2500729752334165743}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: BoneMovingTouch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,3 +157,4 @@ MonoBehaviour:
   heightThreshold: 100
   speed: 0
   previousLocation: {x: 0, y: 0, z: 0}
+  offSetHeight: 0.05

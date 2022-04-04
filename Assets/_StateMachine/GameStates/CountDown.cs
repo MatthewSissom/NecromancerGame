@@ -30,6 +30,14 @@ public class CountDown : State
         lid.LidClosed += () => { lidClosed = true; };
     }
 
+    private void Update()
+    {
+        //jimmie is impatient when debugging on desktop
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            stopWatch.SetHandPercentage(360);
+        }
+    }
     public override IEnumerator Routine()
     {
         Begin();
