@@ -13,7 +13,4 @@ public class RemoveGrabbableInfo : IAssemblyStage
         }
         yield break;
     }
-
-    // TEMP
-    bool IAssemblyStage.ExecutedSuccessfully() { return true; }
 }

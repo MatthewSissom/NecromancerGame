@@ -22,7 +22,6 @@ public class IkInit : IAssemblyStage
         yield break;
     }
     // TEMP
-    bool IAssemblyStage.ExecutedSuccessfully() { return true; }
 
 #if USING_IK
     List<FABRIK> FindIkChains(GameObject skeletonRoot)

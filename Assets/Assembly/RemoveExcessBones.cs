@@ -27,7 +27,4 @@ public class RemoveExcessBones : IAssemblyStage
         }
         yield break;
     }
-
-    // TEMP
-    bool IAssemblyStage.ExecutedSuccessfully() { return true; }
 }
