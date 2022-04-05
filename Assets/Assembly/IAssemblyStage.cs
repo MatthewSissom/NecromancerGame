@@ -5,5 +5,9 @@ using UnityEngine;
 public interface IAssemblyStage
 {
     IEnumerator Execute(GameObject skeleton, IAssemblyStage previous);
-    bool ExecutedSuccessfully();
+}
+
+public interface IikTransformProvider
+{
+    SkeletonTransforms Transforms { get; }
 }

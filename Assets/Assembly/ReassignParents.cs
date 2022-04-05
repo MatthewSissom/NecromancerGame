@@ -16,7 +16,4 @@ public class ReassignParents : IAssemblyStage
         }
         yield break;
     }
-
-    // TEMP
-    bool IAssemblyStage.ExecutedSuccessfully() { return true; }
 }

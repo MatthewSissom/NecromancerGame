@@ -9,7 +9,4 @@ public class TempDebugPause : IAssemblyStage
         Debug.Break();
         yield break;
     }
-
-    // TEMP
-    bool IAssemblyStage.ExecutedSuccessfully() { return true; }
 }
