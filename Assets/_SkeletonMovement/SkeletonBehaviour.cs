@@ -58,12 +58,12 @@ public class SkeletonBehaviour : MonoBehaviour
     float speed;
 
     // used to set up test cats, unused in game pipeline
+    [field: SerializeField]
+    public LimbTunables LimbTunables { get; private set; }
     [SerializeField]
     SkeletonTransforms skeletonPositions;
     [SerializeField]
     SkeletonTransforms targets;
-    [SerializeField]
-    LimbTunables limbTunables;
     [SerializeField]
     List<LimbData> limbEnds;
 
@@ -84,13 +84,14 @@ public class SkeletonBehaviour : MonoBehaviour
             return;
         Initalized = true;
 
+        movement = new SkeletonMovement(initData.LimbEnds, initData.SpinePoints);
+
         // inits pathfinder and path builder
         UpdateTunables(
             tunables,
             initData
         );
 
-        movement = new SkeletonMovement(initData.LimbEnds, initData.SpinePoints);
         locomotionPlanner = new SkeletonLocomotionPlanner(pathBuilder, initData);
         actionQueue = new ActionQueue();
 
@@ -158,10 +159,8 @@ public class SkeletonBehaviour : MonoBehaviour
 
     private void UpdateTunables(SkeletonPathTunables tunables, SkeletonLayoutData layoutData)
     {
-
         pathfinding = new SkeletonPathfinding(tunables);
-        pathBuilder = new SkeletonBasePathBuilder(tunables, new SkeletonPathData(tunables,layoutData));
-        limbTunables.Init(tunables.Speed);
+        pathBuilder = new SkeletonBasePathBuilder(tunables, new SkeletonPathData(tunables,layoutData), movement);
     }
 
     private void CleanUp()

@@ -8,13 +8,20 @@ using UnityEngine;
 public class LimbIdentityData
 {
     [field: SerializeField]
-    public bool IsStump { get; set; }
+    public bool IsStump { get; private set; }
     [field: SerializeField]
-    public bool IsSingle { get; set; }
+    public bool IsSingle { get; private set; }
     [field: SerializeField]
-    public bool IsFront { get; set; }
+    public bool IsFront { get; private set; }
     [field: SerializeField]
-    public bool IsRight { get; set; }
+    public bool IsRight { get; private set; }
+    public LimbIdentityData(bool isStump, bool isSingle, bool isFront, bool isRight)
+    {
+        IsStump = isStump;
+        IsSingle = isSingle;
+        IsFront = isFront;
+        IsRight = isRight;
+    }
 }
 
 // Holds various dimensions and extents of the limb
@@ -52,25 +59,25 @@ public class LimbTransforms
 public class LimbTunables
 {
     [field: SerializeField]
-    public float StepHeightMult;
-    public float StepSpeed { get; private set; } = 0;
-
-    [SerializeField]
-    private float stepSpeedMult;
-
-    public void Init(float speed)
-    {
-        StepSpeed = stepSpeedMult * speed;
-    }
+    public float StepHeightMult { get; private set; }
+    [field: SerializeField]
+    public float StepTime { get; private set; }
 }
 
 public class LimbTracingData
 {
     public float Delay { get; private set; }
+    public LimbTunables Tunables { get; private set; }
+    public float StepTimeInfrontOfSpinePoint { get; private set; }
 
-    public LimbTracingData(float delay)
+    // --- Vars below this comment are set during animation --- //
+    public float Compleation { get; set; }
+    public int TracerId { get; set; }
+    public LimbTracingData(float delay, LimbTunables tunables, float stepTimeInfrontOfSpinePoint)
     {
         Delay = delay;
+        Tunables = tunables;
+        StepTimeInfrontOfSpinePoint = stepTimeInfrontOfSpinePoint;
     }
 }
 
@@ -93,18 +100,18 @@ public class LimbData : MonoBehaviour, IDelayedTracerData
 
     // Script constructor
     public void Init( 
-        LimbTransforms Transforms, 
-        LimbIdentityData IdentityData, 
-        LimbMeasurements Measurements,
-        LimbTunables Tunables,
-        LimbTracingData TracingData
+        LimbTransforms      transforms, 
+        LimbIdentityData    identityData, 
+        LimbMeasurements    measurements,
+        LimbTunables        tunables,
+        LimbTracingData     tracingData
     )
     {
-       this.Transforms = Transforms;
-       this.IdentityData = IdentityData;
-       this.Measurements = Measurements;
-       this.Tunables = Tunables;
-       this.TracingData = TracingData;
+        Transforms      = transforms; 
+        IdentityData    = identityData;
+        Measurements    = measurements;
+        Tunables        = tunables;
+        TracingData     = tracingData;
     }
 
     // Editor/Debug constructor

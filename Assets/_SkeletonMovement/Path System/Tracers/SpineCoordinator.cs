@@ -19,8 +19,7 @@ public class SpineTracer : DelayedTracer
 
     public override bool Update(float dt)
     {
-        orientation.Update(dt);
-        return base.Update(dt);
+        return base.Update(dt) && orientation.Update(dt);
     }
 }
 

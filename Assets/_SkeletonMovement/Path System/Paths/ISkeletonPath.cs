@@ -4,12 +4,12 @@ using UnityEngine;
 
 public interface IDuration
 {
-    float Duration { get; }
+    float EndTime { get; }
 }
 
 public interface INegitiveDuration
 {
-    float NegitiveDuration { get; }
+    float StartTime { get; }
 }
 
 public interface IRealDuration : IDuration, INegitiveDuration {}
@@ -31,5 +31,7 @@ public interface IContinuousSkeletonPath : ISkeletonPath, IContinuousPath { }
 // paths that use other paths in their calculations
 public interface IHigherOrderPath
 {
+    float PositiveDeletedTime { get; }
+    // return total time of deleted path
     void DeletePathBefore(float time);
 }

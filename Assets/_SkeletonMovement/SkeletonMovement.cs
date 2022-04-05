@@ -2,12 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public interface ITraceTimeInfoProvider
+{
+    float MinTraceTime { get; }
+    float BaseTraceTime { get; }
+    float MaxTraceTime { get; }
+}
+
 //Cat movement is in charge of the low level goals like coordinating limb movment
 //Recives a base path from cat behavior
-public class SkeletonMovement
+public class SkeletonMovement : ITraceTimeInfoProvider
 {
     public IContinuousSkeletonPath Path { get => path; }
     public float TraceTime { get; private set; }
+    public float BaseTraceTime { get => TraceTime; }
     public bool ActionIsCancelable { get => (action?.Cancelable ?? true); }
     public bool CanSetAction { get => ActionIsCancelable || ActionCompletion >= 1; }
     public float ActionCompletion {
@@ -15,7 +23,25 @@ public class SkeletonMovement
         {
             if (action == null)
                 return 1;
-            return Mathf.Min(1, TraceTime / action.Path.Duration);
+            return Mathf.Min(1, TraceTime / action.Path.EndTime);
+        }
+    }
+
+    public float MinTraceTime
+    {
+        get 
+        {
+            TracerBase best = FindBestTracer((TracerBase left, TracerBase right) => left.TotalTimeOffset < right.TotalTimeOffset);
+            return best.TotalTimeOffset + TraceTime;
+        }
+    }
+
+    public float MaxTraceTime
+    {
+        get
+        {
+            TracerBase best = FindBestTracer((TracerBase left, TracerBase right) => left.TotalTimeOffset > right.TotalTimeOffset);
+            return best.TotalTimeOffset + TraceTime;
         }
     }
 
@@ -67,6 +93,7 @@ public class SkeletonMovement
         SetPath(newAction.Path);
         spineCoordinator.SetOffsets(newAction.SpineOffsets);
         footCoordinator.SetOffsets(newAction.LimbOffsets);
+        footCoordinator.Walking = newAction is WalkAction;
 
         action = newAction;
     }
@@ -102,7 +129,7 @@ public class SkeletonMovement
                 {
                     WalkAction newWalk = newAction as WalkAction;
                     WalkAction oldWalk = action as WalkAction;
-                    newWalk.MakeActive(oldWalk, TraceTime);
+                    newWalk.MakeActive(oldWalk);
                     return true;
                 }
                 return false;
@@ -115,12 +142,17 @@ public class SkeletonMovement
 
     private void SetPath(IContinuousSkeletonPath basePath)
     {
-        if (basePath == null)
-            Debug.LogError("Null path");
         path = basePath;
         footCoordinator.SetPath(basePath);
         spineCoordinator.SetPath(basePath);
         TraceTime = 0;
+    }
+
+    private TracerBase FindBestTracer(System.Func<TracerBase,TracerBase,bool> comparator)
+    {
+        TracerBase bestFoot = footCoordinator.FindBestTracer(comparator);
+        TracerBase bestSpine = spineCoordinator.FindBestTracer(comparator);
+        return comparator(bestFoot, bestSpine) ? bestFoot : bestSpine;
     }
 
     public void Update(float dt)
@@ -128,7 +160,7 @@ public class SkeletonMovement
         footCoordinator.Update(dt);
         spineCoordinator.Update(dt);
 
-        float duration = (Path?.Duration ?? 0);
+        float duration = (Path?.EndTime ?? 0);
         if (TraceTime < duration)
             TraceTime += dt;
         else

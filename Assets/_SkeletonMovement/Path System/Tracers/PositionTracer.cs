@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class TracerBase
 {
-    public float Completion { get => Path != null ? traceTime / Path.Duration : 1; }
+    public float Completion { get => Path != null ? traceTime / Path.EndTime : 1; }
     public IContinuousSkeletonPath Path { get => path; set => SetPath(value); }
+    // used for comparing path times between tracers
+    public virtual float TotalTimeOffset { get => 0; }
 
     protected IContinuousSkeletonPath path = null;
     protected float traceTime;
@@ -38,7 +40,7 @@ public class TracerBase
 
         // update time and check for finished path
         traceTime += dt;
-        if (traceTime >= Path.Duration)
+        if (traceTime >= Path.EndTime)
         {
             FinishPath();
             return false;
@@ -49,7 +51,7 @@ public class TracerBase
 
     protected virtual void FinishPath()
     {
-        traceTime = Path.Duration;
+        traceTime = Path.EndTime;
     }
 
     public TracerBase(Transform transform)
@@ -70,7 +72,7 @@ public class PositionTracer : TracerBase
             Offset.BasePath = basePath;
     }
 
-    public void SetOffset(SkeletonPathOffset offset) 
+    protected virtual void SetOffset(SkeletonPathOffset offset) 
     {
         this.offset = offset;
         if (path != null)
@@ -95,9 +97,9 @@ public class PositionTracer : TracerBase
     {
         // trace path
         if (Offset != null)
-            transform.position = Offset.GetPointOnPath(Path.Duration);
+            transform.position = Offset.GetPointOnPath(Path.EndTime);
         else
-            transform.position = Path.GetPointOnPath(Path.Duration);
+            transform.position = Path.GetPointOnPath(Path.EndTime);
 
         base.FinishPath();
 
@@ -121,7 +123,7 @@ public class OrientationTracer : TracerBase
 
     protected override void FinishPath()
     {
-        transform.forward = path.GetForward(Path.Duration);
+        transform.forward = path.GetForward(Path.EndTime);
         base.FinishPath();
     }
 

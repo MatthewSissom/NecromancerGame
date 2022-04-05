@@ -28,7 +28,7 @@ public class MultiTracer
     {
         for (int i = 0; i < tracers.Length; i++)
         {
-            tracers[i].SetOffset(offsets[i]);
+            tracers[i].Offset = offsets[i];
         }
     }
 
@@ -38,6 +38,18 @@ public class MultiTracer
         {
             tracers[i] = new DelayedTracer(pointData[i].Transform, pointData[i].Delay);
         }
+    }
+    public DelayedTracer FindBestTracer(System.Func<TracerBase, TracerBase, bool> comparator)
+    {
+        if (tracers == null || tracers.Length == 0)
+            return null;
+
+        DelayedTracer best = tracers[0];
+        for(int i = 1; i < tracers.Length; i++)
+        {
+            best = comparator(best, tracers[0]) ? best : tracers[0];
+        }
+        return best;
     }
 
     protected MultiTracer(int len)

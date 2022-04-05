@@ -93,6 +93,10 @@ public class MovementDataInit : IAssemblyStage
         }
 
         // set limb delays to match their corresponding spine point (shoulders for front legs, hips for back legs)
+        SkeletonBehaviour behaviour = GameObject.FindObjectOfType<SkeletonBehaviour>();
+        LimbTunables limbTunables = null;
+        if (behaviour != null)
+            limbTunables = behaviour.LimbTunables;
         foreach (LimbData limbEnd in limbEnds)
         {
             Transform start = GetMatchingTransform(transforms, limbEnd.IdentityData);
@@ -101,11 +105,11 @@ public class MovementDataInit : IAssemblyStage
 
             if (limbEnd.IdentityData.IsFront)
             {
-                limbEnd.EditorInit(limbGo, limbTunables, new LimbTracingData(spinePoints[1].Delay));
+                limbEnd.EditorInit(limbGo, limbTunables, new LimbTracingData(spinePoints[1].Delay, limbTunables, .1f/tunables.Speed));
             }
             else
             {
-                limbEnd.EditorInit(limbGo, limbTunables, new LimbTracingData(spinePoints[2].Delay));
+                limbEnd.EditorInit(limbGo, limbTunables, new LimbTracingData(spinePoints[2].Delay, limbTunables, .1f/tunables.Speed));
             }
         }
 
