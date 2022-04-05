@@ -159,33 +159,6 @@ public class IkInit : IAssemblyStage
                 continue;
             }
 
-            void UpdateTags(ref int index)
-            {
-                if (index == -1) //first front leg added, add it as a single limb
-                {
-                    index = types.Count;
-                    if(tChain.Count() > 2)
-                        types.Add(LimbEnd.LimbTag.Single);
-                    else
-                        types.Add(LimbEnd.LimbTag.StumpSingle);
-
-                }
-                else
-                {
-                    //update old tags
-                    if (types[index] == LimbEnd.LimbTag.Single)
-                        types[index] = LimbEnd.LimbTag.Pair; 
-                    if (types[index] == LimbEnd.LimbTag.StumpSingle)
-                        types[index] = LimbEnd.LimbTag.Stump;
-
-                    //add new tag
-                    if (tChain.Count() > 2)
-                        types.Add(LimbEnd.LimbTag.Pair);
-                    else
-                        types.Add(LimbEnd.LimbTag.Stump);
-                }
-            }
-
             //use the first two letters to find the matching target
             string key = start.gameObject.name.Substring(0, 2);
             switch (key)
@@ -248,21 +221,6 @@ public class IkInit : IAssemblyStage
             }
             limbEnds[i].SetTags(types[i],locations[i],minIndex);
         }
-
-
-        float[] distances = new float[spineAlignedTargets.Count];
-        for(int i = 0; i < distances.Length; i++)
-        {
-            distances[i] = (spineAlignedTargets[i].transform.position - skeletonTransform.transform.position).magnitude;
-        }
-
-        var behavior = skeletonTransform.gameObject.AddComponent<CatBehavior>();
-        behavior.BehaviorInit(
-            limbEnds,
-            spineAlignedTargets.ToArray(),
-            distances,
-            shoulderIndex
-            );
     }
 
     bool IsOffset(GameObject limbTransform)
