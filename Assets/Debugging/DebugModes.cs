@@ -19,6 +19,9 @@ public class DebugModes : MonoBehaviour
     [SerializeField]
     bool skipCameraTransitions;
 
+    [SerializeField]
+    bool colorBonesInAssembly;
+
     [Header("Input")]
     [SerializeField]
     bool toggleMouseInput;
@@ -40,6 +43,7 @@ public class DebugModes : MonoBehaviour
 
     public static EStateDebugMode StateMode { get { return instance.stateMode; } }
     public static bool SkipCameraTransitions { get { return instance.skipCameraTransitions; } }
+    public static bool ColorBonesInAssembly { get { return instance.colorBonesInAssembly; } }
     public static bool UseMouseInput { get { return instance.toggleMouseInput; } }
     public static GameObject IKTestPrefab { get { return instance.ikTestPrefab; } }
     public static DebugPathFlags SkeletonPathMode { get { return instance.skeletonPathMode; } }

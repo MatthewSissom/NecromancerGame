@@ -95,90 +95,122 @@ public class ResidualBoneData : MonoBehaviour
     }
     public void MarkShoulderSideSpine()
     {
-        foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if(DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.shoulderSpineMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.shoulderSpineMat;
+            }
         }
         isShoulderSideSpine = true;
     }
     public void MarkHipSideSpine()
     {
-        foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if (DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.hipSpineMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.hipSpineMat;
+            }
         }
         isHipSideSpine = true;
     }
     public void MarkHead()
     {
-        foreach(MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if (DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.headMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.headMat;
+            }
         }
         isHead = true;
     }
     public void MarkTail()
     {
-        foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if (DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.tailMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.tailMat;
+            }
         }
         isTail = true;
     }
     public void MarkShoulder()
     {
-
-        foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if (DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.shoulderMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.shoulderMat;
+            }
         }
         isShoulder = true;
     }
     public void MarkHip()
     {
-        foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if (DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.hipMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.hipMat;
+            }
         }
         isHip = true;
     }
     public void MarkFLLStart()
     {
-        foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if (DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.leftLegStartMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.leftLegStartMat;
+            }
         }
         isFLLStart = true;
     }
     public void MarkFRLStart()
     {
-        foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if (DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.rightLegStartMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.rightLegStartMat;
+            }
         }
         isFRLStart = true;
     }
     public void MarkBLLStart()
     {
-        foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if (DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.leftLegStartMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.leftLegStartMat;
+            }
         }
         isBLLStart = true;
     }
     public void MarkBRLStart()
     {
-        foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if (DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.rightLegStartMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.rightLegStartMat;
+            }
         }
         isBRLStart = true;
     }
     public void MarkFoot()
     {
-        foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+        if (DebugModes.ColorBonesInAssembly)
         {
-            r.material = CatPartHighlighters.instance.footMat;
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.footMat;
+            }
         }
     }
     public ResidualBoneData GetChild(BoneVertexType vertex)

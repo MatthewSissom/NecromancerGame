@@ -2,24 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CalcResidualData : IAssemblyStage
+public class CalcResidualData : IAssemblyStage, IikTransformProvider
 {
+    public SkeletonTransforms Transforms { get; private set; }
 
     IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
     {
-        Debug.Log("removing grabbable info...");
+        //creating and populating residual data with initial position/parent-child relations
         foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
         {
             bone.GetComponent<ResidualBoneData>().PopulateDataFrom(bone);
             bone.GetComponent<ResidualBoneData>().PopulateChildrenFrom(bone);
         }
-        /*foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
-        {
-            bone.GetComponent<ResidualBoneData>().DEBUG_distanceFromRoot = bone.GetComponent<ResidualBoneData>().distanceToRootBone(null);
-        }*/
 
+        //assemble list of residual bone datas and identify root bone
         List<ResidualBoneData> boneData = new List<ResidualBoneData>();
-        //path to tail
         ResidualBoneData rootBoneData = null;
         foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
         {
@@ -30,8 +27,10 @@ public class CalcResidualData : IAssemblyStage
             }
         }
 
+        //construct spine, identify head and tail
         List<Transform> orderedSpine = new List<Transform>();
 
+        //step from root to head
         ResidualBoneData boneDataStepper = rootBoneData.GetChild(BoneVertexType.FrontPrimary);
         while(boneDataStepper.getAcrossVertex() != null)
         {
@@ -44,6 +43,7 @@ public class CalcResidualData : IAssemblyStage
         orderedSpine.Reverse();
         orderedSpine.Add(rootBoneData.transform);
 
+        //step from root to tail
         boneDataStepper = rootBoneData.GetChild(BoneVertexType.BackPrimary);
         while (boneDataStepper.getAcrossVertex() != null)
         {
@@ -54,6 +54,9 @@ public class CalcResidualData : IAssemblyStage
         ResidualBoneData tailBoneData = boneDataStepper;
         boneDataStepper.MarkTail();
 
+        //find hip and shoulder, looking for bones with most children (limbs)
+
+        //substep 1: categorize bones as three-childers or two-childers
         boneDataStepper = headBoneData;
         ResidualBoneData boneDataStepper2 = tailBoneData;
         bool doTailStepFlag = false;
@@ -98,6 +101,8 @@ public class CalcResidualData : IAssemblyStage
             doTailStepFlag = !doTailStepFlag;
         }
 
+        //substep 2: pick which of the selected bones are the shoulder/hip
+        //prefer bones with more children, then prefer bones closer to head/tail
         ResidualBoneData shoulderBoneData = null;
         ResidualBoneData hipBoneData = null;
         foreach(ResidualBoneData bd in threeChilders)
@@ -137,6 +142,7 @@ public class CalcResidualData : IAssemblyStage
         shoulderBoneData.MarkShoulder();
         hipBoneData.MarkHip();
 
+        //find and mark starts of limbs (just left/right of shoulder/hip)
         BoneVertexType shoulderLeftDir = ResidualBoneData.Left(shoulderBoneData.myParentConnectLocation);
         BoneVertexType shoulderRightDir = ResidualBoneData.Right(shoulderBoneData.myParentConnectLocation);
 
@@ -169,6 +175,10 @@ public class CalcResidualData : IAssemblyStage
             hipBoneData.GetChild(hipRightDir).MarkBLLStart();
         }
 
+
+        //find and mark ends of legs (i.e. feet)
+        //also gets bone-bone lengths of limbs
+        //(not 100% sure if we needed that but i had it written somewhere in my notes)
         ResidualBoneData FLFoot = null;
         float FLLength = 0;
         ResidualBoneData FRFoot = null;
@@ -231,7 +241,8 @@ public class CalcResidualData : IAssemblyStage
             boneDataStepper.MarkFoot();
         }
 
-        SkeletonTransforms skeletonTransforms = new SkeletonTransforms(
+        //construct skeletonTransforms
+        Transforms = new SkeletonTransforms(
             headBoneData.transform,
             shoulderBoneData.transform,
             hipBoneData.transform,
@@ -245,7 +256,4 @@ public class CalcResidualData : IAssemblyStage
         
         yield break;
     }
-
-    // TEMP
-    bool IAssemblyStage.ExecutedSuccessfully() { return true; }
 }
