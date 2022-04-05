@@ -2410,11 +2410,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followTarget: {fileID: 0}
   speed: 0.2
+  <LimbTunables>k__BackingField:
+    <StepHeightMult>k__BackingField: 0.2
+    <StepTime>k__BackingField: 0.4
   skeletonPositions:
     <Head>k__BackingField: {fileID: 2672171166120686089}
     <Shoulder>k__BackingField: {fileID: 2102842313671347762}
     <Hip>k__BackingField: {fileID: 1351745461954622139}
     <Tail>k__BackingField: {fileID: 2741528689462362405}
+    <OrderedSpineTransforms>k__BackingField: []
     <FrontLeftLeg>k__BackingField: {fileID: 7573356984075753951}
     <FrontRightLeg>k__BackingField: {fileID: 4320754380103469748}
     <BackLeftLeg>k__BackingField: {fileID: 7406632066301648406}
@@ -2424,13 +2428,11 @@ MonoBehaviour:
     <Shoulder>k__BackingField: {fileID: 7263244047530817204}
     <Hip>k__BackingField: {fileID: 5750491859503318300}
     <Tail>k__BackingField: {fileID: 3215259925699428739}
+    <OrderedSpineTransforms>k__BackingField: []
     <FrontLeftLeg>k__BackingField: {fileID: 6712904332773770665}
     <FrontRightLeg>k__BackingField: {fileID: 5827459413320459236}
     <BackLeftLeg>k__BackingField: {fileID: 7378481392430804427}
     <BackRightLeg>k__BackingField: {fileID: 2445571960859140093}
-  limbTunables:
-    StepHeightMult: 0
-    stepSpeedMult: 0
   limbEnds:
   - {fileID: 8344809999884225324}
   - {fileID: 1449528777897906738}

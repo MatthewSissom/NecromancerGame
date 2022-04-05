@@ -42,15 +42,15 @@ public class SkeletonTransforms
         Transform backRightLeg
         )
     {
-        Head          = head;
-        Shoulder      = shoulder;
-        Hip           = hip ;
-        Tail          = tail;
+        Head = head;
+        Shoulder = shoulder;
+        Hip = hip;
+        Tail = tail;
         OrderedSpineTransforms = orderedSpineTransforms;
-        FrontLeftLeg  = frontLeftLeg;
+        FrontLeftLeg = frontLeftLeg;
         FrontRightLeg = frontRightLeg;
-        BackLeftLeg   = backLeftLeg;
-        BackRightLeg  = backRightLeg;
+        BackLeftLeg = backLeftLeg;
+        BackRightLeg = backRightLeg;
     }
 }
 

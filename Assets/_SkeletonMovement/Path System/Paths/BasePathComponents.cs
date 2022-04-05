@@ -6,14 +6,14 @@ using UnityEngine;
 //moves target at a constant speed from start to end
 public class LinePath : IContinuousSkeletonPath
 {
-    public float Duration { get; private set; }
+    public float EndTime { get; private set; }
     Vector3 start;
     Vector3 end;
     Vector3 forward;
 
     public LinePath(float duration, Vector3 start, Vector3 end)
     {
-        Duration = duration;
+        EndTime = duration;
         this.start = start;
         this.end = end;
         forward = (end - start);
@@ -23,7 +23,7 @@ public class LinePath : IContinuousSkeletonPath
 
     public Vector3 GetPointOnPath(float time)
     {
-        return Vector3.Lerp(start, end, time / Duration);
+        return Vector3.Lerp(start, end, time / EndTime);
     }
 
     Vector3 IContinuousPath.GetTangent(float time)
@@ -40,7 +40,7 @@ public class LinePath : IContinuousSkeletonPath
 //moves target along a circle on the ground at a constant speed
 public class SemicirclePath : IContinuousSkeletonPath
 {
-    public float Duration { get; private set; }
+    public float EndTime { get; private set; }
     Vector3 center;
     float rad;
     float startTheta;
@@ -48,7 +48,7 @@ public class SemicirclePath : IContinuousSkeletonPath
 
     public SemicirclePath(float duration, Vector3 center, float rad, float startTheta, float endTheta)
     {
-        Duration = duration;
+        EndTime = duration;
         this.center = center;
         this.rad = rad;
         this.startTheta = startTheta;
@@ -57,19 +57,19 @@ public class SemicirclePath : IContinuousSkeletonPath
 
     public  Vector3 GetPointOnPath(float time)
     {
-        float theta = startTheta + deltaTheta * (time / Duration);
+        float theta = startTheta + deltaTheta * (time / EndTime);
         return center + new Vector3(Mathf.Cos(theta) * rad, 0, Mathf.Sin(theta) * rad);
     }
 
     Vector3 IContinuousPath.GetTangent(float time)
     {
-        float theta = startTheta + deltaTheta * (time / Duration);
-        return new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta)) * Mathf.Sign(deltaTheta);
+        float theta = startTheta + deltaTheta * (time / EndTime);
+        return new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta)) * -Mathf.Sign(deltaTheta);
     }
 
     Vector3 IContinuousPath.GetForward(float time)
     {
-        float theta = startTheta + deltaTheta * (time / Duration);
+        float theta = startTheta + deltaTheta * (time / EndTime);
         return new Vector3(-1 * Mathf.Sin(theta), 0, Mathf.Cos(theta)) * Mathf.Sign(deltaTheta);
     }
 }
@@ -77,7 +77,7 @@ public class SemicirclePath : IContinuousSkeletonPath
 //moves a target along an arc following newtons laws
 public class JumpArc : IContinuousSkeletonPath
 {
-    public float Duration { get; private set; }
+    public float EndTime { get; private set; }
     const float gravConst = -4;
 
     Vector3 initPos;
@@ -93,11 +93,11 @@ public class JumpArc : IContinuousSkeletonPath
 
         float timeToApex = Mathf.Sqrt(2 * apexHeight / (-1 * gravConst));
         float timeAfterApex = Mathf.Sqrt(Mathf.Abs(2 * (apexHeight - delta.y) / gravConst));
-        Duration = timeToApex + timeAfterApex;
+        EndTime = timeToApex + timeAfterApex;
 
         initYVel = -gravConst * timeToApex;
         delta.y = 0;
-        constVelComponent = delta / Duration;
+        constVelComponent = delta / EndTime;
         constPerp = new Vector3(-constVelComponent.z, 0, constVelComponent.x).normalized;
     }
 
@@ -114,50 +114,5 @@ public class JumpArc : IContinuousSkeletonPath
     Vector3 IContinuousPath.GetForward(float time)
     {
         return (constVelComponent + new Vector3(0, initYVel + time * gravConst, 0)).normalized;
-    }
-}
-
-// used to shorten the duration of a path without modifying the underlying path
-public class TrimmedPath : IContinuousSkeletonPath, IHigherOrderPath, IRealDuration
-{
-    public float Duration { get; private set; }
-    public float NegitiveDuration {get; private set;}
-
-    private IContinuousSkeletonPath basePath;
-    private float startTime;
-
-    public Vector3 GetPointOnPath(float time)
-    {
-        return basePath.GetPointOnPath(time + startTime);
-    }
-
-    public Vector3 GetTangent(float time)
-    {
-        return basePath.GetTangent(time + startTime);
-    }
-
-    public Vector3 GetForward(float time)
-    {
-        return basePath.GetForward(time + startTime);
-    }
-
-    public void DeletePathBefore(float time)
-    {
-        (basePath as IHigherOrderPath)?.DeletePathBefore(time + startTime);
-    }
-
-    public TrimmedPath(IContinuousSkeletonPath toTrim, float startTime, float duration)
-    {
-        basePath = toTrim;
-        this.startTime = startTime;
-
-        // shorten duration if it would outrun the base path
-        float durationAdjustment = Mathf.Min(basePath.Duration - (startTime + duration), 0);
-        Duration = duration + durationAdjustment;
-
-        // see if base path has negitive duration
-        IRealDuration toTrimNegitiveGetter = basePath as IRealDuration;
-        float baseNegDuration = (toTrimNegitiveGetter?.NegitiveDuration) ?? 0;
-        NegitiveDuration = baseNegDuration - startTime;
     }
 }

@@ -8,24 +8,20 @@ public class WalkAction : Action
     public override bool Cancelable { get => true; }
 
     private WalkAction previousWalk = null;
-    private float previousTraceTime = 0;
     private Vector3 forward;
-    private Vector3 groundPosition;
 
     override public void MakeActive( Vector3 forward)
     {
         this.forward = forward;
-        this.groundPosition = groundPosition;
     }
     public override void MakeActive(IContinuousSkeletonPath path, float traceTime)
     {
         throw new System.NotImplementedException();
     }
 
-    public void MakeActive(WalkAction cancledWalk, float traceTime)
+    public void MakeActive(WalkAction cancledWalk)
     {
         previousWalk = cancledWalk;
-        previousTraceTime = traceTime;
     }
 
     public WalkAction(Vector3[] destinations, SkeletonBasePathBuilder pathBuilder, SkeletonLayoutData layoutData) : base(destinations,pathBuilder, layoutData) { }
@@ -34,7 +30,7 @@ public class WalkAction : Action
     {
         IContinuousSkeletonPath path;
         if (previousWalk != null)
-            path = pathBuilder.SwitchGroundPath(previousWalk.Path, previousTraceTime, destinations);
+            path = pathBuilder.SwitchGroundPath(previousWalk.Path, destinations);
         else
             path = pathBuilder.GroundPathFromPoints(forward,destinations);
 
@@ -62,7 +58,7 @@ public class WalkAction : Action
     {
         return new CompositeOffsite(
             new PerpendicularOffset(data.Measurements.OffsetFromSpine * (data.IdentityData.IsRight ? -1 : 1)),
-            new HeightOffset(0)
+            new StepOffset(data.Measurements.StepHeight)
             );
     }
 
@@ -93,8 +89,8 @@ public class WalkAction : Action
     {
         const float simulatedTimeStep = .1f;
         List<Vector3> points = new List<Vector3>();
-        float startTime = (path as INegitiveDuration)?.NegitiveDuration ?? 0;
-        for(float time = startTime; time < path.Duration; time+= simulatedTimeStep)
+        float startTime = (path as INegitiveDuration)?.StartTime ?? 0;
+        for(float time = startTime + simulatedTimeStep; time < path.EndTime; time+= simulatedTimeStep)
         {
             points.Add(path.GetPointOnPath(time));
         }

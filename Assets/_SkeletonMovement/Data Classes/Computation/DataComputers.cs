@@ -49,7 +49,8 @@ public class LimbLength : ValComputer<float>
 
 public class SpineLenght : ValComputer<float>
 {
-    public Transform SpinePoint { private get; set; }
+    public Transform From { private get; set; }
+    public Transform To { private get; set; }
 
     protected override float ComputeVal()
     {
@@ -86,11 +87,7 @@ public class LimbIdData : ValComputer<LimbIdentityData>
     protected override LimbIdentityData ComputeVal()
     {
         //TODO
-        LimbIdentityData data = new LimbIdentityData();
-        data.IsStump = true;
-        data.IsSingle = true;
-        data.IsFront = true;
-        data.IsRight = true;
+        LimbIdentityData data = new LimbIdentityData(true, true, true, true);
 
         base.ComputeVal();
         return data;

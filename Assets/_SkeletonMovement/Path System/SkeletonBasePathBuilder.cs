@@ -8,11 +8,13 @@ public class SkeletonBasePathBuilder
     private SkeletonPathTunables tunables;
     private SkeletonPathData pathData;
     private LinkedList<IContinuousSkeletonPath> path;
+    private ITraceTimeInfoProvider timeInfoProvider;
 
-    public SkeletonBasePathBuilder(SkeletonPathTunables tunables, SkeletonPathData pathData)
+    public SkeletonBasePathBuilder(SkeletonPathTunables tunables, SkeletonPathData pathData, ITraceTimeInfoProvider traceTimeInfoProvider)
     {
         this.tunables = tunables;
         this.pathData = pathData;
+        timeInfoProvider = traceTimeInfoProvider;
     }
 
     // should only be called the first time a skeleton starts a path
@@ -22,41 +24,41 @@ public class SkeletonBasePathBuilder
 
         path = new LinkedList<IContinuousSkeletonPath>();
         Vector3 start = destinations[0];
+
         // add line for delayed points
-        path.AddFirst(new LinePath(
+        LinePath forDelayed = new LinePath(
             pathData.SkeletonDuration,
             start + startForward * -1 * pathData.DelayedPathLenght,
             start
-        ));
+        );
+        path.AddFirst(new TrimmedPath(forDelayed,pathData.SkeletonDuration,0));
 
         // try to path. if failed return null
         if (!CalculateGroundPathInternal(startForward, destinations))
             return null;
 
-        IContinuousSkeletonPath finalPath =  new CompositePath(path, -1 * pathData.SkeletonDuration);
+        IContinuousSkeletonPath finalPath =  new CompositePath(path);
         return finalPath;
     }
 
-    public IContinuousSkeletonPath SwitchGroundPath(IContinuousSkeletonPath previousPath, float traceTime, Vector3[] destinations)
+    public IContinuousSkeletonPath SwitchGroundPath(IContinuousSkeletonPath previousPath, Vector3[] destinations)
     {
         path = new LinkedList<IContinuousSkeletonPath>();
 
-        // use previous path for delayed points
-        float adjustedTraceTime = traceTime - pathData.SkeletonDuration;
-        TrimmedPath delayedPath = new TrimmedPath(previousPath, adjustedTraceTime, pathData.SkeletonDuration);
-        delayedPath.DeletePathBefore(0);
-        path.AddFirst(delayedPath);
+        float minTraceTime = timeInfoProvider.MinTraceTime - .1f;
+        (previousPath as IHigherOrderPath)?.DeletePathBefore(minTraceTime);
 
-        // check that current position and pathfinding start pos are ==
-        Assert.AreApproximatelyEqual(previousPath.GetPointOnPath(traceTime).x, destinations[0].x,.01f);
-        Assert.AreApproximatelyEqual(previousPath.GetPointOnPath(traceTime).y, destinations[0].y,.01f);
-        Assert.AreApproximatelyEqual(previousPath.GetPointOnPath(traceTime).z, destinations[0].z,.01f);
+
+        // have delayed points continue to trace previous path
+        float baseTraceTime = timeInfoProvider.BaseTraceTime;
+        TrimmedPath pathForNegitiveTracers = new TrimmedPath(previousPath, baseTraceTime, 0);
+        path.AddFirst(pathForNegitiveTracers);
 
         // try to path. if failed return null
-        if (!CalculateGroundPathInternal(previousPath.GetForward(traceTime), destinations))
+        if (!CalculateGroundPathInternal(previousPath.GetForward(baseTraceTime), destinations))
             return null;
 
-        IContinuousSkeletonPath finalPath = new CompositePath(path, -1 * pathData.SkeletonDuration);
+        IContinuousSkeletonPath finalPath = new CompositePath(path);
         return finalPath;
     }
 

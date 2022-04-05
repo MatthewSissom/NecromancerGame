@@ -5,7 +5,7 @@ using UnityEngine;
 abstract public class SkeletonPathOffset : ISkeletonPath
 {
     virtual public ISkeletonPath BasePath { get; set; } = default;
-    public float Duration { get { return BasePath.Duration; } }
+    public float EndTime { get { return BasePath.EndTime; } }
 
     public Vector3 GetPointOnPath(float time)
     {
@@ -74,6 +74,26 @@ public class CompositeOffsite : SkeletonPathOffset
 
     SkeletonPathOffset seriesStart = null;
     SkeletonPathOffset seriesEnd = null;
+
+    public SkeletonPathOffset FindComponent(System.Predicate<SkeletonPathOffset> IsMatch)
+    {
+        SkeletonPathOffset toCheck = seriesEnd as SkeletonPathOffset;
+        while(toCheck != null)
+        {
+            if (IsMatch(toCheck))
+                return toCheck;
+            toCheck = toCheck.BasePath as SkeletonPathOffset;
+        }
+        return null;
+    }
+
+    public T FindComponent<T>() where T: SkeletonPathOffset
+    {
+        return FindComponent(
+            (SkeletonPathOffset spo) => spo is T
+        ) as T;
+    }
+
     public CompositeOffsite(params SkeletonPathOffset[] components)
     {
         if (components.Length < 2)
