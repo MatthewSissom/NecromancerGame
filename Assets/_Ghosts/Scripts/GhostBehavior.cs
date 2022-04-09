@@ -17,6 +17,13 @@ public class GhostBehavior : MonoBehaviour
     [SerializeField]
     float majorJumpMult;
 
+    [SerializeField]
+    float throwForwardMulti;
+    [SerializeField]
+    float throwUpMulti;
+    [SerializeField]
+    float throwThreshold;
+    
 
     //bone values
     public GrabbableGroup mBone;
@@ -115,7 +122,7 @@ public class GhostBehavior : MonoBehaviour
         if (isMinor)
             MinorShock();
         else
-            MajorShock();
+            MajorShock(false);
     }
 
     /// <summary>
@@ -134,27 +141,42 @@ public class GhostBehavior : MonoBehaviour
     /// <summary>
     /// Plays the major shock animation
     /// </summary>
-    public void MajorShock()
+    public void MajorShock(bool throwBone)
     {
-        Debug.Log("Major shock");
 
         //animate
         animator.SetTrigger("majorShockTrigger");
-        body.Jump(majorJumpMult);
 
         //play audio before potential return from bone throwing
         AudioManager.Instance.PlayMajorShock();
 
-        //throw bone 
-        if (!mBone)
-            return;
-        var boneRb = mBone.Rb;
-        mBone.PickedUp();
-        boneRb.useGravity = true;
-        body.Jump(2 * majorJumpMult, boneRb);
-
-        Recall();
+        //throw bone
+        if (throwBone) {
+            if (!mBone)
+                return;
+            Rigidbody boneRb = mBone.Rb;
+        
+            boneRb.constraints = (RigidbodyConstraints)0;
+            boneRb.velocity = (Vector3.up * throwUpMulti) + (gameObject.transform.forward * throwForwardMulti);
+            boneRb.angularVelocity = new Vector3(10.0f, 0, 0);
+            boneRb.useGravity = true;
+            mBone.Thrown();
+            LostBone();
+            Recall();
+        }
     }
+
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.rigidbody == null)
+            return;
+
+        if (collision.rigidbody.velocity.magnitude > throwThreshold&&mBone!=null)
+        {
+            MajorShock(true);
+        }
+    }
+
 
     /// <summary>
     /// Moves the ghost back to it's start point before destroying it.
