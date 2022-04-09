@@ -214,6 +214,10 @@ public partial class InputManager : MonoBehaviour
         {
             enabled = false;
         });
+        MenuManager.Instance.AddEventMethod(typeof(MenuInstructions), "End", () =>
+        {
+            enabled = true;
+        });
         GameManager.Instance.AddEventMethod(typeof(PlayPenState), "Begin", () =>
         {
             enabled = false;

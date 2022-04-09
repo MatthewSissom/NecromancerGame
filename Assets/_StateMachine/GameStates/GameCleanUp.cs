@@ -11,6 +11,7 @@ public class GameCleanUp : State
         InputManager.Instance.Clear();
         InputManager.Instance.enabled = false;
         GhostManager.Instance.DestroyAll();
+        GhostManager.Instance.TutorialPhaseFinished = null;
         //BoneManager.Instance.DestroyAll();
 
         End();

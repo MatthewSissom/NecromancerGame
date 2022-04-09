@@ -15,12 +15,10 @@ public class StateManager : StateManagerBase
     /// <returns></returns>
     private IEnumerator MainLoop()
     {
-        MenuManager.Instance.GoToMenu("Main");
         yield return SetState(MenuManager.Instance.InMenus());
         while (true)
         {
             yield return SetState(GameManager.Instance.Game());
-            MenuManager.Instance.GoToMenu("Main");
             yield return SetState(MenuManager.Instance.InMenus());
         }
     }

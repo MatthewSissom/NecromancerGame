@@ -136,4 +136,26 @@ public class TableManager : MonoBehaviour
         GameManager.Instance.AddEventMethod(typeof(GhostManager), "End", NextShipment);
         GameManager.Instance.AddEventMethod(typeof(GameInit), "Begin", ResetTable);
     }
+
+    //---Tutorial Queries---//
+
+    private int GetMatchingBoneCount(System.Predicate<BoneGroup> predicate)
+    {
+        int cnt = 0;
+        foreach (BoneGroup b in boneObjects)
+        {
+            cnt += predicate(b) ? 1 : 0;
+        }
+        return cnt;
+    }
+
+    public bool BonesAreConnectedOrGrounded()
+    {
+        return boneObjects.Count == GetMatchingBoneCount((BoneGroup b) => b.isAttached || b.IsOnFloor);
+    }
+
+    public int ConnectedBoneCnt()
+    {
+        return GetMatchingBoneCount(b => b.isAttached);
+    }
 }
