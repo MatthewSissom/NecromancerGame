@@ -20,12 +20,12 @@ public class GhostCollisionHandler
 
         if(shockRating == 2)
         {
-            collided.MajorShock();
+            collided.MajorShock(false);
         }
         else if(shockRating == 1)
         {
             if (!visable)
-                collided.MajorShock();
+                collided.MajorShock(false);
             else
                 collided.MinorShock();
         }

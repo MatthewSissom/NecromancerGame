@@ -34,7 +34,7 @@ public class ghostAnimationTest : MonoBehaviour
         }
         if (major)
         {
-            ghost.MajorShock();
+            ghost.MajorShock(false);
             major = false;
         }
         if(randomShock)
