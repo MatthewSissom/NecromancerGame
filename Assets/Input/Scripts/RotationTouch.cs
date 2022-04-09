@@ -35,7 +35,6 @@ public class RotationTouch : TouchProxy
     float currentScore;
 
     //Up vector in relation to camera not world space
-    Vector3 realUp;
 
     private BoneMovingTouch parent;
     public BoneMovingTouch Parent
@@ -110,11 +109,11 @@ public class RotationTouch : TouchProxy
         Vector3 directionality;
 
         
-        directionality = new Vector3(0, 0, 1.000f)*bone.FlippedMultiplier;
+        directionality = Camera.main.transform.forward*bone.FlippedMultiplier;
         
 
         //magnitude of the projection onto a normal is the dot product
-        float velocityAroundUp = Vector3.Dot(aVelocity, realUp);
+        float velocityAroundUp = Vector3.Dot(aVelocity, directionality);
         
 
         //adjust distances

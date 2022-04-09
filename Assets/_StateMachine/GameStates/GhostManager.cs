@@ -108,7 +108,6 @@ public class GhostManager : State
                 path.Add(pathRoot.GetChild(p).gameObject);
             }
             GhostBehavior ghost = CreateGhost(path);
-            //TODO: give the ghost the bones
             GameObject newBone = Instantiate(bones[i]);
             ghost.mBone = newBone.GetComponent<GrabbableGroup>();
             newBone.GetComponent<GrabbableGroup>().mGhost = ghost;
