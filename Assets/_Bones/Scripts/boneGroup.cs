@@ -133,10 +133,7 @@ public class BoneGroup : MonoBehaviour
             //Debug.DrawLine(getVertexPosition(BoneVertexType.LeftAux), getVertexPosition(BoneVertexType.LeftAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
             //Debug.DrawLine(getVertexPosition(BoneVertexType.RightAux), getVertexPosition(BoneVertexType.RightAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
 
-            PositionCylinder(frontPrimaryCylinder, frontPrimaryVertex);
-            PositionCylinder(backPrimaryCylinder, backPrimaryVertex);
-            PositionCylinder(leftAuxCylinder, leftAuxVertex);
-            PositionCylinder(rightAuxCylinder, rightAuxVertex);
+            AlignAllCylindersToCamera();
         }
     }
 
@@ -183,7 +180,18 @@ public class BoneGroup : MonoBehaviour
     private void PositionCylinder(GameObject cylinder, GameObject vertex)
     {
         cylinder.transform.position = vertex.transform.position;// + getAuxiliaryAxis() * cylinderSize;
-        cylinder.transform.up = getAuxiliaryAxis() * FlippedMultiplier;
+
+        // Matthew changed this, I think it feels better but it's up for debate
+        Vector3 toCamera = Camera.main.transform.position - transform.position;
+        cylinder.transform.up = toCamera * FlippedMultiplier;
+    }
+
+    public void AlignAllCylindersToCamera()
+    {
+        PositionCylinder(frontPrimaryCylinder, frontPrimaryVertex);
+        PositionCylinder(backPrimaryCylinder, backPrimaryVertex);
+        PositionCylinder(leftAuxCylinder, leftAuxVertex);
+        PositionCylinder(rightAuxCylinder, rightAuxVertex);
     }
 
     private void InitCylinder(GameObject cylinder, GameObject indicator, BoneVertexType type)

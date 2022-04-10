@@ -130,11 +130,22 @@ public class TableManager : MonoBehaviour
         PlayPenState.Instance.SetSkeleton(EmptyArmature);
     }
 
+    private void AlignAllColliders()
+    {
+        if (boneObjects != null)
+        {
+            foreach (var b in boneObjects)
+                b.AlignAllCylindersToCamera();
+        }
+    }
+
     private void Start()
     {
         GameManager.Instance.AddEventMethod(typeof(GhostManager), "Begin", ReadyNextShipment);
         GameManager.Instance.AddEventMethod(typeof(GhostManager), "End", NextShipment);
         GameManager.Instance.AddEventMethod(typeof(GameInit), "Begin", ResetTable);
+        GameManager.Instance.AddCamTransitionMethod("TableTrans", "End", AlignAllColliders);
+        GameManager.Instance.AddCamTransitionMethod("GhostTrans", "End", AlignAllColliders);
     }
 
     //---Tutorial Queries---//

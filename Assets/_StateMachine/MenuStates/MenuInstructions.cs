@@ -89,16 +89,16 @@ public class MenuInstructions : State
         failureObject.SetActive(true);
     }
 
-    public void NextInstruction()
+    public void ShowInstruction(int index)
     {
         if (failureObject.activeInHierarchy)
         {
             failureObject.SetActive(true);
         }
-        if(instructionIndex < insturctionObjects.Count-1)
+        if(index < insturctionObjects.Count)
         {
             insturctionObjects[instructionIndex].SetActive(false);
-            instructionIndex++;
+            instructionIndex = index;
             insturctionObjects[instructionIndex].SetActive(true);
         }
     }
@@ -139,9 +139,6 @@ public class MenuInstructions : State
 
     private void ResetVars()
     {
-        insturctionObjects[instructionIndex].SetActive(false);
-        instructionIndex = 0;
-        insturctionObjects[instructionIndex].SetActive(true);
         handTime = 0;
     }
 

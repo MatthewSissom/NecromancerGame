@@ -108,6 +108,17 @@ public abstract class StateManagerBase : MonoBehaviour
         states[stateType].AddToEvent(eventName, method);
     }
 
+    public void AddCamTransitionMethod(string transition, string eventName, System.Action method) 
+    {
+        transition = transition.ToLower().Trim();
+        if (!cameraTransitions.ContainsKey(transition))
+        {
+            Debug.LogError(GetType() + " does not contain state \"" + transition + "\"");
+            return;
+        }
+        cameraTransitions[transition].AddToEvent(eventName, method);
+    }
+
     public void RemoveEventMethod(System.Type stateType, string eventName, System.Action method)
     {
         if (!states.ContainsKey(stateType))

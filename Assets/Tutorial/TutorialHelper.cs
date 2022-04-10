@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class TutorialHelper
 {
+    static int instructionIndex = 0;
     public static IEnumerator DelayedWaitUntil(System.Func<bool> predicate)
     {
         yield return new WaitUntil(predicate);
@@ -31,7 +32,7 @@ public static class TutorialHelper
         InputManager.Instance.enabled = false;
 
         if(previousSucceded)
-            MenuInstructions.Instance.NextInstruction();
+            MenuInstructions.Instance.ShowInstruction(instructionIndex++);
         else
             MenuInstructions.Instance.ShowTutorialFailureScreen();
     }

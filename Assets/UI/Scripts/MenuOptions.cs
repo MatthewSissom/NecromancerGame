@@ -45,8 +45,8 @@ public class MenuOptions : State
 
 		// Init tutorial slider, default to playing the tutorial
 		playTutorial.value = PlayerPrefs.GetInt("playTutorial", 1);
-		handedness.onValueChanged.AddListener(TutorialSliderChanged);
-		TutorialSliderChanged(handedness.value);
+		playTutorial.onValueChanged.AddListener(TutorialSliderChanged);
+		TutorialSliderChanged(playTutorial.value);
 	}
 
 	public override IEnumerator Routine()
