@@ -182,7 +182,7 @@ public class BoneGroup : MonoBehaviour
         cylinder.transform.position = vertex.transform.position;// + getAuxiliaryAxis() * cylinderSize;
 
         // Matthew changed this, I think it feels better but it's up for debate
-        Vector3 toCamera = Camera.main.transform.position - transform.position;
+        Vector3 toCamera = Camera.main.transform.position - vertex.transform.position;
         cylinder.transform.up = toCamera * FlippedMultiplier;
     }
 
