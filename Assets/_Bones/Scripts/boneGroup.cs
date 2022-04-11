@@ -133,7 +133,10 @@ public class BoneGroup : MonoBehaviour
             //Debug.DrawLine(getVertexPosition(BoneVertexType.LeftAux), getVertexPosition(BoneVertexType.LeftAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
             //Debug.DrawLine(getVertexPosition(BoneVertexType.RightAux), getVertexPosition(BoneVertexType.RightAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
 
-            AlignAllCylindersToCamera();
+            if (isBeingDragged)
+            {
+                AlignAllCylindersToCamera();
+            }
         }
     }
 

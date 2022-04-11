@@ -82,7 +82,7 @@ public class MenuInstructions : State
 
     public void ShowTutorialFailureScreen()
     {
-        if (instructionIndex < insturctionObjects.Count - 1)
+        if (instructionIndex < insturctionObjects.Count)
         {
             insturctionObjects[instructionIndex].SetActive(false);
         }
@@ -93,7 +93,7 @@ public class MenuInstructions : State
     {
         if (failureObject.activeInHierarchy)
         {
-            failureObject.SetActive(true);
+            failureObject.SetActive(false);
         }
         if(index < insturctionObjects.Count)
         {
