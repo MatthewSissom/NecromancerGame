@@ -151,7 +151,7 @@ public class TableManager : MonoBehaviour
 
     public bool BonesAreConnectedOrGrounded()
     {
-        return boneObjects.Count == GetMatchingBoneCount((BoneGroup b) => b.isAttached || b.IsOnFloor);
+        return boneObjects.Count == GetMatchingBoneCount((BoneGroup b) => (b.isAttached || b.IsOnFloor) && !b.isBeingDragged);
     }
 
     public int ConnectedBoneCnt()

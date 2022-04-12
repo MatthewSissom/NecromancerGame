@@ -143,9 +143,14 @@ public class GameManager : StateManagerBase
             yield return CameraTransition("GhostTrans");
             yield return SetState(typeof(GhostManager));
 
-            // Second assembly, 
+            // Second assembly, make legs
             TutorialHelper.PrepareNextInstruction();
             yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+
+            yield return CameraTransition("TableTrans");
+            yield return StartCoroutine(
+                TutorialHelper.DelayedWaitUntil(TableManager.Instance.BonesAreConnectedOrGrounded)
+            );
         }
         TutorialHelper.RepeatCoroutineUntil(
             SecondPhase,

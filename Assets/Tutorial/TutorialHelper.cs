@@ -7,7 +7,7 @@ public static class TutorialHelper
     public static IEnumerator DelayedWaitUntil(System.Func<bool> predicate)
     {
         yield return new WaitUntil(predicate);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(.5f);
     }
 
     public static IEnumerator WaitForEquality<T>(System.Func<T> getter, T finalState)
