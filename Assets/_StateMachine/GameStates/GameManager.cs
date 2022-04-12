@@ -36,7 +36,8 @@ public class GameManager : StateManagerBase
             yield break;
         }
 #endif
-        if (PlayerPrefs.GetInt("playTutorial") == 1)
+        int playTutorial = PlayerPrefs.GetInt("playTutorial");
+        if (playTutorial == 1)
         {
             yield return StartCoroutine(Tutorial());
         }
@@ -82,6 +83,7 @@ public class GameManager : StateManagerBase
             // Show moving bones instruction
             if (firstTry)
             {
+                TutorialHelper.PrepareNextInstruction();
                 yield return SetState(MenuManager.Instance.InMenus("Instructions"));
                 GhostManager.Instance.tutorialShipmentId = 0;
                 // Move on after all bones have been picked up
@@ -113,7 +115,7 @@ public class GameManager : StateManagerBase
 
             // Loop if not enough bones were attached
         }
-        TutorialHelper.RepeatCoroutineUntil(
+        yield return TutorialHelper.RepeatCoroutineUntil(
             FirstPhase,
             () => TableManager.Instance.ConnectedBoneCnt() >= 3
         );
@@ -152,7 +154,7 @@ public class GameManager : StateManagerBase
                 TutorialHelper.DelayedWaitUntil(TableManager.Instance.BonesAreConnectedOrGrounded)
             );
         }
-        TutorialHelper.RepeatCoroutineUntil(
+        yield return TutorialHelper.RepeatCoroutineUntil(
             SecondPhase,
             () => TableManager.Instance.ConnectedBoneCnt() >= initalConnectedCount + 3
         );

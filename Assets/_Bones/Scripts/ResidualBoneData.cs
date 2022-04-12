@@ -95,6 +95,7 @@ public class ResidualBoneData : MonoBehaviour
     }
     public void MarkShoulderSideSpine()
     {
+#if UNITY_EDITOR
         if(DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -102,10 +103,12 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.shoulderSpineMat;
             }
         }
+#endif
         isShoulderSideSpine = true;
     }
     public void MarkHipSideSpine()
     {
+#if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -113,10 +116,12 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.hipSpineMat;
             }
         }
+#endif
         isHipSideSpine = true;
     }
     public void MarkHead()
     {
+#if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -124,10 +129,12 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.headMat;
             }
         }
+#endif
         isHead = true;
     }
     public void MarkTail()
     {
+#if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -135,10 +142,12 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.tailMat;
             }
         }
+#endif
         isTail = true;
     }
     public void MarkShoulder()
     {
+#if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -146,10 +155,12 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.shoulderMat;
             }
         }
+#endif
         isShoulder = true;
     }
     public void MarkHip()
     {
+#if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -157,10 +168,12 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.hipMat;
             }
         }
+#endif
         isHip = true;
     }
     public void MarkFLLStart()
     {
+#if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -168,10 +181,12 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.leftLegStartMat;
             }
         }
+#endif
         isFLLStart = true;
     }
     public void MarkFRLStart()
     {
+#if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -179,10 +194,12 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.rightLegStartMat;
             }
         }
+#endif
         isFRLStart = true;
     }
     public void MarkBLLStart()
     {
+#if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -190,10 +207,12 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.leftLegStartMat;
             }
         }
+#endif
         isBLLStart = true;
     }
     public void MarkBRLStart()
     {
+#if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -201,10 +220,12 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.rightLegStartMat;
             }
         }
+#endif
         isBRLStart = true;
     }
     public void MarkFoot()
     {
+#if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
         {
             foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
@@ -212,6 +233,7 @@ public class ResidualBoneData : MonoBehaviour
                 r.material = CatPartHighlighters.instance.footMat;
             }
         }
+#endif
     }
     public ResidualBoneData GetChild(BoneVertexType vertex)
     {
