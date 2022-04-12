@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : StateManagerBase
 {
     public static GameManager Instance;
+    public bool PlayingTutorial { get; private set; } = false;
 
     protected override void Awake()
     {
@@ -28,12 +29,22 @@ public class GameManager : StateManagerBase
 
     public IEnumerator Game()
     {
-#if (UNITY_EDITOR == false)
-        //TODO add case for tutorial
-        yield return StartCoroutine(MainGameLoop());
-#else
-        yield return StartCoroutine(DebugLoops());
+#if (UNITY_EDITOR)
+        if (DebugModes.StateMode != DebugModes.EStateDebugMode.None)
+        {
+            yield return StartCoroutine(DebugLoops());
+            yield break;
+        }
 #endif
+        int playTutorial = PlayerPrefs.GetInt("playTutorial");
+        if (playTutorial == 1)
+        {
+            yield return StartCoroutine(Tutorial());
+        }
+        else
+        {
+            yield return StartCoroutine(MainGameLoop());
+        }
     }
 
     public IEnumerator MainGameLoop()
@@ -64,17 +75,110 @@ public class GameManager : StateManagerBase
     public IEnumerator Tutorial()
     {
         yield return SetState(typeof(GameInit));
+        PlayingTutorial = true;
 
+        // Repeat first delivery phase until the player has connected 3 bones
+        IEnumerator FirstPhase(bool firstTry)
+        {
+            // Show moving bones instruction
+            if (firstTry)
+            {
+                TutorialHelper.PrepareNextInstruction();
+                yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+                GhostManager.Instance.tutorialShipmentId = 0;
+                // Move on after all bones have been picked up
+                GhostManager.Instance.TutorialPhaseFinished = GhostManager.Instance.GhostsHaveNoBones;
+            }
+            // Show failure screen if this isn't the player's first try
+            else
+            {
+                TutorialHelper.PrepareNextInstruction(false);
+                yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+            }
+
+            // Deliver bones
+            yield return CameraTransition("GhostTrans");
+            yield return SetState(typeof(GhostManager));
+
+            // Show attaching instruction
+            if (firstTry)
+            {
+                TutorialHelper.PrepareNextInstruction();
+                yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+            }
+
+            // Don't continue until bones are attached or attaching is possible
+            yield return CameraTransition("TableTrans");
+            yield return StartCoroutine(
+                TutorialHelper.DelayedWaitUntil(TableManager.Instance.BonesAreConnectedOrGrounded)
+            );
+
+            // Loop if not enough bones were attached
+        }
+        yield return TutorialHelper.RepeatCoroutineUntil(
+            FirstPhase,
+            () => TableManager.Instance.ConnectedBoneCnt() >= 3
+        );
+
+        // Show rotation instruction
+        TutorialHelper.PrepareNextInstruction();
+        yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+
+        // No failure case, just wait for skeleton to be incomplete then complete again
+        yield return CameraTransition("TableTrans");
+        yield return new WaitWhile(TableManager.Instance.BonesAreConnectedOrGrounded);
+        yield return StartCoroutine(
+            TutorialHelper.DelayedWaitUntil(TableManager.Instance.BonesAreConnectedOrGrounded)
+        );
+
+        // Repeat second phase until the player has connected 3 more bones
+        int initalConnectedCount = TableManager.Instance.ConnectedBoneCnt();
+        IEnumerator SecondPhase(bool firstTry)
+        {
+            // Show phases instructions, if not the first try show failure screen instead
+            TutorialHelper.PrepareNextInstruction(firstTry);
+            yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+
+            // Second bone delivery
+            GhostManager.Instance.tutorialShipmentId = 1;
+            GhostManager.Instance.TutorialPhaseFinished = GhostManager.Instance.GhostsHaveNoBones;
+            yield return CameraTransition("GhostTrans");
+            yield return SetState(typeof(GhostManager));
+
+            // Second assembly, make legs
+            TutorialHelper.PrepareNextInstruction();
+            yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+
+            yield return CameraTransition("TableTrans");
+            yield return StartCoroutine(
+                TutorialHelper.DelayedWaitUntil(TableManager.Instance.BonesAreConnectedOrGrounded)
+            );
+        }
+        yield return TutorialHelper.RepeatCoroutineUntil(
+            SecondPhase,
+            () => TableManager.Instance.ConnectedBoneCnt() >= initalConnectedCount + 3
+        );
+
+        // Show stopwatch instruction
+        TutorialHelper.PrepareNextInstruction();
+        yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+
+        // Run through a standard delivery phase with the stopwatch
+        GhostManager.Instance.tutorialShipmentId = 2;
+        GhostManager.Instance.TutorialPhaseFinished = null;
         yield return CameraTransition("GhostTrans");
         yield return SetState(typeof(GhostManager));
-
-        MenuManager.Instance.GoToMenu("Main");
-        yield return SetState(MenuManager.Instance.InMenus());
-
         yield return CameraTransition("TableTrans");
-
         CountDown.SetParams("Assemble Cat", GhostManager.Instance.timeBetweenShipments);
         yield return SetState(typeof(CountDown));
+
+        // Show playpen instruction
+        TutorialHelper.PrepareNextInstruction();
+        yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+
+        // Tutorial is finished, default to not playing it after this
+        PlayerPrefs.SetInt("playTutorial", 0);
+        PlayerPrefs.Save();
 
         yield return SetState(typeof(BoneAssembler));
 

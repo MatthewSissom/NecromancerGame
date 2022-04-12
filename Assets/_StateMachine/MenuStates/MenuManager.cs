@@ -7,11 +7,16 @@ public class MenuManager : StateManagerBase
     public static MenuManager Instance;
     private string state;
 
-    public IEnumerator InMenus()
+    public IEnumerator InMenus(string menuState = "Main")
     {
+        GoToMenu(menuState);
         CameraTransition("MenuBoardFlipped");
         yield return CameraTransition("MenuTransMain");
-        yield return SetState(typeof(MenuIntroScreen));
+
+        // Show splash screen if entering the main menu
+        if(menuState == "Main")
+            yield return SetState(typeof(MenuIntroScreen));
+
         while (true)
         {
             switch (state)
@@ -29,20 +34,7 @@ public class MenuManager : StateManagerBase
                     state = null;
                     yield return CameraTransition("MenuBoardFlipped");
                     yield return SetState(typeof(MenuInstructions));
-                    break;
-                case "Score":
-                    state = null;
-                    yield return CameraTransition("MenuTransMain");
-                    yield return CameraTransition("MenuBoardFlipped");
-                    yield return SetState(typeof(MenuDisplayScore));
-                    break;
-                // Will - used for displaying assignments
-                /*case "Assignment":
-                    state = null;
-                    yield return CameraTransition("MenuBoardFlipped");
-                    yield return SetState(typeof(MenuShowAssignments));
-                    break;*/
-                // Will - used for displaying options
+                    yield break;
                 case "Options":
                     state = null;
                     yield return CameraTransition("MenuBoardFlipped");
@@ -53,6 +45,7 @@ public class MenuManager : StateManagerBase
                     break;
             }
         }
+
     }
 
     public void GoToMenu(string name)
