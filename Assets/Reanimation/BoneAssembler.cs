@@ -19,7 +19,7 @@ public class BoneAssembler : State
             new ReassignParents(),
             new RemoveGrabbableInfo(),
             //TODO: new step that puts legs, then spine parts onto the emptyarmature
-            //  new InsertIntoArmature(),
+            new InsertIntoArmature(),
 
             //Save goes here
             //IKInit goes here

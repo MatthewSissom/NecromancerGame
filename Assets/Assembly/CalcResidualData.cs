@@ -70,6 +70,7 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
             {
                 if(!boneDataStepper2.parentBone)
                 {
+                    doTailStepFlag = !doTailStepFlag;
                     continue;
                 }
                 boneDataStepper2 = boneDataStepper2.parentBone;
@@ -85,6 +86,7 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
             {
                 if (!boneDataStepper.parentBone)
                 {
+                    doTailStepFlag = !doTailStepFlag;
                     continue;
                 }
                 boneDataStepper = boneDataStepper.parentBone;

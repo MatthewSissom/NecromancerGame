@@ -21,10 +21,8 @@ public class TableManager : MonoBehaviour
     private List<int> areaShipmentNumbers = default;
 
 
-    //outlines in the order that they appear for shipments
-    //[SerializeField]
-    //private List<GameObject> outlineRenders = default;
-    //private List<SpriteRenderer> outlines;
+    [SerializeField]
+    private List<GameObject> outlines;
 
     private List<TableConnectionArea> allAreas;
     private List<List<TableConnectionArea>> deliveryAreas;
@@ -39,6 +37,8 @@ public class TableManager : MonoBehaviour
     public List<BoneGroup> boneObjects;
     [SerializeField]
     public List<ResidualBoneData> residualBoneData;
+    [SerializeField]
+    private GameObject tableCenter;
     void Awake()
     {
         if (Instance)
@@ -149,6 +149,31 @@ public class TableManager : MonoBehaviour
         GameManager.Instance.AddCamTransitionMethod("GhostTrans", "End", AlignAllColliders);
     }
 
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            FlipBones();
+        }
+    }
+
+    public void FlipBones()
+    {
+        Vector3 flipCenter = tableCenter.transform.position; 
+        Vector3 flipAxis = tableCenter.transform.up;
+        foreach(BoneGroup boneObj in boneObjects)
+        {
+            if(boneObj.isAttached)
+            {
+                boneObj.gameObject.transform.RotateAround(flipCenter, flipAxis, 180);
+                boneObj.ApplyFlip();
+            }
+        }
+        foreach(GameObject outline in outlines)
+        {
+            outline.transform.localScale = new Vector3(-outline.transform.localScale.x, outline.transform.localScale.y, outline.transform.localScale.z);
+        }
+    }
     //---Tutorial Queries---//
 
     private int GetMatchingBoneCount(System.Predicate<BoneGroup> predicate)
