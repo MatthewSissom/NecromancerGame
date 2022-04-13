@@ -257,7 +257,7 @@ MonoBehaviour:
   Is3D: 0
   IsOneShot: 1
   Parameters:
-  - {fileID: -8202328636155970551}
+  - {fileID: -1684495352627199334}
   MinDistance: 0
   MaxDistance: 0
   Length: 270
@@ -276,7 +276,7 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.bank
   Name: Master
   StudioPath: bank:/Master
-  lastModified: 637781150526152605
+  lastModified: 637782346164104071
   LoadResult: 0
   FileSizes: []
   Exists: 1
@@ -451,6 +451,26 @@ MonoBehaviour:
   MinDistance: 0
   MaxDistance: 0
   Length: 119235
+--- !u!114 &-1684495352627199334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fecb8ef7f94ca804a8ab72049b86782e, type: 3}
+  m_Name: parameter:/PocketwatchTickTock/TimeLeft
+  m_EditorClassIdentifier: 
+  Name: TimeLeft
+  Min: 0
+  Max: 1
+  Default: 0
+  ID:
+    data1: 0
+    data2: 0
+  Exists: 1
 --- !u!114 &-1322782408704335087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -619,7 +639,7 @@ MonoBehaviour:
   - {fileID: -5803213250001359351}
   StringsBanks:
   - {fileID: 6788599698923747006}
-  stringsBankWriteTime: 637781150526162609
+  stringsBankWriteTime: 637782346164114087
   cacheVersion: 6
 --- !u!114 &897814740484035575
 MonoBehaviour:
@@ -977,7 +997,7 @@ MonoBehaviour:
   Path: FMODAssets/Desktop/Master.strings.bank
   Name: Master.strings
   StudioPath: bank:/Master.strings
-  lastModified: 637781150526162609
+  lastModified: 637782346164114087
   LoadResult: 0
   FileSizes:
   - Name: 

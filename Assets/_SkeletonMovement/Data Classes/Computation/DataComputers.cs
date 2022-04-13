@@ -36,10 +36,10 @@ public class SpinePointHeight : ValComputer<float>
 public class LimbLength : ValComputer<float>
 {
     public Transform LimbStart { private get; set; }
-
     protected override float ComputeVal()
     {
-        float totalLen = 0;
+        ResidualBoneData boneData = LimbStart.gameObject.GetComponent<ResidualBoneData>();
+        float totalLen = boneData.myLegLength;
 
 
         base.ComputeVal();
@@ -55,7 +55,7 @@ public class SpineLenght : ValComputer<float>
     protected override float ComputeVal()
     {
         float totalLen = 0;
-
+        //TODO: get length calculations for spine working
 
         base.ComputeVal();
         return totalLen;

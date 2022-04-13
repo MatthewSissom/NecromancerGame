@@ -37,7 +37,8 @@ public class TableManager : MonoBehaviour
 
     [SerializeField]
     public List<BoneGroup> boneObjects;
-
+    [SerializeField]
+    public List<ResidualBoneData> residualBoneData;
     void Awake()
     {
         if (Instance)

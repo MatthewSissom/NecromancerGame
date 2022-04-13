@@ -16,7 +16,7 @@ public class ResidualBoneData : MonoBehaviour
     public bool isHipSideSpine;
     private bool isHead;
     private bool isTail;
-    private bool isShoulder;
+    public bool isShoulder;
     private bool isHip;
     public bool isFLLStart;
     public bool isFRLStart;

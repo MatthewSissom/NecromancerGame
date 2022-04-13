@@ -16,11 +16,10 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
         }
 
         //assemble list of residual bone datas and identify root bone
-        List<ResidualBoneData> boneData = new List<ResidualBoneData>();
         ResidualBoneData rootBoneData = null;
         foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
         {
-            boneData.Add(bone.residualBoneData);
+            TableManager.Instance.residualBoneData.Add(bone.residualBoneData);
             if(bone.isRoot)
             {
                 rootBoneData = bone.residualBoneData;
@@ -241,17 +240,21 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
             boneDataStepper.MarkFoot();
         }
 
+        //TODO: head and tail should be empty game objects created on end of head/tail
+        //TODO: limb start transforms should be at the offset position
+        //TODO: create empty objects at ends of limbs (like pad in testcat)
+
         //construct skeletonTransforms
         Transforms = new SkeletonTransforms(
-            headBoneData.transform,
-            shoulderBoneData.transform,
-            hipBoneData.transform,
-            tailBoneData.transform,
+            headBoneData?.transform,
+            shoulderBoneData?.transform,
+            hipBoneData?.transform,
+            tailBoneData?.transform,
             orderedSpine.ToArray(),
-            FLLStart.transform,
-            FRLStart.transform,
-            BLLStart.transform,
-            BRLStart.transform
+            FLLStart?.transform,
+            FRLStart?.transform,
+            BLLStart?.transform,
+            BRLStart?.transform
         );
         
         yield break;
