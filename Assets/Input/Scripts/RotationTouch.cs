@@ -86,7 +86,7 @@ public class RotationTouch : TouchProxy
         Vector3 movementVector = pos - oldPos;
         //adjust distances
         if (aroundUp)
-            angleDistAroundUp += Vector3.SignedAngle(oldToParent, toParent, realUp)*angleDistMulti;
+            angleDistAroundUp -= Vector3.SignedAngle(oldToParent, toParent, realUp)*angleDistMulti;
         
     }
 
@@ -127,14 +127,13 @@ public class RotationTouch : TouchProxy
         float angleChange = time * velocityAroundUp * Mathf.Rad2Deg;
         if ((angleDistAroundUp > 0 && angleDistAroundUp -angleChange <0) ||(angleDistAroundUp <0 && angleDistAroundUp + angleChange > 0))
         {
-            Debug.Log(angleDistAroundUp);
             aVelocity = Vector3.zero;
             angleDistAroundUp = 0;
             angleChange = 0;
             
         }
         parent.activeBone.Rb.angularVelocity = aVelocity;
-        angleDistAroundUp -= time * velocityAroundUp * Mathf.Rad2Deg;
+        angleDistAroundUp += time * velocityAroundUp * Mathf.Rad2Deg;
     }
 
     protected override void OnDisable()
