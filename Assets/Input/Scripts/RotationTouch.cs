@@ -25,7 +25,7 @@ public class RotationTouch : TouchProxy
     [SerializeField]
     float stopWatchRotModifier = 0.5f;
     [SerializeField]
-    float angleDistMulti= 0.5f;
+    float angleDistMulti= 0.1f;
 
     
     public Vector3 realUp;
@@ -86,13 +86,13 @@ public class RotationTouch : TouchProxy
         Vector3 movementVector = pos - oldPos;
         //adjust distances
         if (aroundUp)
-            angleDistAroundUp += Vector3.SignedAngle(oldToParent, toParent, realUp)*angleDistMulti;
+            angleDistAroundUp -= Vector3.SignedAngle(oldToParent, toParent, realUp)*angleDistMulti;
         
     }
 
     protected void Update()
     {
-        if (parent.activeWatch == null && parent.activeBone == null)
+        if ((parent.activeWatch == null && parent.activeBone == null)||angleDistAroundUp==0)
             return;
 
         if (parent.activeWatch != null)
@@ -102,6 +102,7 @@ public class RotationTouch : TouchProxy
                 angleDistAroundUp = 0;
             return;
         }
+
 
         //calculate angular velocities around axies
         Vector3 aVelocity = parent.activeBone.Rb.angularVelocity;
@@ -117,14 +118,22 @@ public class RotationTouch : TouchProxy
 
         //apply corrections
         aVelocity += velocityAroundUp * realUp*parent.activeBone.FlippedMultiplier;
-        
+
 
         //remove any rotation along toParent, it is unwanted
         //aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
 
-        //push calculated value to the rigidbody
+        //push calculated value to the rigidbody if not changing between negative and positive angles
+        float angleChange = time * velocityAroundUp * Mathf.Rad2Deg;
+        if ((angleDistAroundUp > 0 && angleDistAroundUp -angleChange <0) ||(angleDistAroundUp <0 && angleDistAroundUp + angleChange > 0))
+        {
+            aVelocity = Vector3.zero;
+            angleDistAroundUp = 0;
+            angleChange = 0;
+            
+        }
         parent.activeBone.Rb.angularVelocity = aVelocity;
-        angleDistAroundUp -= time * velocityAroundUp * Mathf.Rad2Deg;
+        angleDistAroundUp += time * velocityAroundUp * Mathf.Rad2Deg;
     }
 
     protected override void OnDisable()
