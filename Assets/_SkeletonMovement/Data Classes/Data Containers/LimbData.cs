@@ -15,6 +15,14 @@ public class LimbIdentityData
     public bool IsFront { get; private set; }
     [field: SerializeField]
     public bool IsRight { get; private set; }
+    public LimbIdentityData(OpenLimbIdentityData openData)
+    {
+        IsStump = openData.IsStump;
+        IsSingle= openData.IsSingle;
+        IsFront = openData.IsFront;
+        IsRight = openData.IsRight;
+    }
+
     public LimbIdentityData(bool isStump, bool isSingle, bool isFront, bool isRight)
     {
         IsStump = isStump;
@@ -36,7 +44,15 @@ public class LimbMeasurements
     public float OffsetFromSpine { get; private set; }
     [field: SerializeField]
     //the diamater of the circle that the limb can trace on the ground
-    public float StrideLength { get; set; }
+    public float StrideLength { get; private set; }
+
+    public LimbMeasurements(OpenLimbMeasurements openData)
+    {
+        StepHeight      = openData.StepHeight       ;
+        TotalLength     = openData.TotalLength      ;
+        OffsetFromSpine = openData.OffsetFromSpine  ;
+        StrideLength    = openData.StrideLength;
+    }
 }
 
 // Holds game objects associated with the limb
@@ -47,6 +63,12 @@ public class LimbTransforms
     public Transform Target { get; private set; }
     [field: SerializeField]
     public Transform LimbStart { get; private set; }
+
+    public LimbTransforms(OpenLimbTransforms openData)
+    {
+        LimbStart   = openData.LimbStart;
+        Target      = openData.Target;
+    }
 
     public LimbTransforms(Transform start, Transform target)
     {
@@ -73,6 +95,13 @@ public class LimbTracingData
     // --- Vars below this comment are set during animation --- //
     public float Compleation { get; set; }
     public int TracerId { get; set; }
+    public LimbTracingData(OpenLimbTracingData openData)
+    {
+        Delay                       = openData.Delay                       ;
+        Tunables                    = openData.Tunables                    ;
+        StepTimeInfrontOfSpinePoint = openData.StepTimeInfrontOfSpinePoint;
+    }
+
     public LimbTracingData(float delay, LimbTunables tunables, float stepTimeInfrontOfSpinePoint)
     {
         Delay = delay;
@@ -81,8 +110,10 @@ public class LimbTracingData
     }
 }
 
-public class LimbData : MonoBehaviour, IDelayedTracerData
+[Serializable]
+public class LimbData : IDelayedTracerData
 {
+
     // Editor Interface
     [field: SerializeField]
     public LimbIdentityData IdentityData { get; private set; }
@@ -99,19 +130,14 @@ public class LimbData : MonoBehaviour, IDelayedTracerData
     public float Delay { get => TracingData.Delay; }
 
     // Script constructor
-    public void Init( 
-        LimbTransforms      transforms, 
-        LimbIdentityData    identityData, 
-        LimbMeasurements    measurements,
-        LimbTunables        tunables,
-        LimbTracingData     tracingData
-    )
+    public LimbData Init( OpenLimbData openData )
     {
-        Transforms      = transforms; 
-        IdentityData    = identityData;
-        Measurements    = measurements;
-        Tunables        = tunables;
-        TracingData     = tracingData;
+        Transforms      = new LimbTransforms(openData.Transforms  );
+        IdentityData    = new LimbIdentityData ( openData.IdentityData ) ;
+        Measurements    = new LimbMeasurements( openData.Measurements ) ;
+        Tunables        = openData.Tunables;
+        TracingData     = new LimbTracingData( openData.TracingData ) ;
+        return this;
     }
 
     // Editor/Debug constructor
@@ -125,4 +151,10 @@ public class LimbData : MonoBehaviour, IDelayedTracerData
         Tunables = tunables;
         TracingData = tracingData;
     }
+}
+
+public class DebugLimbData : MonoBehaviour
+{
+    [field: SerializeField]
+    public LimbData data { get; private set; }
 }

@@ -7,6 +7,12 @@ public class SpineIdentityData
     public bool IsShoulder { get; private set; }
     public bool IsHip { get; private set; }
 
+    public SpineIdentityData(OpenSpineIdentityData openData)
+    {
+        IsShoulder = openData.IsShoulder;
+        IsHip = openData.IsHip;
+    }
+
     public SpineIdentityData(bool isShoulder, bool isHip)
     {
         IsShoulder = isShoulder;
@@ -21,6 +27,16 @@ public class SpinePointData : IDelayedTracerData
     public float Delay { get; private set; }
     public SpineIdentityData Identity { get; private set; }
     public float BaseHeight { get; private set; }
+
+    public SpinePointData(OpenSpinePointData openData)
+    {
+        BaseHeight = openData.BaseHeight;
+        Transform = openData.Target;
+        if (openData.Delay < 0)
+            Debug.LogError("Spine delays cannot be less than 0!");
+        Delay = openData.Delay;
+        Identity = new SpineIdentityData(openData.Identity);
+    }
 
     public SpinePointData(Transform transform, float delay, float baseHeight, SpineIdentityData IdData)
     {

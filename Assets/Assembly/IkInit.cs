@@ -1,30 +1,135 @@
-﻿//#define USING_IK
+﻿#define USING_IK
 
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 #if USING_IK
+using UnityEngine.Assertions;
 using RootMotion.FinalIK;
 #endif
 
 public class IkInit : IAssemblyStage
 {
+    private class ChainInitData 
+    {
+        public FABRIK Component { get; private set; }
+        public List<Transform> NewChain { get; private set; }
+        public ChainInitData(FABRIK component, List<Transform> newChain)
+        {
+            Component = component;
+            NewChain = newChain;
+        }
+        public static ChainInitData GetData(FABRIK component, List<Transform> newChain)
+        {
+            return new ChainInitData(component, newChain);
+        }
+    }
+
     // Todo add cat behavior to empty armature
     // PlayPenState.Instance.SetSkeleton(EmptyArmature);
 
     IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous) 
     {
 #if USING_IK
-        RebuildIKChains(skeleton, out List<TransformChain> validTransformChains);
-        AddMovementComponents(skeleton.transform, validTransformChains);
+        string assertError = "Assembly pipline is set up incorrectly: " + previous.GetType() + 
+            " comes before " + GetType() + " but does not implement " + typeof(IikTransformProvider).ToString();
+        Assert.IsTrue(previous is IikTransformProvider, assertError);
+
+        RebuildIKChains((previous as IikTransformProvider).Transforms);
 #endif
 
         yield break;
     }
-    // TEMP
 
 #if USING_IK
-    List<FABRIK> FindIkChains(GameObject skeletonRoot)
+    LabledSkeletonData<FABRIK> GetIkComponents(LabledSkeletonData<Transform> chainStarts)
+    {
+        return chainStarts.Convert((Transform t) => t.GetComponent<FABRIK>());
+    }
+
+    LabledSkeletonData<Transform> GetTargets(LabledSkeletonData<FABRIK> chains) 
+    {
+        Transform GetTransform(FABRIK chain)
+        {
+            if (chain == null)
+                return null;
+            return chain.solver?.target;
+        }
+        return chains.Convert(GetTransform);
+    }
+
+    List<Transform> GetTransformList(Transform start, Transform endTarget)
+    {
+        List<Transform> transforms = new List<Transform>();
+        Transform last = null;
+
+        void AddTransform(Transform add)
+        {
+            transforms.Add(add);
+            last = add;
+        }
+        AddTransform(start);
+
+        while (last.childCount == 0 && (last.position - endTarget.position).magnitude < 0.0001f)
+        {
+            AddTransform(last.GetChild(0));
+        }
+
+        return transforms;
+    }
+
+    Transform GetRoot(Transform findParentOf)
+    {
+        if (findParentOf.parent == null)
+            return findParentOf;
+        return GetRoot(findParentOf.parent);
+    }
+
+    LabledSkeletonData<ChainInitData> PackageNewChainData(LabledSkeletonData<FABRIK> ikComponents, LabledSkeletonData<List<Transform>> chain)
+    {
+        return ikComponents.Combine(chain, ChainInitData.GetData);
+    }
+
+    void RebuildIKChains(SkeletonTransforms transforms)
+    {
+        // Get basic data
+        LabledSkeletonData<FABRIK> ikComponents = GetIkComponents(transforms);
+        LabledSkeletonData<Transform> targets = GetTargets(ikComponents);
+        LabledSkeletonData<List<Transform>> transformLists = transforms.Combine(targets, GetTransformList);
+        FABRIKRoot mFABRIKRoot = GetRoot(transforms.Shoulder).GetComponentInChildren<FABRIKRoot>();
+
+        // Check to make sure no IK chains were missed
+        List<FABRIK> ikChains = DebugSearchForChains(GetRoot(transforms.Shoulder));
+        foreach (var chain in ikChains)
+            Assert.IsTrue(ikComponents.Contains(chain), "Ik chain missed by ik init!");
+
+        // rebuild transform chains
+        List<FABRIK> invaildChains = new List<FABRIK>();
+        LabledSkeletonData<ChainInitData> newChainData = PackageNewChainData(ikComponents, transformLists);
+        foreach(var data in newChainData.ToList())
+        {
+            IKSolverFABRIK ikSolver = data.Component.solver;
+            ikSolver.SetChain(data.NewChain.ToArray(), ikSolver.GetRoot());
+            string message = string.Empty;
+
+            bool isValid = !ikSolver.IsValid(ref message);
+            if (!isValid)
+            {
+                Debug.LogError("Failed to init ik chain: " + message);
+                invaildChains.Add(data.Component);
+                continue;
+            }
+
+            data.Component.enabled = isValid;
+        }
+
+        // prepare data to be passed to next step, remove disabled transforms
+        LabledSkeletonData<Transform> enabledTransforms = newChainData.Convert(
+            (ChainInitData data) => invaildChains.Contains(data.Component) ? null : data.NewChain[0]
+        );
+    }
+
+    List<FABRIK> DebugSearchForChains(Transform skeletonRoot)
     {
         List<FABRIK> fabrikChains = new List<FABRIK>();
 
@@ -41,190 +146,8 @@ public class IkInit : IAssemblyStage
             }
         }
 
-        SearchForChains(skeletonRoot.transform);
+        SearchForChains(skeletonRoot);
         return fabrikChains;
-    }
-
-    List<TransformChain> GetTransformChains(List<FABRIK> ikChains)
-    {
-        List<TransformChain> transformChains = new List<TransformChain>();
-        foreach (var fChain in ikChains)
-        {
-            var bones = fChain.solver.bones;
-            Transform[] transforms = new Transform[bones.Length];
-            for (int i = 0; i < bones.Length; i++)
-            {
-                transforms[i] = bones[i].transform;
-            }
-            if (transforms[0].gameObject.name.ToLower() == "spine")
-                transformChains.Add(new SpineTransformChain(transforms,
-                    null,
-                    fChain.solver.target.gameObject,
-                    IsOffset(transforms[0].gameObject)
-                    ));
-            else
-                transformChains.Add(
-                    new TransformChain(transforms,
-                        fChain.solver.target.gameObject,
-                        IsOffset(transforms[0].gameObject)
-                    ));
-        }
-        return transformChains;
-    }
-
-    void RebuildIKChains(GameObject skeleton, out List<TransformChain> validTransformChains)
-    {
-        List<FABRIK> ikChains = FindIkChains(skeleton);
-        List<TransformChain> currentTransformChains = GetTransformChains(ikChains);
-        FABRIKRoot mFABRIKRoot = skeleton.GetComponentInChildren<FABRIKRoot>();
-
-
-        // create and clean up transform chains
-        List<TransformChain> emptyChains = new List<TransformChain>();
-        for(int i = 0; i < ikChains.Count; i++)
-        {
-            var fChain = ikChains[i];
-            var tChain = currentTransformChains[i];
-
-            tChain.DestroyAdditionalEmpties();
-
-            if (tChain.Count() > 1)
-            {
-                fChain.solver.SetChain(tChain.GetList().ToArray(), fChain.solver.GetRoot());
-                string message = string.Empty;
-                if (!fChain.solver.IsValid(ref message))
-                    emptyChains.Add(tChain);
-            }
-            else
-            {
-                emptyChains.Add(tChain);
-            }
-        }
-
-        mFABRIKRoot.enabled = true;
-        validTransformChains = new List<TransformChain>();
-        for (int i = 0; i < ikChains.Count; i++)
-        {
-            bool isValid = !emptyChains.Contains(currentTransformChains[i]);
-            ikChains[i].enabled = isValid;
-            if (isValid)
-                validTransformChains.Add(currentTransformChains[i]);
-        }
-    }
-
-    void AddMovementComponents(Transform skeletonTransform, List<TransformChain> transformChains)
-    {
-        //limb data
-        List<LimbEnd> limbEnds = new List<LimbEnd>();
-        List<LimbEnd.LimbLocationTag> locations = new List<LimbEnd.LimbLocationTag>();
-        List<LimbEnd.LimbTag> types = new List<LimbEnd.LimbTag>();
-
-        //movement data
-        List<Transform> spineAlignedTargets = new List<Transform>();
-        //always add the root as a key target
-        spineAlignedTargets.Add(skeletonTransform);
-
-        int frontIndex = -1; //holds the index of a front leg in the array
-        int backIndex = -1;  //holds the index of a back leg in the array
-
-        Transform chainTargets = skeletonTransform.GetChild(1);
-        foreach (var tChain in transformChains)
-        {
-            var transforms = tChain.GetList();
-            var start = transforms[0].gameObject;
-
-            GameObject target = tChain.Target;
-            if (!target)
-                continue;
-            var endGO = transforms[transforms.Count - 1].gameObject;
-            target.transform.position = endGO.transform.position;
-
-            //check if the chain is spine aligned
-            if (!IsOffset(start))
-            {
-                var tKey = tChain.Target.name.Substring(0, 2);
-                switch (tKey)
-                {
-                    case "Ta":
-                        spineAlignedTargets.Add(tChain.Target.transform);
-                        continue;
-                    case "Pe":
-                        spineAlignedTargets.Add(tChain.Target.transform);
-                        continue;
-                    case "He":
-                        spineAlignedTargets.Add(tChain.Target.transform);
-                        continue;
-                }
-                continue;
-            }
-
-            //use the first two letters to find the matching target
-            string key = start.gameObject.name.Substring(0, 2);
-            switch (key)
-            {
-                //update tags for limb ends
-                case "FR":
-                    locations.Add(LimbEnd.LimbLocationTag.FrontRight);
-                    UpdateTags(ref frontIndex);
-                    break;
-                case "FL":
-                    locations.Add(LimbEnd.LimbLocationTag.FrontLeft);
-                    UpdateTags(ref frontIndex);
-                    break;
-                case "BR":
-                    locations.Add(LimbEnd.LimbLocationTag.BackRight);
-                    UpdateTags(ref backIndex);
-                    break;
-                case "BL":
-                    locations.Add(LimbEnd.LimbLocationTag.BackLeft);
-                    UpdateTags(ref backIndex);
-                    break;
-                default:
-                    Debug.LogError("Limb key: " + key + " for object " + start.gameObject.name + " not recognized");
-                    break;
-            }
-            var newLimbMarker = endGO.AddComponent<LimbEnd>();
-            newLimbMarker.LimbInit(
-                tChain.WorldLength(),
-                target,
-                start
-                );
-            limbEnds.Add(newLimbMarker);
-        }
-
-        Vector3 forward = skeletonTransform.forward;
-        int IsCloserToTail(Transform t1, Transform t2)
-        {
-            return System.Math.Sign(
-                Vector3.Dot(forward, t1.position) - Vector3.Dot(forward, t2.position)
-                );
-        }
-        spineAlignedTargets.Sort(IsCloserToTail);
-        int shoulderIndex = spineAlignedTargets.IndexOf(skeletonTransform);
-
-        //tags can only be set once all limbs have been processed, because other limbs can change types
-        for (int i = 0; i < limbEnds.Count; i++)
-        {
-            //find the nearest target on the spine
-            float minDistance = float.MaxValue;
-            int minIndex = -1;
-            for(int j = 0; j < spineAlignedTargets.Count; j++)
-            {
-                var target = spineAlignedTargets[j];
-                var distFromTarget = (target.position - limbEnds[i].LimbStart.transform.position).magnitude;
-                if (distFromTarget < minDistance)
-                {
-                    minIndex = j;
-                    minDistance = distFromTarget;
-                }
-            }
-            limbEnds[i].SetTags(types[i],locations[i],minIndex);
-        }
-    }
-
-    bool IsOffset(GameObject limbTransform)
-    {
-        return limbTransform.name.EndsWith("Offset");
     }
 
 #endif

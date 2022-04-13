@@ -11,3 +11,8 @@ public interface IikTransformProvider
 {
     SkeletonTransforms Transforms { get; }
 }
+
+public interface IikTargetProvider
+{
+    SkeletonTransforms Targets { get; }
+}

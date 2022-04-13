@@ -54,8 +54,8 @@ public class SkeletonBehaviour : MonoBehaviour
     public GameObject followTarget;
     Vector3 targetPreviousPos = new Vector3(-1000,-1000,-1000);
 
-    [SerializeField]
-    float speed;
+    [field: SerializeField]
+    public float Speed { get; private set; }
 
     // used to set up test cats, unused in game pipeline
     [field: SerializeField]
@@ -111,10 +111,11 @@ public class SkeletonBehaviour : MonoBehaviour
 
         Debug.Log("Start init used on catbehavior. This should only happen when using the playpen debug mode");
 
-        var tunables = new SkeletonPathTunables(.1f, speed ); 
+        var tunables = new SkeletonPathTunables(.1f, Speed ); 
 
         MovementDataInit dataInit = new MovementDataInit();
-        SkeletonLayoutData layoutData = dataInit.EditorInit(limbEnds.ToArray(), skeletonPositions, targets, tunables);
+        dataInit.EditorInit(limbEnds.ToArray(), skeletonPositions, targets, tunables);
+        SkeletonLayoutData layoutData = dataInit.ComputedLayoutData;
         BehaviorInit(layoutData,tunables);
     }
 

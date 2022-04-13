@@ -13,6 +13,7 @@ public class BoneAssembler : State
     public void Start()
     {
         SetPipeline(rootBone,
+            new TempDebugPause(),
             new RemoveExcessBones(),
             new CalcResidualData(),
             new ReassignParents(),
