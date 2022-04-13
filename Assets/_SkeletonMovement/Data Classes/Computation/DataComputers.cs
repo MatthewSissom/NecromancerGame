@@ -112,10 +112,10 @@ public class SpinePointPositions : ValComputer<LabeledSpineData<Vector2>>
 public class LimbLength : ValComputer<float>
 {
     public Transform LimbStart { private get; set; }
-
     protected override float ComputeVal()
     {
-        float totalLen = 0;
+        ResidualBoneData boneData = LimbStart.gameObject.GetComponent<ResidualBoneData>();
+        float totalLen = boneData.myLegLength;
 
 
         base.ComputeVal();
@@ -131,6 +131,23 @@ public class SpineLenght : ValComputer<float>
     protected override float ComputeVal()
     {
         float totalLen = 0;
+        ResidualBoneData fromData = From.gameObject.GetComponent<ResidualBoneData>();
+        ResidualBoneData toData = To.gameObject.GetComponent<ResidualBoneData>();
+        if (fromData.isShoulder) {
+            totalLen = toData.distanceToRootBone(null);
+        } else if (toData.isShoulder)
+        {
+            totalLen = fromData.distanceToRootBone(null);
+        } else if (fromData.isHead || toData.isHead) 
+        {
+            totalLen = fromData.distanceToRootBone(null) + toData.distanceToRootBone(null);
+        } else if(fromData.isTail)
+        {
+            totalLen = fromData.distanceToRootBone(null) - toData.distanceToRootBone(null);
+        } else
+        {
+            totalLen = toData.distanceToRootBone(null) - fromData.distanceToRootBone(null);
+        }
 
 
         base.ComputeVal();

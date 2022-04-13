@@ -76,7 +76,7 @@ public partial class InputManager : MonoBehaviour
         mTouch.ResetTouch(position, 0);
         mTouch.gameObject.SetActive(true);
         mTouch.id = id;
-
+        mTouch.realUp = Camera.main.transform.forward;
         return rotationTouch;
     }
 

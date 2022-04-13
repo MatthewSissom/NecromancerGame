@@ -16,10 +16,26 @@ public class BoneAssembler : State
             new TempDebugPause(),
             new RemoveExcessBones(),
             new CalcResidualData(),
+            new MakeShoulderRoot(),
             new ReassignParents(),
             new RemoveGrabbableInfo(),
+            //TODO: new step that puts legs, then spine parts onto the emptyarmature
+            new InsertIntoArmature(),
+
+            //Save goes here
+            //IKInit goes here
+
+            //TODO: step to remove residualbonedata from bones (not necessary but feels cleaner)
+            //  new RemoveResidualData(),
             new TempDebugPause() //just pauses the game once it finishes, temporary
         ) ;
+
+        //Loaded cat pipeline:
+        /* new BuildGameObjectsFromData (builds bone structure in an empty armature, 
+         *   with proper parent-child relations and no grabbable info)
+         * new IKInit()
+         * 
+         */
     }
     public override IEnumerator Routine()
     {

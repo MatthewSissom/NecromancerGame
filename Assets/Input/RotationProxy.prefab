@@ -140,7 +140,9 @@ MonoBehaviour:
   id: 0
   moved: 0
   aroundToParentMult: 1000
-  acceleration: 8000
+  acceleration: 2000
   switchResistance: 0
   aVelocityClamp: 0.05
   stopWatchRotModifier: 0.08
+  angleDistMulti: 0.5
+  realUp: {x: 0, y: 0, z: 0}

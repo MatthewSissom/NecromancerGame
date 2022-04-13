@@ -56,7 +56,10 @@ public class BoneGroup : MonoBehaviour
     /// </summary>
     public BoneVertexType parentVertexCollisionType;
     public Dictionary<BoneVertexType, BoneGroup> children;
-
+    /// <summary>
+    /// The vertex on this bone that is in the connection
+    /// </summary>
+    public BoneVertexType myConnectionVertexType;
     [SerializeField] //for debugging
     public BoneCollisionCylinder currentCylinderHit;
 
@@ -110,6 +113,16 @@ public class BoneGroup : MonoBehaviour
         }
 
         residualBoneData = gameObject.AddComponent<ResidualBoneData>();
+
+        if(FlippedMultiplier == -1)
+        {
+            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetInvisible();
+            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetVisible();
+        } else
+        {
+            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetVisible();
+            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetInvisible();
+        }
     }
 
     protected virtual void Start()
@@ -121,10 +134,10 @@ public class BoneGroup : MonoBehaviour
     {
         if(!isCleaned)
         {
-            if (isRoot)
+            /*if (isRoot)
             {
                 transform.forward = Camera.main.transform.forward;
-            }
+            }*/
 
             //Debug.DrawLine(getPrimaryMidpoint(), getPrimaryMidpoint() + getAuxiliaryAxis() * 0.5f, Color.blue);
 
@@ -207,12 +220,24 @@ public class BoneGroup : MonoBehaviour
         colCyl.MyIndicator = indicator;
     }
 
+    public void ApplyFlip()
+    {
+        if(leftAuxCylinder.GetComponent<BoneCollisionCylinder>().isVisible)
+        {
+            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetInvisible();
+            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetVisible();
+        } else
+        {
+            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetVisible();
+            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetInvisible();
+        }
+    }
     public void Attach(BoneGroup parent)
     {
 #if UNITY_EDITOR
         // I'm sick of debug logs! I'm hiding them! I don't wanna see em!
         if (DebugModes.AdditionalAssemblerInfo)
-            Debug.Log("attaching to parent's " + parentVertexCollisionType);
+            Debug.Log("attaching my " + myConnectionVertexType + " to parent's " + parentVertexCollisionType);
 #endif
         parent.children[parentVertexCollisionType] = this;
         this.parent = parent;
@@ -261,7 +286,7 @@ public class BoneGroup : MonoBehaviour
     {
         BoneGroup otherGroup = currentCylinderHit.MyBone;
         parentVertexCollisionType = currentCylinderHit.MyType;
-
+        myConnectionVertexType = currentCollisionVertex.Value;
         isBeingDragged = false;
 
         frontPrimaryCylinder.SetActive(true);

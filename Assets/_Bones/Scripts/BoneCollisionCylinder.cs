@@ -12,6 +12,8 @@ public class BoneCollisionCylinder : MonoBehaviour
     private MeshRenderer indicatorRenderer;
     private LineRenderer myLineRenderer;
 
+    public bool isVisible = true;
+
     private bool isParentsActiveCollision;
 
     public bool IsParentsActiveCollision
@@ -158,16 +160,18 @@ public class BoneCollisionCylinder : MonoBehaviour
     public void SetVisible()
     {
         indicatorRenderer.enabled = true;
+        isVisible = true;
     }
 
     public void SetInvisible()
     {
         indicatorRenderer.enabled = false;
+        isVisible = false;
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        if(!myBone.isAttached && myBone.isBeingDragged && other.gameObject.tag == "ColliderCylinder")
+        if(isVisible && !myBone.isAttached && myBone.isBeingDragged && other.gameObject.tag == "ColliderCylinder" && other.gameObject.GetComponent<BoneCollisionCylinder>().isVisible)
         {
             if(myBone.currentCylinderHit == null || myBone.currentCylinderDoingHitting != this)
             {
@@ -193,7 +197,7 @@ public class BoneCollisionCylinder : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        if (!myBone.isAttached && myBone.isBeingDragged && other.gameObject.tag == "ColliderCylinder")
+        if (isVisible && !myBone.isAttached && myBone.isBeingDragged && other.gameObject.tag == "ColliderCylinder" && other.gameObject.GetComponent<BoneCollisionCylinder>().isVisible)
         {
             if(IsParentsActiveCollision)
             {

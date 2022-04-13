@@ -11,13 +11,13 @@ public class ResidualBoneData : MonoBehaviour
     public ResidualBoneData parentBone;
     public BoneVertexType myParentConnectLocation;
     private BoneVertexType parentsMeConnectLocation;
-    private bool isRoot;
+    public bool isRoot;
     public bool isShoulderSideSpine;
     public bool isHipSideSpine;
-    private bool isHead;
-    private bool isTail;
-    private bool isShoulder;
-    private bool isHip;
+    public bool isHead;
+    public bool isTail;
+    public bool isShoulder;
+    public bool isHip;
     public bool isFLLStart;
     public bool isFRLStart;
     public bool isBLLStart;
@@ -25,6 +25,20 @@ public class ResidualBoneData : MonoBehaviour
     public float myLegLength;
     public float numChildren;
 
+    public void SwapWithParent()
+    {
+        childBones[myParentConnectLocation] = parentBone;
+        parentBone.childBones[parentsMeConnectLocation] = null;
+        parentBone.parentBone = this;
+        parentBone.parentsMeConnectLocation = myParentConnectLocation;
+        parentBone.myParentConnectLocation = parentsMeConnectLocation;
+        if(parentBone.isRoot)
+        {
+            isRoot = true;
+            parentBone.isRoot = false;
+        }
+        parentBone.transform.SetParent(transform);
+    }
     public void PopulateDataFrom(GrabbableGroup boneGroup)
     {
         boneGroupPosition = boneGroup.transform.position;
@@ -88,7 +102,7 @@ public class ResidualBoneData : MonoBehaviour
         if (boneGroup.Parent)
         {
             parentBone = boneGroup.Parent.residualBoneData;
-            myParentConnectLocation = boneGroup.parentVertexCollisionType;
+            myParentConnectLocation = boneGroup.myConnectionVertexType;
             parentsMeConnectLocation = boneGroup.Parent.FindBoneInChildren(boneGroup);
         }
 
