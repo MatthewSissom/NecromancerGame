@@ -21,9 +21,12 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     private bool firstPickup = true;
 
     Transform IGrabbable.transform { get { return transform; } }
-    public Rigidbody Rb { get {  return rB; } }
+    public Rigidbody Rb { get { return rB; } }
     public Vector3 PrimaryMidpoint { get { return getPrimaryMidpoint(); } }
     public Vector3 AuxilieryAxis { get { return getAuxiliaryAxis(); } }
+
+    [SerializeField]
+    private float beingThrownThreshold;
 
     protected override void Awake()
     {
@@ -40,6 +43,15 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         mPointApproacher = GetComponent<PointApproacher>();
     }
 
+    public void Thrown()
+    { 
+
+        rB.drag = 0.1f;
+        StartCoroutine(DelayedLayerChange());
+
+    }
+
+
     public void PickedUp()
     {
         if (mGhost)
@@ -48,14 +60,15 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         if (mCustomGravity)
             mCustomGravity.Disable();
         rB.useGravity = false;
-        
+
+        rB.drag = 0;
         
         if(firstPickup)
           transform.forward = Camera.main.transform.forward * flippedMultiplier;
 
-        rB.constraints = (RigidbodyConstraints)48;
+        rB.constraints = (RigidbodyConstraints)0;
 
-        if(currentCylinderDoingHitting)
+        if (currentCylinderDoingHitting)
         {
             currentCylinderDoingHitting.SetVisible();
         }
@@ -65,16 +78,8 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         }
         OnPickup();
         firstPickup = false;
-        IEnumerator DelayedLayerChange()
-        {
-            
-            yield return new WaitForSeconds(0.4f);
-            gameObject.layer = physicsLayer;
-      
-            yield break;
-        }
         StartCoroutine(DelayedLayerChange());
-        
+
     }
 
     public void Dropped()
@@ -82,8 +87,15 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         
         if (!this)
             return;
-
-        if(currentCylinderHit != null)
+        //Do not change velocity values if the bone has been thrown
+        if(rB.velocity.magnitude > beingThrownThreshold)
+        {
+            if (mCustomGravity)
+                mCustomGravity.Enable();
+            rB.drag = 0.1f;
+            OnNoCollideDrop();
+        }
+        else if(currentCylinderHit != null)
         {
             mPointApproacher.StartApproach(
                 getRelativePosition(currentCollisionVertex.Value, currentCylinderHit.MyBone, currentCylinderHit.MyType), 0.5f);
@@ -129,4 +141,12 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         //mass is considered temporary and will be written over unless directly set
         rB.mass = rB.mass;
     }
+    IEnumerator DelayedLayerChange()
+    {
+
+        yield return new WaitForSeconds(0.4f);
+        gameObject.layer = physicsLayer;
+        yield break;
+    }
+    
 }

@@ -6,7 +6,6 @@ public class RemoveExcessBones : IAssemblyStage
 {
     IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
     {
-        Debug.Log("removing excess bones...");
         /*foreach (BoneGroup bone in TableManager.Instance.boneObjects)
         {
             if(!bone.isAttached)

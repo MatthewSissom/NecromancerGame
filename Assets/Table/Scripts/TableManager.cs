@@ -131,10 +131,43 @@ public class TableManager : MonoBehaviour
         PlayPenState.Instance.SetSkeleton(EmptyArmature);
     }
 
+    private void AlignAllColliders()
+    {
+        if (boneObjects != null)
+        {
+            foreach (var b in boneObjects)
+                b.AlignAllCylindersToCamera();
+        }
+    }
+
     private void Start()
     {
         GameManager.Instance.AddEventMethod(typeof(GhostManager), "Begin", ReadyNextShipment);
         GameManager.Instance.AddEventMethod(typeof(GhostManager), "End", NextShipment);
         GameManager.Instance.AddEventMethod(typeof(GameInit), "Begin", ResetTable);
+        GameManager.Instance.AddCamTransitionMethod("TableTrans", "End", AlignAllColliders);
+        GameManager.Instance.AddCamTransitionMethod("GhostTrans", "End", AlignAllColliders);
+    }
+
+    //---Tutorial Queries---//
+
+    private int GetMatchingBoneCount(System.Predicate<BoneGroup> predicate)
+    {
+        int cnt = 0;
+        foreach (BoneGroup b in boneObjects)
+        {
+            cnt += predicate(b) ? 1 : 0;
+        }
+        return cnt;
+    }
+
+    public bool BonesAreConnectedOrGrounded()
+    {
+        return boneObjects.Count == GetMatchingBoneCount((BoneGroup b) => (b.isAttached || b.IsOnFloor) && !b.isBeingDragged);
+    }
+
+    public int ConnectedBoneCnt()
+    {
+        return GetMatchingBoneCount(b => b.isAttached);
     }
 }

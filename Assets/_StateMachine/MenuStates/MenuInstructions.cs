@@ -38,12 +38,16 @@ public class MenuInstructions : State
         }
     }
 
-    private bool exit;
+    public static MenuInstructions Instance { get; private set; } = null;
+
     public GameObject canvas;
     [SerializeField]
     private List<GameObject> insturctionObjects;
     [SerializeField]
+    private GameObject failureObject;
+    [SerializeField]
     private List<HandData> handMovementData;
+    private bool exit;
 
     int instructionIndex;
     float handTime;
@@ -65,32 +69,49 @@ public class MenuInstructions : State
         yield break;
     }
 
-
     public void ButtonPressed(string name)
     {
         MenuManager.Instance.GoToMenu("Main");
         exit = true;
     }
 
-    public void NextInstruction()
+    public void GoToNextState()
     {
-        if(instructionIndex < insturctionObjects.Count-1)
+        exit = true;
+    }
+
+    public void ShowTutorialFailureScreen()
+    {
+        if (instructionIndex < insturctionObjects.Count)
         {
             insturctionObjects[instructionIndex].SetActive(false);
-            instructionIndex++;
+        }
+        failureObject.SetActive(true);
+    }
+
+    public void ShowInstruction(int index)
+    {
+        if (failureObject.activeInHierarchy)
+        {
+            failureObject.SetActive(false);
+        }
+        if(index < insturctionObjects.Count)
+        {
+            insturctionObjects[instructionIndex].SetActive(false);
+            instructionIndex = index;
             insturctionObjects[instructionIndex].SetActive(true);
         }
     }
 
-    public void PreviousInstruction()
-    {
-        if (instructionIndex > 0)
-        {
-            insturctionObjects[instructionIndex].SetActive(false);
-            instructionIndex--;
-            insturctionObjects[instructionIndex].SetActive(true);
-        }
-    }
+    //public void PreviousInstruction()
+    //{
+    //    if (instructionIndex > 0)
+    //    {
+    //        insturctionObjects[instructionIndex].SetActive(false);
+    //        instructionIndex--;
+    //        insturctionObjects[instructionIndex].SetActive(true);
+    //    }
+    //}
 
     private void AnimateHands()
     {
@@ -118,14 +139,15 @@ public class MenuInstructions : State
 
     private void ResetVars()
     {
-        insturctionObjects[instructionIndex].SetActive(false);
-        instructionIndex = 0;
-        insturctionObjects[instructionIndex].SetActive(true);
         handTime = 0;
     }
 
     private void Start()
     {
+        if (Instance != null)
+            Destroy(this);
+        Instance = this;
+
         canvas.SetActive(false);
 
         //events

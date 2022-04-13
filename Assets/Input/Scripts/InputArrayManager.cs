@@ -11,8 +11,7 @@ public partial class InputManager : MonoBehaviour
     private RotationTouch rotationTouch;
     //holds a list of active touches
     private List<TouchProxy> activeTouches;
-    private List<TouchProxy> toDeactivate;
-   
+    private List<TouchProxy> toDeactivate;   
 
     TouchProxy FindNearestActive(Vector3 pos)
     {
@@ -77,7 +76,7 @@ public partial class InputManager : MonoBehaviour
         mTouch.ResetTouch(position, 0);
         mTouch.gameObject.SetActive(true);
         mTouch.id = id;
-
+        mTouch.realUp = Camera.main.transform.forward;
         return rotationTouch;
     }
 
@@ -107,5 +106,8 @@ public partial class InputManager : MonoBehaviour
         }
 #endif
     }
+
+    // Used for tutorial
+    public bool Rotating() { return rotationTouch != null; }
 }
 

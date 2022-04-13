@@ -51,6 +51,10 @@ public class BoneAssembler : State
         IAssemblyStage previousStage = null;
         foreach (IAssemblyStage stage in assemblyStages)
         {
+#if UNITY_EDITOR
+            if (DebugModes.AdditionalAssemblerInfo)
+                Debug.Log("Running assembly phase \'" + stage.GetType().ToString() + "\'");
+#endif
             yield return stage.Execute(skeleton,previousStage);
             previousStage = stage;
         }

@@ -200,6 +200,10 @@ MonoBehaviour:
   animator: {fileID: 7601512931771972381}
   minorJumpMult: 0
   majorJumpMult: 0
+  throwForwardMulti: 1
+  throwUpMulti: 2
+  throwThreshold: 2
+  debugFlag: 0
   mBone: {fileID: 0}
   leftHand: {fileID: 606933358637980381}
   rightHand: {fileID: 2422530440300992244}
@@ -241,6 +245,7 @@ MonoBehaviour:
   ballanceRotationThreshold: 30
   bobTollerance: 0.1
   ballanceHeightThreshold: 0.2
+  movementPIDs: []
 --- !u!114 &1595573356089452381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,6 +258,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbcad953088986e45967dd074f531902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  minSecondsCooldown: 0
+  maxSecondsCooldown: 0
 --- !u!1 &7071229383301650499
 GameObject:
   m_ObjectHideFlags: 0

@@ -64,6 +64,9 @@ public class BoneGroup : MonoBehaviour
 
     public BoneVertexType? currentCollisionVertex;
 
+    // Tutorial vars
+    public bool IsOnFloor { get; private set; } = false;
+
     protected virtual void Awake()
     {
         children = new Dictionary<BoneVertexType, BoneGroup>();
@@ -130,10 +133,10 @@ public class BoneGroup : MonoBehaviour
             //Debug.DrawLine(getVertexPosition(BoneVertexType.LeftAux), getVertexPosition(BoneVertexType.LeftAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
             //Debug.DrawLine(getVertexPosition(BoneVertexType.RightAux), getVertexPosition(BoneVertexType.RightAux) + getAuxiliaryAxis() * 0.5f, Color.yellow);
 
-            PositionCylinder(frontPrimaryCylinder, frontPrimaryVertex);
-            PositionCylinder(backPrimaryCylinder, backPrimaryVertex);
-            PositionCylinder(leftAuxCylinder, leftAuxVertex);
-            PositionCylinder(rightAuxCylinder, rightAuxVertex);
+            if (isBeingDragged)
+            {
+                AlignAllCylindersToCamera();
+            }
         }
     }
 
@@ -180,7 +183,18 @@ public class BoneGroup : MonoBehaviour
     private void PositionCylinder(GameObject cylinder, GameObject vertex)
     {
         cylinder.transform.position = vertex.transform.position;// + getAuxiliaryAxis() * cylinderSize;
-        cylinder.transform.up = getAuxiliaryAxis() * FlippedMultiplier;
+
+        // Matthew changed this, I think it feels better but it's up for debate
+        Vector3 toCamera = Camera.main.transform.position - vertex.transform.position;
+        cylinder.transform.up = toCamera * FlippedMultiplier;
+    }
+
+    public void AlignAllCylindersToCamera()
+    {
+        PositionCylinder(frontPrimaryCylinder, frontPrimaryVertex);
+        PositionCylinder(backPrimaryCylinder, backPrimaryVertex);
+        PositionCylinder(leftAuxCylinder, leftAuxVertex);
+        PositionCylinder(rightAuxCylinder, rightAuxVertex);
     }
 
     private void InitCylinder(GameObject cylinder, GameObject indicator, BoneVertexType type)
@@ -195,7 +209,11 @@ public class BoneGroup : MonoBehaviour
 
     public void Attach(BoneGroup parent)
     {
-        Debug.Log("attaching to parent's " + parentVertexCollisionType);
+#if UNITY_EDITOR
+        // I'm sick of debug logs! I'm hiding them! I don't wanna see em!
+        if (DebugModes.AdditionalAssemblerInfo)
+            Debug.Log("attaching to parent's " + parentVertexCollisionType);
+#endif
         parent.children[parentVertexCollisionType] = this;
         this.parent = parent;
         isLeaf = true;
@@ -206,6 +224,7 @@ public class BoneGroup : MonoBehaviour
     protected void OnPickup()
     {
         isBeingDragged = true;
+        IsOnFloor = false;
 
         frontPrimaryCylinder.SetActive(true);
         backPrimaryCylinder.SetActive(true);
@@ -296,5 +315,10 @@ public class BoneGroup : MonoBehaviour
             return BoneVertexType.RightAux;
         }
         return BoneVertexType.FrontPrimary;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        IsOnFloor = collision.gameObject.CompareTag("Horizontal") && collision.gameObject.name == "Floor";
     }
 }

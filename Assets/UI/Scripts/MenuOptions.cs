@@ -16,6 +16,8 @@ public class MenuOptions : State
 	private Slider sfxSlider;
 	[SerializeField]
 	private Slider handedness;
+	[SerializeField]
+	private Slider playTutorial;
 
 	private FMOD.Studio.EventInstance testSound;
 
@@ -40,6 +42,11 @@ public class MenuOptions : State
 		handedness.value = PlayerPrefs.GetInt("handedness", 1);
 		handedness.onValueChanged.AddListener(HandednessSliderChanged);
 		HandednessSliderChanged(handedness.value);
+
+		// Init tutorial slider, default to playing the tutorial
+		playTutorial.value = PlayerPrefs.GetInt("playTutorial", 1);
+		playTutorial.onValueChanged.AddListener(TutorialSliderChanged);
+		TutorialSliderChanged(playTutorial.value);
 	}
 
 	public override IEnumerator Routine()
@@ -62,6 +69,13 @@ public class MenuOptions : State
 		PlayerPrefs.Save();
 		MenuManager.Instance.GoToMenu("Main");
 		exit = true;
+	}
+
+	private void PlayTutorialToggled()
+	{
+		//bool enabled = playTutorial.
+
+		//PlayerPrefs.SetInt("playTutorial", 1);
 	}
 
 	// Invoked when the value of the slider changes.
@@ -98,6 +112,12 @@ public class MenuOptions : State
 	{
 		int val = (int)newValue;
 		PlayerPrefs.SetInt("handedness", val);
+	}
+
+	private void TutorialSliderChanged(float newValue)
+	{
+		int val = (int)newValue;
+		PlayerPrefs.SetInt("playTutorial", val);
 	}
 
 	private void PlayTestSFXSound()

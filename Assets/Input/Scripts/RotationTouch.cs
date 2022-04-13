@@ -24,7 +24,11 @@ public class RotationTouch : TouchProxy
     float aVelocityClamp = 1.0f;
     [SerializeField]
     float stopWatchRotModifier = 0.5f;
+    [SerializeField]
+    float angleDistMulti= 0.5f;
+
     
+    public Vector3 realUp;
 
     //Score - tracks if the player is trying to spin or pinch
     const int scoresLength = 5;
@@ -35,7 +39,6 @@ public class RotationTouch : TouchProxy
     float currentScore;
 
     //Up vector in relation to camera not world space
-    Vector3 realUp;
 
     private BoneMovingTouch parent;
     public BoneMovingTouch Parent
@@ -70,7 +73,7 @@ public class RotationTouch : TouchProxy
     }
 
     public override void Move(Vector3 pos, float rad)
-    {        
+    {
         //store old values
         Vector3 oldToParent = toParent;
         Vector3 oldPos = transform.position;
@@ -78,15 +81,12 @@ public class RotationTouch : TouchProxy
         //update position
         base.Move(pos, rad);
         toParent = (parent.transform.position - transform.position).normalized;
-        
-        //update scores and check for axis change//
-
-        //score goes from -.5 to .5 based on if the movement is in the 
-        //direction of the parent (.5) or perpendicular to it (-.5)
+        toParentPerp = Vector3.Cross(Vector3.up, toParent).normalized;
+     
         Vector3 movementVector = pos - oldPos;
-        //split the vector into components
-        
-        angleDistAroundUp += Vector3.SignedAngle(oldToParent, toParent, Vector3.up);
+        //adjust distances
+        if (aroundUp)
+            angleDistAroundUp += Vector3.SignedAngle(oldToParent, toParent, realUp)*angleDistMulti;
         
     }
 
@@ -102,43 +102,29 @@ public class RotationTouch : TouchProxy
                 angleDistAroundUp = 0;
             return;
         }
-        
 
         //calculate angular velocities around axies
-        GrabbableGroup bone = parent.activeBone;
-        Vector3 aVelocity = bone.Rb.angularVelocity;
-        Vector3 directionality;
-
-        
-        directionality = new Vector3(0, 0, 1.000f)*bone.FlippedMultiplier;
-        
+        Vector3 aVelocity = parent.activeBone.Rb.angularVelocity;
 
         //magnitude of the projection onto a normal is the dot product
         float velocityAroundUp = Vector3.Dot(aVelocity, realUp);
-        
-
+     
         //adjust distances
         float time = Time.deltaTime;
-        
-        angleDistAroundUp -= time * velocityAroundUp * Mathf.Rad2Deg;
 
         //calculate velocity corrections
         velocityAroundUp = Mathf.Sign(angleDistAroundUp) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundUp) * acceleration) * Mathf.Deg2Rad - velocityAroundUp;
-        
+
         //apply corrections
-        aVelocity -= velocityAroundUp * directionality;
+        aVelocity += velocityAroundUp * realUp*parent.activeBone.FlippedMultiplier;
+        
 
         //remove any rotation along toParent, it is unwanted
-        aVelocity += Vector3.Dot(aVelocity, toParent) * toParentPerp;
-       
-
-        if (aVelocity.magnitude < aVelocityClamp)
-        {
-            aVelocity = Vector3.zero;
-        }
+        //aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
 
         //push calculated value to the rigidbody
-        bone.Rb.angularVelocity = aVelocity * bone.FlippedMultiplier;
+        parent.activeBone.Rb.angularVelocity = aVelocity;
+        angleDistAroundUp -= time * velocityAroundUp * Mathf.Rad2Deg;
     }
 
     protected override void OnDisable()
