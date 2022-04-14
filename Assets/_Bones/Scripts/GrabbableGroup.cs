@@ -123,14 +123,10 @@ public class GrabbableGroup : BoneGroup, IGrabbable
             }
             OnNoCollideDrop();
         }
-        IEnumerator DelayedRotationLock()
-        {
 
-            yield return new WaitForSeconds(0.2f);
-            rB.freezeRotation = true;
-            yield break;
-        }
-        StartCoroutine(DelayedRotationLock());
+        rB.freezeRotation = true;
+
+        
         
     }
 

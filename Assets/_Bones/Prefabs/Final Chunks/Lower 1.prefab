@@ -188,7 +188,7 @@ MonoBehaviour:
   isLeaf: 0
   isAttached: 0
   isRoot: 0
-  flippedMultiplier: -1
+  flippedMultiplier: 1
   mGhost: {fileID: 0}
   beingThrownThreshold: 0.5
 --- !u!114 &7836108499516237397
