@@ -59,12 +59,6 @@ public class Stopwatch : MonoBehaviour, IGrabbable
 
     private bool grabbable = true;
     public bool Grabbable { get { return grabbable; } set { grabbable = value; } }
-    private bool leaving = false;
-    //public bool Leaving { get { return leaving; } set { leaving = value; } }
-    private bool left = false;
-    //public bool Left { get { return left; } set { left = value; } }
-    private bool returning = false;
-    public bool Returning { get { return returning; } set { returning = value; } }
 
     private void Awake()
     {
@@ -105,21 +99,6 @@ public class Stopwatch : MonoBehaviour, IGrabbable
             if (resistTimer > resistTime + 0.5f)
                 resisting = false;
         }
-        if (leaving)
-        {
-            lerpCount++;
-
-            Vector3 interpolation = new Vector3(Mathf.SmoothStep(homePoint.x, awayPoint.x, lerpCount / lerpEndFrame), Mathf.SmoothStep(homePoint.y, awayPoint.y, lerpCount / lerpEndFrame), Mathf.SmoothStep(homePoint.z, awayPoint.z, lerpCount / lerpEndFrame));
-
-            gameObject.transform.position = interpolation;
-
-            if (lerpCount == lerpEndFrame)
-            {
-                leaving = false;
-                left = true;
-                lerpCount = 0;
-            }
-        }
 
     }
 
@@ -142,21 +121,16 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     public void PickedUp()
     {
         
-        rB.useGravity = false;
-        leaving = true;
         grabbable = false;
-        //rB.constraints = (RigidbodyConstraints)112;
         touchEffect.Play();
 
     }
     public void Dropped()
     {
         Vector3 startPosition = gameObject.transform.position;
+        rB.velocity = Vector3.zero;
         IEnumerator Routine()
         {
-            returning = true;
-            left = false;
-            leaving = false;
             lerpCount = 0;
             while (lerpCount != lerpEndFrame)
             {
@@ -172,12 +146,10 @@ public class Stopwatch : MonoBehaviour, IGrabbable
             }
             lerpCount = 0;
             grabbable = true;
-            returning = false;
             touchEffect.Stop();
             yield break;
         }
-        if ((left || leaving)&&!returning) 
-            StartCoroutine(Routine());
+       StartCoroutine(Routine());
 
         
     }

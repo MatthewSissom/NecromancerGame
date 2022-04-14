@@ -1,4 +1,4 @@
-﻿#define USING_IK
+﻿//#define USING_IK
 
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +10,7 @@ using RootMotion.FinalIK;
 
 public class IkInit : IAssemblyStage
 {
+#if USING_IK
     private class ChainInitData 
     {
         public FABRIK Component { get; private set; }
@@ -24,6 +25,7 @@ public class IkInit : IAssemblyStage
             return new ChainInitData(component, newChain);
         }
     }
+#endif
 
     // Todo add cat behavior to empty armature
     // PlayPenState.Instance.SetSkeleton(EmptyArmature);
