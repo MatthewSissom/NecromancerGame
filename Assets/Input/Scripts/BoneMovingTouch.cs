@@ -111,7 +111,7 @@ public class BoneMovingTouch : TouchProxy
         if (activeWatch != null||activeBone!=null)
             return;
         Stopwatch b = other.GetComponent<Stopwatch>(); 
-        if (b != null||b.Grabbable)
+        if (b != null&&b.Grabbable)
         {
             SetActive(b);
             b.PickedUp();
