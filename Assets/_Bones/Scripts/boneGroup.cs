@@ -9,6 +9,8 @@ public class BoneGroup : MonoBehaviour
 {
     private bool isCleaned;
 
+    protected Rigidbody rB;
+
     [SerializeField]
     protected GameObject frontPrimaryVertex;
 
@@ -69,6 +71,7 @@ public class BoneGroup : MonoBehaviour
 
     // Tutorial vars
     public bool IsOnFloor { get; private set; } = false;
+    
 
     protected virtual void Awake()
     {
@@ -127,7 +130,7 @@ public class BoneGroup : MonoBehaviour
 
     protected virtual void Start()
     {
-        
+        rB = GetComponent<Rigidbody>();
     }
 
     protected virtual void FixedUpdate()
@@ -236,6 +239,7 @@ public class BoneGroup : MonoBehaviour
     {
 #if UNITY_EDITOR
         // I'm sick of debug logs! I'm hiding them! I don't wanna see em!
+        //?
         if (DebugModes.AdditionalAssemblerInfo)
             Debug.Log("attaching my " + myConnectionVertexType + " to parent's " + parentVertexCollisionType);
 #endif
@@ -244,6 +248,7 @@ public class BoneGroup : MonoBehaviour
         isLeaf = true;
         parent.isLeaf = false;
         isAttached = true;
+        rB.constraints = (RigidbodyConstraints)126;
     }
 
     protected void OnPickup()
@@ -295,6 +300,30 @@ public class BoneGroup : MonoBehaviour
         rightAuxCylinder.SetActive(true);
 
         Attach(otherGroup);
+    }
+
+    /// <summary>
+    /// Changes all of the layers of a gameobject and its children
+    /// </summary>
+    /// <param name="obj">gameobject we want to change the layer of</param>
+    /// <param name="layerNumber">layer we are changing to</param>
+    public void FullLayerChange(GameObject obj, int layerNumber)
+    {
+        if (null == obj)
+        {
+            return;
+        }
+
+        obj.layer = layerNumber;
+
+        foreach (Transform child in obj.transform)
+        {
+            if (null == child)
+            {
+                continue;
+            }
+            FullLayerChange(child.gameObject, layerNumber);
+        }
     }
 
     public Vector3 getRelativePosition(BoneVertexType myVertexType, BoneGroup otherBone, BoneVertexType otherVertexType)

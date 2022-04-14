@@ -14,7 +14,6 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     const float realBoneDensity = 1850;
     const float density = realBoneDensity * 5;
 
-    private Rigidbody rB;
     private CustomGravity mCustomGravity;
     private PointApproacher mPointApproacher;
 
@@ -37,7 +36,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     {
         base.Start();
         //physics init
-        rB = GetComponent<Rigidbody>();
+        
         ResetMass();
         mCustomGravity = GetComponent<CustomGravity>();
         mPointApproacher = GetComponent<PointApproacher>();
@@ -145,7 +144,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     {
 
         yield return new WaitForSeconds(0.4f);
-        gameObject.layer = physicsLayer;
+        FullLayerChange(gameObject, physicsLayer);
         yield break;
     }
     

@@ -176,10 +176,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bones:
-  - {fileID: 4403942450086851822, guid: 2f24e37c2dd293640959f543f5e85de7, type: 3}
-  - {fileID: 2823066793007793120, guid: 4ac90835dfd42604da1999dc0a6b2d57, type: 3}
-  - {fileID: 6420342891581815629, guid: 9254181329b720d4d9c1400777bd3826, type: 3}
-  - {fileID: 3448698190246710477, guid: 59bbebdba56a898408caa5db2778e8b3, type: 3}
+  - {fileID: 4403942450086851822, guid: 90c152b94957e9f40915e1f68bd0323b, type: 3}
+  - {fileID: 2823066793007793120, guid: a43e3b45a9c7f194ebf84e22cbf3f27a, type: 3}
+  - {fileID: 6420342891581815629, guid: eb81680edd8867c40b116bead13ec1d0, type: 3}
+  - {fileID: 3448698190246710477, guid: bb7731443dffc3a45bba843c7caad498, type: 3}
   specialBones: []
 --- !u!1001 &3585972960578648357
 PrefabInstance:
