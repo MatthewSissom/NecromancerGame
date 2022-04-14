@@ -29,11 +29,13 @@ public class MovementDataInit : IAssemblyStage
         SetTunables(skeletonBehaviour.LimbTunables);
         LabeledLimbData<Transform> limbStarts = chainStarts.Transforms.LimbData;
         LabeledLimbData<Transform> limbTargets = chainTargets.Targets.LimbData;
+        LabeledSpineData<Transform> spineTransforms = chainStarts.Transforms.SpineData;
         LabeledSpineData<Transform> spineTargets = chainTargets.Targets.SpineData;
 
         //--- Create computers ---//
-        SpineLenght spineLenght = new SpineLenght();
+        LabeledSpineData<SpineLenght> spineLengths = new LabeledSpineData<SpineLenght>();
         SpinePointPositions spinePositions = new SpinePointPositions();
+        SpineHeight spineHeight = new SpineHeight();
 
         LimbOffset limbOffset = new LimbOffset();
         LabeledLimbData<LimbLength> limbLengths = new LabeledLimbData<LimbLength>();
@@ -42,14 +44,29 @@ public class MovementDataInit : IAssemblyStage
         LabeledLimbData<StepHeight> stepHeights = new LabeledLimbData<StepHeight>();
 
         //--- Set relationships between computers ---//
+        spineLengths.Head.To = spineTransforms.Shoulder;
+        spineLengths.Head.From = spineTransforms.Head;
+        spineLengths.Shoulder.To = spineTransforms.Shoulder;
+        spineLengths.Shoulder.From = spineTransforms.Hip;
+        spineLengths.Hip.To = spineTransforms.Shoulder;
+        spineLengths.Hip.From = spineTransforms.Hip;
+        spineLengths.Tail.To = spineTransforms.Tail;
+        spineLengths.Tail.From = spineTransforms.Hip;
+        spinePositions.SpineLengths = spineLengths;
+        spinePositions.LimbLenghts = limbLengths;
+        spineHeight.SpinePositions = spinePositions;
+        limbOffset.AllLimbLenghts = limbLengths;
+        limbLengths.Modify(limbStarts, (LimbLength ll, Transform start) => ll.LimbStart = start);
 
 
+        // ok to compute spineHeight before full assignment
+        LabeledSpineData<ValComputer<float>> computedSpineHeights = spineHeight;
+        LabeledLimbData<ValComputer<float>> limbOriginHeight = new LabeledLimbData<ValComputer<float>>(computedSpineHeights.Shoulder,computedSpineHeights.Shoulder, computedSpineHeights.Hip, computedSpineHeights.Hip);
+        strideLenghts.Modify(limbOriginHeight, (StrideLenght sl, ValComputer<float> sh) => sl.SpinePointHeight = sh);
+        strideLenghts.Modify(limbLengths, (StrideLenght sl, LimbLength ll) => sl.LimbLength = ll);
 
         //--- Perform simple conversions ---//
-        LabeledSpineData<Vector2> spinePos = spinePositions;
-        LabeledSpineData<float> spineDelays = spinePos.Convert((Vector2 pos) => pos.x / speed);
-        LabeledSpineData<float> spineHeight = spinePos.Convert((Vector2 pos) => pos.y);
-
+        LabeledSpineData<float> spineDelays = ((LabeledSpineData<Vector2>)spinePositions).Convert((Vector2 pos) => pos.x / speed);
         LabeledLimbData<float> limbDelays = new LabeledLimbData<float>(spineDelays.Shoulder, spineDelays.Shoulder, spineDelays.Hip, spineDelays.Hip);
         LabeledLimbData<float> stepTimeInfrontOfSpine = strideLenghts.Convert((StrideLenght length) => length / 2 / speed);
 
@@ -96,18 +113,18 @@ public class MovementDataInit : IAssemblyStage
         openSpineData.Modify(spineTargets, (OpenSpinePointData ospd, Transform target) => ospd.Target = target);
         openSpineData.Modify(spineDelays, (OpenSpinePointData ospd, float delay) => ospd.Delay = delay);
         openSpineData.Modify(spineIdData, (OpenSpinePointData ospd, OpenSpineIdentityData sid) => ospd.Identity = sid);
-        openSpineData.Modify(spineHeight, (OpenSpinePointData ospd, float height) => ospd.BaseHeight = height);
+        openSpineData.Modify(spineHeight, (OpenSpinePointData ospd, ValComputer<float> height) => ospd.BaseHeight = height);
 
         // Create final data containers
         LabeledLimbData<LimbData> labeledLimbData = labeledOpenLimbData.Convert((OpenLimbData openData) => new LimbData().Init(openData));
         LabeledSpineData<SpinePointData> labeledSpineData = openSpineData.Convert((OpenSpinePointData openData) => new SpinePointData(openData));
         
         LimbData[] limbEnds = labeledLimbData.ToList().ToArray();
-        SpinePointData[] spinePoints = labeledSpineData.ToList().ToArray(); 
-
-        ComputedLayoutData = new SkeletonLayoutData(limbEnds, spinePoints, spineLenght);
-
-        initalized = true;
+        SpinePointData[] spinePoints = labeledSpineData.ToList().ToArray();
+        float totalLength = 0;
+        foreach (var length in spineLengths.ToList())
+            totalLength += length;
+        ComputedLayoutData = new SkeletonLayoutData(limbEnds, spinePoints, totalLength);
 
         yield break;
     }
@@ -188,8 +205,6 @@ public class MovementDataInit : IAssemblyStage
             }
         }
 
-
-        initalized = true;
         ComputedLayoutData = new SkeletonLayoutData(limbEnds, spinePoints, totalDistance);
     }
 }

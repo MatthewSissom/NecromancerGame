@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class SpinePointPositions : ValComputer<LabeledSpineData<Vector2>>
 {
-    public LabeledLimbData<LimbLength> LimbLenghts { private get; set; } = null;
-    public LabeledSpineData<SpineLenght> SpineLengths { private get; set; } = null;
+    public ValComputer<LabeledLimbData<LimbLength>> LimbLenghts { private get; set; } = null;
+    public ValComputer<LabeledSpineData<SpineLenght>> SpineLengths { private get; set; } = null;
 
     private float GetHeightFromLimbs(float left, float right, out float maxHeight)
     {
         maxHeight = float.MaxValue;
         float avgBentHeight = 0;
-        var limbArr = LimbLenghts.ToList();
 
         if(left == 0 && right == 0)
         {
@@ -46,9 +45,12 @@ public class SpinePointPositions : ValComputer<LabeledSpineData<Vector2>>
 
     protected override LabeledSpineData<Vector2> ComputeVal()
     {
-        float hipBestHeight = GetHeightFromLimbs(LimbLenghts.BackLeftLeg, LimbLenghts.BackRightLeg, out float hipMaxHeight);
-        float shoulderBestHeight = GetHeightFromLimbs(LimbLenghts.FrontLeftLeg, LimbLenghts.FrontRightLeg, out float shoulderMaxHeight);
-        float spineDist = SpineLengths.Hip;
+        LabeledLimbData<LimbLength> limbLengths = LimbLenghts;
+        LabeledSpineData<SpineLenght> spineLengths = SpineLengths; 
+
+        float hipBestHeight = GetHeightFromLimbs(limbLengths.BackLeftLeg, limbLengths.BackRightLeg, out float hipMaxHeight);
+        float shoulderBestHeight = GetHeightFromLimbs(limbLengths.FrontLeftLeg, limbLengths.FrontRightLeg, out float shoulderMaxHeight);
+        float spineDist = spineLengths.Hip;
 
         float shoulderHeight = shoulderBestHeight;
         float hipHeight = hipBestHeight;
@@ -91,13 +93,13 @@ public class SpinePointPositions : ValComputer<LabeledSpineData<Vector2>>
         }
 
         const float headAngle = Mathf.PI / 8;
-        float headHeight = Mathf.Sin(headAngle) * SpineLengths.Head + shoulderHeight;
+        float headHeight = Mathf.Sin(headAngle) * spineLengths.Head + shoulderHeight;
         const float tailAngle = Mathf.PI / 4; 
 
         Vector2 headPos     = new Vector2(0, headHeight);
-        Vector2 shoulderPos = new Vector2(headPos.x + SpineLengths.Head * Mathf.Cos(headAngle), shoulderHeight);
-        Vector2 hipPos      = new Vector2(shoulderPos.x + SpineLengths.Hip * Mathf.Cos(signedAngle), hipHeight);
-        Vector2 tailPos = new Vector2(hipPos.x + SpineLengths.Tail * Mathf.Cos(tailAngle), hipHeight + Mathf.Sin(tailAngle));
+        Vector2 shoulderPos = new Vector2(headPos.x + spineLengths.Head * Mathf.Cos(headAngle), shoulderHeight);
+        Vector2 hipPos      = new Vector2(shoulderPos.x + spineLengths.Hip * Mathf.Cos(signedAngle), hipHeight);
+        Vector2 tailPos = new Vector2(hipPos.x + spineLengths.Tail * Mathf.Cos(tailAngle), hipHeight + Mathf.Sin(tailAngle));
 
         base.ComputeVal();
         return new LabeledSpineData<Vector2>(
@@ -151,9 +153,86 @@ public class SpineLenght : ValComputer<float>
 
 
         base.ComputeVal();
-        return totalLen;
+        return Mathf.Abs(totalLen);
     }
 }
+
+public class SpineHeight : ValComputer<LabeledSpineData<ValComputer<float>>>
+{ 
+    public SpinePointPositions SpinePositions { private get; set; }
+
+    private class Hip : ValComputer<float>
+    {
+        private SpinePointPositions spinePositions;
+        public Hip(SpinePointPositions spinePositions)
+        {
+            this.spinePositions = spinePositions;
+        }
+
+        protected override float ComputeVal()
+        {
+            base.ComputeVal();
+            return ((LabeledSpineData<Vector2>)spinePositions).Hip.y;
+        }
+    }
+    private class Shoulder : ValComputer<float>
+    {
+        private SpinePointPositions spinePositions;
+        public Shoulder(SpinePointPositions spinePositions)
+        {
+            this.spinePositions = spinePositions;
+        }
+
+        protected override float ComputeVal()
+        {
+            base.ComputeVal();
+            return ((LabeledSpineData<Vector2>)spinePositions).Shoulder.y;
+        }
+    }
+
+    private class Head : ValComputer<float>
+    {
+        private SpinePointPositions spinePositions;
+        public Head(SpinePointPositions spinePositions)
+        {
+            this.spinePositions = spinePositions;
+        }
+
+        protected override float ComputeVal()
+        {
+            base.ComputeVal();
+            return ((LabeledSpineData<Vector2>)spinePositions).Head.y;
+        }
+    }
+
+    private class Tail : ValComputer<float>
+    {
+        private SpinePointPositions spinePositions;
+        public Tail(SpinePointPositions spinePositions)
+        {
+            this.spinePositions = spinePositions;
+        }
+
+        protected override float ComputeVal()
+        {
+            base.ComputeVal();
+            return ((LabeledSpineData<Vector2>)spinePositions).Tail.y;
+        }
+    }
+
+    protected override LabeledSpineData<ValComputer<float>> ComputeVal()
+    {
+        base.ComputeVal();
+
+        return new LabeledSpineData<ValComputer<float>>(
+            new Head(SpinePositions),
+            new Shoulder(SpinePositions),
+            new Hip(SpinePositions),
+            new Tail(SpinePositions)
+        );
+    }
+}
+
 
 
 public class StrideLenght : ValComputer<float>
