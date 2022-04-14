@@ -18,12 +18,12 @@ public class PointApproacher : MonoBehaviour
 
     private float approachTimer;
     private float approachTimerMax;
-    private Collider collider;
+    private GrabbableGroup bone;
     private Rigidbody rb;
 
     void Awake()
     {
-        collider = GetComponent<Collider>();
+        bone = GetComponent<GrabbableGroup>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -53,14 +53,14 @@ public class PointApproacher : MonoBehaviour
         startPoint = transform.position;
         target = targetPos;
         approaching = true;
-        collider.enabled = false;
+        bone.FullLayerChange(bone.gameObject, 14);
         rb.isKinematic = true;
     }
 
     private void EndApproach()
     {
         approaching = false;
-        collider.enabled = true;
+        bone.FullLayerChange(bone.gameObject, 10);
         rb.isKinematic = false;
     }
 }

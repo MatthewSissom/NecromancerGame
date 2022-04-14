@@ -177,7 +177,7 @@ public class BoneMovingTouch : TouchProxy
             if (activeWatch.transform.position.y > offSetHeight)
                 toProxy = (transform.position + offset - activeWatch.transform.position) * baseMult;
             else
-                toProxy = (transform.position - activeBone.transform.root.position) * baseMult;
+                toProxy = (transform.position - activeWatch.transform.root.position) * baseMult;
             Vector3.ClampMagnitude(toProxy, maxVelocity);
             activeWatch.Rb.velocity = toProxy;
         }
