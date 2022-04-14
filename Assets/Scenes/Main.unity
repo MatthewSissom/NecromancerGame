@@ -224,7 +224,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9102266
 RectTransform:
   m_ObjectHideFlags: 0
@@ -22734,17 +22734,17 @@ PrefabInstance:
     - target: {fileID: 5406990077029518491, guid: 272fe0c5c7a7c66479176599225942a7,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5406990077029518491, guid: 272fe0c5c7a7c66479176599225942a7,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5406990077029518491, guid: 272fe0c5c7a7c66479176599225942a7,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 272fe0c5c7a7c66479176599225942a7, type: 3}
@@ -23142,7 +23142,7 @@ PrefabInstance:
     - target: {fileID: 5406990077029518491, guid: 272fe0c5c7a7c66479176599225942a7,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 272fe0c5c7a7c66479176599225942a7, type: 3}
@@ -26958,7 +26958,7 @@ PrefabInstance:
     - target: {fileID: 5406990077029518491, guid: 272fe0c5c7a7c66479176599225942a7,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 272fe0c5c7a7c66479176599225942a7, type: 3}
@@ -27294,7 +27294,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1574902926
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27698,7 +27698,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1597187370
 RectTransform:
   m_ObjectHideFlags: 0
@@ -30382,7 +30382,7 @@ PrefabInstance:
     - target: {fileID: 5406990077029518491, guid: 272fe0c5c7a7c66479176599225942a7,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 272fe0c5c7a7c66479176599225942a7, type: 3}
@@ -33072,7 +33072,7 @@ PrefabInstance:
     - target: {fileID: 5406990077029518491, guid: 272fe0c5c7a7c66479176599225942a7,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 272fe0c5c7a7c66479176599225942a7, type: 3}
