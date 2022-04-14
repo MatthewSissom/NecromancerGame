@@ -38,6 +38,7 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     private Rigidbody rB;
 
     private bool resisting = false;
+    private bool returning = false;
     [SerializeField]
     float resistClamp = 0.5f;
 
@@ -127,10 +128,14 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     }
     public void Dropped()
     {
+        if (returning)
+            return;
+
         Vector3 startPosition = gameObject.transform.position;
         rB.velocity = Vector3.zero;
         IEnumerator Routine()
         {
+            returning = true;
             lerpCount = 0;
             while (lerpCount != lerpEndFrame)
             {
@@ -146,6 +151,7 @@ public class Stopwatch : MonoBehaviour, IGrabbable
             }
             lerpCount = 0;
             grabbable = true;
+            returning = false;
             touchEffect.Stop();
             yield break;
         }
