@@ -13,6 +13,16 @@ public class OpenLimbIdentityData
     public bool IsFront { get;   set; }
     [field: SerializeField]
     public bool IsRight { get;   set; }
+
+    public OpenLimbIdentityData(bool isFront, bool isRight)
+    {
+        IsFront = isFront;
+        IsRight = isRight;
+        IsSingle = false;
+        IsStump = false;
+    }
+
+    public OpenLimbIdentityData() : this(false, false) { }
 }
 
 // Holds various dimensions and extents of the limb
