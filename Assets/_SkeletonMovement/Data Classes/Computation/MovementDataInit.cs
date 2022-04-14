@@ -40,7 +40,6 @@ public class MovementDataInit : IAssemblyStage
         LimbOffset limbOffset = new LimbOffset();
         LabeledLimbData<LimbLength> limbLengths = new LabeledLimbData<LimbLength>();
         LabeledLimbData<StrideLenght> strideLenghts = new LabeledLimbData<StrideLenght>();
-        LabeledLimbData<LimbIdData> limbIdData = new LabeledLimbData<LimbIdData>();
         LabeledLimbData<StepHeight> stepHeights = new LabeledLimbData<StepHeight>();
 
         //--- Set relationships between computers ---//
@@ -57,7 +56,8 @@ public class MovementDataInit : IAssemblyStage
         spineHeight.SpinePositions = spinePositions;
         limbOffset.AllLimbLenghts = limbLengths;
         limbLengths.Modify(limbStarts, (LimbLength ll, Transform start) => ll.LimbStart = start);
-
+        stepHeights.Modify(limbLengths, (StepHeight sh, LimbLength ll) => sh.LimbLength = ll);
+        stepHeights.Modify(strideLenghts, (StepHeight sh, StrideLenght sl) => sh.LimbLength = sl);
 
         // ok to compute spineHeight before full assignment
         LabeledSpineData<ValComputer<float>> computedSpineHeights = spineHeight;
@@ -90,8 +90,12 @@ public class MovementDataInit : IAssemblyStage
         openLimbTracingData.Modify(limbTunables, (OpenLimbTracingData oltd, LimbTunables tunables) => oltd.Tunables = tunables);
         openLimbTracingData.Modify(stepTimeInfrontOfSpine, (OpenLimbTracingData oltd, float time) => oltd.StepTimeInfrontOfSpinePoint = time);
 
-        LabeledLimbData<OpenLimbIdentityData> openLimbIds = new LabeledLimbData<OpenLimbIdentityData>();
-        //TODO
+        LabeledLimbData<OpenLimbIdentityData> openLimbIds = new LabeledLimbData<OpenLimbIdentityData>(
+            new OpenLimbIdentityData( true, true ),
+            new OpenLimbIdentityData( true, false ),
+            new OpenLimbIdentityData( false, true ),
+            new OpenLimbIdentityData( false, false)
+        );
 
         LabeledLimbData<OpenLimbData> labeledOpenLimbData = new LabeledLimbData<OpenLimbData>(new OpenLimbData(),new OpenLimbData(),new OpenLimbData(),new OpenLimbData());
         labeledOpenLimbData.Modify(openLimbIds, (OpenLimbData old, OpenLimbIdentityData olid) => old.IdentityData= olid);
