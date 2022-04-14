@@ -181,9 +181,8 @@ public class GhostManager : State
         AudioManager.Instance.PlaySound("catTest");
 
         // Check for the end condition of this shipment. Typically a countdown, but could be a tutorial phase.
-        if (GameManager.Instance.PlayingTutorial)
+        if (GameManager.Instance.PlayingTutorial && TutorialPhaseFinished != null)
         {
-            Assert.IsNotNull(TutorialPhaseFinished);
             yield return StartCoroutine(TutorialHelper.DelayedWaitUntil(TutorialPhaseFinished));
         }
         else

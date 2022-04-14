@@ -87,7 +87,7 @@ public class GameManager : StateManagerBase
                 yield return SetState(MenuManager.Instance.InMenus("Instructions"));
                 GhostManager.Instance.tutorialShipmentId = 0;
                 // Move on after all bones have been picked up
-                GhostManager.Instance.TutorialPhaseFinished = GhostManager.Instance.GhostsHaveNoBones;
+                GhostManager.Instance.TutorialPhaseFinished = () => GhostManager.Instance.GhostsHaveNoBones() && TableManager.Instance.BonesAreNotBeingHeld();
             }
             // Show failure screen if this isn't the player's first try
             else
@@ -141,13 +141,9 @@ public class GameManager : StateManagerBase
 
             // Second bone delivery
             GhostManager.Instance.tutorialShipmentId = 1;
-            GhostManager.Instance.TutorialPhaseFinished = GhostManager.Instance.GhostsHaveNoBones;
+            GhostManager.Instance.TutorialPhaseFinished = () => GhostManager.Instance.GhostsHaveNoBones() && TableManager.Instance.BonesAreNotBeingHeld();
             yield return CameraTransition("GhostTrans");
             yield return SetState(typeof(GhostManager));
-
-            // Second assembly, make legs
-            TutorialHelper.PrepareNextInstruction();
-            yield return SetState(MenuManager.Instance.InMenus("Instructions"));
 
             yield return CameraTransition("TableTrans");
             yield return StartCoroutine(
@@ -173,8 +169,8 @@ public class GameManager : StateManagerBase
         yield return SetState(typeof(CountDown));
 
         // Show playpen instruction
-        TutorialHelper.PrepareNextInstruction();
-        yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+        //TutorialHelper.PrepareNextInstruction();
+        //yield return SetState(MenuManager.Instance.InMenus("Instructions"));
 
         // Tutorial is finished, default to not playing it after this
         PlayerPrefs.SetInt("playTutorial", 0);
