@@ -152,9 +152,3 @@ public class LimbData : IDelayedTracerData
         TracingData = tracingData;
     }
 }
-
-public class DebugLimbData : MonoBehaviour
-{
-    [field: SerializeField]
-    public LimbData data { get; private set; }
-}

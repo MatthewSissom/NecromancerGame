@@ -7875,19 +7875,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 460052289}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
+  m_Script: {fileID: 11500000, guid: 72c9fc54af7ec6e469d4ae0b01249a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <IdentityData>k__BackingField:
-    <IsStump>k__BackingField: 0
-    <IsSingle>k__BackingField: 0
-    <IsFront>k__BackingField: 0
-    <IsRight>k__BackingField: 0
-  <Measurements>k__BackingField:
-    <StepHeight>k__BackingField: 0
-    <TotalLength>k__BackingField: 0
-    <OffsetFromSpine>k__BackingField: 0
-    <StrideLength>k__BackingField: 0
+  <data>k__BackingField:
+    <IdentityData>k__BackingField:
+      <IsStump>k__BackingField: 0
+      <IsSingle>k__BackingField: 0
+      <IsFront>k__BackingField: 0
+      <IsRight>k__BackingField: 0
+    <Measurements>k__BackingField:
+      <StepHeight>k__BackingField: 0
+      <TotalLength>k__BackingField: 0
+      <OffsetFromSpine>k__BackingField: 0
+      <StrideLength>k__BackingField: 0
 --- !u!114 &460052292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -31656,19 +31657,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 1821922397}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f612b07690a5dc349a5e0c4df792b700, type: 3}
+  m_Script: {fileID: 11500000, guid: 72c9fc54af7ec6e469d4ae0b01249a44, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <IdentityData>k__BackingField:
-    <IsStump>k__BackingField: 0
-    <IsSingle>k__BackingField: 0
-    <IsFront>k__BackingField: 0
-    <IsRight>k__BackingField: 0
-  <Measurements>k__BackingField:
-    <StepHeight>k__BackingField: 0
-    <TotalLength>k__BackingField: 0
-    <OffsetFromSpine>k__BackingField: 0
-    <StrideLength>k__BackingField: 0
+  <data>k__BackingField:
+    <IdentityData>k__BackingField:
+      <IsStump>k__BackingField: 0
+      <IsSingle>k__BackingField: 0
+      <IsFront>k__BackingField: 0
+      <IsRight>k__BackingField: 0
+    <Measurements>k__BackingField:
+      <StepHeight>k__BackingField: 0
+      <TotalLength>k__BackingField: 0
+      <OffsetFromSpine>k__BackingField: 0
+      <StrideLength>k__BackingField: 0
 --- !u!114 &1821922400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -34989,6 +34991,7 @@ MonoBehaviour:
   vertexIndicatorPrefab: {fileID: 0}
   residualBoneData: {fileID: 0}
   parentVertexCollisionType: 0
+  myConnectionVertexType: 0
   currentCylinderHit: {fileID: 0}
   currentCylinderDoingHitting: {fileID: 0}
   isBeingDragged: 0
@@ -38316,6 +38319,7 @@ MonoBehaviour:
   vertexIndicatorPrefab: {fileID: 0}
   residualBoneData: {fileID: 0}
   parentVertexCollisionType: 0
+  myConnectionVertexType: 0
   currentCylinderHit: {fileID: 0}
   currentCylinderDoingHitting: {fileID: 0}
   isBeingDragged: 0
@@ -41670,6 +41674,7 @@ MonoBehaviour:
   vertexIndicatorPrefab: {fileID: 0}
   residualBoneData: {fileID: 0}
   parentVertexCollisionType: 0
+  myConnectionVertexType: 0
   currentCylinderHit: {fileID: 0}
   currentCylinderDoingHitting: {fileID: 0}
   isBeingDragged: 0
