@@ -8,6 +8,7 @@ public class RotationTouch : TouchProxy
     //or around the vector perpendicular to up and toParent (when a player pinches a bone)
     float angleDistAroundUp = 0;
     float angleDistAroundParent = 0;
+    float linearDistAroundUp = 0;
     Vector3 toParent;
     Vector3 toParentPerp;
     //which axis is the player currently rotating around?
@@ -15,9 +16,7 @@ public class RotationTouch : TouchProxy
 
     //game feel values
     [SerializeField]
-    float aroundToParentMult = 1000;
-    [SerializeField]
-    float acceleration = 1000;
+    float rotForceMulti = 1;
     [SerializeField]
     float switchResistance = 0;
     [SerializeField]
@@ -25,7 +24,9 @@ public class RotationTouch : TouchProxy
     [SerializeField]
     float stopWatchRotModifier = 0.5f;
     [SerializeField]
-    float angleDistMulti= 0.1f;
+    float linearDistMulti= 10;
+    
+   
 
     
     public Vector3 realUp;
@@ -81,18 +82,27 @@ public class RotationTouch : TouchProxy
         //update position
         base.Move(pos, rad);
         toParent = (parent.transform.position - transform.position).normalized;
-        toParentPerp = Vector3.Cross(Vector3.up, toParent).normalized;
-     
+
+        //update scores and check for axis change//
+
+        //score goes from -.5 to .5 based on if the movement is in the 
+        //direction of the parent (.5) or perpendicular to it (-.5)
         Vector3 movementVector = pos - oldPos;
+        //split the vector into components
+       
+
         //adjust distances
-        if (aroundUp)
-            angleDistAroundUp -= Vector3.SignedAngle(oldToParent, toParent, realUp)*angleDistMulti;
-        
+     
+        angleDistAroundUp = Vector3.SignedAngle(oldToParent, toParent, realUp);
+        //Debug.Log(Mathf.Sign(angleDistAroundUp));
+        linearDistAroundUp += Vector3.Distance(oldToParent, toParent) * linearDistMulti * Mathf.Sign(angleDistAroundUp);
+
+
     }
 
     protected void Update()
     {
-        if ((parent.activeWatch == null && parent.activeBone == null)||angleDistAroundUp==0)
+        if (parent.activeWatch == null&&parent.activeBone == null)
             return;
 
         if (parent.activeWatch != null)
@@ -102,44 +112,25 @@ public class RotationTouch : TouchProxy
                 angleDistAroundUp = 0;
             return;
         }
-
-
         //calculate angular velocities around axies
-        Vector3 aVelocity = parent.activeBone.Rb.angularVelocity;
+        Vector3 aVelocity = Vector3.zero;
 
-        //magnitude of the projection onto a normal is the dot product
-        float velocityAroundUp = Vector3.Dot(aVelocity, realUp);
-     
-        //adjust distances
         float time = Time.deltaTime;
 
-        //calculate velocity corrections
-        velocityAroundUp = Mathf.Sign(angleDistAroundUp) * Mathf.Sqrt(2 * Mathf.Abs(angleDistAroundUp) * acceleration) * Mathf.Deg2Rad - velocityAroundUp;
+        float lVelocity = linearDistAroundUp * rotForceMulti*time;
+        linearDistAroundUp -= lVelocity * time;
 
-        //apply corrections
-        aVelocity += velocityAroundUp * realUp*parent.activeBone.FlippedMultiplier;
+        aVelocity = lVelocity * realUp;
 
-
-        //remove any rotation along toParent, it is unwanted
-        //aVelocity -= Vector3.Dot(aVelocity, toParent) * toParentPerp;
-
-        //push calculated value to the rigidbody if not changing between negative and positive angles
-        float angleChange = time * velocityAroundUp * Mathf.Rad2Deg;
-        if ((angleDistAroundUp > 0 && angleDistAroundUp -angleChange <0) ||(angleDistAroundUp <0 && angleDistAroundUp + angleChange > 0))
-        {
-            aVelocity = Vector3.zero;
-            angleDistAroundUp = 0;
-            angleChange = 0;
-            
-        }
         parent.activeBone.Rb.angularVelocity = aVelocity;
-        angleDistAroundUp += time * velocityAroundUp * Mathf.Rad2Deg;
+       
+
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
         if (parent && parent.isActiveAndEnabled)
-            parent.StopRotation(acceleration * Mathf.Deg2Rad);
+            parent.StopRotation(rotForceMulti * Mathf.Deg2Rad);
     }
 }
