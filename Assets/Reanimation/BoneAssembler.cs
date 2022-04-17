@@ -24,11 +24,12 @@ public class BoneAssembler : State
 
             //Save goes here
             //IKInit goes here
+            new IkInit(),
 
             //TODO: step to remove residualbonedata from bones (not necessary but feels cleaner)
             //  new RemoveResidualData(),
             new TempDebugPause() //just pauses the game once it finishes, temporary
-        ) ;
+        );
 
         //Loaded cat pipeline:
         /* new BuildGameObjectsFromData (builds bone structure in an empty armature, 

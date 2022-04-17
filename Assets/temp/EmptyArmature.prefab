@@ -371,7 +371,6 @@ Transform:
   m_Children:
   - {fileID: 7402348624065966412}
   - {fileID: 9214333599877977540}
-  - {fileID: 1351745461954622139}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -388,30 +387,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followTarget: {fileID: 0}
-  speed: 0
+  <Speed>k__BackingField: 0
   <LimbTunables>k__BackingField:
     <StepHeightMult>k__BackingField: 0
     <StepTime>k__BackingField: 0
-  skeletonPositions:
-    <Head>k__BackingField: {fileID: 0}
-    <Shoulder>k__BackingField: {fileID: 0}
-    <Hip>k__BackingField: {fileID: 0}
-    <Tail>k__BackingField: {fileID: 0}
-    <OrderedSpineTransforms>k__BackingField: []
-    <FrontLeftLeg>k__BackingField: {fileID: 0}
-    <FrontRightLeg>k__BackingField: {fileID: 0}
-    <BackLeftLeg>k__BackingField: {fileID: 0}
-    <BackRightLeg>k__BackingField: {fileID: 0}
-  targets:
-    <Head>k__BackingField: {fileID: 0}
-    <Shoulder>k__BackingField: {fileID: 0}
-    <Hip>k__BackingField: {fileID: 0}
-    <Tail>k__BackingField: {fileID: 0}
-    <OrderedSpineTransforms>k__BackingField: []
-    <FrontLeftLeg>k__BackingField: {fileID: 0}
-    <FrontRightLeg>k__BackingField: {fileID: 0}
-    <BackLeftLeg>k__BackingField: {fileID: 0}
-    <BackRightLeg>k__BackingField: {fileID: 0}
   limbEnds: []
 --- !u!114 &5123879659305953413
 MonoBehaviour:
@@ -425,16 +404,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f367ff1a8558144abea88ce2d8bb242, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Transforms>k__BackingField:
-    <Head>k__BackingField: {fileID: 4464976320382703240}
-    <Shoulder>k__BackingField: {fileID: 2102842313671347762}
-    <Hip>k__BackingField: {fileID: 1351745461954622139}
-    <Tail>k__BackingField: {fileID: 1516075768796491668}
-    <OrderedSpineTransforms>k__BackingField: []
-    <FrontLeftLeg>k__BackingField: {fileID: 5242478120664202759}
-    <FrontRightLeg>k__BackingField: {fileID: 6202953364505366459}
-    <BackLeftLeg>k__BackingField: {fileID: 4549640337650916904}
-    <BackRightLeg>k__BackingField: {fileID: 7842939679882202661}
 --- !u!1 &3157923432646105934
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,15 +457,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3323339409273819337}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0.010116582, y: 0.030060707, z: -0.17010058}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.20200011, y: 0.0063000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4549640337650916904}
   - {fileID: 7842939679882202661}
   - {fileID: 1516075768796491668}
-  m_Father: {fileID: 7263244047530817204}
-  m_RootOrder: 2
+  m_Father: {fileID: 2102842313671347762}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3881020991767543700
 GameObject:
@@ -686,7 +655,8 @@ Transform:
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0.0016001053, y: -0.0021999478, z: -0.011300031}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1351745461954622139}
   m_Father: {fileID: 7402348624065966412}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
