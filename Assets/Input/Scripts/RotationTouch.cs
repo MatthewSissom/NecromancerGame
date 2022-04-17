@@ -7,7 +7,7 @@ public class RotationTouch : TouchProxy
     //rotation can either be around the up axis (when the player spins a bone)
     //or around the vector perpendicular to up and toParent (when a player pinches a bone)
     float angleDistAroundUp = 0;
-    float angleDistAroundParent = 0;
+    float stopWatchAngle = 0;
     float linearDistAroundUp = 0;
     Vector3 toParent;
     Vector3 toParentPerp;
@@ -64,7 +64,7 @@ public class RotationTouch : TouchProxy
         }
 
         angleDistAroundUp = 0;
-        angleDistAroundParent = 0;
+        stopWatchAngle = 0;
 
         currentScore = 0;
         for (int i = 0; i < scoresLength; i++)
@@ -94,6 +94,7 @@ public class RotationTouch : TouchProxy
         //adjust distances
      
         angleDistAroundUp = Vector3.SignedAngle(oldToParent, toParent, realUp);
+        stopWatchAngle = angleDistAroundUp;
         //Debug.Log(Mathf.Sign(angleDistAroundUp));
         linearDistAroundUp += Vector3.Distance(oldToParent, toParent) * linearDistMulti * Mathf.Sign(angleDistAroundUp);
 
@@ -107,7 +108,7 @@ public class RotationTouch : TouchProxy
 
         if (parent.activeWatch != null)
         {
-            parent.activeWatch.ChangeAngle(angleDistAroundUp * stopWatchRotModifier);
+            parent.activeWatch.ChangeAngle(-angleDistAroundUp * stopWatchRotModifier);
             if (angleDistAroundUp < 0)
                 angleDistAroundUp = 0;
             return;
