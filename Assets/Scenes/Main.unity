@@ -26335,6 +26335,11 @@ PrefabInstance:
       propertyPath: roundTime
       value: 20
       objectReference: {fileID: 0}
+    - target: {fileID: 1579113033529271246, guid: 9db830be7935e314eb62a2e06dc2a82c,
+        type: 3}
+      propertyPath: resistClamp
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 2310420313706021154, guid: 9db830be7935e314eb62a2e06dc2a82c,
         type: 3}
       propertyPath: m_Name
