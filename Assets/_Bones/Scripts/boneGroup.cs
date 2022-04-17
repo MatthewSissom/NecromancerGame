@@ -75,23 +75,50 @@ public class BoneGroup : MonoBehaviour
 
     protected virtual void Awake()
     {
+        ParticleSystem.MainModule _m;
+        ParticleSystem.ShapeModule _s;
+
+        foreach(MeshRenderer r in GetComponentsInChildren<MeshRenderer>())
+        {
+            r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        }
         children = new Dictionary<BoneVertexType, BoneGroup>();
         frontPrimaryCylinder = Instantiate(cylColliderPrefab, transform); 
         frontPrimaryIndicator = Instantiate(vertexIndicatorPrefab, frontPrimaryVertex.transform.position, Quaternion.identity, transform);
+        frontPrimaryIndicator.transform.localScale = Vector3.one * (frontPrimaryIndicator.transform.localScale.x / gameObject.transform.localScale.x);
+        if(frontPrimaryIndicator.GetComponent<ParticleSystem>())
+        {
+            frontPrimaryIndicator.GetComponent<ParticleSystem>().Stop();
+        }
         InitCylinder(frontPrimaryCylinder, frontPrimaryIndicator, BoneVertexType.FrontPrimary);
         
         backPrimaryCylinder = Instantiate(cylColliderPrefab, transform); 
         backPrimaryIndicator = Instantiate(vertexIndicatorPrefab, backPrimaryVertex.transform.position, Quaternion.identity, transform);
+        backPrimaryIndicator.transform.localScale = Vector3.one * (backPrimaryIndicator.transform.localScale.x / gameObject.transform.localScale.x);
+        if (backPrimaryIndicator.GetComponent<ParticleSystem>())
+        {
+            backPrimaryIndicator.GetComponent<ParticleSystem>().Stop();
+        }
         InitCylinder(backPrimaryCylinder, backPrimaryIndicator, BoneVertexType.BackPrimary); 
         
 
         leftAuxCylinder = Instantiate(cylColliderPrefab, transform);
         leftAuxIndicator = Instantiate(vertexIndicatorPrefab, leftAuxVertex.transform.position, Quaternion.identity, transform);
+        leftAuxIndicator.transform.localScale = Vector3.one * (leftAuxIndicator.transform.localScale.x / gameObject.transform.localScale.x);
+        if (leftAuxIndicator.GetComponent<ParticleSystem>())
+        {
+            leftAuxIndicator.GetComponent<ParticleSystem>().Stop();
+        }
         InitCylinder(leftAuxCylinder, leftAuxIndicator, BoneVertexType.LeftAux);
 
 
         rightAuxCylinder = Instantiate(cylColliderPrefab, transform);
         rightAuxIndicator = Instantiate(vertexIndicatorPrefab, rightAuxVertex.transform.position, Quaternion.identity, transform);
+        rightAuxIndicator.transform.localScale = Vector3.one * (rightAuxIndicator.transform.localScale.x / gameObject.transform.localScale.x);
+        if (rightAuxIndicator.GetComponent<ParticleSystem>())
+        {
+            rightAuxIndicator.GetComponent<ParticleSystem>().Stop();
+        }
         InitCylinder(rightAuxCylinder, rightAuxIndicator, BoneVertexType.RightAux);
 
         frontPrimaryCollider = frontPrimaryCylinder.GetComponent<Collider>();

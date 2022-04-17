@@ -175,6 +175,10 @@ public class GhostManager : State
 
         // update 'done' so GameManager will know when to move past the assembly stage
         currentShipment++;
+        if(currentShipment == 3)
+        {
+            TableManager.Instance.FlipBones();
+        }
         done = currentShipment == boneShipments.Count;
 
         // Plays sound when cats fist spawn for bone shipment
