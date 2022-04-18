@@ -9,10 +9,10 @@ public interface IAssemblyStage
 
 public interface IikTransformProvider
 {
-    SkeletonTransforms Transforms { get; }
+    LabledSkeletonData<Transform> Transforms { get; }
 }
 
 public interface IikTargetProvider
 {
-    SkeletonTransforms Targets { get; }
+    LabledSkeletonData<Transform> Targets { get; }
 }

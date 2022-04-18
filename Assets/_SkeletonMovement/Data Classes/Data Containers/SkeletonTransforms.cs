@@ -316,11 +316,7 @@ public class SkeletonTransforms : LabledSkeletonData<Transform>
 {
     // Ordered from head to tail, don't include null values
     [field: SerializeField]
-    public Transform[] OrderedSpineTransforms { get; private set; }
-    public SkeletonTransforms(Transform head, Transform shoulder, Transform hip, Transform tail, Transform[] orderedSpineTransforms, Transform frontLeftLeg, Transform frontRightLeg, Transform backLeftLeg, Transform backRightLeg) : base(head, shoulder, hip, tail, frontLeftLeg, frontRightLeg, backLeftLeg, backRightLeg)
-    {
-        OrderedSpineTransforms = orderedSpineTransforms;
-    }
+    public SkeletonTransforms(Transform head, Transform shoulder, Transform hip, Transform tail, Transform frontLeftLeg, Transform frontRightLeg, Transform backLeftLeg, Transform backRightLeg) : base(head, shoulder, hip, tail, frontLeftLeg, frontRightLeg, backLeftLeg, backRightLeg) {}
 }
 
 

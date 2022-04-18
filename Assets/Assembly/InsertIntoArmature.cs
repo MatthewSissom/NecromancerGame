@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InsertIntoArmature : IAssemblyStage
+public class InsertIntoArmature : IAssemblyStage, IikTransformProvider
 {
+    public LabledSkeletonData<Transform> Transforms { get; private set; }
+
     public IEnumerator Execute(GameObject skeleton, IAssemblyStage previous)
     {
         GameObject armature = TableManager.Instance.EmptyArmature;
@@ -153,7 +155,18 @@ public class InsertIntoArmature : IAssemblyStage
             }
         }
 
-
+        //construct skeletonTransforms
+        //need to use trinary because of unity's weird custom null
+        Transforms = new SkeletonTransforms(
+            head    == null ? null : head    .transform,
+            shoulder== null ? null : shoulder.transform,
+            hip     == null ? null : hip     .transform,
+            tail    == null ? null : tail    .transform,
+            fll     == null ? null : fll     .transform,
+            frl     == null ? null : frl     .transform,
+            bll     == null ? null : bll     .transform,
+            brl     == null ? null : brl     .transform
+        );
 
         yield break;
     }

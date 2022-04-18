@@ -6,7 +6,9 @@ public class TempDebugPause : IAssemblyStage
 {
     IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
     {
+#if UNITY_EDITOR
         Debug.Break();
         yield break;
+#endif
     }
 }

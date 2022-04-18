@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CalcResidualData : IAssemblyStage, IikTransformProvider
+public class CalcResidualData : IAssemblyStage
 {
-    public SkeletonTransforms Transforms { get; private set; }
-
     IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
     {
         //creating and populating residual data with initial position/parent-child relations
@@ -141,6 +139,7 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
             }
         }
 
+        //@Jimmie null ref here x2
         shoulderBoneData.MarkShoulder();
         hipBoneData.MarkHip();
 
@@ -246,19 +245,6 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
         //TODO: head and tail should be empty game objects created on end of head/tail
         //TODO: limb start transforms should be at the offset position
         //TODO: create empty objects at ends of limbs (like pad in testcat)
-
-        //construct skeletonTransforms
-        Transforms = new SkeletonTransforms(
-            headBoneData?.transform,
-            shoulderBoneData?.transform,
-            hipBoneData?.transform,
-            tailBoneData?.transform,
-            orderedSpine.ToArray(),
-            FLLStart?.transform,
-            FRLStart?.transform,
-            BLLStart?.transform,
-            BRLStart?.transform
-        );
         
         yield break;
     }

@@ -13,7 +13,6 @@ public class BoneAssembler : State
     public void Start()
     {
         SetPipeline(rootBone,
-            new TempDebugPause(),
             new RemoveExcessBones(),
             new CalcResidualData(),
             new MakeShoulderRoot(),
@@ -23,7 +22,8 @@ public class BoneAssembler : State
             new InsertIntoArmature(),
 
             //Save goes here
-            //IKInit goes here
+
+            new TempDebugPause(),
             new IkInit(),
 
             //TODO: step to remove residualbonedata from bones (not necessary but feels cleaner)
@@ -58,7 +58,8 @@ public class BoneAssembler : State
                 Debug.Log("Running assembly phase \'" + stage.GetType().ToString() + "\'");
 #endif
             yield return stage.Execute(skeleton,previousStage);
-            previousStage = stage;
+            if(!(stage is TempDebugPause))
+                previousStage = stage;
         }
     }
     /*

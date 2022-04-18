@@ -65,7 +65,7 @@ public class SkeletonBehaviour : MonoBehaviour
     [SerializeField]
     SkeletonTransforms targets;
     [SerializeField]
-    List<LimbData> limbEnds;
+    LabeledLimbData<DebugLimbData> limbEnds;
 
     public bool Initalized { get; private set; } = false;
     
@@ -114,7 +114,7 @@ public class SkeletonBehaviour : MonoBehaviour
         var tunables = new SkeletonPathTunables(.1f, Speed ); 
 
         MovementDataInit dataInit = new MovementDataInit();
-        dataInit.EditorInit(limbEnds.ToArray(), skeletonPositions, targets, tunables);
+        dataInit.EditorInit(limbEnds.Convert((DebugLimbData dld) => dld.data).ToList().ToArray(), skeletonPositions, targets, tunables);
         SkeletonLayoutData layoutData = dataInit.ComputedLayoutData;
         BehaviorInit(layoutData,tunables);
     }

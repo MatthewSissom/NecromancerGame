@@ -1,4 +1,4 @@
-﻿//#define USING_IK
+﻿#define USING_IK
 
 using System.Collections;
 using System.Collections.Generic;
@@ -8,8 +8,11 @@ using UnityEngine.Assertions;
 using RootMotion.FinalIK;
 #endif
 
-public class IkInit : IAssemblyStage
+public class IkInit : IAssemblyStage, IikTransformProvider, IikTargetProvider
 {
+    public LabledSkeletonData<Transform> Transforms { get; private set; }
+    public LabledSkeletonData<Transform> Targets { get; private set; }
+
 #if USING_IK
     private class ChainInitData 
     {
@@ -46,7 +49,7 @@ public class IkInit : IAssemblyStage
 #if USING_IK
     LabledSkeletonData<FABRIK> GetIkComponents(LabledSkeletonData<Transform> chainStarts)
     {
-        return chainStarts.Convert((Transform t) => t.GetComponent<FABRIK>());
+        return chainStarts.Convert((Transform t) => t?.GetComponent<FABRIK>());
     }
 
     LabledSkeletonData<Transform> GetTargets(LabledSkeletonData<FABRIK> chains) 
@@ -62,6 +65,12 @@ public class IkInit : IAssemblyStage
 
     List<Transform> GetTransformList(Transform start, Transform endTarget)
     {
+        if (start == null || endTarget == null)
+        {
+            Assert.IsTrue(start == null, "IkInit Error: Valid chain start has no target.");
+            return null;
+        }
+
         List<Transform> transforms = new List<Transform>();
         Transform last = null;
 
@@ -92,7 +101,7 @@ public class IkInit : IAssemblyStage
         return ikComponents.Combine(chain, ChainInitData.GetData);
     }
 
-    void RebuildIKChains(SkeletonTransforms transforms)
+    void RebuildIKChains(LabledSkeletonData<Transform> transforms)
     {
         // Get basic data
         LabledSkeletonData<FABRIK> ikComponents = GetIkComponents(transforms);
@@ -100,13 +109,11 @@ public class IkInit : IAssemblyStage
         LabledSkeletonData<List<Transform>> transformLists = transforms.Combine(targets, GetTransformList);
         FABRIKRoot mFABRIKRoot = GetRoot(transforms.Shoulder).GetComponentInChildren<FABRIKRoot>();
 
-        // Check to make sure no IK chains were missed
-        List<FABRIK> ikChains = DebugSearchForChains(GetRoot(transforms.Shoulder));
-        foreach (var chain in ikChains)
-            Assert.IsTrue(ikComponents.Contains(chain), "Ik chain missed by ik init!");
 
-        // rebuild transform chains
-        List<FABRIK> invaildChains = new List<FABRIK>();
+        // Rebuild transform chains
+
+        // Assume that all chains are invalid to start
+        List<FABRIK> invaildChains = SearchHigharchyForChains(GetRoot(transforms.Shoulder));
         LabledSkeletonData<ChainInitData> newChainData = PackageNewChainData(ikComponents, transformLists);
         foreach(var data in newChainData.ToList())
         {
@@ -118,20 +125,27 @@ public class IkInit : IAssemblyStage
             if (!isValid)
             {
                 Debug.LogError("Failed to init ik chain: " + message);
-                invaildChains.Add(data.Component);
                 continue;
             }
 
             data.Component.enabled = isValid;
+            if(data.Component.enabled)
+                invaildChains.Remove(data.Component);
         }
 
         // prepare data to be passed to next step, remove disabled transforms
-        LabledSkeletonData<Transform> enabledTransforms = newChainData.Convert(
-            (ChainInitData data) => invaildChains.Contains(data.Component) ? null : data.NewChain[0]
+        newChainData = newChainData.Convert(
+            (ChainInitData data) => invaildChains.Contains(data.Component) ? null : data
+        );
+        Transforms = newChainData.Convert(
+            (ChainInitData data) => data?.NewChain[0]
+        );
+        Targets = newChainData.Convert(
+            (ChainInitData data) => (data == null ? null : data)?.Component?.solver?.target
         );
     }
 
-    List<FABRIK> DebugSearchForChains(Transform skeletonRoot)
+    List<FABRIK> SearchHigharchyForChains(Transform skeletonRoot)
     {
         List<FABRIK> fabrikChains = new List<FABRIK>();
 
