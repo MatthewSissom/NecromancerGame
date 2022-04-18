@@ -6,7 +6,7 @@ using UnityEngine;
 public class ResidualBoneData : MonoBehaviour
 {
     private Vector3 boneGroupPosition;
-    private Dictionary<BoneVertexType, Vector3> vertexPositions;
+    public Dictionary<BoneVertexType, Vector3> vertexPositions;
     private Dictionary<BoneVertexType, ResidualBoneData> childBones;
     public ResidualBoneData parentBone;
     public BoneVertexType myParentConnectLocation;
@@ -15,6 +15,7 @@ public class ResidualBoneData : MonoBehaviour
     public bool isShoulderSideSpine;
     public bool isHipSideSpine;
     public bool isHead;
+    public bool isNeck;
     public bool isTail;
     public bool isShoulder;
     public bool isHip;
@@ -22,9 +23,20 @@ public class ResidualBoneData : MonoBehaviour
     public bool isFRLStart;
     public bool isBLLStart;
     public bool isBRLStart;
+    public bool isFLLFoot;
+    public bool isFRLFoot;
+    public bool isBLLFoot;
+    public bool isBRLFoot;
     public float myLegLength;
     public float numChildren;
 
+    public bool isLegStart
+    {
+        get
+        {
+            return isFLLStart || isFRLStart || isBRLStart || isBLLStart;
+        }
+    }
     public void SwapWithParent()
     {
         childBones[myParentConnectLocation] = parentBone;
@@ -38,6 +50,21 @@ public class ResidualBoneData : MonoBehaviour
             parentBone.isRoot = false;
         }
         parentBone.transform.SetParent(transform);
+    }
+    public GameObject AddEmptyObjectBetweenSelfAndParent()
+    {
+        GameObject emptyObj = new GameObject(gameObject.name + " Joint");
+        emptyObj.transform.position = vertexPositions[myParentConnectLocation];
+        emptyObj.transform.parent = parentBone.transform;
+        transform.parent = emptyObj.transform;
+        return emptyObj;
+    }
+    public GameObject AddEmptyCapObject()
+    {
+        GameObject emptyObj = new GameObject(gameObject.name + " Cap");
+        emptyObj.transform.position = vertexPositions[Opposite(myParentConnectLocation)];
+        emptyObj.transform.parent = transform;
+        return emptyObj;
     }
     public void PopulateDataFrom(GrabbableGroup boneGroup)
     {
@@ -159,6 +186,10 @@ public class ResidualBoneData : MonoBehaviour
 #endif
         isTail = true;
     }
+    public void MarkNeck()
+    {
+        isNeck = true;
+    }
     public void MarkShoulder()
     {
 #if UNITY_EDITOR
@@ -237,7 +268,7 @@ public class ResidualBoneData : MonoBehaviour
 #endif
         isBRLStart = true;
     }
-    public void MarkFoot()
+    public void MarkFLLFoot()
     {
 #if UNITY_EDITOR
         if (DebugModes.ColorBonesInAssembly)
@@ -248,6 +279,46 @@ public class ResidualBoneData : MonoBehaviour
             }
         }
 #endif
+        isFLLFoot = true;
+    }
+    public void MarkFRLFoot()
+    {
+#if UNITY_EDITOR
+        if (DebugModes.ColorBonesInAssembly)
+        {
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.footMat;
+            }
+        }
+#endif
+        isFRLFoot = true;
+    }
+    public void MarkBLLFoot()
+    {
+#if UNITY_EDITOR
+        if (DebugModes.ColorBonesInAssembly)
+        {
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.footMat;
+            }
+        }
+#endif
+        isBLLFoot = true;
+    }
+    public void MarkBRLFoot()
+    {
+#if UNITY_EDITOR
+        if (DebugModes.ColorBonesInAssembly)
+        {
+            foreach (MeshRenderer r in gameObject.GetComponentsInChildren<MeshRenderer>())
+            {
+                r.material = CatPartHighlighters.instance.footMat;
+            }
+        }
+#endif
+        isBRLFoot = true;
     }
     public ResidualBoneData GetChild(BoneVertexType vertex)
     {
@@ -267,7 +338,7 @@ public class ResidualBoneData : MonoBehaviour
         );
     }
 
-    private static BoneVertexType Opposite(BoneVertexType t)
+    public static BoneVertexType Opposite(BoneVertexType t)
     {
         switch (t)
         {

@@ -157,8 +157,10 @@ public class TableManager : MonoBehaviour
         }
     }
 
+    public int catFlipMult = 1;
     public void FlipBones()
     {
+        catFlipMult = -catFlipMult;
         Vector3 flipCenter = tableCenter.transform.position; 
         Vector3 flipAxis = tableCenter.transform.up;
         foreach(BoneGroup boneObj in boneObjects)

@@ -12,8 +12,17 @@ public class BoneCollisionCylinder : MonoBehaviour
     private MeshRenderer indicatorRenderer;
     private LineRenderer myLineRenderer;
 
-    public bool isVisible = true;
+    private bool isConnectInvis = false;
+    private bool isFlipInvis = false;
+    private bool isJustInvis = false;
 
+    public bool IsVisible
+    {
+        get
+        {
+            return !isConnectInvis && !isFlipInvis && !isJustInvis;
+        }
+    }
     private bool isParentsActiveCollision;
 
     public bool IsParentsActiveCollision
@@ -157,21 +166,42 @@ public class BoneCollisionCylinder : MonoBehaviour
         GetComponent<MeshRenderer>().material = auxiliaryMat;
     }
 
-    public void SetVisible()
+    private void UpdateRenderer()
     {
-        indicatorRenderer.enabled = true;
-        isVisible = true;
+        indicatorRenderer.enabled = IsVisible;
+    }
+    public void SetFlipVisible()
+    {
+        isFlipInvis = false;
+        UpdateRenderer();
     }
 
-    public void SetInvisible()
+    public void SetFlipInvisible()
     {
-        indicatorRenderer.enabled = false;
-        isVisible = false;
+        isFlipInvis = true;
+        UpdateRenderer();
+    }
+    public void SetConnectVisible()
+    {
+        isConnectInvis = false;
+        UpdateRenderer();
+    }
+
+    public void SetConnectInvisible()
+    {
+        isConnectInvis = true;
+        UpdateRenderer();
+    }
+
+    public void SetJustInvisible()
+    {
+        isJustInvis = true;
+        UpdateRenderer();
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        if(isVisible && !myBone.isAttached && myBone.isBeingDragged && other.gameObject.tag == "ColliderCylinder" && other.gameObject.GetComponent<BoneCollisionCylinder>().isVisible)
+        if(IsVisible && !myBone.isAttached && myBone.isBeingDragged && other.gameObject.tag == "ColliderCylinder" && other.gameObject.GetComponent<BoneCollisionCylinder>().IsVisible)
         {
             if(myBone.currentCylinderHit == null || myBone.currentCylinderDoingHitting != this)
             {
@@ -197,7 +227,7 @@ public class BoneCollisionCylinder : MonoBehaviour
 
     public void OnTriggerExit(Collider other)
     {
-        if (isVisible && !myBone.isAttached && myBone.isBeingDragged && other.gameObject.tag == "ColliderCylinder" && other.gameObject.GetComponent<BoneCollisionCylinder>().isVisible)
+        if (IsVisible && !myBone.isAttached && myBone.isBeingDragged && other.gameObject.tag == "ColliderCylinder" && other.gameObject.GetComponent<BoneCollisionCylinder>().IsVisible)
         {
             if(IsParentsActiveCollision)
             {

@@ -110,6 +110,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   primaryMat: {fileID: 2100000, guid: 41b74fa5bef9c914996d4de548b7be51, type: 2}
   auxiliaryMat: {fileID: 2100000, guid: 7538781c7c3bab1408c69739335cd2d2, type: 2}
+  isVisible: 1
 --- !u!120 &4632981468009845197
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -151,7 +152,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1

@@ -62,18 +62,18 @@ public class GrabbableGroup : BoneGroup, IGrabbable
 
         rB.drag = 0;
         
-        if(firstPickup)
+        //if(firstPickup)
           transform.forward = Camera.main.transform.forward * flippedMultiplier;
 
-        rB.constraints = (RigidbodyConstraints)0;
+        rB.constraints = RigidbodyConstraints.FreezeRotation;
 
         if (currentCylinderDoingHitting)
         {
-            currentCylinderDoingHitting.SetVisible();
+            currentCylinderDoingHitting.SetConnectVisible();
         }
         if(currentCylinderHit)
         {
-            currentCylinderHit.SetVisible();
+            currentCylinderHit.SetConnectVisible();
         }
         OnPickup();
         firstPickup = false;
@@ -101,11 +101,11 @@ public class GrabbableGroup : BoneGroup, IGrabbable
 
             if (currentCylinderDoingHitting)
             {
-                currentCylinderDoingHitting.SetInvisible();
+                currentCylinderDoingHitting.SetConnectInvisible();
             }
             if (currentCylinderHit)
             {
-                currentCylinderHit.SetInvisible();
+                currentCylinderHit.SetConnectInvisible();
             }
             OnCollideDrop();
         } else

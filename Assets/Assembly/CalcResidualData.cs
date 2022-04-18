@@ -31,6 +31,7 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
 
         //step from root to head
         ResidualBoneData boneDataStepper = rootBoneData.GetChild(BoneVertexType.FrontPrimary);
+        boneDataStepper.MarkNeck();
         while(boneDataStepper.getAcrossVertex() != null)
         {
             boneDataStepper.MarkShoulderSideSpine();
@@ -200,7 +201,7 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
             FLLength = FLFoot.distanceToParentedBone(null, (ResidualBoneData d) => d.isFLLStart);
             FLLStart.myLegLength = FLLength;
 
-            boneDataStepper.MarkFoot();
+            boneDataStepper.MarkFLLFoot();
         }
 
         boneDataStepper = FRLStart;
@@ -213,7 +214,7 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
             FRFoot = boneDataStepper;
             FRLength = FRFoot.distanceToParentedBone(null, (ResidualBoneData d) => d.isFRLStart);
             FRLStart.myLegLength = FRLength;
-            boneDataStepper.MarkFoot();
+            boneDataStepper.MarkFRLFoot();
         }
 
         boneDataStepper = BLLStart;
@@ -226,7 +227,7 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
             BLFoot = boneDataStepper;
             BLLength = BLFoot.distanceToParentedBone(null, (ResidualBoneData d) => d.isBLLStart);
             BLLStart.myLegLength = BLLength;
-            boneDataStepper.MarkFoot();
+            boneDataStepper.MarkBLLFoot();
         }
 
         boneDataStepper = BRLStart;
@@ -239,7 +240,7 @@ public class CalcResidualData : IAssemblyStage, IikTransformProvider
             BRFoot = boneDataStepper;
             BRLength = BRFoot.distanceToParentedBone(null, (ResidualBoneData d) => d.isBRLStart);
             BRLStart.myLegLength = BRLength;
-            boneDataStepper.MarkFoot();
+            boneDataStepper.MarkBRLFoot();
         }
 
         //TODO: head and tail should be empty game objects created on end of head/tail

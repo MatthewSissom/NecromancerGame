@@ -75,8 +75,6 @@ public class BoneGroup : MonoBehaviour
 
     protected virtual void Awake()
     {
-        ParticleSystem.MainModule _m;
-        ParticleSystem.ShapeModule _s;
 
         foreach(MeshRenderer r in GetComponentsInChildren<MeshRenderer>())
         {
@@ -88,7 +86,7 @@ public class BoneGroup : MonoBehaviour
         frontPrimaryIndicator.transform.localScale = Vector3.one * (frontPrimaryIndicator.transform.localScale.x / gameObject.transform.localScale.x);
         if(frontPrimaryIndicator.GetComponent<ParticleSystem>())
         {
-            frontPrimaryIndicator.GetComponent<ParticleSystem>().Stop();
+            Destroy(frontPrimaryIndicator.GetComponent<ParticleSystem>());
         }
         InitCylinder(frontPrimaryCylinder, frontPrimaryIndicator, BoneVertexType.FrontPrimary);
         
@@ -97,7 +95,7 @@ public class BoneGroup : MonoBehaviour
         backPrimaryIndicator.transform.localScale = Vector3.one * (backPrimaryIndicator.transform.localScale.x / gameObject.transform.localScale.x);
         if (backPrimaryIndicator.GetComponent<ParticleSystem>())
         {
-            backPrimaryIndicator.GetComponent<ParticleSystem>().Stop();
+            Destroy(backPrimaryIndicator.GetComponent<ParticleSystem>());
         }
         InitCylinder(backPrimaryCylinder, backPrimaryIndicator, BoneVertexType.BackPrimary); 
         
@@ -107,7 +105,7 @@ public class BoneGroup : MonoBehaviour
         leftAuxIndicator.transform.localScale = Vector3.one * (leftAuxIndicator.transform.localScale.x / gameObject.transform.localScale.x);
         if (leftAuxIndicator.GetComponent<ParticleSystem>())
         {
-            leftAuxIndicator.GetComponent<ParticleSystem>().Stop();
+            Destroy(leftAuxIndicator.GetComponent<ParticleSystem>());
         }
         InitCylinder(leftAuxCylinder, leftAuxIndicator, BoneVertexType.LeftAux);
 
@@ -117,7 +115,7 @@ public class BoneGroup : MonoBehaviour
         rightAuxIndicator.transform.localScale = Vector3.one * (rightAuxIndicator.transform.localScale.x / gameObject.transform.localScale.x);
         if (rightAuxIndicator.GetComponent<ParticleSystem>())
         {
-            rightAuxIndicator.GetComponent<ParticleSystem>().Stop();
+            Destroy(rightAuxIndicator.GetComponent<ParticleSystem>());
         }
         InitCylinder(rightAuxCylinder, rightAuxIndicator, BoneVertexType.RightAux);
 
@@ -146,12 +144,12 @@ public class BoneGroup : MonoBehaviour
 
         if(FlippedMultiplier == -1)
         {
-            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetInvisible();
-            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetVisible();
+            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetFlipInvisible();
+            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetFlipVisible();
         } else
         {
-            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetVisible();
-            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetInvisible();
+            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetFlipVisible();
+            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetFlipInvisible();
         }
     }
 
@@ -252,14 +250,14 @@ public class BoneGroup : MonoBehaviour
 
     public void ApplyFlip()
     {
-        if(leftAuxCylinder.GetComponent<BoneCollisionCylinder>().isVisible)
+        if(TableManager.Instance.catFlipMult * flippedMultiplier == -1)
         {
-            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetInvisible();
-            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetVisible();
+            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetFlipInvisible();
+            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetFlipVisible();
         } else
         {
-            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetVisible();
-            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetInvisible();
+            leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetFlipVisible();
+            rightAuxCylinder.GetComponent<BoneCollisionCylinder>().SetFlipInvisible();
         }
     }
     public void Attach(BoneGroup parent)
@@ -340,8 +338,10 @@ public class BoneGroup : MonoBehaviour
         {
             return;
         }
-
-        obj.layer = layerNumber;
+        if(obj.tag != "ColliderCylinder")
+        {
+            obj.layer = layerNumber;
+        }
 
         foreach (Transform child in obj.transform)
         {
