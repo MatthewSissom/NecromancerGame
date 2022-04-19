@@ -8463,6 +8463,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  axis: {x: 0, y: 0, z: 1}
+  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+  limit: 45
+  twistLimit: 180
 --- !u!1 &460052289
 GameObject:
   m_ObjectHideFlags: 0
@@ -11468,6 +11472,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  axis: {x: 0, y: 0, z: 1}
+  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+  limit: 45
+  twistLimit: 180
 --- !u!1 &670829818
 GameObject:
   m_ObjectHideFlags: 0
@@ -21091,6 +21099,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  axis: {x: 0, y: 0, z: 1}
+  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+  limit: 45
+  twistLimit: 180
 --- !u!1 &1198006963
 GameObject:
   m_ObjectHideFlags: 0
@@ -21341,6 +21353,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45281828b4c9247558c7c695124d6877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  axis: {x: 0, y: 0, z: 1}
+  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+  limit: 45
+  twistLimit: 180
 --- !u!1 &1215235227
 GameObject:
   m_ObjectHideFlags: 0

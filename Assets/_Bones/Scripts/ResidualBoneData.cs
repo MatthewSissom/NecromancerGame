@@ -134,6 +134,23 @@ public class ResidualBoneData : MonoBehaviour
         }
 
     }
+
+#if UNITY_EDITOR
+
+    public void DebugAddChild(ResidualBoneData child, BoneVertexType type)
+    {
+        childBones = childBones ?? new Dictionary<BoneVertexType, ResidualBoneData>();
+
+    }
+
+    public void DebugFinalizeChildren()
+    {
+
+    }
+
+#endif
+
+
     public void MarkShoulderSideSpine()
     {
 #if UNITY_EDITOR

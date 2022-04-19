@@ -68,14 +68,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 114139201704738927}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0825, y: 0.0168, z: 0.0016}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.0078000575, y: 0.010499999, z: 0.0015999973}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 670361765918739088}
   - {fileID: 3979648201858585609}
-  m_Father: {fileID: 3390346668614592117}
-  m_RootOrder: 1
+  m_Father: {fileID: 1351745461954622139}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8708278506811405182
 MonoBehaviour:
@@ -966,7 +966,7 @@ GameObject:
   - component: {fileID: 1122439133886659153}
   - component: {fileID: 1122439133886659152}
   m_Layer: 0
-  m_Name: L1
+  m_Name: Model
   m_TagString: Bone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2155,7 +2155,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3979648201858585609}
   m_Layer: 0
-  m_Name: Tail (1)
+  m_Name: Model
   m_TagString: Bone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2414,47 +2414,6 @@ MonoBehaviour:
   <LimbTunables>k__BackingField:
     <StepHeightMult>k__BackingField: 0.2
     <StepTime>k__BackingField: 0.4
-  limbEnds:
-  - <IdentityData>k__BackingField:
-      <IsStump>k__BackingField: 0
-      <IsSingle>k__BackingField: 0
-      <IsFront>k__BackingField: 0
-      <IsRight>k__BackingField: 0
-    <Measurements>k__BackingField:
-      <StepHeight>k__BackingField: 0
-      <TotalLength>k__BackingField: 0
-      <OffsetFromSpine>k__BackingField: 0
-      <StrideLength>k__BackingField: 0
-  - <IdentityData>k__BackingField:
-      <IsStump>k__BackingField: 0
-      <IsSingle>k__BackingField: 0
-      <IsFront>k__BackingField: 0
-      <IsRight>k__BackingField: 0
-    <Measurements>k__BackingField:
-      <StepHeight>k__BackingField: 0
-      <TotalLength>k__BackingField: 0
-      <OffsetFromSpine>k__BackingField: 0
-      <StrideLength>k__BackingField: 0
-  - <IdentityData>k__BackingField:
-      <IsStump>k__BackingField: 0
-      <IsSingle>k__BackingField: 0
-      <IsFront>k__BackingField: 0
-      <IsRight>k__BackingField: 0
-    <Measurements>k__BackingField:
-      <StepHeight>k__BackingField: 0
-      <TotalLength>k__BackingField: 0
-      <OffsetFromSpine>k__BackingField: 0
-      <StrideLength>k__BackingField: 0
-  - <IdentityData>k__BackingField:
-      <IsStump>k__BackingField: 0
-      <IsSingle>k__BackingField: 0
-      <IsFront>k__BackingField: 0
-      <IsRight>k__BackingField: 0
-    <Measurements>k__BackingField:
-      <StepHeight>k__BackingField: 0
-      <TotalLength>k__BackingField: 0
-      <OffsetFromSpine>k__BackingField: 0
-      <StrideLength>k__BackingField: 0
 --- !u!1 &2625304745404510694
 GameObject:
   m_ObjectHideFlags: 0
@@ -2981,6 +2940,7 @@ Transform:
   - {fileID: 4549640337650916904}
   - {fileID: 7842939679882202661}
   - {fileID: 737859630896452114}
+  - {fileID: 1516075768796491668}
   m_Father: {fileID: 3390346668614592117}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3229,7 +3189,7 @@ GameObject:
   - component: {fileID: 3859342268089920140}
   - component: {fileID: 3859342268089920141}
   m_Layer: 0
-  m_Name: L1 (4)
+  m_Name: Model
   m_TagString: Bone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3590,7 +3550,7 @@ GameObject:
   - component: {fileID: 5149234242504140663}
   - component: {fileID: 5350716450789755879}
   m_Layer: 0
-  m_Name: Sholder
+  m_Name: Model
   m_TagString: Bone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3917,7 +3877,7 @@ Transform:
   - {fileID: 5611403919911929058}
   - {fileID: 8982261632883198882}
   m_Father: {fileID: 3390346668614592117}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 85.04, y: -89.588005, z: -179.591}
 --- !u!1 &5001981423865820985
 GameObject:
@@ -4021,7 +3981,7 @@ GameObject:
   - component: {fileID: 5274926510684153989}
   - component: {fileID: 5274926510684153988}
   m_Layer: 0
-  m_Name: L1 (2)
+  m_Name: Model
   m_TagString: Bone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4294,7 +4254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axis: {x: 0, y: 0, z: 1}
-  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+  defaultLocalRotation: {x: -0, y: -0, z: -0, w: 1}
   limit: 0
   twistLimit: 180
 --- !u!1 &5632148036197435758
@@ -4386,7 +4346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6343737476021804871}
   m_Layer: 0
-  m_Name: Spine Chunk (1)
+  m_Name: Model
   m_TagString: Bone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5224,7 +5184,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axis: {x: 0, y: 0, z: 1}
-  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 0}
+  defaultLocalRotation: {x: 0, y: 0, z: 0, w: 1}
   limit: 0
   twistLimit: 180
 --- !u!1 &7222929641332226489
@@ -6087,7 +6047,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1351745461954622139}
-  - {fileID: 1516075768796491668}
   - {fileID: 5520329447545918429}
   m_Father: {fileID: 8514723275856451778}
   m_RootOrder: 0
@@ -6422,7 +6381,7 @@ GameObject:
   - component: {fileID: 8306508559453628208}
   - component: {fileID: 7771959293897021448}
   m_Layer: 0
-  m_Name: L2_Left
+  m_Name: Model
   m_TagString: Bone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6502,7 +6461,7 @@ PrefabInstance:
     - target: {fileID: 2431325389565282801, guid: 95a60e09cde338647ba50b0c04cf26a4,
         type: 3}
       propertyPath: m_Name
-      value: Paw (5)
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 6587603090560950204, guid: 95a60e09cde338647ba50b0c04cf26a4,
         type: 3}
@@ -6787,7 +6746,7 @@ PrefabInstance:
     - target: {fileID: 2431325389565282801, guid: 95a60e09cde338647ba50b0c04cf26a4,
         type: 3}
       propertyPath: m_Name
-      value: Paw (4)
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 6587603090560950204, guid: 95a60e09cde338647ba50b0c04cf26a4,
         type: 3}
@@ -6886,7 +6845,7 @@ PrefabInstance:
     - target: {fileID: 4981607565998472679, guid: 006d207bbf4d9844ea8e7f127cfae291,
         type: 3}
       propertyPath: m_Name
-      value: L2_Left (1)
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 5352055421307364447, guid: 006d207bbf4d9844ea8e7f127cfae291,
         type: 3}
@@ -6979,7 +6938,7 @@ PrefabInstance:
     - target: {fileID: 4981607565998472679, guid: 006d207bbf4d9844ea8e7f127cfae291,
         type: 3}
       propertyPath: m_Name
-      value: L2_Left (2)
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 5352055421307364447, guid: 006d207bbf4d9844ea8e7f127cfae291,
         type: 3}
@@ -7072,7 +7031,7 @@ PrefabInstance:
     - target: {fileID: 4981607565998472679, guid: 006d207bbf4d9844ea8e7f127cfae291,
         type: 3}
       propertyPath: m_Name
-      value: L2_Left
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 5352055421307364447, guid: 006d207bbf4d9844ea8e7f127cfae291,
         type: 3}
@@ -7164,7 +7123,7 @@ PrefabInstance:
     - target: {fileID: 2431325389565282801, guid: 95a60e09cde338647ba50b0c04cf26a4,
         type: 3}
       propertyPath: m_Name
-      value: Paw (3)
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 6587603090560950204, guid: 95a60e09cde338647ba50b0c04cf26a4,
         type: 3}
@@ -7333,7 +7292,7 @@ PrefabInstance:
     - target: {fileID: 7946559770330850285, guid: 563f18a60aff41043bccb1f6fcf3be6b,
         type: 3}
       propertyPath: m_Name
-      value: L1 (3)
+      value: Model
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -8778997130051474620, guid: 563f18a60aff41043bccb1f6fcf3be6b, type: 3}
@@ -7426,7 +7385,7 @@ PrefabInstance:
     - target: {fileID: 7946559770330850285, guid: 563f18a60aff41043bccb1f6fcf3be6b,
         type: 3}
       propertyPath: m_Name
-      value: L1 (5)
+      value: Model
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -8778997130051474620, guid: 563f18a60aff41043bccb1f6fcf3be6b, type: 3}
@@ -7449,7 +7408,7 @@ PrefabInstance:
     - target: {fileID: 6433956109204502383, guid: 550b58a1e5556ac4ca341e6b5dc9e1cb,
         type: 3}
       propertyPath: m_Name
-      value: Tail
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 7515543908188209191, guid: 550b58a1e5556ac4ca341e6b5dc9e1cb,
         type: 3}
@@ -7635,7 +7594,7 @@ PrefabInstance:
     - target: {fileID: 2431325389565282801, guid: 95a60e09cde338647ba50b0c04cf26a4,
         type: 3}
       propertyPath: m_Name
-      value: Paw (2)
+      value: Model
       objectReference: {fileID: 0}
     - target: {fileID: 6587603090560950204, guid: 95a60e09cde338647ba50b0c04cf26a4,
         type: 3}
@@ -7897,7 +7856,7 @@ PrefabInstance:
     - target: {fileID: 7946559770330850285, guid: 563f18a60aff41043bccb1f6fcf3be6b,
         type: 3}
       propertyPath: m_Name
-      value: L1 (1)
+      value: Model
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: -8778997130051474620, guid: 563f18a60aff41043bccb1f6fcf3be6b, type: 3}

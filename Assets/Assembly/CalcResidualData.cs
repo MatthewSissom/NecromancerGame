@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CalcResidualData : IAssemblyStage
 {
-    IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
+    protected virtual ResidualBoneData GetRootAndInitRBD(GameObject skeleton)
     {
         //creating and populating residual data with initial position/parent-child relations
         foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
@@ -13,16 +13,22 @@ public class CalcResidualData : IAssemblyStage
             bone.GetComponent<ResidualBoneData>().PopulateChildrenFrom(bone);
         }
 
-        //assemble list of residual bone datas and identify root bone
         ResidualBoneData rootBoneData = null;
         foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
         {
             TableManager.Instance.residualBoneData.Add(bone.residualBoneData);
-            if(bone.isRoot)
+            if (bone.isRoot)
             {
                 rootBoneData = bone.residualBoneData;
             }
         }
+        return rootBoneData;
+    }
+
+    IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous)
+    {
+        //assemble list of residual bone datas and identify root bone
+        ResidualBoneData rootBoneData = GetRootAndInitRBD(skeleton);
 
         //construct spine, identify head and tail
         List<Transform> orderedSpine = new List<Transform>();
