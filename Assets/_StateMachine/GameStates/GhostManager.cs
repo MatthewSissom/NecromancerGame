@@ -86,8 +86,17 @@ public class GhostManager : State
     /// <param name="boneShipment">an object which holds all the paths for ghosts to travel allong in a given round.</param>
     private void InitBoneShipmentObjects(GameObject boneShipment)
     {
-        // Don't shuffle bones when playing the tutorial
-        List<GameObject> bones = boneShipment.GetComponent<BoneShipment>().BoneShuffle(false && !GameManager.Instance.PlayingTutorial);
+        List<GameObject> bones;
+
+        if (GameManager.Instance.PlayingTutorial)
+        {
+            bones = boneShipment.GetComponent<BoneShipment>().bones;
+        }
+        else
+        { 
+            bones = boneShipment.GetComponent<BoneShipment>().BoneShuffle(true);
+        }
+       
 #if UNITY_EDITOR
         if (boneShipment.transform.childCount != bones.Count)
         {

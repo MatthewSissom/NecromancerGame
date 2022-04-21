@@ -97,32 +97,38 @@ public class BoneGroup : MonoBehaviour
         {
             Destroy(backPrimaryIndicator.GetComponent<ParticleSystem>());
         }
-        InitCylinder(backPrimaryCylinder, backPrimaryIndicator, BoneVertexType.BackPrimary); 
-        
+        InitCylinder(backPrimaryCylinder, backPrimaryIndicator, BoneVertexType.BackPrimary);
 
-        leftAuxCylinder = Instantiate(cylColliderPrefab, transform);
-        leftAuxIndicator = Instantiate(vertexIndicatorPrefab, leftAuxVertex.transform.position, Quaternion.identity, transform);
-        leftAuxIndicator.transform.localScale = Vector3.one * (leftAuxIndicator.transform.localScale.x / gameObject.transform.localScale.x);
-        if (leftAuxIndicator.GetComponent<ParticleSystem>())
+        if (leftAuxVertex != null)
         {
-            Destroy(leftAuxIndicator.GetComponent<ParticleSystem>());
-        }
-        InitCylinder(leftAuxCylinder, leftAuxIndicator, BoneVertexType.LeftAux);
+            leftAuxCylinder = Instantiate(cylColliderPrefab, transform);
+            leftAuxIndicator = Instantiate(vertexIndicatorPrefab, leftAuxVertex.transform.position, Quaternion.identity, transform);
+            leftAuxIndicator.transform.localScale = Vector3.one * (leftAuxIndicator.transform.localScale.x / gameObject.transform.localScale.x);
+            if (leftAuxIndicator.GetComponent<ParticleSystem>())
+            {
+                Destroy(leftAuxIndicator.GetComponent<ParticleSystem>());
+            }
+            InitCylinder(leftAuxCylinder, leftAuxIndicator, BoneVertexType.LeftAux);
 
 
-        rightAuxCylinder = Instantiate(cylColliderPrefab, transform);
-        rightAuxIndicator = Instantiate(vertexIndicatorPrefab, rightAuxVertex.transform.position, Quaternion.identity, transform);
-        rightAuxIndicator.transform.localScale = Vector3.one * (rightAuxIndicator.transform.localScale.x / gameObject.transform.localScale.x);
-        if (rightAuxIndicator.GetComponent<ParticleSystem>())
-        {
-            Destroy(rightAuxIndicator.GetComponent<ParticleSystem>());
+
+            rightAuxCylinder = Instantiate(cylColliderPrefab, transform);
+            rightAuxIndicator = Instantiate(vertexIndicatorPrefab, rightAuxVertex.transform.position, Quaternion.identity, transform);
+            rightAuxIndicator.transform.localScale = Vector3.one * (rightAuxIndicator.transform.localScale.x / gameObject.transform.localScale.x);
+            if (rightAuxIndicator.GetComponent<ParticleSystem>())
+            {
+                Destroy(rightAuxIndicator.GetComponent<ParticleSystem>());
+            }
+            InitCylinder(rightAuxCylinder, rightAuxIndicator, BoneVertexType.RightAux);
         }
-        InitCylinder(rightAuxCylinder, rightAuxIndicator, BoneVertexType.RightAux);
 
         frontPrimaryCollider = frontPrimaryCylinder.GetComponent<Collider>();
         backPrimaryCollider = backPrimaryCylinder.GetComponent<Collider>();
-        leftAuxCollider = leftAuxCylinder.GetComponent<Collider>();
-        rightAuxCollider = rightAuxCylinder.GetComponent<Collider>();
+        if (leftAuxVertex != null)
+        {
+            leftAuxCollider = leftAuxCylinder.GetComponent<Collider>();
+            rightAuxCollider = rightAuxCylinder.GetComponent<Collider>();
+        }
 
         cylinderSize = frontPrimaryCylinder.transform.lossyScale.y;
 
@@ -136,12 +142,16 @@ public class BoneGroup : MonoBehaviour
         {
             frontPrimaryCylinder.SetActive(false);
             backPrimaryCylinder.SetActive(false);
-            leftAuxCylinder.SetActive(false);
-            rightAuxCylinder.SetActive(false);
+            if (leftAuxVertex != null)
+            {
+                leftAuxCylinder.SetActive(false);
+                rightAuxCylinder.SetActive(false);
+            }
         }
 
         residualBoneData = gameObject.AddComponent<ResidualBoneData>();
-
+        if (leftAuxVertex == null)
+            return;
         if(FlippedMultiplier == -1)
         {
             leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetFlipInvisible();
@@ -218,6 +228,9 @@ public class BoneGroup : MonoBehaviour
 
     public Vector3 getAuxiliaryAxis()
     {
+        if (leftAuxVertex == null)
+            return Vector3.zero;
+
         return (getVertexPosition(BoneVertexType.LeftAux) - getVertexPosition(BoneVertexType.RightAux)).normalized;
     }
 
@@ -234,8 +247,11 @@ public class BoneGroup : MonoBehaviour
     {
         PositionCylinder(frontPrimaryCylinder, frontPrimaryVertex);
         PositionCylinder(backPrimaryCylinder, backPrimaryVertex);
-        PositionCylinder(leftAuxCylinder, leftAuxVertex);
-        PositionCylinder(rightAuxCylinder, rightAuxVertex);
+        if (leftAuxVertex != null)
+        {
+            PositionCylinder(leftAuxCylinder, leftAuxVertex);
+            PositionCylinder(rightAuxCylinder, rightAuxVertex);
+        }
     }
 
     private void InitCylinder(GameObject cylinder, GameObject indicator, BoneVertexType type)
@@ -250,6 +266,8 @@ public class BoneGroup : MonoBehaviour
 
     public void ApplyFlip()
     {
+        if (leftAuxVertex == null)
+            return;
         if(TableManager.Instance.catFlipMult * flippedMultiplier == -1)
         {
             leftAuxCylinder.GetComponent<BoneCollisionCylinder>().SetFlipInvisible();
@@ -283,8 +301,11 @@ public class BoneGroup : MonoBehaviour
 
         frontPrimaryCylinder.SetActive(true);
         backPrimaryCylinder.SetActive(true);
-        leftAuxCylinder.SetActive(true);
-        rightAuxCylinder.SetActive(true);
+        if (leftAuxVertex != null)
+        {
+            leftAuxCylinder.SetActive(true);
+            rightAuxCylinder.SetActive(true);
+        }
 
         if(parent)
         {
@@ -308,8 +329,11 @@ public class BoneGroup : MonoBehaviour
 
         frontPrimaryCylinder.SetActive(false);
         backPrimaryCylinder.SetActive(false);
-        leftAuxCylinder.SetActive(false);
-        rightAuxCylinder.SetActive(false);
+        if (leftAuxVertex != null)
+        {
+            leftAuxCylinder.SetActive(false);
+            rightAuxCylinder.SetActive(false);
+        }
     }
 
     protected void OnCollideDrop()
@@ -321,8 +345,11 @@ public class BoneGroup : MonoBehaviour
 
         frontPrimaryCylinder.SetActive(true);
         backPrimaryCylinder.SetActive(true);
-        leftAuxCylinder.SetActive(true);
-        rightAuxCylinder.SetActive(true);
+        if (leftAuxVertex != null)
+        {
+            leftAuxCylinder.SetActive(true);
+            rightAuxCylinder.SetActive(true);
+        }
 
         Attach(otherGroup);
     }
@@ -362,20 +389,29 @@ public class BoneGroup : MonoBehaviour
     {
         Destroy(frontPrimaryCylinder);
         Destroy(backPrimaryCylinder);
-        Destroy(leftAuxCylinder);
-        Destroy(rightAuxCylinder);
+       
 
         Destroy(frontPrimaryIndicator);
         Destroy(backPrimaryIndicator);
-        Destroy(leftAuxIndicator);
-        Destroy(rightAuxIndicator);
+        
 
         Destroy(frontPrimaryVertex);
         Destroy(backPrimaryVertex);
-        Destroy(leftAuxVertex);
-        Destroy(rightAuxVertex);
+
+        if (leftAuxVertex != null)
+        {
+            Destroy(leftAuxCylinder);
+            Destroy(rightAuxCylinder);
+
+            Destroy(leftAuxIndicator);
+            Destroy(rightAuxIndicator);
+
+            Destroy(leftAuxIndicator);
+            Destroy(rightAuxIndicator);
+        }
 
         isCleaned = true;
+
     }
     public BoneVertexType FindBoneInChildren(BoneGroup bone)
     {

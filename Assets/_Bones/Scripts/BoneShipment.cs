@@ -23,13 +23,16 @@ public class BoneShipment : MonoBehaviour
             bones[i] = myGO;
         }
 
-        if (special)
+        List<GameObject> sendBones = bones;
+
+        if (special&&specialBones.Count>0)
         {
+        
             int randomIndex = Random.Range(0, n - 1);
             int specialIndex = Random.Range(0, specialBones.Count - 1);
 
-            bones[randomIndex] = specialBones[specialIndex];
+            sendBones[randomIndex] = specialBones[specialIndex];
         }
-        return bones;
+        return sendBones;
     }
 }

@@ -27,6 +27,9 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     [SerializeField]
     private float beingThrownThreshold;
 
+    private float heightThreshold = 0;
+    public float HeightSwitchOver { set { heightThreshold = value; } }
+
     protected override void Awake()
     {
         base.Awake();
@@ -65,8 +68,6 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         //if(firstPickup)
           transform.forward = Camera.main.transform.forward * flippedMultiplier;
 
-        rB.constraints = RigidbodyConstraints.FreezeRotation;
-
         if (currentCylinderDoingHitting)
         {
             currentCylinderDoingHitting.SetConnectVisible();
@@ -78,6 +79,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         OnPickup();
         firstPickup = false;
         StartCoroutine(DelayedLayerChange());
+        Rb.constraints = (RigidbodyConstraints)0;
 
     }
 
@@ -96,6 +98,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         }
         else if(currentCylinderHit != null)
         {
+           
             mPointApproacher.StartApproach(
                 getRelativePosition(currentCollisionVertex.Value, currentCylinderHit.MyBone, currentCylinderHit.MyType), 0.5f);
 
@@ -138,8 +141,11 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     }
     IEnumerator DelayedLayerChange()
     {
-
-        yield return new WaitForSeconds(0.4f);
+        FullLayerChange(gameObject, 14);
+        while (rB.velocity.magnitude>0.5f)
+        {
+            yield return null;
+        }
         FullLayerChange(gameObject, physicsLayer);
         yield break;
     }

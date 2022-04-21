@@ -94,11 +94,14 @@ public class Stopwatch : MonoBehaviour, IGrabbable
             else
                 AudioManager.Instance.PlayTickTock(false);
         }
-        if(resisting)
+        if(resisting == true)
         {
-            resistTimer += Time.deltaTime;
-            if (resistTimer > resistTime + 0.5f)
+            resistTime += Time.deltaTime;
+            if(resistTime > 1)
+            {
                 resisting = false;
+                touchEffect.Play();
+            }
         }
 
     }
@@ -114,10 +117,10 @@ public class Stopwatch : MonoBehaviour, IGrabbable
     /// </summary>
     public void ResistDialBack()
     {
-        resisting = true;
-        resistTime = Time.time;
-        resistTimer = resistTime;
+        touchEffect.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         breakEffect.Play();
+        resistTime = 0;
+        resisting = true;
     }
     public void PickedUp()
     {

@@ -143,5 +143,5 @@ MonoBehaviour:
   switchResistance: 0
   aVelocityClamp: 0.05
   stopWatchRotModifier: 1
-  linearDistMulti: 2
+  linearDistMulti: 5
   realUp: {x: 0, y: 0, z: 0}
