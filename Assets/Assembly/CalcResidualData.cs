@@ -67,8 +67,8 @@ public class CalcResidualData : IAssemblyStage
         List<ResidualBoneData> threeChilders = new List<ResidualBoneData>();
         List<ResidualBoneData> twoChilders = new List<ResidualBoneData>();
         List<ResidualBoneData> backups = new List<ResidualBoneData>();
-        backups.Add(headBoneData.parentBone);
-        backups.Add(tailBoneData.parentBone);
+        backups.Add(headBoneData.parentBone == null ? headBoneData : headBoneData.parentBone);
+        backups.Add(tailBoneData.parentBone == null ? tailBoneData : tailBoneData.parentBone);
         while(threeChilders.Count < 2 && (boneDataStepper2.parentBone || boneDataStepper.parentBone))
         {
             if(doTailStepFlag)
