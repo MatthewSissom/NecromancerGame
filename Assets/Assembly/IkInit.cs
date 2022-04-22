@@ -49,7 +49,14 @@ public class IkInit : IAssemblyStage, IikTransformProvider, IikTargetProvider
 #if USING_IK
     LabledSkeletonData<FABRIK> GetIkComponents(LabledSkeletonData<Transform> chainStarts)
     {
-        return chainStarts.Convert((Transform t) => t?.GetComponent<FABRIK>());
+        FABRIK GetFabrikComponent(Transform t)
+        {
+            if (t == null)
+                return null;
+            FABRIK chain =  t.GetComponent<FABRIK>();
+            return chain;
+        }
+        return chainStarts.Convert(GetFabrikComponent);
     }
 
     LabledSkeletonData<Transform> GetTargets(LabledSkeletonData<FABRIK> chains) 
@@ -103,6 +110,9 @@ public class IkInit : IAssemblyStage, IikTransformProvider, IikTargetProvider
 
     void RebuildIKChains(LabledSkeletonData<Transform> transforms)
     {
+        // Assume that all chains are invalid to start
+        List<FABRIK> invaildChains = SearchHigharchyForChains(GetRoot(transforms.Shoulder));
+
         // Get basic data
         LabledSkeletonData<FABRIK> ikComponents = GetIkComponents(transforms);
         LabledSkeletonData<Transform> targets = GetTargets(ikComponents);
@@ -111,9 +121,6 @@ public class IkInit : IAssemblyStage, IikTransformProvider, IikTargetProvider
 
 
         // Rebuild transform chains
-
-        // Assume that all chains are invalid to start
-        List<FABRIK> invaildChains = SearchHigharchyForChains(GetRoot(transforms.Shoulder));
         LabledSkeletonData<ChainInitData> newChainData = PackageNewChainData(ikComponents, transformLists);
         foreach(var data in newChainData.ToList())
         {
