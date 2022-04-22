@@ -35,6 +35,8 @@ public class CalcResidualData : IAssemblyStage
 
         //step from root to head
         ResidualBoneData boneDataStepper = rootBoneData.GetChild(BoneVertexType.FrontPrimary);
+        if (boneDataStepper == null)
+            boneDataStepper = rootBoneData;
         boneDataStepper.MarkNeck();
         while(boneDataStepper.getAcrossVertex() != null)
         {

@@ -8,9 +8,10 @@ public class CalcResidualDataForPrefab : CalcResidualData
     {
 #if UNITY_EDITOR
 
-        Transform skull = skeleton.transform.GetChild(0);
-        Transform skullEndMarker = skeleton.transform.GetChild(1);
+        Transform skull = skeleton.transform.Find("Skull");
+        Transform skullEndMarker = skeleton.transform.Find("SkullTarget");
 
+        // Basic data init
         DFRecurse( skull, 
             (Transform parent, Transform child, int childIndex) => {
                 var rbd = child.gameObject.AddComponent<ResidualBoneData>();
@@ -18,6 +19,7 @@ public class CalcResidualDataForPrefab : CalcResidualData
                 rbd.DebugIdInit(child.position, parent == null);
             }
         );
+        // Use higharchy to set parent child relationships
         DFRecurse(skull,
             (Transform parent, Transform child, int childIndex) => {
                 if(parent != null)
@@ -27,6 +29,12 @@ public class CalcResidualDataForPrefab : CalcResidualData
                     if (pRBD != null)
                         pRBD.DebugAddChild(cRBD, GetConnectionData(child, childIndex));
                 }
+            }
+        );
+        // Remove GOs from higharchy
+        DFRecurse(skull,
+            (Transform parent, Transform child, int childIndex) => {
+                child.parent = null;
             }
         );
 
@@ -71,14 +79,14 @@ public class CalcResidualDataForPrefab : CalcResidualData
         }
     }
 
-    protected void DFRecurse(Transform start, System.Action<Transform, Transform, int> applyToAll) 
+    protected void DFRecurse(Transform me, System.Action<Transform, Transform, int> applyToAll, Transform parent = null, int index = 0) 
     {
-        for(int i = 0; i < start.childCount; ++i)
+        for(int i = 0; i < me.childCount; ++i)
         {
-            Transform child = start.GetChild(i);
+            Transform child = me.GetChild(i);
             if(child.name != "Model")
-                DFRecurse(child , applyToAll);
+                DFRecurse(child , applyToAll, me, i);
         }
-        applyToAll(null, start, 0);
+        applyToAll(parent, me, index);
     }
 }

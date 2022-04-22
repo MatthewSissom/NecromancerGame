@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-public class MovementDataInit : IAssemblyStage
+public class MovementDataInit : IAssemblyStage, IBehaviourDataProvider
 {
-    public SkeletonLayoutData ComputedLayoutData { get; private set; }
+    public SkeletonLayoutData LayoutData { get; private set; }
 
     private LimbTunables limbTunables;
 
@@ -128,7 +128,7 @@ public class MovementDataInit : IAssemblyStage
         float totalLength = 0;
         foreach (var length in spineLengths.ToList())
             totalLength += length;
-        ComputedLayoutData = new SkeletonLayoutData(limbEnds, spinePoints, totalLength);
+        LayoutData = new SkeletonLayoutData(limbEnds, spinePoints, totalLength);
 
         yield break;
     }
@@ -209,7 +209,7 @@ public class MovementDataInit : IAssemblyStage
             }
         }
 
-        ComputedLayoutData = new SkeletonLayoutData(limbEnds, spinePoints, totalDistance);
+        LayoutData = new SkeletonLayoutData(limbEnds, spinePoints, totalDistance);
     }
 }
 

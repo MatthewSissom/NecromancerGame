@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class ResidualBoneData : MonoBehaviour
 {
@@ -395,12 +396,16 @@ public class ResidualBoneData : MonoBehaviour
     }
     public ResidualBoneData GetChild(BoneVertexType vertex)
     {
+        Assert.IsNotNull(childBones);
+        Assert.IsTrue(childBones.ContainsKey(vertex));
         return childBones[vertex];
     }
+
     private float VDistance(BoneVertexType v1, BoneVertexType v2)
     {
         return Vector3.Distance(vertexPositions[v1], vertexPositions[v2]);
     }
+
     private float getMaxAcrossDistance(BoneVertexType startVertex)
     {
         return Mathf.Max(

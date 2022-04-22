@@ -16,3 +16,8 @@ public interface IikTargetProvider
 {
     LabledSkeletonData<Transform> Targets { get; }
 }
+
+public interface IBehaviourDataProvider
+{
+    SkeletonLayoutData LayoutData { get; }
+}

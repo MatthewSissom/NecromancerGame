@@ -55,16 +55,14 @@ public class StateManager : StateManagerBase
     {
         switch (DebugModes.StateMode)
         {
-            default:
-                yield return StartCoroutine(MainLoop());
-                break;
             case DebugModes.EStateDebugMode.SkipMenus:
                 yield return StartCoroutine(NoMenuLoop());
                 break;
-            case DebugModes.EStateDebugMode.AssemblyAndPlayPen:
-                GhostManager.Instance.ShortenDeliveryTimes();
+
+            case DebugModes.EStateDebugMode.AssemblyTest:
                 yield return StartCoroutine(NoMenuLoop());
                 break;
+
             case DebugModes.EStateDebugMode.PlaypenOnly:
                 while (true)
                 {
@@ -74,6 +72,10 @@ public class StateManager : StateManagerBase
                     PlayPenState.Instance.SetSkeleton(testSkeleton);
                     yield return SetState(GameManager.Instance.Game());
                 }
+
+            default:
+                yield return StartCoroutine(MainLoop());
+                break;
         }
     }
 

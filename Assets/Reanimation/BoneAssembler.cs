@@ -6,10 +6,14 @@ using System;
 
 public class BoneAssembler : State
 {
+    public static BoneAssembler Instance { get; private set; }
+
     [SerializeField]
     private GameObject rootBone;
     private GameObject skeleton;
     private List<IAssemblyStage> assemblyStages;
+
+
     public void Start()
     {
         SetPipeline(rootBone,
@@ -18,17 +22,13 @@ public class BoneAssembler : State
             new MakeShoulderRoot(),
             new ReassignParents(),
             new RemoveGrabbableInfo(),
-            //TODO: new step that puts legs, then spine parts onto the emptyarmature
             new InsertIntoArmature(),
-
             //Save goes here
-
-            new TempDebugPause(),
             new IkInit(),
-
+            new MovementDataInit(),
             //TODO: step to remove residualbonedata from bones (not necessary but feels cleaner)
             //  new RemoveResidualData(),
-            new TempDebugPause() //just pauses the game once it finishes, temporary
+            new BehaviourInit()
         );
 
         //Loaded cat pipeline:
@@ -38,6 +38,17 @@ public class BoneAssembler : State
          * 
          */
     }
+
+    override protected void Awake()
+    {
+        if (Instance)
+        {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
+    }
+
     public override IEnumerator Routine()
     {
         Debug.Log("starting bone assembly");
@@ -46,6 +57,7 @@ public class BoneAssembler : State
 
     void SetPipeline(GameObject startSkeleton, params IAssemblyStage[] assemblySequence)
     {
+        skeleton = startSkeleton;
         assemblyStages = new List<IAssemblyStage>(assemblySequence);
     }
     IEnumerator RunPipeline()
@@ -62,6 +74,23 @@ public class BoneAssembler : State
                 previousStage = stage;
         }
     }
+
+#if UNITY_EDITOR
+    public void SetTestPipeline(GameObject prefab)
+    {
+        GameObject go = Instantiate(prefab);
+        SetPipeline(go,
+            new CalcResidualDataForPrefab(),
+            new MakeShoulderRoot(),
+            new ReassignParents(),
+            new RemoveGrabbableInfo(),
+            new InsertIntoArmature(),
+            new IkInit(),
+            new MovementDataInit(),
+            new BehaviourInit()
+        );
+    }
+#endif
     /*
     [SerializeField]
     //root gameObject for connection colliders, the higharchy of this gameObject and the

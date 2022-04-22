@@ -10,7 +10,7 @@ public class DebugModes : MonoBehaviour
         None,
         Tutorial,
         SkipMenus,
-        AssemblyAndPlayPen,
+        AssemblyTest,
         PlaypenOnly
     }
     [SerializeField]
@@ -19,11 +19,16 @@ public class DebugModes : MonoBehaviour
     [SerializeField]
     bool skipCameraTransitions;
 
+    [Header("Assembly")]
+
     [SerializeField]
     bool colorBonesInAssembly;
 
     [SerializeField]
     bool additionalAssemblerInfo;
+
+    [SerializeField]
+    GameObject assemblyTestPrefab;
 
     [Header("Input")]
     [SerializeField]
@@ -50,6 +55,7 @@ public class DebugModes : MonoBehaviour
     public static bool AdditionalAssemblerInfo { get => instance.additionalAssemblerInfo; } 
     public static bool UseMouseInput { get => instance.toggleMouseInput; } 
     public static GameObject IKTestPrefab { get => instance.ikTestPrefab; } 
+    public static GameObject AssemblyTestPrefab { get => instance.assemblyTestPrefab; } 
     public static DebugPathFlags SkeletonPathMode { get => instance.skeletonPathMode; } 
 
 

@@ -202,9 +202,23 @@ public class GameManager : StateManagerBase
                 yield return SetState(typeof(PlayPenState));
                 yield return SetState(typeof(GameCleanUp));
                 break;
+
             case DebugModes.EStateDebugMode.Tutorial:
                 yield return StartCoroutine(Tutorial());
                 break;
+
+            case DebugModes.EStateDebugMode.AssemblyTest:
+                yield return SetState(typeof(GameInit));
+
+                BoneAssembler.Instance.SetTestPipeline(DebugModes.AssemblyTestPrefab);
+                yield return SetState(typeof(BoneAssembler));
+
+                yield return CameraTransition("ToPlayPenMid");
+                yield return CameraTransition("PlayPen");
+                yield return SetState(typeof(PlayPenState));
+                yield return SetState(typeof(GameCleanUp));
+                break;
+
             default:
                 yield return StartCoroutine(MainGameLoop());
                 break;

@@ -111,12 +111,11 @@ public class SkeletonBehaviour : MonoBehaviour
 
         Debug.Log("Start init used on catbehavior. This should only happen when using the playpen debug mode");
 
-        var tunables = new SkeletonPathTunables(.1f, Speed ); 
-
+        var tunables = new SkeletonPathTunables(.1f, Speed);
         MovementDataInit dataInit = new MovementDataInit();
         dataInit.EditorInit(limbEnds.Convert((DebugLimbData dld) => dld.data).ToList().ToArray(), skeletonPositions, targets, tunables);
-        SkeletonLayoutData layoutData = dataInit.ComputedLayoutData;
-        BehaviorInit(layoutData,tunables);
+        SkeletonLayoutData layoutData = dataInit.LayoutData;
+        BehaviorInit(layoutData, tunables);
     }
 
     private bool MoveToPoint(Vector3 destination)
