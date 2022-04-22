@@ -118,8 +118,7 @@ public class CalcResidualData : IAssemblyStage
             if(shoulderBoneData == null && bd.isShoulderSideSpine)
             {
                 shoulderBoneData = bd;
-            }
-            if(hipBoneData == null && bd.isHipSideSpine)
+            } else if(hipBoneData == null && bd.isHipSideSpine)
             {
                 hipBoneData = bd;
             }
@@ -129,8 +128,7 @@ public class CalcResidualData : IAssemblyStage
             if (shoulderBoneData == null && bd.isShoulderSideSpine)
             {
                 shoulderBoneData = bd;
-            }
-            if (hipBoneData == null && bd.isHipSideSpine)
+            } else if (hipBoneData == null && bd.isHipSideSpine)
             {
                 hipBoneData = bd;
             }
@@ -140,8 +138,7 @@ public class CalcResidualData : IAssemblyStage
             if (shoulderBoneData == null && bd.isShoulderSideSpine)
             {
                 shoulderBoneData = bd;
-            }
-            if (hipBoneData == null && bd.isHipSideSpine)
+            } else if (hipBoneData == null && bd.isHipSideSpine)
             {
                 hipBoneData = bd;
             }
