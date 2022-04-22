@@ -18,6 +18,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     private PointApproacher mPointApproacher;
 
     private bool firstPickup = true;
+    public bool FirstPickup { get { return firstPickup; } }
 
     Transform IGrabbable.transform { get { return transform; } }
     public Rigidbody Rb { get { return rB; } }
@@ -49,7 +50,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
     { 
 
         rB.drag = 0.1f;
-        StartCoroutine(DelayedLayerChange());
+        DelayedLayerChange();
 
     }
 
@@ -64,9 +65,15 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         rB.useGravity = false;
 
         rB.drag = 0;
-        
-        //if(firstPickup)
-          transform.forward = Camera.main.transform.forward * flippedMultiplier;
+
+        if (firstPickup)
+        {
+            transform.forward = Camera.main.transform.forward * flippedMultiplier;
+        }
+        else
+        {
+            Rb.constraints = 0;
+        }
 
         if (currentCylinderDoingHitting)
         {
@@ -77,9 +84,7 @@ public class GrabbableGroup : BoneGroup, IGrabbable
             currentCylinderHit.SetConnectVisible();
         }
         OnPickup();
-        firstPickup = false;
-        StartCoroutine(DelayedLayerChange());
-        Rb.constraints = (RigidbodyConstraints)0;
+        
 
     }
 
@@ -139,15 +144,11 @@ public class GrabbableGroup : BoneGroup, IGrabbable
         //mass is considered temporary and will be written over unless directly set
         rB.mass = rB.mass;
     }
-    IEnumerator DelayedLayerChange()
+    public void DelayedLayerChange()
     {
-        FullLayerChange(gameObject, 14);
-        while (rB.velocity.magnitude>0.5f)
-        {
-            yield return null;
-        }
         FullLayerChange(gameObject, physicsLayer);
-        yield break;
+        Rb.constraints = (RigidbodyConstraints)0;
+        firstPickup = false;
     }
     
 }

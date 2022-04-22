@@ -361,14 +361,13 @@ public class BoneGroup : MonoBehaviour
     /// <param name="layerNumber">layer we are changing to</param>
     public void FullLayerChange(GameObject obj, int layerNumber)
     {
-        if (null == obj)
+        if (null == obj || obj.tag == "ColliderCylinder")
         {
             return;
         }
-        if(obj.tag != "ColliderCylinder")
-        {
-            obj.layer = layerNumber;
-        }
+       
+        obj.layer = layerNumber;
+      
 
         foreach (Transform child in obj.transform)
         {

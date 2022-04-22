@@ -23,8 +23,9 @@ public class BoneShipment : MonoBehaviour
             bones[i] = myGO;
         }
 
-        List<GameObject> sendBones = bones;
-
+        //make a new copy of the bone list to be sent to the ghosts. Must Use new or sendbones will reference the original list.
+        List<GameObject> sendBones = new List<GameObject>(bones);
+  
         if (special&&specialBones.Count>0)
         {
         

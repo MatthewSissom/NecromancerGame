@@ -157,4 +157,4 @@ MonoBehaviour:
   heightThreshold: 100
   speed: 0
   previousLocation: {x: 0, y: 0, z: 0}
-  offSetHeight: 0.05
+  offSetHeight: 0

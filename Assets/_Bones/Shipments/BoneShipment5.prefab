@@ -353,10 +353,14 @@ MonoBehaviour:
   - {fileID: 4777319146964545170, guid: 843976b442beca8418d3fc2fcc566880, type: 3}
   - {fileID: 8681569674231407083, guid: 939bfa149f25e614c96078c0f2c78045, type: 3}
   - {fileID: 4403942450086851822, guid: 90c152b94957e9f40915e1f68bd0323b, type: 3}
+  - {fileID: 5426715947578482954, guid: 8eff15c916b9415429c849772bfcd66e, type: 3}
   - {fileID: 2823066793007793120, guid: a43e3b45a9c7f194ebf84e22cbf3f27a, type: 3}
   - {fileID: 3448698190246710477, guid: bb7731443dffc3a45bba843c7caad498, type: 3}
-  - {fileID: 5426715947578482954, guid: 8eff15c916b9415429c849772bfcd66e, type: 3}
-  specialBones: []
+  specialBones:
+  - {fileID: 4346642184240622019, guid: c3d4b06803d5e634291a89f10fd7dee9, type: 3}
+  - {fileID: 6106531193394082445, guid: d9af0db07b3f5df42af46cf536b3d82d, type: 3}
+  - {fileID: 3836386919472663181, guid: dc5937afc757a904cbeb6fde507808a6, type: 3}
+  - {fileID: 3289754914319845337, guid: 48cba32e609d69f49bb985a4ed11e9aa, type: 3}
 --- !u!1001 &1185036504
 PrefabInstance:
   m_ObjectHideFlags: 0

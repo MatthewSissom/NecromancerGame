@@ -43,8 +43,6 @@ public class BoneMovingTouch : TouchProxy
 
     private const float watchLerpEndFrame = 30;
 
-    [SerializeField]
-    private float offSetHeight = 0.05f;
 
     private GrabbableGroup potentialPickup;
     private float potentialPickupTimer;
@@ -152,32 +150,31 @@ public class BoneMovingTouch : TouchProxy
         if (activeBone != null)
         {
             //-move the active object to the proxy-//
+            if (activeBone.transform.position.y >= transform.position.y && activeBone.FirstPickup)
+                activeBone.DelayedLayerChange();
 
             const float maxVelocity = 7.0f;
             const float baseMult = 20;
             //find movement vector
             Vector3 toProxy;
             //don't engage the offset until the bone is above the table.
-            if(activeBone.transform.position.y > offSetHeight)
-                toProxy = (transform.position + offset - activeBone.transform.root.position) * baseMult;
-            else
-                toProxy = (transform.position - activeBone.transform.root.position) * baseMult;
+         
+            toProxy = (transform.position+offset - activeBone.transform.root.position) * baseMult;
             Vector3.ClampMagnitude(toProxy, maxVelocity);
             activeBone.Rb.velocity = toProxy;
         }
         if(activeWatch != null)
         {
             //-move the active object to the proxy-//
-
+       
             const float maxVelocity = 7.0f;
             const float baseMult = 20;
             //find movement vector
             Vector3 toProxy;
             //don't engage the offset until the bone is above the table.
-            if (activeWatch.transform.position.y > offSetHeight)
-                toProxy = (transform.position + offset - activeWatch.transform.position) * baseMult;
-            else
-                toProxy = (transform.position - activeWatch.transform.root.position) * baseMult;
+           
+            toProxy = (transform.position + offset - activeWatch.transform.position) * baseMult;
+           
             Vector3.ClampMagnitude(toProxy, maxVelocity);
             activeWatch.Rb.velocity = toProxy;
         }
