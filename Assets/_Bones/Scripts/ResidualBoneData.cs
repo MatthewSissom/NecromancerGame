@@ -71,7 +71,6 @@ public class ResidualBoneData : MonoBehaviour
         boneGroupPosition = boneGroup.transform.position;
         isRoot = boneGroup.isRoot;
 
-
         vertexPositions = new Dictionary<BoneVertexType, Vector3>();
 
         vertexPositions[BoneVertexType.FrontPrimary] = 
@@ -137,15 +136,72 @@ public class ResidualBoneData : MonoBehaviour
 
 #if UNITY_EDITOR
 
-    public void DebugAddChild(ResidualBoneData child, BoneVertexType type)
+    private Dictionary<BoneVertexType, ResidualBoneData> LazyInitChildBones()
     {
-        childBones = childBones ?? new Dictionary<BoneVertexType, ResidualBoneData>();
+        // no init needed
+        if (childBones != null)
+            return childBones;
 
+        childBones = new Dictionary<BoneVertexType, ResidualBoneData>();
+        childBones[BoneVertexType.FrontPrimary] = null;
+        childBones[BoneVertexType.BackPrimary] = null;
+        childBones[BoneVertexType.LeftAux] = null;
+        childBones[BoneVertexType.RightAux] = null;
+        numChildren = 0;
+
+        return childBones;
     }
 
-    public void DebugFinalizeChildren()
+    public Dictionary<BoneVertexType, Vector3> LazyInitVertexPositions()
     {
+        //no init needed;
+        if (vertexPositions != null)
+            return vertexPositions;
 
+        vertexPositions = new Dictionary<BoneVertexType, Vector3>();
+
+        vertexPositions[BoneVertexType.FrontPrimary] = new Vector3(0,0,0);
+        vertexPositions[BoneVertexType.BackPrimary] =  new Vector3(0,0,0);
+        vertexPositions[BoneVertexType.LeftAux] =      new Vector3(0,0,0);
+        vertexPositions[BoneVertexType.RightAux] = new Vector3(0, 0, 0);
+
+        return vertexPositions;
+    }
+
+    public struct BoneConnectionData
+    {
+        public BoneVertexType vertexOnParent    ;
+        public BoneVertexType vertexOnChild     ;
+        public Vector3 position                 ;
+
+        public BoneConnectionData(BoneVertexType vertexOnParent, BoneVertexType vertexOnChild, Vector3 position)
+        {
+            this.vertexOnParent = vertexOnParent;
+            this.vertexOnChild = vertexOnChild;
+            this.position = position;
+        }
+    }
+
+
+    public void DebugIdInit(Vector3 position, bool isRoot = false)
+    {
+        boneGroupPosition = position;
+        this.isRoot = isRoot;
+    }
+
+    public void DebugAddChild(ResidualBoneData child, BoneConnectionData connectionData)
+    {
+        childBones = LazyInitChildBones();
+        if (child != null)
+        {
+            childBones[connectionData.vertexOnParent] = child;
+            child.parentBone = this;
+            child.parentsMeConnectLocation = connectionData.vertexOnParent;
+            child.myParentConnectLocation = connectionData.vertexOnChild;
+            child.LazyInitVertexPositions()[connectionData.vertexOnChild] = connectionData.position;
+        }
+        LazyInitVertexPositions()[connectionData.vertexOnParent] = connectionData.position;
+        numChildren++;
     }
 
 #endif

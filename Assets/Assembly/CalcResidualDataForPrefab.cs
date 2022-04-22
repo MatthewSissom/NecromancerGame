@@ -8,28 +8,77 @@ public class CalcResidualDataForPrefab : CalcResidualData
     {
 #if UNITY_EDITOR
 
-        Transform root = skeleton.transform.GetChild(0);
+        Transform skull = skeleton.transform.GetChild(0);
+        Transform skullEndMarker = skeleton.transform.GetChild(1);
 
-
-
-
-        //creating and populating residual data with initial position/parent-child relations
-        foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
-        {
-            bone.GetComponent<ResidualBoneData>().PopulateDataFrom(bone);
-            bone.GetComponent<ResidualBoneData>().PopulateChildrenFrom(bone);
-        }
-
-        ResidualBoneData rootBoneData = null;
-        foreach (GrabbableGroup bone in TableManager.Instance.boneObjects)
-        {
-            TableManager.Instance.residualBoneData.Add(bone.residualBoneData);
-            if (bone.isRoot)
-            {
-                rootBoneData = bone.residualBoneData;
+        DFRecurse( skull, 
+            (Transform parent, Transform child, int childIndex) => {
+                var rbd = child.gameObject.AddComponent<ResidualBoneData>();
+                TableManager.Instance.residualBoneData.Add(rbd);
+                rbd.DebugIdInit(child.position, parent == null);
             }
-        }
-        return rootBoneData;
+        );
+        DFRecurse(skull,
+            (Transform parent, Transform child, int childIndex) => {
+                if(parent != null)
+                {
+                    var pRBD = parent.GetComponent<ResidualBoneData>();
+                    var cRBD = child.GetComponent<ResidualBoneData>();
+                    if (pRBD != null)
+                        pRBD.DebugAddChild(cRBD, GetConnectionData(child, childIndex));
+                }
+            }
+        );
+
+        return skull.GetComponent<ResidualBoneData>();
 #endif
+    }
+
+    protected ResidualBoneData.BoneConnectionData GetConnectionData(Transform child, int childIndex)
+    {
+        switch(childIndex)
+        {
+            // no parent
+            case -1:
+                return new ResidualBoneData.BoneConnectionData(
+                    BoneVertexType.FrontPrimary,
+                    BoneVertexType.FrontPrimary,
+                    child.position
+                    );
+            // primary connection
+            case 0:
+                return new ResidualBoneData.BoneConnectionData(
+                    BoneVertexType.BackPrimary,
+                    BoneVertexType.FrontPrimary,
+                    child.position
+                    );
+            // left leg
+            case 1:
+                return new ResidualBoneData.BoneConnectionData(
+                    BoneVertexType.LeftAux,
+                    BoneVertexType.FrontPrimary,
+                    child.position
+                    );
+            // right leg
+            case 2:
+                return new ResidualBoneData.BoneConnectionData(
+                    BoneVertexType.RightAux,
+                    BoneVertexType.FrontPrimary,
+                    child.position
+                    );
+            default:
+                throw new System.ArgumentOutOfRangeException("Child index not handled, check that test cat is set up propertly");
+        }
+    }
+
+    protected void DFRecurse(Transform start, System.Action<Transform, Transform, int> applyToAll) 
+    {
+        for(int i = 0; i < start.childCount; ++i)
+        {
+            Transform child = start.GetChild(i);
+            if(child.name != "Model")
+                DFRecurse(child , applyToAll);
+        }
+        applyToAll(null, start, 0);
     }
 }
