@@ -35,19 +35,27 @@ public class CalcResidualData : IAssemblyStage
 
         //step from root to head
         ResidualBoneData boneDataStepper = rootBoneData.GetChild(BoneVertexType.FrontPrimary);
+
+        ResidualBoneData headBoneData = null;
         if (boneDataStepper == null)
-            boneDataStepper = rootBoneData;
-        boneDataStepper.MarkNeck();
-        while(boneDataStepper.getAcrossVertex() != null)
         {
-            boneDataStepper.MarkShoulderSideSpine();
-            orderedSpine.Add(boneDataStepper.transform);
-            boneDataStepper = boneDataStepper.GetChild(boneDataStepper.getAcrossVertex().Value);
+            boneDataStepper = rootBoneData;
+            headBoneData = boneDataStepper;
+            boneDataStepper.MarkHead();
+        } else
+        {
+            boneDataStepper.MarkNeck();
+            while (boneDataStepper.getAcrossVertex() != null)
+            {
+                boneDataStepper.MarkShoulderSideSpine();
+                orderedSpine.Add(boneDataStepper.transform);
+                boneDataStepper = boneDataStepper.GetChild(boneDataStepper.getAcrossVertex().Value);
+            }
+            headBoneData = boneDataStepper;
+            boneDataStepper.MarkHead();
+            orderedSpine.Reverse();
+            orderedSpine.Add(rootBoneData.transform);
         }
-        ResidualBoneData headBoneData = boneDataStepper;
-        boneDataStepper.MarkHead();
-        orderedSpine.Reverse();
-        orderedSpine.Add(rootBoneData.transform);
 
         //step from root to tail
         boneDataStepper = rootBoneData.GetChild(BoneVertexType.BackPrimary);
@@ -65,6 +73,8 @@ public class CalcResidualData : IAssemblyStage
         //substep 1: categorize bones as three-childers or two-childers
         boneDataStepper = headBoneData;
         ResidualBoneData boneDataStepper2 = tailBoneData;
+        bool skipHeadSide = headBoneData == rootBoneData;
+        bool skipTailSide = tailBoneData == rootBoneData;
         bool doTailStepFlag = false;
         List<ResidualBoneData> threeChilders = new List<ResidualBoneData>();
         List<ResidualBoneData> twoChilders = new List<ResidualBoneData>();
@@ -73,7 +83,7 @@ public class CalcResidualData : IAssemblyStage
         backups.Add(tailBoneData.parentBone == null ? tailBoneData : tailBoneData.parentBone);
         while(threeChilders.Count < 2 && (boneDataStepper2.parentBone || boneDataStepper.parentBone))
         {
-            if(doTailStepFlag)
+            if(doTailStepFlag && !skipTailSide)
             {
                 if(!boneDataStepper2.parentBone)
                 {
@@ -81,7 +91,7 @@ public class CalcResidualData : IAssemblyStage
                     continue;
                 }
                 boneDataStepper2 = boneDataStepper2.parentBone;
-                if(boneDataStepper2.numChildren == 3)
+                if(boneDataStepper2.numChildren >= 3)
                 {
                     threeChilders.Add(boneDataStepper2);
                 }
@@ -89,7 +99,7 @@ public class CalcResidualData : IAssemblyStage
                 {
                     twoChilders.Add(boneDataStepper2);
                 }
-            } else
+            } else if(!skipHeadSide)
             {
                 if (!boneDataStepper.parentBone)
                 {
@@ -97,7 +107,7 @@ public class CalcResidualData : IAssemblyStage
                     continue;
                 }
                 boneDataStepper = boneDataStepper.parentBone;
-                if (boneDataStepper.numChildren == 3)
+                if (boneDataStepper.numChildren >= 3)
                 {
                     threeChilders.Add(boneDataStepper);
                 }
@@ -115,6 +125,10 @@ public class CalcResidualData : IAssemblyStage
         ResidualBoneData hipBoneData = null;
         foreach(ResidualBoneData bd in threeChilders)
         {
+            if(shoulderBoneData == bd || hipBoneData == bd)
+            {
+                continue;
+            }
             if(shoulderBoneData == null && bd.isShoulderSideSpine)
             {
                 shoulderBoneData = bd;
@@ -123,8 +137,56 @@ public class CalcResidualData : IAssemblyStage
                 hipBoneData = bd;
             }
         }
+        foreach (ResidualBoneData bd in threeChilders)
+        {
+            if (shoulderBoneData == bd || hipBoneData == bd)
+            {
+                continue;
+            }
+            if (shoulderBoneData == null)
+            {
+                shoulderBoneData = bd;
+            }
+            else if (hipBoneData == null)
+            {
+                hipBoneData = bd;
+            }
+        }
         foreach (ResidualBoneData bd in twoChilders)
         {
+            if (shoulderBoneData == bd || hipBoneData == bd)
+            {
+                continue;
+            }
+            if (shoulderBoneData == null && bd.isShoulderSideSpine)
+            {
+                shoulderBoneData = bd;
+            } else if (hipBoneData == null && bd.isHipSideSpine)
+            {
+                hipBoneData = bd;
+            }
+        }
+        foreach (ResidualBoneData bd in twoChilders)
+        {
+            if (shoulderBoneData == bd || hipBoneData == bd)
+            {
+                continue;
+            }
+            if (shoulderBoneData == null)
+            {
+                shoulderBoneData = bd;
+            }
+            else if (hipBoneData == null)
+            {
+                hipBoneData = bd;
+            }
+        }
+        foreach (ResidualBoneData bd in backups)
+        {
+            if (shoulderBoneData == bd || hipBoneData == bd)
+            {
+                continue;
+            }
             if (shoulderBoneData == null && bd.isShoulderSideSpine)
             {
                 shoulderBoneData = bd;
@@ -135,10 +197,15 @@ public class CalcResidualData : IAssemblyStage
         }
         foreach (ResidualBoneData bd in backups)
         {
-            if (shoulderBoneData == null && bd.isShoulderSideSpine)
+            if (shoulderBoneData == bd || hipBoneData == bd)
+            {
+                continue;
+            }
+            if (shoulderBoneData == null)
             {
                 shoulderBoneData = bd;
-            } else if (hipBoneData == null && bd.isHipSideSpine)
+            }
+            else if (hipBoneData == null)
             {
                 hipBoneData = bd;
             }
