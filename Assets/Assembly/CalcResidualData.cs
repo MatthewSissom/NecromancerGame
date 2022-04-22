@@ -44,7 +44,6 @@ public class CalcResidualData : IAssemblyStage
             boneDataStepper.MarkHead();
         } else
         {
-            boneDataStepper.MarkNeck();
             while (boneDataStepper.getAcrossVertex() != null)
             {
                 boneDataStepper.MarkShoulderSideSpine();
@@ -215,6 +214,18 @@ public class CalcResidualData : IAssemblyStage
         shoulderBoneData.MarkShoulder();
         hipBoneData.MarkHip();
 
+        ResidualBoneData neck = shoulderBoneData.GetChild(BoneVertexType.FrontPrimary);
+        if(!neck)
+        {
+            neck = shoulderBoneData.parentBone;
+        }
+        neck.MarkNeck();
+        ResidualBoneData tailStart = hipBoneData.GetChild(BoneVertexType.BackPrimary);
+        if(!tailStart)
+        {
+            tailStart = hipBoneData.parentBone;
+        }
+        tailStart.MarkTailStart();
         //find and mark starts of limbs (just left/right of shoulder/hip)
         BoneVertexType shoulderLeftDir = ResidualBoneData.Left(shoulderBoneData.myParentConnectLocation);
         BoneVertexType shoulderRightDir = ResidualBoneData.Right(shoulderBoneData.myParentConnectLocation);

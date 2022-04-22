@@ -16,6 +16,7 @@ public class InsertIntoArmature : IAssemblyStage, IikTransformProvider
         ResidualBoneData shoulder = null;
         ResidualBoneData hip = null;
         ResidualBoneData tail = null;
+        ResidualBoneData tailStart = null;
         ResidualBoneData fll = null;
         ResidualBoneData frl = null;
         ResidualBoneData bll = null;
@@ -45,6 +46,10 @@ public class InsertIntoArmature : IAssemblyStage, IikTransformProvider
             if (bone.isTail)
             {
                 tail = bone;
+            }
+            if (bone.isTailStart)
+            {
+                tailStart = bone;
             }
             if (bone.isFLLStart)
             {
@@ -158,14 +163,14 @@ public class InsertIntoArmature : IAssemblyStage, IikTransformProvider
         //construct skeletonTransforms
         //need to use trinary because of unity's weird custom null
         Transforms = new SkeletonTransforms(
-            head    == null ? null : head    .transform,
-            shoulder== null ? null : shoulder.transform,
-            hip     == null ? null : hip     .transform,
-            tail    == null ? null : tail    .transform,
-            fll     == null ? null : fll     .transform,
-            frl     == null ? null : frl     .transform,
-            bll     == null ? null : bll     .transform,
-            brl     == null ? null : brl     .transform
+            head    == null ? null : neck     .transform.parent, //if head and neck aren't working,
+            shoulder== null ? null : shoulder .transform,        //try stepping up/down the skeleton
+            hip     == null ? null : hip      .transform,        //with more or fewer .parent calls,
+            tail    == null ? null : tailStart.transform.parent, //i think this is right though
+            fll     == null ? null : fll      .transform.parent,
+            frl     == null ? null : frl      .transform.parent,
+            bll     == null ? null : bll      .transform.parent,
+            brl     == null ? null : brl      .transform.parent
         );
 
         yield break;

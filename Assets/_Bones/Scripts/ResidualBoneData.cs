@@ -17,6 +17,7 @@ public class ResidualBoneData : MonoBehaviour
     public bool isHipSideSpine;
     public bool isHead;
     public bool isNeck;
+    public bool isTailStart;
     public bool isTail;
     public bool isShoulder;
     public bool isHip;
@@ -263,6 +264,11 @@ public class ResidualBoneData : MonoBehaviour
     public void MarkNeck()
     {
         isNeck = true;
+    }
+
+    public void MarkTailStart()
+    {
+        isTailStart = true;
     }
     public void MarkShoulder()
     {
