@@ -8,7 +8,7 @@ public class TempDebugPause : IAssemblyStage
     {
 #if UNITY_EDITOR
         Debug.Break();
-        yield break;
 #endif
+        yield break;
     }
 }

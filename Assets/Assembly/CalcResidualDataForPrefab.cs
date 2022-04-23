@@ -6,9 +6,9 @@ public class CalcResidualDataForPrefab : CalcResidualData
 {
     protected override ResidualBoneData GetRootAndInitRBD(GameObject skeleton)
     {
-#if UNITY_EDITOR
 
         Transform skull = skeleton.transform.Find("Skull");
+#if UNITY_EDITOR
         Transform skullEndMarker = skeleton.transform.Find("SkullTarget");
 
         // Basic data init
@@ -46,10 +46,11 @@ public class CalcResidualDataForPrefab : CalcResidualData
             }
         );
 
-        return skull.GetComponent<ResidualBoneData>();
 #endif
+        return skull.GetComponent<ResidualBoneData>();
     }
 
+#if UNITY_EDITOR
     protected ResidualBoneData.BoneConnectionData GetConnectionData(Transform child, int childIndex)
     {
         switch(childIndex)
@@ -97,4 +98,5 @@ public class CalcResidualDataForPrefab : CalcResidualData
         }
         applyToAll(parent, me, index);
     }
+#endif
 }

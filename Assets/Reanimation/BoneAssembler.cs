@@ -62,6 +62,8 @@ public class BoneAssembler : State
     }
     IEnumerator RunPipeline()
     {
+        yield break;
+
         IAssemblyStage previousStage = null;
         foreach (IAssemblyStage stage in assemblyStages)
         {

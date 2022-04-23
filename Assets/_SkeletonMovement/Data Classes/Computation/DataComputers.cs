@@ -116,6 +116,9 @@ public class LimbLength : ValComputer<float>
     public Transform LimbStart { private get; set; }
     protected override float ComputeVal()
     {
+        if (LimbStart == null)
+            return 0;
+
         ResidualBoneData boneData = LimbStart.gameObject.GetComponent<ResidualBoneData>();
         if(boneData == null)
         {
@@ -137,6 +140,9 @@ public class SpineLenght : ValComputer<float>
     protected override float ComputeVal()
     {
         float totalLen = 0;
+
+        if (From == null || To == null)
+            return totalLen;
 
         ResidualBoneData fromData = From.gameObject.GetComponent<ResidualBoneData>();
         if(fromData == null)

@@ -76,6 +76,7 @@ public class GameManager : StateManagerBase
     {
         yield return SetState(typeof(GameInit));
         PlayingTutorial = true;
+        Stopwatch.Instance.gameObject.SetActive(false);
 
         // Repeat first delivery phase until the player has connected 3 bones
         IEnumerator FirstPhase(bool firstTry)
@@ -156,6 +157,16 @@ public class GameManager : StateManagerBase
         );
 
         // Show stopwatch instruction
+        TutorialHelper.PrepareNextInstruction();
+        yield return SetState(MenuManager.Instance.InMenus("Instructions"));
+
+        // Stopwatch only phase
+        Stopwatch.Instance.gameObject.SetActive(true);
+        yield return CameraTransition("GhostTrans");
+        CountDown.SetParams("Assemble Cat", 15);
+        yield return SetState(typeof(CountDown));
+
+        // Final Instruction
         TutorialHelper.PrepareNextInstruction();
         yield return SetState(MenuManager.Instance.InMenus("Instructions"));
 

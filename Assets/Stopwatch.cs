@@ -5,8 +5,11 @@ using UnityEngine;
 
 public class Stopwatch : MonoBehaviour, IGrabbable
 {
+    public static Stopwatch Instance;
+
     public GameObject hand;
     private float angle = 0;
+
     public float Angle { get { return angle; } set { angle = value; } }
     [SerializeField]
     private float roundTime = 6;
@@ -63,6 +66,12 @@ public class Stopwatch : MonoBehaviour, IGrabbable
 
     private void Awake()
     {
+        if (Instance)
+        {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
         angle = 0;
     }
     private void Start()
