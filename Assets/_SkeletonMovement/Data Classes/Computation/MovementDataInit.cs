@@ -22,9 +22,13 @@ public class MovementDataInit : IAssemblyStage, IBehaviourDataProvider
         Assert.IsNotNull(chainStarts, "Assembly pipline is set up incorrectly: " + previous.GetType() + " comes before " + GetType() + " but does not implement " + typeof(IikTransformProvider).ToString());
         IikTargetProvider chainTargets = previous as IikTargetProvider;
         Assert.IsNotNull(chainTargets, "Assembly pipline is set up incorrectly: " + previous.GetType() + " comes before " + GetType() + " but does not implement " + typeof(IikTargetProvider).ToString());
-        SkeletonBehaviour skeletonBehaviour = skeleton.GetComponent<SkeletonBehaviour>();
-        Assert.IsNotNull(skeletonBehaviour, "Assembly pipline is set up incorrectly: Skeleton has no skeleton behavior component attached.");
 
+        Transform root = skeleton.transform;
+        while (root.parent != null)
+            root = root.parent;
+        SkeletonBehaviour skeletonBehaviour = root.GetComponent<SkeletonBehaviour>();
+        Assert.IsNotNull(skeletonBehaviour, "Assembly pipline is set up incorrectly: Skeleton has no skeleton behavior component attached.");
+        
         float speed = skeletonBehaviour.Speed;
         SetTunables(skeletonBehaviour.LimbTunables);
         LabeledLimbData<Transform> limbStarts = chainStarts.Transforms.LimbData;

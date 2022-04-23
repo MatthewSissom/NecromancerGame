@@ -21,6 +21,9 @@ public class PlayPenState : State
         }
 
         var behavior = playSkeleton.GetComponent<SkeletonBehaviour>();
+        if (!behavior)
+            return;
+
         if (behavior.transform.parent)
             behavior.transform.parent = null;
 

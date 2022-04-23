@@ -84,6 +84,8 @@ public class SkeletonBehaviour : MonoBehaviour
             return;
         Initalized = true;
 
+        enabled = true;
+
         movement = new SkeletonMovement(initData.LimbEnds, initData.SpinePoints);
 
         // inits pathfinder and path builder

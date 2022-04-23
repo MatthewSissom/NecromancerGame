@@ -70,6 +70,8 @@ public class BoneAssembler : State
                 Debug.Log("Running assembly phase \'" + stage.GetType().ToString() + "\'");
 #endif
             yield return stage.Execute(skeleton,previousStage);
+            if (stage is IAssemblySkeletonChanger)
+                skeleton = (stage as IAssemblySkeletonChanger).NewSkeleton;
             if(!(stage is TempDebugPause))
                 previousStage = stage;
         }

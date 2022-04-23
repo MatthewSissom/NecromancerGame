@@ -206,6 +206,11 @@ public class ResidualBoneData : MonoBehaviour
         numChildren++;
     }
 
+    public void AddCapConnectionPoint(BoneConnectionData connectionData)
+    {
+        LazyInitVertexPositions()[connectionData.vertexOnParent] = connectionData.position;
+    }
+
 #endif
 
 

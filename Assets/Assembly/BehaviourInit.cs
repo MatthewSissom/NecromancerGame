@@ -12,10 +12,14 @@ public class BehaviourInit : IAssemblyStage
         Assert.IsTrue(previous is IBehaviourDataProvider, assertError);
 
         IBehaviourDataProvider dataProvider = previous as IBehaviourDataProvider;
-        SkeletonBehaviour behaviour = skeleton.AddComponent<SkeletonBehaviour>();
+
+        Transform root = skeleton.transform;
+        while (root.parent != null)
+            root = root.parent;
+        SkeletonBehaviour behaviour = root.GetComponent<SkeletonBehaviour>();
         behaviour.BehaviorInit(
             dataProvider.LayoutData,
-            new SkeletonPathTunables(.1f, 0.2f) //TEMP
+            new SkeletonPathTunables(.1f, behaviour.Speed) //TEMP
             );
 
         PlayPenState.Instance.SetSkeleton(skeleton);

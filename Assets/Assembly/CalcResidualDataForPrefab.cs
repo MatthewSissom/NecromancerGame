@@ -14,6 +14,9 @@ public class CalcResidualDataForPrefab : CalcResidualData
         // Basic data init
         DFRecurse( skull, 
             (Transform parent, Transform child, int childIndex) => {
+                // don't add rbd to caps
+                if (child.childCount == 0)
+                    return;
                 var rbd = child.gameObject.AddComponent<ResidualBoneData>();
                 TableManager.Instance.residualBoneData.Add(rbd);
                 rbd.DebugIdInit(child.position, parent == null);
@@ -27,7 +30,12 @@ public class CalcResidualDataForPrefab : CalcResidualData
                     var pRBD = parent.GetComponent<ResidualBoneData>();
                     var cRBD = child.GetComponent<ResidualBoneData>();
                     if (pRBD != null)
-                        pRBD.DebugAddChild(cRBD, GetConnectionData(child, childIndex));
+                    {
+                        if (cRBD != null)
+                            pRBD.DebugAddChild(cRBD, GetConnectionData(child, childIndex));
+                        else
+                            pRBD.AddCapConnectionPoint(GetConnectionData(child, childIndex));
+                    }
                 }
             }
         );

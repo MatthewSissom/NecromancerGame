@@ -1,4 +1,4 @@
-﻿//#define USING_IK
+﻿#define USING_IK
 
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +12,7 @@ public class IkInit : IAssemblyStage, IikTransformProvider, IikTargetProvider
 {
     public LabledSkeletonData<Transform> Transforms { get; private set; }
     public LabledSkeletonData<Transform> Targets { get; private set; }
+    public LabledSkeletonData<Transform> ChainEnds { get; private set; }
 
 #if USING_IK
     private class ChainInitData 
@@ -30,17 +31,15 @@ public class IkInit : IAssemblyStage, IikTransformProvider, IikTargetProvider
     }
 #endif
 
-    // Todo add cat behavior to empty armature
-    // PlayPenState.Instance.SetSkeleton(EmptyArmature);
-
     IEnumerator IAssemblyStage.Execute(GameObject skeleton, IAssemblyStage previous) 
     {
 #if USING_IK
         string assertError = "Assembly pipline is set up incorrectly: " + previous.GetType() + 
             " comes before " + GetType() + " but does not implement " + typeof(IikTransformProvider).ToString();
         Assert.IsTrue(previous is IikTransformProvider, assertError);
-
-        RebuildIKChains((previous as IikTransformProvider).Transforms);
+        ChainEnds = (previous as IikTransformProvider).ChainEnds;
+        Transforms = (previous as IikTransformProvider).Transforms;
+        RebuildIKChains();
 #endif
 
         yield break;
@@ -74,7 +73,6 @@ public class IkInit : IAssemblyStage, IikTransformProvider, IikTargetProvider
     {
         if (start == null || endTarget == null)
         {
-            Assert.IsTrue(start == null, "IkInit Error: Valid chain start has no target.");
             return null;
         }
 
@@ -86,13 +84,14 @@ public class IkInit : IAssemblyStage, IikTransformProvider, IikTargetProvider
             transforms.Add(add);
             last = add;
         }
-        AddTransform(start);
+        AddTransform(endTarget);
 
-        while (last.childCount == 0 && (last.position - endTarget.position).magnitude < 0.0001f)
+        while (last.parent != null && last != start)
         {
-            AddTransform(last.GetChild(0));
+            AddTransform(last.parent);
         }
 
+        transforms.Reverse();
         return transforms;
     }
 
@@ -108,23 +107,27 @@ public class IkInit : IAssemblyStage, IikTransformProvider, IikTargetProvider
         return ikComponents.Combine(chain, ChainInitData.GetData);
     }
 
-    void RebuildIKChains(LabledSkeletonData<Transform> transforms)
+    void RebuildIKChains()
     {
         // Assume that all chains are invalid to start
-        List<FABRIK> invaildChains = SearchHigharchyForChains(GetRoot(transforms.Shoulder));
+        List<FABRIK> invaildChains = SearchHigharchyForChains(GetRoot(Transforms.Shoulder));
 
         // Get basic data
-        LabledSkeletonData<FABRIK> ikComponents = GetIkComponents(transforms);
+        LabledSkeletonData<FABRIK> ikComponents = GetIkComponents(Transforms);
         LabledSkeletonData<Transform> targets = GetTargets(ikComponents);
-        LabledSkeletonData<List<Transform>> transformLists = transforms.Combine(targets, GetTransformList);
-        FABRIKRoot mFABRIKRoot = GetRoot(transforms.Shoulder).GetComponentInChildren<FABRIKRoot>();
+        LabledSkeletonData<List<Transform>> transformLists = Transforms.Combine(ChainEnds, GetTransformList);
+        FABRIKRoot mFABRIKRoot = GetRoot(Transforms.Shoulder).GetComponentInChildren<FABRIKRoot>();
 
 
         // Rebuild transform chains
         LabledSkeletonData<ChainInitData> newChainData = PackageNewChainData(ikComponents, transformLists);
         foreach(var data in newChainData.ToList())
         {
+            if(data.Component == null || data.NewChain == null)
+                continue;
+
             IKSolverFABRIK ikSolver = data.Component.solver;
+            Assert.IsNotNull(ikSolver);
             ikSolver.SetChain(data.NewChain.ToArray(), ikSolver.GetRoot());
             string message = string.Empty;
 
@@ -145,7 +148,7 @@ public class IkInit : IAssemblyStage, IikTransformProvider, IikTargetProvider
             (ChainInitData data) => invaildChains.Contains(data.Component) ? null : data
         );
         Transforms = newChainData.Convert(
-            (ChainInitData data) => data?.NewChain[0]
+            (ChainInitData data) => data?.NewChain?[0]
         );
         Targets = newChainData.Convert(
             (ChainInitData data) => (data == null ? null : data)?.Component?.solver?.target
