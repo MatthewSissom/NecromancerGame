@@ -117,6 +117,10 @@ public class LimbLength : ValComputer<float>
     protected override float ComputeVal()
     {
         ResidualBoneData boneData = LimbStart.gameObject.GetComponent<ResidualBoneData>();
+        if(boneData == null)
+        {
+            boneData = LimbStart.gameObject.GetComponent<JointRBDRef>().rbd;
+        }
         float totalLen = boneData.myLegLength;
 
 
@@ -133,8 +137,19 @@ public class SpineLenght : ValComputer<float>
     protected override float ComputeVal()
     {
         float totalLen = 0;
+
         ResidualBoneData fromData = From.gameObject.GetComponent<ResidualBoneData>();
+        if(fromData == null)
+        {
+            fromData = From.gameObject.GetComponent<JointRBDRef>().rbd;
+        }
+
         ResidualBoneData toData = To.gameObject.GetComponent<ResidualBoneData>();
+        if (toData == null)
+        {
+            toData = From.gameObject.GetComponent<JointRBDRef>().rbd;
+        }
+
         if (fromData.isShoulder) {
             totalLen = toData.distanceToRootBone(null);
         } else if (toData.isShoulder)

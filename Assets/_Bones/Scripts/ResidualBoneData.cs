@@ -56,6 +56,8 @@ public class ResidualBoneData : MonoBehaviour
     public GameObject AddEmptyObjectBetweenSelfAndParent()
     {
         GameObject emptyObj = new GameObject(gameObject.name + " Joint");
+        JointRBDRef rbdRef = emptyObj.AddComponent<JointRBDRef>();
+        rbdRef.rbd = this;
         emptyObj.transform.position = vertexPositions[myParentConnectLocation];
         emptyObj.transform.parent = parentBone.transform;
         transform.parent = emptyObj.transform;
