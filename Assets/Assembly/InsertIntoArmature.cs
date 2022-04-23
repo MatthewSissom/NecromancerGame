@@ -213,6 +213,23 @@ public class InsertIntoArmature : IAssemblyStage, IikTransformProvider, IAssembl
             }
         }
 
+        if(neck != null)
+            neck.transform.parent.gameObject.AddComponent<JointRBDRef>().rbd = head;
+        if(shoulder != null)
+            shoulder.transform.parent.gameObject.AddComponent<JointRBDRef>().rbd = shoulder;
+        if(hip != null)
+            hip.transform.parent.gameObject.AddComponent<JointRBDRef>().rbd = hip;
+        if(tailStart != null)
+            tailStart.transform.parent.gameObject.AddComponent<JointRBDRef>().rbd = tail;
+        if(fll != null)
+            fll.transform.parent.gameObject.AddComponent<JointRBDRef>().rbd = fll;
+        if (frl != null)
+            frl.transform.parent.gameObject.AddComponent<JointRBDRef>().rbd = frl;
+        if (bll != null)
+            bll.transform.parent.gameObject.AddComponent<JointRBDRef>().rbd = bll;
+        if (brl != null)
+            brl.transform.parent.gameObject.AddComponent<JointRBDRef>().rbd = brl;
+
         //construct skeletonTransforms
         //need to use trinary because of unity's weird custom null
         Transforms = new SkeletonTransforms(
